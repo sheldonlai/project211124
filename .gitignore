@@ -1,0 +1,17 @@
+# See http://help.github.com/ignore-files/ for more about ignoring files.
+
+# compiled output
+/web/server_out
+/web/*/**.js
+/web/*/**.js.map
+
+# dependencies
+/web/node_modules
+
+# IDEs and editors
+/.idea
+web/client/app/
+web/client/assets/
+web/client/css/
+web/common/JSONObjects/
+web/server/service/

@@ -1,0 +1,19 @@
+{
+  "compilerOptions": {
+    "module": "es6",
+    "target": "es6",
+    "sourceMap": true,
+    "noImplicitAny": true,
+    "outDir": "./server_out"
+  },
+  "exclude": [
+    "./node_modules",
+    "./client"
+  ],
+  "lib": [
+    "ES5",
+    "ES2015",
+    "DOM",
+    "ScriptHost"
+  ]
+}
