@@ -1,9 +1,7 @@
-///<reference path="../node_modules/@types/mongoose/index.d.ts"/>
 import {Server} from "./Server";
 const cluster = require('cluster');
 const numCPUs = require('os').cpus().length;
 import * as mongoose from 'mongoose';
-import {Promise} from 'mongoose'
 
 let config = require('./config');
 

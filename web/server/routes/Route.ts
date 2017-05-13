@@ -14,7 +14,7 @@ export class Route {
     }
 
     public homePage = (req: Request, res: Response, next: NextFunction) =>{
-        res.sendFile(path.resolve(__dirname, '../client/static/home.html'));
+        res.sendFile(path.resolve(__dirname, '../../client/static/home.html'));
     }
 
     public questionPage = (req: Request, res: Response, next: NextFunction) =>{
