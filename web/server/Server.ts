@@ -41,6 +41,7 @@ export class Server {
         });
 
         this.app.use(favicon(path.join(__dirname, '../client/static/favicon.ico')));
+        this.app.use('/', express.static(path.resolve(__dirname, '../client/static/')))
         this.app.use('/node_modules', express.static(path.resolve(__dirname, '../node_modules')));
         this.app.use(bodyParser.urlencoded({extended: false}));
         this.app.use(bodyParser.json({limit: '50mb'}));
