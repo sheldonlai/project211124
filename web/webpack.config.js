@@ -1,33 +1,42 @@
 var path = require('path');
 
 module.exports = {
-    entry: './src/react-app/main.tsx',
-    devtool: 'sourcemaps',
+    entry: {
+        app : './client/app/main.tsx'
+    },
+    devtool: 'source-maps',
     cache: true,
-    debug: true,
     output: {
-        path: __dirname,
-        filename: './src/rest/public/build/bundle.js'
+        path: path.join(__dirname, './client/static/'),
+        filename: '[name].bundle.js'
     },
     resolve: {
         // Add '.ts' and '.tsx' as resolvable extensions.
-        extensions: ["", ".webpack.js", ".web.js", ".ts", ".tsx", ".js"]
+        extensions: [".ts", ".tsx", ".js", "jsx", ".json"]
     },
 
     module: {
-        loaders: [
+        rules: [
             // All files with a '.ts' or '.tsx' extension will be handled by 'awesome-typescript-loader'.
-            { test: /\.tsx?$/, loader: "awesome-typescript-loader" }
+            { test: /\.tsx?$/, loader: 'awesome-typescript-loader'}
         ],
 
-        preLoaders: [
-            // All output '.js' files will have any sourcemaps re-processed by 'source-map-loader'.
-            { test: /\.js$/, loader: "source-map-loader" }
-        ]
-    },
+        // plugins : [
+        //     new LoaderOptionsPlugin({
+        //         debug: false,
+        //         options: {
+        //             resolve: {
+        //                 extensions: ['.ts', '.tsx', '.js']
+        //             }
+        //         }
+        //     })
+        // ]
 
-    node: {
-        fs: "empty"
+        // preLoaders: [
+        //     // All output '.js' files will have any sourcemaps re-processed by 'source-map-loader'.
+        //     { test: /\.js$/, loader: "source-map-loader" }
+        // ]
+
     }
 
     // When importing a module whose path matches one of the following, just

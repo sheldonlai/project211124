@@ -3,11 +3,11 @@
     "module": "commonjs",
     "target": "es5",
     "sourceMap": true,
-    "noImplicitAny": true
+    "noImplicitAny": true,
+    "jsx" : "react"
   },
   "exclude": [
-    "./node_modules",
-    "./client"
+    "./node_modules"
   ],
   "lib": [
     "ES5",
