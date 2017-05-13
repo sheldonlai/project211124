@@ -4,7 +4,7 @@
     "target": "es6",
     "sourceMap": true,
     "noImplicitAny": true,
-    "outDir": "./server_out"
+    "outDir": "./out"
   },
   "exclude": [
     "./node_modules",

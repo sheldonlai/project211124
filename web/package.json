@@ -13,12 +13,10 @@
     "@types/chai": "^3.4.34",
     "@types/chai-http": "0.0.30",
     "@types/express": "^4.0.35",
-    "@types/jszip": "0.0.32",
     "@types/material-ui": "^0.16.59",
     "@types/mocha": "^2.2.33",
     "@types/mongoose": "^4.7.11",
     "@types/node": "^6.0.52",
-    "@types/parse5": "^2.2.34",
     "@types/react": "^15.0.16",
     "@types/react-dom": "^0.14.23",
     "@types/react-tap-event-plugin": "^0.0.30",
@@ -26,14 +24,10 @@
     "awesome-typescript-loader": "^3.1.2"
   },
   "scripts": {
-    "clean": "rm -rf ./node_modules/ .yarnclean",
-    "cleanwin": "rmdir node_modules .yarnclean /s /q & exit 0",
     "build": "tsc",
     "test": "mocha --timeout 10000 -R list",
     "testcover": "mocha --timeout 10000",
-    "cover": "nyc -r json-summary -r lcov yarn run testcover",
-    "coverwin": "nyc -r json-summary -r lcov yarn run testcover",
-    "start": "node src/App.js"
+    "start": "node out/server/server.js"
   },
   "dependencies": {
     "@types/body-parser": "^1.16.3",
