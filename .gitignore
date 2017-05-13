@@ -4,8 +4,10 @@
 /web/out
 
 /web/server_out
-/web/*/**.js
-/web/*/**.js.map
+/web/common/**/**.js
+/web/common/**/**.js.map
+/web/server/**/**.js
+/web/server/**/**.js.map
 
 # dependencies
 /web/node_modules
