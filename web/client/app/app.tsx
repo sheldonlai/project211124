@@ -1,7 +1,5 @@
 import * as React from 'react';
-import {Tabs, Tab} from 'material-ui/Tabs';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
-import Paper from 'material-ui/Paper';
 import * as injectTapEventPlugin from 'react-tap-event-plugin';
 import {Route, Router} from "react-router";
 import {Link} from "react-router-dom";
@@ -9,6 +7,7 @@ import {Home} from "./home/home";
 import createBrowserHistory from 'history/createBrowserHistory'
 
 const history = createBrowserHistory()
+
 
 
 export class App extends React.Component<any, any> {
@@ -22,12 +21,11 @@ export class App extends React.Component<any, any> {
             <MuiThemeProvider>
                 <Router history={history}>
                     <div>
-                        <ul>
-                            <li><Link to="/">Home</Link></li>
-                        </ul>
-
-                        <hr/>
-
+                        <div className="menu">
+                            <ul>
+                                <li><Link to="/">Home</Link></li>
+                            </ul>
+                        </div>
                         <Route exact path="/" component={Home}/>
                     </div>
                 </Router>
