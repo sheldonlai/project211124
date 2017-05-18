@@ -31,9 +31,9 @@ export class Server {
 
     public config() {
 
-        var dbURI = config.database;
+        let dbURI = config.database.URI;
         mongoose.connect(dbURI);
-        var db = mongoose.connection;
+        let db = mongoose.connection;
 
         db.on('error', console.error);
         db.on('connected', function () {

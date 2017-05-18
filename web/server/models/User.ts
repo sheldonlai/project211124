@@ -2,36 +2,34 @@ import {model, Schema, Document} from "mongoose";
 import {UserTypeEnum} from "../enums/UserTypeEnum";
 
 export interface IUser extends Document {
-    name: string;
-    hashedPassword: string;
     email: string;
+    name: string;
     role: UserTypeEnum;
-    accesses: any;
-    tags: Array<any>;
-    passwordResetToken?: string;
-    friends: Array<any>;
-    teams: Array<any>;
+    verified: Boolean
+    local: any;
+    facebook: any;
 }
 
 export const userSchema = new Schema({
-    name: {type: String, required: true, unique: true},
-    hashedPassword: {type: String, required: true},
-    email: {type: String, required: true},
-    role: {type: String, enum: ["admin", "mod", "normal"]},
-    accesses: [{type: Schema.Types.ObjectId, ref: 'Access'}],
-    tags: [{type: Schema.Types.ObjectId, ref: 'Category'}],
-    passwordResetToken: {type: String, unique: true},
-    friends: [{type: Schema.Types.ObjectId, ref: 'user'}],
-    teams: [{type: Schema.Types.ObjectId, ref: 'Team'}],
-    history: [
-        {
-            module : {types : String, enum: ["team" , "tournament", "story"]},
-            date : Date,
-            tag : {type: Schema.Types.ObjectId, ref: 'tag'}
-        }
-    ]
+    email:           {type: String, required: true, unique: true},
+    name:            {type: String, required: true},
+    role:            {type: String, enum: ["admin", "mod", "normal"], required: true, default: 'normal'},
+    verified:        {type: Boolean, required: true, default: false},
+    local:           {
+        password:       {type: String},
+        salt:           {type: String}
+    },
+    facebook:         {
+        id:             {type: String},
+        access_token:   {type: String},
+    }
+}, {
+    timestamps: true
 });
 
+// should add pre-save method to ensure local, facebook or google is populated properly
+
 export const UserModel = model<IUser>('user', userSchema);
+
 
 
