@@ -7,7 +7,9 @@ import * as cookieParser from 'cookie-parser';
 import {AppError} from '../common/errors/AppError';
 import {Request, Response} from 'express';
 import {Route} from './routes/Route';
-import {HomeAPI} from './API/HomeAPI';
+import {HomeAPI} from './routes/HomeAPI';
+import {Container} from "inversify";
+import container from './inversify.config';
 
 let favicon = require('serve-favicon');
 let config = require('./config');
@@ -15,6 +17,7 @@ let config = require('./config');
 export class Server {
     public app: express.Application;
     public server: http.Server;
+    public container : Container;
 
     public static bootstrap(): Server {
         return new Server();
@@ -23,7 +26,7 @@ export class Server {
     constructor() {
         //create expressjs application
         this.app = express();
-
+        this.container = container;
         //configure application
         this.config();
 

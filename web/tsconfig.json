@@ -6,7 +6,6 @@
     "types": ["reflect-metadata"],
     "target": "es5",
     "sourceMap": true,
-    "noImplicitAny": true,
     "jsx" : "react",
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true

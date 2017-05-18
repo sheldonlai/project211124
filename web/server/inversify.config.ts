@@ -1,7 +1,8 @@
 import { Container } from "inversify";
-import {IQuestionAnswerRepository, QuestionAnswerRepository} from "./respositories/QuestionAnswerRepository";
+import "reflect-metadata"
 
-var container = new Container();
+import {IQuestionAnswerRepository, QuestionAnswerRepository} from "./respositories/QuestionAnswerRepository";
+let container = new Container();
 container.bind<IQuestionAnswerRepository>("IQuestionAnswerRepository").to(QuestionAnswerRepository);
 
 export default container;

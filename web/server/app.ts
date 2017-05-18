@@ -23,7 +23,6 @@ if (cluster.isMaster && !devMode ) {
         cluster.fork();
     });
 } else {
-
     let app = Server.bootstrap().app;
     let port: number = 3000;
 

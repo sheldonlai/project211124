@@ -19,7 +19,7 @@ export const schema = new Schema({
     isPublished:  Boolean,
     lastEditedUtc: Date,
     comments: [{
-        commentAuthor : {type: Schema.Types.ObjectId, ref: 'user'},
+        commentBy : {type: Schema.Types.ObjectId, ref: 'user'},
         commentContent : {type: String , required: true},
         lastEditedUtc: Date
     }]
