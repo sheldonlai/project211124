@@ -1,9 +1,4 @@
-/**
- * Created by SHELDON on 5/11/2017.
- */
-/**
- * Created by SHELDON on 5/11/2017.
- */
+
 import { NextFunction, Request, Response, Router } from "express";
 import {Urls} from '../../common/urls';
 import * as path from 'path';

@@ -10,6 +10,7 @@ import {Route} from './routes/Route';
 import {HomeAPI} from './routes/HomeAPI';
 import {Container} from "inversify";
 import container from './inversify.config';
+import {QuestionAnswerAPI} from "./routes/QuestionAnswerAPI";
 
 let favicon = require('serve-favicon');
 let config = require('./config');
@@ -69,6 +70,7 @@ export class Server {
     public api() {
         let router = express.Router();
         new HomeAPI(router);
+        new QuestionAnswerAPI(router, this.container);
         this.app.use('/api', router);
     }
 

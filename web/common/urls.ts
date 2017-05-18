@@ -12,4 +12,6 @@ export class Urls {
     static Authenticate = "/Authenticate";
     static Register= "/RegisterAccount";
 
+    static CreateQuestion = "/create-question"
+
 }
