@@ -11,6 +11,8 @@ import {HomeAPI} from './routes/HomeAPI';
 import {Container} from "inversify";
 import container from './inversify.config';
 import {QuestionAnswerAPI} from "./routes/QuestionAnswerAPI";
+import {IQuestionAnswerService} from "./services/QuestionAnswerService";
+import TYPES from "./enums/ClassTypes";
 
 let favicon = require('serve-favicon');
 let config = require('./config');
@@ -27,10 +29,9 @@ export class Server {
     constructor() {
         //create expressjs application
         this.app = express();
-        this.container = container;
         //configure application
+        this.container = container;
         this.config();
-
     }
 
     public config() {
@@ -69,8 +70,9 @@ export class Server {
 
     public api() {
         let router = express.Router();
+        let qAService : IQuestionAnswerService = this.container.get<IQuestionAnswerService>(TYPES.IQAService);
         new HomeAPI(router);
-        new QuestionAnswerAPI(router, this.container);
+        new QuestionAnswerAPI(router, qAService);
         this.app.use('/api', router);
     }
 

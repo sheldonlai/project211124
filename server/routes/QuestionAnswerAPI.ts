@@ -8,9 +8,10 @@ export class QuestionAnswerAPI {
 
     private service : IQuestionAnswerService;
 
-    constructor(router: Router, container: Container) {
+    constructor(router: Router, service: IQuestionAnswerService) {
+        this.service = service;
         router.get(Urls.CreateQuestion, this.createQuestion);
-        this.service = container.get<IQuestionAnswerService>(TYPES.IQAService);
+
     }
 
     public createQuestion = (req: Request, res: Response, next: NextFunction) =>{

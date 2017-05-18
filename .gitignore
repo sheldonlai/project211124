@@ -1,13 +1,13 @@
 # See http://help.github.com/ignore-files/ for more about ignoring files.
 
 # compiled output
-/web/common/**/**.js
-/web/common/**/**.js.map
-/web/server/**/**.js
-/web/server/**/**.js.map
-/web/client/**/**.jsx
+common/**/**.js
+common/**/**.js.map
+server/**/**.js
+server/**/**.js.map
+client/**/**.jsx
 # dependencies
-/web/node_modules
+node_modules
 
 # IDEs and editors
 /.idea
