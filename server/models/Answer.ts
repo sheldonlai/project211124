@@ -1,32 +1,30 @@
 import {model, Schema, Document} from "mongoose";
 
 
-export interface IQuestion {
-    id : string;
+export interface IAnswer extends Document {
+    id: string;
     title: string;
+    question: any;
     content: string;
     author: any;
-    tags : any;
+    upVotes : number;
+    downVotes: number;
     groups: any[];
-    isPublished : boolean;
     lastEditedUtc : Date;
 };
 
-export interface IQuestionDocument extends IQuestion, Document{
-
-}
-
 const schema = new Schema({
     title: {type: String, required: true},
+    question: {type: Schema.Types.ObjectId, ref : 'question'},
     content: {type: String, required: true},
     author: {type: Schema.Types.ObjectId, ref: 'user', required: true},
-    tags: [{type: Schema.Types.ObjectId, ref: 'tag' }],
-    isPublished:  Boolean,
-    lastEditedUtc: {Type : Date, default: Date.now()},
+    upVotes: {type: Number},
+    downVotes : {type : Number},
+    lastEditedUtc: Date,
     comments: [{
         commentBy : {type: Schema.Types.ObjectId, ref: 'user'},
         commentContent : {type: String , required: true},
         lastEditedUtc: Date
     }]
 });
-export const Question = model<IQuestionDocument>('story', schema);
+export const Answer = model<IAnswer>('story', schema);
