@@ -22,11 +22,11 @@ const schema = new Schema({
     author: {type: Schema.Types.ObjectId, ref: 'user', required: true},
     tags: [{type: Schema.Types.ObjectId, ref: 'tag' }],
     isPublished:  Boolean,
-    lastEditedUtc: {Type : Date, default: Date.now()},
+    lastEditedUtc: {type : Date, default: Date.now},
     comments: [{
         commentBy : {type: Schema.Types.ObjectId, ref: 'user'},
         commentContent : {type: String , required: true},
-        lastEditedUtc: Date
+        lastEditedUtc: {type : Date, default: Date.now}
     }]
 });
-export const Question = model<IQuestionDocument>('story', schema);
+export const Question = model<IQuestionDocument>('question', schema);

@@ -1,5 +1,5 @@
 import {Answer, IAnswer} from '../models/Answer';
-import {injectable} from 'inversify/dts/annotation/injectable';
+import {injectable} from 'inversify';
 import {BaseRepository} from './BaseRepository';
 export interface IAnswerRepository {
     getAnswerByQId(questionId : string) : Promise<IAnswer[]>;

@@ -24,11 +24,11 @@ const schema = new Schema({
     author: {type: Schema.Types.ObjectId, ref: 'user', required: true},
     upVotes: {type: Number},
     downVotes : {type : Number},
-    lastEditedUtc: Date,
+    lastEditedUtc: {type: Date, default: Date.now},
     comments: [{
         commentBy : {type: Schema.Types.ObjectId, ref: 'user'},
         commentContent : {type: String , required: true},
-        lastEditedUtc: Date
+        lastEditedUtc:  {type: Date, default: Date.now}
     }]
 });
-export const Answer = model<IAnswerDocument>('story', schema);
+export const Answer = model<IAnswerDocument>('answer', schema);
