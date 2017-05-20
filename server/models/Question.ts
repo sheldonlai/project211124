@@ -1,7 +1,7 @@
 import {model, Schema, Document} from "mongoose";
 
 
-export interface IQuestion {
+export interface Question {
     id : string;
     title: string;
     content: string;
@@ -12,7 +12,7 @@ export interface IQuestion {
     lastEditedUtc : Date;
 };
 
-export interface IQuestionDocument extends IQuestion, Document{
+export interface IQuestion extends Question, Document{
 
 }
 
@@ -29,4 +29,4 @@ const schema = new Schema({
         lastEditedUtc: {type : Date, default: Date.now}
     }]
 });
-export const Question = model<IQuestionDocument>('question', schema);
+export const QuestionModel = model<IQuestion>('question', schema);
