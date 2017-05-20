@@ -1,7 +1,8 @@
 import {model, Schema, Document} from "mongoose";
+import {BaseModel} from './BaseModel';
 
 
-export interface Question {
+export class Question implements BaseModel{
     id : string;
     title: string;
     content: string;

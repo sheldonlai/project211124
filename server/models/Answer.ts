@@ -1,7 +1,8 @@
-import {model, Schema, Document} from "mongoose";
+import {model, Schema, Document} from 'mongoose';
+import {BaseModel} from './BaseModel';
 
 
-export class Answer {
+export class Answer implements BaseModel{
     id: string;
     title: string;
     question: any;

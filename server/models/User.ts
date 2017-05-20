@@ -1,14 +1,18 @@
 import {model, Schema, Document} from "mongoose";
 import {UserTypeEnum} from "../enums/UserTypeEnum";
+import {BaseModel} from './BaseModel';
 
-export interface IUser extends Document {
+export class User implements BaseModel {
+    id: string;
     email: string;
     name: string;
     role: UserTypeEnum;
-    verified: Boolean
+    verified: Boolean;
     local: any;
     facebook: any;
 }
+
+export interface IUser extends User, Document{}
 
 export const userSchema = new Schema({
     email:           {type: String, required: true, unique: true},
