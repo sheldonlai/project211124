@@ -2,11 +2,13 @@ import {Server} from "./Server";
 const cluster = require('cluster');
 const numCPUs = require('os').cpus().length;
 import * as mongoose from 'mongoose';
+import container from './inversify.config';
 
 let config = require('./config');
 
 import * as http from "http";
 import {Worker} from 'cluster';
+import {SocketIOController} from './Socket.io.controller';
 
 (<any>mongoose).Promise = global.Promise;
 
@@ -23,10 +25,13 @@ if (cluster.isMaster && !devMode ) {
         cluster.fork();
     });
 } else {
-    let app = Server.bootstrap().app;
+    let app = Server.bootstrap(container).app;
+    let server = require('http').Server(app);
+    let io = require('socket.io')(server);
+    let socketIoController = new SocketIOController(io, container);
     let port: number = 3000;
 
-    let server : http.Server = app.listen(port, function () {
+    server.listen(port, function () {
         let host = server.address().address;
         let port = server.address().port;
         console.log('This express app is listening on port:' + port);

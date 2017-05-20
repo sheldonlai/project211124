@@ -9,7 +9,6 @@ import {Request, Response} from 'express';
 import {Route} from './routes/Route';
 import {HomeAPI} from './routes/HomeAPI';
 import {Container} from "inversify";
-import container from './inversify.config';
 import {QuestionAnswerAPI} from "./routes/QuestionAnswerAPI";
 import {IQuestionAnswerService} from "./services/QuestionAnswerService";
 import TYPES from "./enums/ClassTypes";
@@ -22,11 +21,11 @@ export class Server {
     public server: http.Server;
     public container : Container;
 
-    public static bootstrap(): Server {
-        return new Server();
+    public static bootstrap(container: Container): Server {
+        return new Server(container);
     }
 
-    constructor() {
+    constructor(container : Container) {
         //create expressjs application
         this.app = express();
         //configure application

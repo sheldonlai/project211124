@@ -2,6 +2,7 @@ import {EntityNotFoundError} from '../errors/EntityNotFoundError';
 import {injectable} from 'inversify';
 import {model, Document, Model} from 'mongoose';
 import {BaseModel} from '../models/BaseModel';
+import {unmanaged} from 'inversify';
 
 export interface IBaseRepository<T> {
     getById(obj : T) : Promise<T>;
@@ -14,7 +15,8 @@ export interface IBaseRepository<T> {
 export abstract class BaseRepository<T extends BaseModel, I extends Document & T>
     implements IBaseRepository<T>{
 
-    constructor(private model: Model<I>) {
+    constructor(@unmanaged() private model: Model<I>) {
+
     }
 
     getById(obj: T): Promise<T> {
