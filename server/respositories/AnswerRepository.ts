@@ -5,7 +5,10 @@ export interface IAnswerRepository extends IBaseRepository<Answer>{
 }
 
 @injectable()
-export class AnswerRepository extends
-    BaseRepository<Answer, IAnswer> implements IAnswerRepository{
+export class AnswerRepository extends BaseRepository<Answer, IAnswer> implements IAnswerRepository{
+
+    constructor() {
+        super(AnswerModel)
+    }
 
 }

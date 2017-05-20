@@ -1,6 +1,6 @@
 import {EntityNotFoundError} from '../errors/EntityNotFoundError';
 import {injectable} from 'inversify';
-import {model, Document} from 'mongoose';
+import {model, Document, Model} from 'mongoose';
 
 export interface IBaseRepository<T> {
     getById(obj : T) : Promise<T>;
@@ -12,6 +12,9 @@ export interface IBaseRepository<T> {
 @injectable()
 export abstract class BaseRepository<T, I extends Document & T>
     implements IBaseRepository<T>{
+
+    constructor(private model: Model<I>) {
+    }
 
     getById(obj: T): Promise<T> {
         throw new Error('Method not implemented.');
