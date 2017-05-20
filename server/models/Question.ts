@@ -1,16 +1,31 @@
 import {model, Schema, Document} from "mongoose";
 import {BaseModel} from './BaseModel';
+import {User} from './User';
 
+export class QuestionComments {
+    commentBy : User;
+    commentContent : string;
+    lastEditedUtc : string;
+}
 
-export class Question implements BaseModel{
-    id : string;
+export class Question extends BaseModel{
     title: string;
     content: string;
     author: any;
-    tags : any;
-    groups: any[];
+    tags : any[];
     isPublished : boolean;
     lastEditedUtc : Date;
+    comments : QuestionComments[];
+
+    constructor(
+        title:string, content: string, author: User, tags:any[], isPublished : boolean
+    ){
+        super();
+        this.title = title;
+        this.content = content;
+        this.author = author;
+        this.tags = tags;
+    }
 };
 
 export interface IQuestion extends Question, Document{

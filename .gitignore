@@ -5,6 +5,8 @@ common/**/**.js
 common/**/**.js.map
 server/**/**.js
 server/**/**.js.map
+test/**/**.js
+test/**/**.js.map
 client/**/**.jsx
 # dependencies
 node_modules

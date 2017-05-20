@@ -2,8 +2,7 @@ import {model, Schema, Document} from "mongoose";
 import {UserTypeEnum} from "../enums/UserTypeEnum";
 import {BaseModel} from './BaseModel';
 
-export class User implements BaseModel {
-    id: string;
+export class User extends BaseModel {
     email: string;
     name: string;
     role: UserTypeEnum;
@@ -17,7 +16,7 @@ export interface IUser extends User, Document{}
 export const userSchema = new Schema({
     email:           {type: String, required: true, unique: true},
     name:            {type: String, required: true},
-    role:            {type: String, enum: ["admin", "mod", "normal"], required: true, default: 'normal'},
+    role:            {type: String, enum: [UserTypeEnum.ADMIN, UserTypeEnum.MOD, UserTypeEnum.NORMAL], required: true, default: 'normal'},
     verified:        {type: Boolean, required: true, default: false},
     local:           {
         password:       {type: String},

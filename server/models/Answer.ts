@@ -2,7 +2,7 @@ import {model, Schema, Document} from 'mongoose';
 import {BaseModel} from './BaseModel';
 
 
-export class Answer implements BaseModel{
+export class Answer extends BaseModel{
     id: string;
     title: string;
     question: any;

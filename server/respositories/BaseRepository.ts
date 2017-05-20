@@ -20,7 +20,7 @@ export abstract class BaseRepository<T extends BaseModel, I extends Document & T
     }
 
     getById(obj: T): Promise<T> {
-        return this.model.findById(obj.id)
+        return this.model.findById(obj._id)
             .lean().exec().then(function(res : T){
             return this.getModel(res);
         })
@@ -33,13 +33,13 @@ export abstract class BaseRepository<T extends BaseModel, I extends Document & T
     }
 
     update(obj: T): Promise<T> {
-        return this.model.findOneAndUpdate({_id :obj.id}, obj).exec().then(function(res: I){
+        return this.model.findOneAndUpdate({_id :obj._id}, obj).exec().then(function(res: I){
             return this.getModel(res).toObject;
         });
     }
 
     delete(obj: T): Promise<T> {
-        return this.model.findByIdAndRemove(obj.id).exec();
+        return this.model.findByIdAndRemove(obj._id).exec();
     }
 
     getModel(model : any){

@@ -42,7 +42,7 @@ export class SocketIOController {
 
 
     checkPermission(headers : Headers) : Promise<User>{
-        //TODO: Check for login, chat id
+        //TODO: Check for login, chat _id
         return null;
 
     }
