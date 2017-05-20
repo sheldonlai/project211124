@@ -1,5 +1,5 @@
 import {injectable, inject} from "inversify";
-import {IQuestionAnswerRepository} from "../respositories/QuestionAnswerRepository";
+import {IQuestionRepository} from "../respositories/QuestionRepository";
 import TYPES from '../enums/ClassTypes';
 
 export interface IQuestionAnswerService{
@@ -9,10 +9,10 @@ export interface IQuestionAnswerService{
 @injectable()
 export class QuestionAnswerService implements IQuestionAnswerService{
 
-    private questionsAnswerRepository : IQuestionAnswerRepository;
+    private questionsAnswerRepository : IQuestionRepository;
 
     constructor(
-        @inject(TYPES.IQARepo)  questionsAnswerRepository : IQuestionAnswerRepository
+        @inject(TYPES.IQuestionRepo)  questionsAnswerRepository : IQuestionRepository
     ){
         this.questionsAnswerRepository = questionsAnswerRepository;
     }

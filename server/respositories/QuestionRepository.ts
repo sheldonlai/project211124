@@ -2,21 +2,19 @@ import {injectable} from "inversify";
 import {IQuestion, Question} from '../models/Question';
 import {BaseRepository} from './BaseRepository';
 import {Answer, IAnswer} from '../models/Answer';
-export interface IQuestionAnswerRepository {
-    getQuestionById(questionId : string) : Promise<IQuestion>;
-    getAnswerByQId(questionId : string) : Promise<IAnswer[]>;
-    createQuestion(Question): Promise<any>;
-    createAnswer(answer: IAnswer): Promise<IAnswer>;
-    updateQuestion(question : IQuestion): Promise<IQuestion>;
-    updateAnswer(answer: IAnswer) : Promise<IAnswer>;
-    deleteQuestion(question : IQuestion): Promise<any>;
-    deleteAnswer(answer: IAnswer): Promise<any>;
+import {IUser} from '../models/User';
 
-    //getQuestionByAuthor(user):Promise<any>;
+export interface IQuestionRepository {
+    getQuestionById(questionId : string) : Promise<IQuestion>;
+    createQuestion(Question): Promise<any>;
+    updateQuestion(question : IQuestion): Promise<IQuestion>;
+    deleteQuestion(question : IQuestion): Promise<any>;
+    getQuestionByAuthor(user):Promise<any>;
+
 }
 
 @injectable()
-export class QuestionAnswerRepository extends BaseRepository implements IQuestionAnswerRepository {
+export class QuestionRepository extends BaseRepository implements IQuestionRepository {
 
     getQuestionById(questionId : string) : Promise<IQuestion>{
         return Question.findById(questionId).lean().exec().then( function (question : IQuestion) {
@@ -24,21 +22,9 @@ export class QuestionAnswerRepository extends BaseRepository implements IQuestio
         });
     }
 
-    getAnswerByQId(questionId : string) : Promise<IAnswer[]>{
-        return Answer.find({question : questionId}).lean().exec().then(function(answers :IAnswer[]){
-            return this.getModel(answers);
-        })
-    }
-
     createQuestion(question : IQuestion): Promise<any> {
         return Question.create(question).then(function(question) {
             return this.getModel(question).toObject();
-        })
-    }
-
-    createAnswer(answer: IAnswer): Promise<IAnswer> {
-        return Answer.create(answer).then(function(answer) {
-            return this.getModel(answer).toObject();
         })
     }
 
@@ -48,20 +34,16 @@ export class QuestionAnswerRepository extends BaseRepository implements IQuestio
         })
     }
 
-    updateAnswer(answer: IAnswer): Promise<IAnswer> {
-        return undefined;
-    }
-
     deleteQuestion(question: IQuestion): Promise<any> {
         return Question.findByIdAndRemove(question.id).exec().then(function(){
             return;
         })
     }
 
-    deleteAnswer(answer: IAnswer): Promise<any> {
-        return Answer.findByIdAndRemove(answer.id).exec().then(function(){
-            return;
-        })
+    getQuestionByAuthor(user: IUser): Promise<any>{
+        return Question.find({author : user}).lean().exec().then(function(question: IQuestion){
+            return this.getModel(question);
+        });
     }
 
 }

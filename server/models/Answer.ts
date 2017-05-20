@@ -1,7 +1,7 @@
 import {model, Schema, Document} from "mongoose";
 
 
-export interface IAnswer extends Document {
+export interface IAnswer {
     id: string;
     title: string;
     question: any;
@@ -12,6 +12,10 @@ export interface IAnswer extends Document {
     groups: any[];
     lastEditedUtc : Date;
 };
+
+export interface IAnswerDocument extends IAnswer, Document{
+
+}
 
 const schema = new Schema({
     title: {type: String, required: true},
@@ -27,4 +31,4 @@ const schema = new Schema({
         lastEditedUtc: Date
     }]
 });
-export const Answer = model<IAnswer>('story', schema);
+export const Answer = model<IAnswerDocument>('story', schema);

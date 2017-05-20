@@ -2,8 +2,9 @@
  * Created by SHELDON on 5/18/2017.
  */
 let TYPES = {
-    IQARepo: Symbol("IQuestionAnswerRepository"),
-    IQAService: Symbol("IQuestionAnswerService")
+    IQuestionRepo: Symbol("IQuestionRepository"),
+    IQAService: Symbol("IQuestionAnswerService"),
+    IAnswerRepo: Symbol("IAnswerRepository")
 };
 
 export default TYPES;
