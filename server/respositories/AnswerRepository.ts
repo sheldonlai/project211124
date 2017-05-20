@@ -9,7 +9,7 @@ export interface IAnswerRepository {
 }
 
 @injectable()
-class AnswerRepository extends BaseRepository{
+export class AnswerRepository extends BaseRepository{
     getAnswerByQId(questionId : string) : Promise<IAnswer[]>{
         return Answer.find({question : questionId}).lean().exec().then(function(answers :IAnswer[]){
             return this.getModel(answers);
