@@ -42,6 +42,7 @@ export abstract class BaseRepository<T extends BaseModel, I extends Document & T
     }
 
     create(obj: T): Promise<T> {
+        delete obj._id;
         return this.model.create(obj).then((rse:I)=>{
             return rse.toObject();
         })
@@ -55,7 +56,10 @@ export abstract class BaseRepository<T extends BaseModel, I extends Document & T
     }
 
     deleteById(id : string | Types.ObjectId): Promise<T> {
-        return this.model.findByIdAndRemove(id).exec();
+        return this.model.findByIdAndRemove(id)
+            .exec().then((res: I) => {
+            return this.getModel(res);
+        });
     }
 
     private getModels(docs: any): T[] {

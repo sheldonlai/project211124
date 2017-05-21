@@ -6,13 +6,13 @@ import * as chai from 'chai';
 
 require('source-map-support').install();
 
-import {Question, QuestionComment, QuestionModel} from '../../server/models/Question';
-import {UserModel} from '../../server/models/User';
+import {Question, QuestionComment, QuestionModel} from '../../../server/models/Question';
+import {UserModel} from '../../../server/models/User';
 
-import TYPES from '../../server/enums/ClassTypes';
-import {AnswerRepository, IAnswerRepository} from '../../server/repositories/AnswerRepository';
-import {Answer, AnswerModel} from '../../server/models/Answer';
-import {UserTypeEnum} from '../../server/enums/UserTypeEnum';
+import TYPES from '../../../server/enums/ClassTypes';
+import {AnswerRepository, IAnswerRepository} from '../../../server/repositories/AnswerRepository';
+import {Answer, AnswerModel} from '../../../server/models/Answer';
+import {UserTypeEnum} from '../../../server/enums/UserTypeEnum';
 
 var mongoose = require('mongoose');
 
