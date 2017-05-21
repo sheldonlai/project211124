@@ -10,7 +10,7 @@ import {Question, QuestionComment, QuestionModel} from '../../server/models/Ques
 import {UserModel} from '../../server/models/User';
 
 import TYPES from '../../server/enums/ClassTypes';
-import {AnswerRepository, IAnswerRepository} from '../../server/respositories/AnswerRepository';
+import {AnswerRepository, IAnswerRepository} from '../../server/repositories/AnswerRepository';
 import {Answer, AnswerModel} from '../../server/models/Answer';
 import {UserTypeEnum} from '../../server/enums/UserTypeEnum';
 
@@ -31,8 +31,8 @@ describe('AnswerRepoTest', function () {
     let sampleQuestion;
 
     before(function(){
-        return mongoose.connect('mongodb://localhost:27017/test');
-    })
+        return mongoose.connect('mongodb://admin:1122312@ds143141.mlab.com:43141/askalot');
+    });
 
     after(function(){
         return mongoose.disconnect();

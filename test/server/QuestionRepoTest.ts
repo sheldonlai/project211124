@@ -5,7 +5,7 @@ import * as chai from 'chai';
 
 require('source-map-support').install();
 
-import {IQuestionRepository, QuestionRepository} from '../../server/respositories/QuestionRepository';
+import {IQuestionRepository, QuestionRepository} from '../../server/repositories/QuestionRepository';
 import {Question, QuestionComment, QuestionModel} from '../../server/models/Question';
 import {UserModel} from '../../server/models/User';
 import {UserTypeEnum} from '../../server/enums/UserTypeEnum'
@@ -24,7 +24,7 @@ let questionRepo :IQuestionRepository = container.get<IQuestionRepository>(TYPES
 describe('QuestionRepoTest', function (){
 
     before(function(){
-        return mongoose.connect('mongodb://localhost:27017/test');
+        return mongoose.connect('mongodb://admin:1122312@ds143141.mlab.com:43141/askalot');
     })
 
     after(function(){
@@ -187,7 +187,7 @@ describe('QuestionRepoTest', function (){
             )
             return questionRepo.create(newQuestion);
         }).then(function(question){
-            return questionRepo.delete(question);
+            return questionRepo.deleteById(question._id);
         }).then(function(){
             return QuestionModel.find({}).exec();
         }).then(function(questions){
