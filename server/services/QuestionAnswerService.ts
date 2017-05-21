@@ -1,7 +1,7 @@
 import {injectable, inject} from "inversify";
-import {IQuestionRepository} from "../respositories/QuestionRepository";
+import {IQuestionRepository} from "../repositories/QuestionRepository";
 import TYPES from '../enums/ClassTypes';
-import {IAnswerRepository} from '../respositories/AnswerRepository';
+import {IAnswerRepository} from '../repositories/AnswerRepository';
 
 export interface IQuestionAnswerService{
     createQuestion(question: any, user: any): Promise<any>;
