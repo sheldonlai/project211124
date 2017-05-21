@@ -15,7 +15,6 @@ import TYPES from '../../server/enums/ClassTypes';
 var mongoose = require('mongoose');
 
 mongoose.Promise = global.Promise;
-mongoose.connect('mongodb://localhost:27017/test');
 
 var expect = chai.expect;
 let container = new Container();
@@ -23,6 +22,15 @@ container.bind<IQuestionRepository>(TYPES.IQuestionRepo).to(QuestionRepository);
 let questionRepo :IQuestionRepository = container.get<IQuestionRepository>(TYPES.IQuestionRepo);
 
 describe('QuestionRepoTest', function (){
+
+    before(function(){
+        return mongoose.connect('mongodb://localhost:27017/test');
+    })
+
+    after(function(){
+        return mongoose.disconnect();
+    })
+
 
     beforeEach(function () {
         return QuestionModel.remove({}).then(function(){

@@ -1,6 +1,4 @@
-/**
- * Created by SHELDON on 5/20/2017.
- */
+
 import {Container} from 'inversify';
 import 'reflect-metadata'
 import 'mocha'
@@ -19,17 +17,26 @@ import {UserTypeEnum} from '../../server/enums/UserTypeEnum';
 var mongoose = require('mongoose');
 
 mongoose.Promise = global.Promise;
-mongoose.connect('mongodb://localhost:27017/test');
 
-var expect = chai.expect;
+
+let expect = chai.expect;
 let container = new Container();
 container.bind<IAnswerRepository>(TYPES.IQuestionRepo).to(AnswerRepository);
 let ansRepo = container.get<IAnswerRepository>(TYPES.IQuestionRepo);
 
 describe('AnswerRepoTest', function () {
 
+
     let sampleUser;
     let sampleQuestion;
+
+    before(function(){
+        return mongoose.connect('mongodb://localhost:27017/test');
+    })
+
+    after(function(){
+        return mongoose.disconnect();
+    })
 
     beforeEach(function () {
         return AnswerModel.remove({}).then(function(){
@@ -54,6 +61,7 @@ describe('AnswerRepoTest', function () {
             return QuestionModel.create(newQuestion);
         }).then(function(question) {
             sampleQuestion = question;
+            return;
         })
     })
 
@@ -62,6 +70,9 @@ describe('AnswerRepoTest', function () {
             .then(function (answer) {
                 expect(answer.content).equals('content');
                 expect(answer._id).not.equals(undefined);
+                expect(answer.upVotes).equals(0);
+                expect(answer.downVotes).equals(0);
+                return;
             })
     })
 
@@ -73,6 +84,7 @@ describe('AnswerRepoTest', function () {
             }).catch(function(err){
                 expect(err.message).to.be.not.equal(error_msg);
                 console.log('test passed')
+                return;
             })
     })
 
@@ -84,6 +96,7 @@ describe('AnswerRepoTest', function () {
             }).catch(function(err){
                 expect(err.message).to.be.not.equal(error_msg);
                 console.log('test passed')
+                return;
             })
     })
 
@@ -94,7 +107,7 @@ describe('AnswerRepoTest', function () {
                 answer.content = 'new content'
                 answer.comments.push(new QuestionComment(
                     sampleUser, 'good'
-                ))
+                ));
                 answer.downVotes = 100;
                 answer.upVotes = 200;
                 return ansRepo.update(answer);
@@ -103,6 +116,7 @@ describe('AnswerRepoTest', function () {
                 expect(answer.upVotes).equals(200);
                 expect(answer.downVotes).equals(100);
                 expect(answer.content).equals('new content');
+                return;
             })
     })
 
