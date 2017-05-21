@@ -165,4 +165,54 @@ describe('QuestionRepoTest', function (){
             expect(question.content).equals('content');
         })
     })
+
+    it('should delete question', function () {
+        let new_user;
+        return UserModel.create({
+            email: 's',
+            name: 's',
+            role: UserTypeEnum.ADMIN
+        }).then(function(user){
+            new_user = user;
+            let newQuestion = new Question(
+                'title',
+                'content',
+                user,
+                [],
+                false
+            )
+            return repo.create(newQuestion);
+        }).then(function(question){
+            return repo.delete(question);
+        }).then(function(){
+            return QuestionModel.find({}).exec();
+        }).then(function(questions){
+            expect(questions.length).equals(0);
+        })
+    })
+
+    it('should delete question by Id', function () {
+        let new_user;
+        return UserModel.create({
+            email: 's',
+            name: 's',
+            role: UserTypeEnum.ADMIN
+        }).then(function(user){
+            new_user = user;
+            let newQuestion = new Question(
+                'title',
+                'content',
+                user,
+                [],
+                false
+            )
+            return repo.create(newQuestion);
+        }).then(function(question){
+            return repo.deleteById(question._id);
+        }).then(function(){
+            return QuestionModel.find({}).exec();
+        }).then(function(questions){
+            expect(questions.length).equals(0);
+        })
+    })
 })

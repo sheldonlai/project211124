@@ -9,6 +9,7 @@ export interface IBaseRepository<T> {
     create(obj : T): Promise<T>;
     update(obj : T): Promise<T>;
     delete(obj : T): Promise<T>;
+    deleteById(id : string | Types.ObjectId) : Promise<T>;
 }
 
 @injectable()
@@ -40,6 +41,10 @@ export abstract class BaseRepository<T extends BaseModel, I extends Document & T
 
     delete(obj: T): Promise<T> {
         return this.model.findByIdAndRemove(obj._id).exec();
+    }
+
+    deleteById(id : string | Types.ObjectId): Promise<T> {
+        return this.model.findByIdAndRemove(id).exec();
     }
 
     getModel(model : any){
