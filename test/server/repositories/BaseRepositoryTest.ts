@@ -167,7 +167,9 @@ describe("BaseRepositoryTest", function () {
             }).then(function(updated) {
                 expect(updated._id).eql(testModel._id);
                 expect(updated.age).to.equal(100);
-                return;
+                return repo.getById(updated._id);
+            }).then(function(model) {
+                expect(model.age).to.equal(100);
             })
         });
     });
