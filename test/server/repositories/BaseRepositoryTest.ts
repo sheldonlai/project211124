@@ -1,7 +1,3 @@
-/**
- * Created by Phillip on 2017-05-20.
- */
-
 import {Document, model, Schema} from "mongoose";
 import {BaseModel} from "../../../server/models/BaseModel";
 import {BaseRepository, IBaseRepository} from "../../../server/repositories/BaseRepository";
