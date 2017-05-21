@@ -4,9 +4,10 @@ const numCPUs = require('os').cpus().length;
 import * as mongoose from 'mongoose';
 import container from './inversify.config';
 
+require('source-map-support').install();
+
 let config = require('./config');
 
-import * as http from "http";
 import {Worker} from 'cluster';
 import {SocketIOController} from './Socket.io.controller';
 

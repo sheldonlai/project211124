@@ -15,6 +15,15 @@ export class QuestionRepository extends
         super(QuestionModel);
     }
 
+    create(question : Question): Promise<Question>{
+        delete question.lastEditedUtc;
+        return super.create(question);
+    }
+    update(question : Question): Promise<Question>{
+        delete question.lastEditedUtc;
+        return super.update(question);
+    }
+
     getQuestionByAuthor(user: IUser): Promise<any>{
         return QuestionModel.find({author : user})
             .lean().exec().then(function(question: Question){

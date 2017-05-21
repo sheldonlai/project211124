@@ -1,11 +1,11 @@
 import {EntityNotFoundError} from '../errors/EntityNotFoundError';
 import {injectable} from 'inversify';
-import {model, Document, Model} from 'mongoose';
+import {model, Document, Model, Types} from 'mongoose';
 import {BaseModel} from '../models/BaseModel';
 import {unmanaged} from 'inversify';
 
 export interface IBaseRepository<T> {
-    getById(obj : T) : Promise<T>;
+    getById(id : string | Types.ObjectId) : Promise<T>;
     create(obj : T): Promise<T>;
     update(obj : T): Promise<T>;
     delete(obj : T): Promise<T>;
@@ -19,22 +19,22 @@ export abstract class BaseRepository<T extends BaseModel, I extends Document & T
 
     }
 
-    getById(obj: T): Promise<T> {
-        return this.model.findById(obj._id)
-            .lean().exec().then(function(res : T){
+    getById(id : string | Types.ObjectId): Promise<T> {
+        return this.model.findById(id)
+            .lean().exec().then((res : T) =>{
             return this.getModel(res);
         })
     }
 
     create(obj: T): Promise<T> {
-        return this.model.create(obj).then(function(rse:I){
+        return this.model.create(obj).then((rse:I)=>{
             return rse.toObject();
         })
     }
 
     update(obj: T): Promise<T> {
-        return this.model.findOneAndUpdate({_id :obj._id}, obj).exec().then(function(res: I){
-            return this.getModel(res).toObject;
+        return this.model.findOneAndUpdate({_id :obj._id}, obj, {new: true}).exec().then((res: I) => {
+            return this.getModel(res).toObject();
         });
     }
 

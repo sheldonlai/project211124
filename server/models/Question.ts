@@ -2,10 +2,15 @@ import {model, Schema, Document} from "mongoose";
 import {BaseModel} from './BaseModel';
 import {User} from './User';
 
-export class QuestionComments {
+export class QuestionComment {
     commentBy : User;
     commentContent : string;
-    lastEditedUtc : string;
+    lastEditedUtc : Date;
+
+    constructor(user: User, content: string){
+        this.commentBy = user;
+        this.commentContent = content;
+    }
 }
 
 export class Question extends BaseModel{
@@ -15,16 +20,17 @@ export class Question extends BaseModel{
     tags : any[];
     isPublished : boolean;
     lastEditedUtc : Date;
-    comments : QuestionComments[];
+    comments : QuestionComment[];
 
     constructor(
-        title:string, content: string, author: User, tags:any[], isPublished : boolean
+        title:string, content: string, author: User | string, tags:any[], isPublished : boolean
     ){
         super();
         this.title = title;
         this.content = content;
         this.author = author;
         this.tags = tags;
+        this.isPublished = isPublished;
     }
 };
 
