@@ -20,12 +20,12 @@ mongoose.connect('mongodb://localhost:27017/test');
 var expect = chai.expect;
 let container = new Container();
 container.bind<IQuestionRepository>(TYPES.IQuestionRepo).to(QuestionRepository);
-let repo :IQuestionRepository = container.get<IQuestionRepository>(TYPES.IQuestionRepo);
+let questionRepo :IQuestionRepository = container.get<IQuestionRepository>(TYPES.IQuestionRepo);
 
 describe('QuestionRepoTest', function (){
 
     beforeEach(function () {
-        QuestionModel.remove({}).then(function(){
+        return QuestionModel.remove({}).then(function(){
             return UserModel.remove({})
         })
     })
@@ -33,13 +33,9 @@ describe('QuestionRepoTest', function (){
     it('should fail with no author', function () {
         let error_msg = 'should fail';
         let newQuestion = new Question(
-           'title',
-            'content',
-            null,
-            [],
-            false
+           'title', 'content', null, [], false
         )
-        return repo.create(newQuestion).then(function(q){
+        return questionRepo.create(newQuestion).then(function(q){
             expect.fail(error_msg);
         }).catch(function(err){
             expect(err.message).to.be.not.equal(error_msg);
@@ -63,7 +59,7 @@ describe('QuestionRepoTest', function (){
             )
             // should not be able to change last edited
             newQuestion.lastEditedUtc = dateTime;
-            return repo.create(newQuestion).then(function(question){
+            return questionRepo.create(newQuestion).then(function(question){
                 expect(question._id).to.be.not.equal(undefined);
                 expect(question._id).to.be.not.equal(null);
                 expect(question.title).equals('title');
@@ -93,7 +89,7 @@ describe('QuestionRepoTest', function (){
                 [],
                 false
             )
-            return repo.create(newQuestion);
+            return questionRepo.create(newQuestion);
         }).then(function(question){
             // update question
             expect(question._id).to.be.not.equal(undefined);
@@ -108,7 +104,7 @@ describe('QuestionRepoTest', function (){
             // should not change
             question.lastEditedUtc = dateTime;
 
-            return repo.update(question);
+            return questionRepo.update(question);
         }).then(function(question){
             expect(question.lastEditedUtc).not.eql(dateTime);
             expect(question.content).equals('changed content');
@@ -133,9 +129,9 @@ describe('QuestionRepoTest', function (){
                 [],
                 false
             )
-            return repo.create(newQuestion);
+            return questionRepo.create(newQuestion);
         }).then(function(question){
-            return repo.getById(question._id);
+            return questionRepo.getById(question._id);
         }).then(function(question){
             expect(question.title).equals('title');
             expect(question.content).equals('content');
@@ -157,9 +153,9 @@ describe('QuestionRepoTest', function (){
                 [],
                 false
             )
-            return repo.create(newQuestion);
+            return questionRepo.create(newQuestion);
         }).then(function(question){
-            return repo.getById(question._id.toString());
+            return questionRepo.getById(question._id.toString());
         }).then(function(question){
             expect(question.title).equals('title');
             expect(question.content).equals('content');
@@ -181,9 +177,9 @@ describe('QuestionRepoTest', function (){
                 [],
                 false
             )
-            return repo.create(newQuestion);
+            return questionRepo.create(newQuestion);
         }).then(function(question){
-            return repo.delete(question);
+            return questionRepo.delete(question);
         }).then(function(){
             return QuestionModel.find({}).exec();
         }).then(function(questions){
@@ -206,9 +202,9 @@ describe('QuestionRepoTest', function (){
                 [],
                 false
             )
-            return repo.create(newQuestion);
+            return questionRepo.create(newQuestion);
         }).then(function(question){
-            return repo.deleteById(question._id);
+            return questionRepo.deleteById(question._id);
         }).then(function(){
             return QuestionModel.find({}).exec();
         }).then(function(questions){
