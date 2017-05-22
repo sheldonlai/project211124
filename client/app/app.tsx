@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {MuiThemeProvider} from 'material-ui/styles/MuiThemeProvider';
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import * as injectTapEventPlugin from 'react-tap-event-plugin';
 import {Route, Router} from "react-router";
 import {Link} from "react-router-dom";
