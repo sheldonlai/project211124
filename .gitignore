@@ -8,6 +8,8 @@ server/**/**.js.map
 test/**/**.js
 test/**/**.js.map
 client/**/**.jsx
+client/**/**.js
+client/**/**.js.map
 # dependencies
 node_modules
 
