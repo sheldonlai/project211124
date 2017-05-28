@@ -1,19 +1,16 @@
+import {Container} from "inversify";
+import "reflect-metadata";
+import "mocha";
+import * as chai from "chai";
+import {Question, QuestionComment, QuestionModel} from "../../../server/models/Question";
+import {UserModel} from "../../../server/models/User";
 
-import {Container} from 'inversify';
-import 'reflect-metadata'
-import 'mocha'
-import * as chai from 'chai';
+import TYPES from "../../../server/enums/ClassTypes";
+import {AnswerRepository, IAnswerRepository} from "../../../server/repositories/AnswerRepository";
+import {Answer, AnswerModel} from "../../../server/models/Answer";
+import {FakeModels} from "./helpers/FakeModels";
 
 require('source-map-support').install();
-
-import {Question, QuestionComment, QuestionModel} from '../../../server/models/Question';
-import {UserModel} from '../../../server/models/User';
-
-import TYPES from '../../../server/enums/ClassTypes';
-import {AnswerRepository, IAnswerRepository} from '../../../server/repositories/AnswerRepository';
-import {Answer, AnswerModel} from '../../../server/models/Answer';
-import {UserTypeEnum} from '../../../server/enums/UserTypeEnum';
-import {FakeModels} from "./helpers/FakeModels";
 
 let mongoose = require('mongoose');
 
@@ -76,7 +73,7 @@ describe('AnswerRepoTest', function () {
     it ('should fail when create with no question', function () {
         let error_msg = "fail expected but actually passed";
         return ansRepo.create(new Answer(null, 'content', sampleUser, []))
-            .then(function (answer) {
+            .then(function () {
                 expect.fail(error_msg);
             }).catch(function(err){
                 expect(err.message).to.be.not.equal(error_msg);
@@ -88,7 +85,7 @@ describe('AnswerRepoTest', function () {
     it ('should fail when create with no author', function () {
         let error_msg = "fail expected but actually passed";
         return ansRepo.create(new Answer(null, 'content', sampleUser, []))
-            .then(function (answer) {
+            .then(function () {
                 expect.fail(error_msg);
             }).catch(function(err){
                 expect(err.message).to.be.not.equal(error_msg);
@@ -98,7 +95,6 @@ describe('AnswerRepoTest', function () {
     });
 
     it('should updated ', function () {
-        let fakeDate = new Date(2016,1,11);
         return ansRepo.create(new Answer(sampleQuestion, 'content', sampleUser, []))
             .then(function (answer) {
                 answer.content = 'new content';
