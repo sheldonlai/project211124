@@ -13,8 +13,9 @@ import TYPES from '../../../server/enums/ClassTypes';
 import {AnswerRepository, IAnswerRepository} from '../../../server/repositories/AnswerRepository';
 import {Answer, AnswerModel} from '../../../server/models/Answer';
 import {UserTypeEnum} from '../../../server/enums/UserTypeEnum';
+import {FakeModels} from "./helpers/FakeModels";
 
-var mongoose = require('mongoose');
+let mongoose = require('mongoose');
 
 mongoose.Promise = global.Promise;
 
@@ -36,7 +37,7 @@ describe('AnswerRepoTest', function () {
 
     after(function(){
         return mongoose.disconnect();
-    })
+    });
 
     beforeEach(function () {
         return AnswerModel.remove({}).then(function(){
@@ -44,11 +45,7 @@ describe('AnswerRepoTest', function () {
         }).then(function () {
             return UserModel.remove({})
         }).then(function(){
-            return UserModel.create({
-                email: 's',
-                name: 's',
-                role: UserTypeEnum.ADMIN
-            })
+            return UserModel.create(new FakeModels().localUser())
         }).then(function(user){
             sampleUser = user;
             let newQuestion = new Question(
@@ -57,13 +54,13 @@ describe('AnswerRepoTest', function () {
                 user,
                 [],
                 false
-            )
+            );
             return QuestionModel.create(newQuestion);
         }).then(function(question) {
             sampleQuestion = question;
             return;
         })
-    })
+    });
 
     it ('should create new Answer', function () {
         return ansRepo.create(new Answer(sampleQuestion, 'content', sampleUser, []))
@@ -74,37 +71,37 @@ describe('AnswerRepoTest', function () {
                 expect(answer.downVotes).equals(0);
                 return;
             })
-    })
+    });
 
     it ('should fail when create with no question', function () {
-        let error_msg = "fail expected but actually passed"
+        let error_msg = "fail expected but actually passed";
         return ansRepo.create(new Answer(null, 'content', sampleUser, []))
             .then(function (answer) {
                 expect.fail(error_msg);
             }).catch(function(err){
                 expect(err.message).to.be.not.equal(error_msg);
-                console.log('test passed')
+                console.log('test passed');
                 return;
             })
-    })
+    });
 
     it ('should fail when create with no author', function () {
-        let error_msg = "fail expected but actually passed"
+        let error_msg = "fail expected but actually passed";
         return ansRepo.create(new Answer(null, 'content', sampleUser, []))
             .then(function (answer) {
                 expect.fail(error_msg);
             }).catch(function(err){
                 expect(err.message).to.be.not.equal(error_msg);
-                console.log('test passed')
+                console.log('test passed');
                 return;
             })
-    })
+    });
 
     it('should updated ', function () {
         let fakeDate = new Date(2016,1,11);
         return ansRepo.create(new Answer(sampleQuestion, 'content', sampleUser, []))
             .then(function (answer) {
-                answer.content = 'new content'
+                answer.content = 'new content';
                 answer.comments.push(new QuestionComment(
                     sampleUser, 'good'
                 ));
@@ -120,4 +117,4 @@ describe('AnswerRepoTest', function () {
             })
     })
 
-})
+});
