@@ -9,7 +9,7 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 var mongoose_1 = require("mongoose");
 var BaseModel_1 = require("./BaseModel");
 var ChatMessage = (function () {
@@ -37,7 +37,7 @@ exports.ChatSchema = new mongoose_1.Schema({
     User_B: { type: mongoose_1.Schema.Types.ObjectId, ref: 'user', required: true },
     Messages: [{
             meesages: { type: String, required: true },
-            sentAt: { type: Date, required: true, "default": Date.now },
+            sentAt: { type: Date, required: true, default: Date.now },
             sentBy: { type: mongoose_1.Schema.Types.ObjectId, ref: 'user', required: true }
         }]
 }, {
@@ -45,3 +45,4 @@ exports.ChatSchema = new mongoose_1.Schema({
 });
 // should add pre-save method to ensure local, facebook or google is populated properly
 exports.ChatModel = mongoose_1.model('ChatHistory', exports.ChatSchema);
+//# sourceMappingURL=Chat_history.js.map

@@ -2,9 +2,15 @@
  * Created by SHELDON on 5/18/2017.
  */
 let TYPES = {
+
+    /* Repositories */
+    IUserRepo: Symbol("IUserRepository"),
     IQuestionRepo: Symbol("IQuestionRepository"),
-    IQAService: Symbol("IQuestionAnswerService"),
-    IAnswerRepo: Symbol("IAnswerRepository")
+    IAnswerRepo: Symbol("IAnswerRepository"),
+
+    /* Services */
+    IQAService: Symbol("IQuestionAnswerService")
+
 };
 
 export default TYPES;

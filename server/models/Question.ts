@@ -32,7 +32,7 @@ export class Question extends BaseModel{
         this.tags = tags;
         this.isPublished = isPublished;
     }
-};
+}
 
 export interface IQuestion extends Question, Document{
 
