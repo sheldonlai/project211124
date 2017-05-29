@@ -7,14 +7,14 @@ import {Link} from "react-router-dom";
 import {Home} from "./home/home";
 import createBrowserHistory from 'history/createBrowserHistory'
 import FlatButton from 'material-ui/FlatButton';
-import {deepOrange800, deepOrangeA700, orange800} from 'material-ui/styles/colors';
+import {LoginView} from './auth/login';
 const history = createBrowserHistory()
 
 let muiTheme = getMuiTheme({
     palette: {
-        primary1Color: orange800,
-        primary2Color: deepOrangeA700,
-        primary3Color: deepOrange800,
+        primary1Color: '#d3ffbb',
+        primary2Color: '#d3ffbb',
+        primary3Color: '#d3ffbb',
     },
     appBar: {
         height: 50,
@@ -30,12 +30,12 @@ const menuButtonStyle = {
 
 
 export class App extends React.Component<any, any> {
-    constructor(props: any) {
+    constructor(props) {
         injectTapEventPlugin();
         super(props);
     }
 
-    render() {
+    render() : any {
         return (
             <MuiThemeProvider muiTheme={muiTheme}>
                 <Router history={history}>
@@ -49,8 +49,15 @@ export class App extends React.Component<any, any> {
                                     </Link>
                                 </li>
                             </ul>
+                            <div id="login-menu">
+                                <Link to="/login">
+                                    <FlatButton label="Login" primary={true} style={menuButtonStyle}
+                                                labelStyle={{"fontSize" : "16px"}}/>
+                                </Link>
+                            </div>
                         </div>
                         <Route exact path="/" component={Home}/>
+                        <Route exact path="login" component={LoginView}/>
                     </div>
                 </Router>
             </MuiThemeProvider>
