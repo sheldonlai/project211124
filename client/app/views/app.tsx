@@ -7,7 +7,9 @@ import {Link} from "react-router-dom";
 import {Home} from "./home/home";
 import createBrowserHistory from 'history/createBrowserHistory'
 import FlatButton from 'material-ui/FlatButton';
-import {LoginView} from './auth/login';
+import {LoginView} from './auth/Login';
+import {Routes} from '../constants/Routes';
+import {RegistrationView} from './auth/RegistrationView';
 const history = createBrowserHistory()
 
 let muiTheme = getMuiTheme({
@@ -50,14 +52,15 @@ export class App extends React.Component<any, any> {
                                 </li>
                             </ul>
                             <div id="login-menu">
-                                <Link to="/login">
+                                <Link to={Routes.login}>
                                     <FlatButton label="Login" primary={true} style={menuButtonStyle}
                                                 labelStyle={{"fontSize" : "16px"}}/>
                                 </Link>
                             </div>
                         </div>
-                        <Route exact path="/" component={Home}/>
-                        <Route exact path="login" component={LoginView}/>
+                        <Route exact path={Routes.home} component={Home}/>
+                        <Route exact path={Routes.login} component={LoginView}/>
+                        <Route exact path={Routes.registration} component={RegistrationView}/>
                     </div>
                 </Router>
             </MuiThemeProvider>

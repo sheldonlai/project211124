@@ -7,13 +7,23 @@ import {Urls} from '../../../common/urls';
 import {AxiosRequestConfig} from 'axios';
 
 export interface IApiController{
-    login(user : LoginRequestDto): Promise<any>;
-    getHomePageData(): Promise<any>;
+    get (url: string) : Promise<any>;
+    post (url: string, data: any) : Promise<any>;
+    put (url: string, data: any) : Promise<any>;
+    delete (url: string) : Promise<any>;
 }
 
 export class ApiController implements  IApiController{
 
-    config : any;
+
+    get config(): any {
+        let config = {headers: {'Content-Type': 'application/json'}};
+        let token = window.localStorage.getItem('token');
+        if(token){
+            config.headers['token'] = token;
+        }
+        return config;
+    }
 
     public static _instance : ApiController = new ApiController();
 
@@ -26,22 +36,24 @@ export class ApiController implements  IApiController{
             throw new Error("Error: Instantiation failed: Use AuthService.getInstance() instead of new.");
         }
         ApiController._instance = this;
-        this.config = {headers: {'Content-Type': 'application/json'}}
     }
 
-    setHeaderToken(token : string): void{
-        this.config.headers['token'] = token;
+    get = (url: string) : Promise<any> => {
+        return axios.get(url, this.config);
     }
 
-    removeHeaderToken(){
-        delete this.config.headers['token'];
+    post = (url: string, data: any) : Promise<any> => {
+        return axios.post(url, data, this.config);
     }
 
-    login(user : LoginRequestDto): Promise<any> {
-        return axios.post(Urls.Login, user);
+    put = (url: string, data: any) : Promise<any> => {
+        if (data){
+            return axios.put(url, data, this.config);
+        }
+        return axios.put(url);
     }
 
-    getHomePageData (): Promise<any>{
-        return axios.get(Urls.HomeData);
-    };
+    delete = (url: string) : Promise<any> => {
+        return axios.delete(url, this.config);
+    }
 }
