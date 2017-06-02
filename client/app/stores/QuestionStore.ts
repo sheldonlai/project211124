@@ -1,50 +1,51 @@
 import AppDispatcher from '../dispatcher/AppDispatcher';
-import {EventEmitter} from 'events';
+import {CommonController} from '../api.controllers/CommonController';
+import {QuestionPreview} from '../models/quetsions/QuestionPreview';
+import {QuestionPageDto} from '../../../common/dtos/q&a/QuestionPageDto';
+import {ReduceStore} from 'flux/utils';
+import {QuestionActionTypes} from '../actions/QuestionActionTypes';
 
 
-class QuestionStoreClass extends EventEmitter {
-    questions: any[];
-
-    fetchQuestions() {
-        return this.questions;
-    }
-
-    loadQuestions(data){
-        this.questions = data;
-    }
-
-    emitChange() {
-        this.emit('change');
-    }
-
-    addChangeListener(callback) {
-        this.on('change', callback);
-    }
-
-    removeChangeListener(callback) {
-        this.removeListener('change', callback);
-    }
+export interface QuestionState {
+    questionPreviews : QuestionPreview[];
+    questionPage : QuestionPageDto;
 
 }
 
-const Question = new QuestionStoreClass();
+class QuestionStoreClass extends ReduceStore<QuestionState, any> {
 
-AppDispatcher.register(function(payload){
-    let action = payload.action;
-    let text;
+    commonController : CommonController;
 
-    switch (action.actionType) {
-        case 'GetQuestions':
-            Question.loadQuestions(action.data);
-            break;
-        default:
-            return true;
+    constructor(){
+        super(AppDispatcher);
+        this.commonController = CommonController.getInstance();
     }
 
-    Question.emitChange();
+    getInitialState() : QuestionState {
+        return {
+            questionPreviews : [],
+            questionPage : null
+        };
+    }
 
-    return true;
-})
+    reduce(state: any, action: any) {
+        switch (action.type) {
+            case QuestionActionTypes.CreateQuestion:
 
+                return state;
+            case QuestionActionTypes.FetchQuestionPreviews:
 
-export default Question;
+                return state;
+
+            case QuestionActionTypes.FetchedQuestionPreviews:
+                return state;
+
+            case QuestionActionTypes.QuestionCreated:
+                return state;
+            default:
+                return state;
+        }
+    }
+}
+
+export default new QuestionStoreClass();

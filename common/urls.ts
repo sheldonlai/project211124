@@ -1,7 +1,6 @@
 export class APIUrls {
 
-    static Home = "/";
-    static HomeData = "/home_data";
+    static MainPage = "/";
 
     // auth
     static Login = "/login";
@@ -10,10 +9,8 @@ export class APIUrls {
     // Common
     static SearchUsers = "/search-users";
 
-
-
     static CreateQuestion = "/create-question"
-
+    static QuestionPreviews = "/question-previews"
 
 
 }

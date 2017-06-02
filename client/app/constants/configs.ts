@@ -3,6 +3,6 @@
  */
 
 
-const Config = {
-    tokenKey : 'token',
+export const Config = {
+    tokenKey : 'token'
 }

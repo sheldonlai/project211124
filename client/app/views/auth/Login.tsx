@@ -3,16 +3,24 @@ import {Component} from 'react';
 import Paper from 'material-ui/Paper';
 import TextField from 'material-ui/TextField';
 import RaisedButton from 'material-ui/RaisedButton';
+import {LoginRequest} from '../../../../common/dtos/auth/LoginRequest';
 
-export interface LoginViewProps {
-    login: () => void;
+export interface LoginViewState {
+    loginRequest : LoginRequest
 
 }
+
+
 
 export class LoginView extends Component<any, any> {
 
     constructor(props){
         super(props);
+    }
+
+    submit = () => {
+        let request = this.state.
+        if ()
     }
 
     render(){
@@ -29,7 +37,7 @@ export class LoginView extends Component<any, any> {
                             hintText="password"
                             type="password"
                         /><br />
-                        <RaisedButton primary={true} label="login"/>
+                        <RaisedButton primary={true} label="login" onTouchTap={this.submit}/>
                     </Paper>
                 </div>
             </div>

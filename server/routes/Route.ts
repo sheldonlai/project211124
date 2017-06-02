@@ -10,7 +10,7 @@ import * as path from 'path';
 export class Route {
 
     constructor(router: Router) {
-        router.get(APIUrls.Home + '*', this.homePage);
+        router.get(APIUrls.MainPage + '*', this.homePage);
     }
 
     public homePage = (req: Request, res: Response, next: NextFunction) =>{

@@ -39,7 +39,6 @@ class AuthenticationStoreClass extends ReduceStore<AuthState, any> {
 
             case AuthActionTypes.LOGGED_IN:
                 let data = action.data;
-
                 return {
                     loggedIn: this.isLoggedIn(),
                     role: data.role,

@@ -1,14 +1,19 @@
-/**
- * Created by SHELDON on 5/22/2017.
- */
+
 import axios from 'axios';
-import {LoginRequestDto} from '../../../common/dtos/auth/LoginRequestDto';
+import {LoginRequest} from '../../../common/dtos/auth/LoginRequest';
 import {APIUrls} from '../../../common/urls';
 import {AxiosRequestConfig} from 'axios';
+import {Routes} from '../constants/Routes';
+import {Config} from '../constants/configs';
+
 
 
 export class ApiController {
 
+    // used to navigate throughout the app
+    // should be passed in by the app container
+    routerHistory : any;
+    apiPrefix = '/api';
 
     get config(): any {
         let config = {headers: {'Content-Type': 'application/json'}};
@@ -20,22 +25,19 @@ export class ApiController {
     }
 
     get = (url: string) : Promise<any> => {
-        return axios.get(url, this.config);
+        return axios.get(this.apiPrefix + url, this.config);
     }
 
     post = (url: string, data: any) : Promise<any> => {
-        return axios.post(url, data, this.config);
+        return axios.post(this.apiPrefix + url, data, this.config);
     }
 
     put = (url: string, data: any) : Promise<any> => {
-        if (data){
-            return axios.put(url, data, this.config);
-        }
-        return axios.put(url);
+        return axios.put(this.apiPrefix + url, data, this.config);
     }
 
     delete = (url: string) : Promise<any> => {
-        return axios.delete(url, this.config);
+        return axios.delete(this.apiPrefix + url, this.config);
     }
 
     getToken() : string {
@@ -48,5 +50,13 @@ export class ApiController {
 
     removeToken () {
         localStorage.removeItem(Config.tokenKey);
+    }
+
+    routerLinkTo(url : Routes): void {
+        if (this.routerHistory) {
+            this.routerHistory.push(url)
+        } else {
+            throw new Error('Router history is undefined.');
+        }
     }
 }

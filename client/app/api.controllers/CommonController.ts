@@ -14,8 +14,6 @@ export class CommonController extends ApiController{
         return CommonController._instance;
     }
 
-    // used to navigate throughout the app
-    routerHistory : any;
 
     private constructor() {
         if(CommonController._instance){
@@ -42,8 +40,5 @@ export class CommonController extends ApiController{
     logout () : void {
         this.removeToken();
     }
-
-
-
 
 }
