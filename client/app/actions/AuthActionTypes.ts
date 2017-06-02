@@ -3,5 +3,7 @@
  */
 export enum AuthActionTypes {
     LOGIN = <any> "LOGIN",
-    LOGOUT = <any> "LOGOUT"
+    LOGOUT = <any> "LOGOUT",
+    LOGGED_IN = <any> "LOGGED_IN",
+
 }

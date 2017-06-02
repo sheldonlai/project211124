@@ -2,7 +2,7 @@
  * Created by SHELDON on 5/11/2017.
  */
 import { NextFunction, Request, Response, Router } from "express";
-import {Urls} from '../../common/urls';
+import {APIUrls} from '../../common/urls';
 import * as path from 'path';
 
 
@@ -10,7 +10,7 @@ import * as path from 'path';
 export class Route {
 
     constructor(router: Router) {
-        router.get(Urls.Home + '*', this.homePage);
+        router.get(APIUrls.Home + '*', this.homePage);
     }
 
     public homePage = (req: Request, res: Response, next: NextFunction) =>{

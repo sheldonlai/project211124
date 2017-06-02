@@ -60,7 +60,9 @@ export class App extends React.Component<any, any> {
                         </div>
                         <Route exact path={Routes.home} component={Home}/>
                         <Route exact path={Routes.login} component={LoginView}/>
-                        <Route exact path={Routes.registration} component={RegistrationView}/>
+                        <Route exact path={Routes.registration} component={RegistrationView} {...this.props}/>
+                        <Route exact path={Routes.registration} component={RegistrationView} {...this.props}/>
+                        <Route exact path={Routes.registration} component={RegistrationView} {...this.props}/>
                     </div>
                 </Router>
             </MuiThemeProvider>

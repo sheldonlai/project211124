@@ -1,4 +1,4 @@
-export class Urls {
+export class APIUrls {
 
     static Home = "/";
     static HomeData = "/home_data";
@@ -13,5 +13,7 @@ export class Urls {
 
 
     static CreateQuestion = "/create-question"
+
+
 
 }

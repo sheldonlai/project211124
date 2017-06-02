@@ -1,5 +1,5 @@
 import {NextFunction, Router, Response, Request} from "express";
-import {Urls} from "../../common/urls";
+import {APIUrls} from "../../common/urls";
 import {Container} from "inversify";
 import {IQuestionAnswerService} from "../services/QuestionAnswerService";
 import TYPES from "../enums/ClassTypes";
@@ -10,7 +10,7 @@ export class QuestionAnswerAPI {
 
     constructor(router: Router, service: IQuestionAnswerService) {
         this.service = service;
-        router.get(Urls.CreateQuestion, this.createQuestion);
+        router.get(APIUrls.CreateQuestion, this.createQuestion);
 
     }
 
