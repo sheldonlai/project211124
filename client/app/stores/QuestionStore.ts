@@ -30,14 +30,17 @@ class QuestionStoreClass extends ReduceStore<QuestionState, any> {
 
     reduce(state: any, action: any) {
         switch (action.type) {
-            case QuestionActionTypes.CreateQuestion:
-
-                return state;
-            case QuestionActionTypes.FetchQuestionPreviews:
+            case QuestionActionTypes.CreateQuestionError:
 
                 return state;
 
             case QuestionActionTypes.FetchedQuestionPreviews:
+
+                return state;
+
+            case QuestionActionTypes.FetchedQuestion:
+                let data : QuestionPageDto = action.data;
+
                 return state;
 
             case QuestionActionTypes.QuestionCreated:

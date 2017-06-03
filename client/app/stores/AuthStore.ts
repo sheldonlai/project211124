@@ -33,10 +33,6 @@ class AuthenticationStoreClass extends ReduceStore<AuthState, any> {
 
     reduce(state: any, action: any) {
         switch (action.type) {
-            case AuthActionTypes.LOGIN:
-                this.commonController.login(action.login);
-                return state;
-
             case AuthActionTypes.LOGGED_IN:
                 let data = action.data;
                 return {

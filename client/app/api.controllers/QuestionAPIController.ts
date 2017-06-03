@@ -2,6 +2,7 @@
 import {ApiController} from './ApiController';
 import {Routes} from '../constants/Routes';
 import {APIUrls} from '../../../common/urls';
+import {QuestionDto} from '../../../common/dtos/q&a/QuestionDto';
 export class QuestionAPIController extends ApiController{
 
     public static _instance : QuestionAPIController = new QuestionAPIController();
@@ -21,8 +22,12 @@ export class QuestionAPIController extends ApiController{
         QuestionAPIController._instance = this;
     }
 
-    fetchQuestionPreviews() : void {
-        this.get(APIUrls.HomeData)
+    fetchQuestionPreviews() : Promise<any> {
+        return this.get(APIUrls.QuestionPreviews);
+    }
+
+    createQuestion(question : QuestionDto) : Promise<any> {
+        return this.post(APIUrls.CreateQuestion, question);
     }
 
 }

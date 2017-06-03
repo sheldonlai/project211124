@@ -1,9 +1,7 @@
 import {ApiController} from './ApiController';
 import {APIUrls} from '../../../common/urls';
-import {LoginRequest} from '../models/LoginRequest';
-import AppDispatcher from '../dispatcher/AppDispatcher';
-import {AuthActionTypes} from '../actions/AuthActionTypes';
 import {Routes} from '../constants/Routes';
+import {LoginRequest} from '../../../common/dtos/auth/LoginRequest';
 
 
 export class CommonController extends ApiController{
@@ -14,6 +12,9 @@ export class CommonController extends ApiController{
         return CommonController._instance;
     }
 
+    // used to navigate throughout the app
+    // should be passed in by the app container
+    routerHistory : any;
 
     private constructor() {
         if(CommonController._instance){
@@ -27,18 +28,16 @@ export class CommonController extends ApiController{
         this.routerHistory.push(url)
     }
 
-    login (login: LoginRequest) : void {
-        this.post(APIUrls.Login, login).then((response)=> {
-            this.setToken(response.data.token);
-            AppDispatcher.dispatch({
-                type: AuthActionTypes.LOGGED_IN,
-                data: response.data
-            });
-        })
+    login (login: LoginRequest) : Promise<any> {
+        return this.post(APIUrls.Login, login);
     }
 
     logout () : void {
         this.removeToken();
+    }
+
+    registerUser (regRequest : any) : Promise<any> {
+        return this.post(APIUrls.Register, regRequest);
     }
 
 }

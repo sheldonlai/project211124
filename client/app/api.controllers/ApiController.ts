@@ -10,9 +10,6 @@ import {Config} from '../constants/configs';
 
 export class ApiController {
 
-    // used to navigate throughout the app
-    // should be passed in by the app container
-    routerHistory : any;
     apiPrefix = '/api';
 
     get config(): any {
@@ -52,11 +49,5 @@ export class ApiController {
         localStorage.removeItem(Config.tokenKey);
     }
 
-    routerLinkTo(url : Routes): void {
-        if (this.routerHistory) {
-            this.routerHistory.push(url)
-        } else {
-            throw new Error('Router history is undefined.');
-        }
-    }
+
 }

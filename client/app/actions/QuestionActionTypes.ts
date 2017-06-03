@@ -2,10 +2,10 @@
  * Created by SHELDON on 6/1/2017.
  */
 export enum QuestionActionTypes {
-    FetchQuestionPreviews = <any> "FetchQuestionPreviews",
+    QuestionPreviewsError = <any> "QuestionPreviewsError",
     FetchedQuestionPreviews = <any> "FetchedQuestionPreviews",
-    CreateQuestion = <any> "CreateQuestion",
+    CreateQuestionError = <any> "CreateQuestionError",
     QuestionCreated = <any> "QuestionCreated",
-    FetchQuestion = <any> "FetchQuestion",
+    FetchQuestionError = <any> "FetchQuestionError",
     FetchedQuestion = <any> "FetchedQuestion",
 }
