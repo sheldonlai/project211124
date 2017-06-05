@@ -2,13 +2,15 @@
 import { NextFunction, Request, Response, Router } from "express";
 import {APIUrls} from '../../common/urls';
 import * as path from 'path';
+import {BaseAPI} from "./BaseAPI";
 
 
 
-export class HomeAPI {
+export class HomeAPI extends BaseAPI {
 
     constructor(router: Router) {
-        router.get(APIUrls.HomeData, this.homeData);
+        super();
+       // router.get(APIUrls.HomeData, this.homeData);
     }
 
     public homeData = (req: Request, res: Response, next: NextFunction) =>{

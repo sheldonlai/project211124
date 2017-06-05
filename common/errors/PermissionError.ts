@@ -4,7 +4,7 @@ import {AppError} from "./AppError";
  */
 export class PermissionError extends AppError{
     constructor(msg: string){
-        super(msg, 400);
+        super(msg, 403);
 
     }
 }

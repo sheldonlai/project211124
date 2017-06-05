@@ -6,6 +6,7 @@ import {IQuestionAnswerService, QuestionAnswerService} from "./services/Question
 import TYPES from "./enums/ClassTypes";
 import {IAnswerRepository, AnswerRepository} from './repositories/AnswerRepository';
 import {IUserRepository, UserRepository} from "./repositories/UserRepository";
+import {AuthenticationService, IAuthenticationService} from "./services/AuthenticationService";
 
 let container = new Container();
 
@@ -16,5 +17,6 @@ container.bind<IAnswerRepository>(TYPES.IAnswerRepo).to(AnswerRepository);
 
 /* Services */
 container.bind<IQuestionAnswerService>(TYPES.IQAService).to(QuestionAnswerService);
+container.bind<IAuthenticationService>(TYPES.IAuthService).to(AuthenticationService);
 
 export default container;

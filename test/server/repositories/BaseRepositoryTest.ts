@@ -101,6 +101,32 @@ describe("BaseRepositoryTest", function () {
         })
     });
 
+    describe("test findOne method", function() {
+        it("should throw exception if no entity matches the given query predicates", function() {
+            let error_msg = "fail expected but actually passed";
+            return repo.findOne({age: 50}).then(function() {
+                expect.fail(error_msg);
+                return
+            }).catch(function(err) {
+                expect(err.name).to.equal("EntityNotFoundError");
+                return;
+            })
+        });
+
+       it("should return entity that match the query predicates", function() {
+           let testModel1: TestModel = new TestModel(20);
+           let testModel2: TestModel = new TestModel(20);
+           let createPromises = [repo.create(testModel1), repo.create(testModel2)];
+           return Promise.all(createPromises).then(function() {
+               let query = { age: 20 };
+               return repo.findOne(query);
+           }).then(function(model) {
+               expect(model.age).to.equal(20);
+               return;
+           })
+       })
+    });
+
     describe("test filter method", function() {
         it("should return entities that matches the query predicates", function() {
             let testModel1: TestModel = new TestModel(10);

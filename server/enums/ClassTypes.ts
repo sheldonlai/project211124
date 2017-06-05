@@ -9,7 +9,8 @@ let TYPES = {
     IAnswerRepo: Symbol("IAnswerRepository"),
 
     /* Services */
-    IQAService: Symbol("IQuestionAnswerService")
+    IQAService: Symbol("IQuestionAnswerService"),
+    IAuthService: Symbol("IAuthenticationService")
 
 };
 

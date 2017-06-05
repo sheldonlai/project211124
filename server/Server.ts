@@ -12,6 +12,8 @@ import {Container} from "inversify";
 import {QuestionAnswerAPI} from "./routes/QuestionAnswerAPI";
 import {IQuestionAnswerService} from "./services/QuestionAnswerService";
 import TYPES from "./enums/ClassTypes";
+import {IAuthenticationService} from "./services/AuthenticationService";
+import {AuthenticationAPI} from "./routes/AuthenticationAPI";
 
 let favicon = require('serve-favicon');
 let config = require('./config');
@@ -51,9 +53,9 @@ export class Server {
         this.app.use(bodyParser.json({limit: '50mb'}));
         this.app.use(cookieParser());
 
-        let router = express.Router();
-        new Route(router);
-        this.app.use(router);
+        //let router = express.Router();
+        //new Route(router);
+        //this.app.use(router);
         this.api();
 
         this.app.use(function (err : AppError, req : Request, res : Response, next: any) {
@@ -69,9 +71,16 @@ export class Server {
 
     public api() {
         let router = express.Router();
-        let qAService : IQuestionAnswerService = this.container.get<IQuestionAnswerService>(TYPES.IQAService);
         new HomeAPI(router);
+
+        /* Question Answer */
+        let qAService : IQuestionAnswerService = this.container.get<IQuestionAnswerService>(TYPES.IQAService);
         new QuestionAnswerAPI(router, qAService);
+
+        /* Authentication */
+        let authenticationService: IAuthenticationService = this.container.get<IAuthenticationService>(TYPES.IAuthService);
+        new AuthenticationAPI(router, authenticationService);
+
         this.app.use('/api', router);
     }
 

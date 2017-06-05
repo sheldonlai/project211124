@@ -7,6 +7,7 @@ import {unmanaged} from 'inversify';
 export interface IBaseRepository<T> {
     getAll(): Promise<T[]>
     getById(id : string | Types.ObjectId) : Promise<T>;
+    findOne(query: any): Promise<T>;
     filter(query: any): Promise<T[]>
     create(obj : T): Promise<T>;
     update(obj : T): Promise<T>;
@@ -32,6 +33,13 @@ export abstract class BaseRepository<T extends BaseModel, I extends Document & T
             .lean().exec().then((res : I) =>{
             return this.getModel(res);
         })
+    }
+
+    findOne(query: any): Promise<T> { // Seems weird to throw exception if its not found
+        return this.model.findOne(query)
+            .lean().exec().then((res: I) => {
+                return this.getModel(res);
+            })
     }
 
     filter(query: any): Promise<T[]> {
