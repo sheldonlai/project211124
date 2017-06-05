@@ -13,7 +13,7 @@ import {SocketIOController} from './Socket.io.controller';
 
 (<any>mongoose).Promise = global.Promise;
 
-let devMode = config.devMode;
+let devMode = config.dev.devMode;
 
 if (cluster.isMaster && !devMode ) {
     // Fork workers.

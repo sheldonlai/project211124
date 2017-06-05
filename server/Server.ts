@@ -5,7 +5,7 @@ import * as http from 'http';
 import * as bodyParser from 'body-parser';
 import * as cookieParser from 'cookie-parser';
 import {AppError} from '../common/errors/AppError';
-import {Request, Response} from 'express';
+import {NextFunction, Request, Response} from 'express';
 import {Route} from './routes/Route';
 import {HomeAPI} from './routes/HomeAPI';
 import {Container} from "inversify";
@@ -20,7 +20,6 @@ let config = require('./config');
 
 export class Server {
     public app: express.Application;
-    public server: http.Server;
     public container : Container;
 
     public static bootstrap(container: Container): Server {
@@ -28,27 +27,23 @@ export class Server {
     }
 
     constructor(container : Container) {
-        //create expressjs application
+        //create expressJS application
         this.app = express();
         //configure application
         this.container = container;
-        this.config();
+        this.configure();
     }
 
-    public config() {
+    private configure(): void {
+        /* Database */
+        this.connectMongoose();
 
-        let dbURI = config.database.URI;
-        mongoose.connect(dbURI);
-        let db = mongoose.connection;
-
-        db.on('error', console.error);
-        db.on('connected', function () {
-            console.log('Mongoose default connection open to ' + dbURI);
-        });
-
+        /* Static files */
         this.app.use(favicon(path.join(__dirname, '../client/static/favicon.ico')));
-        this.app.use('/', express.static(path.resolve(__dirname, '../client/static/')))
+        this.app.use('/', express.static(path.resolve(__dirname, '../client/static/')));
         this.app.use('/node_modules', express.static(path.resolve(__dirname, '../node_modules')));
+
+        /* Third party middleware */
         this.app.use(bodyParser.urlencoded({extended: false}));
         this.app.use(bodyParser.json({limit: '50mb'}));
         this.app.use(cookieParser());
@@ -58,19 +53,26 @@ export class Server {
         //this.app.use(router);
         this.api();
 
-        this.app.use(function (err : AppError, req : Request, res : Response, next: any) {
-            res.statusCode = (err.status)? err.status : 500;
+        /* Error Handler */
+        this.app.use(this.errorHandler);
+    }
 
-            res.json({
-                error : err.message
-            });
+    private connectMongoose(): void {
+        let dbURI = config.database.URI;
+        mongoose.connect(dbURI);
+        let db = mongoose.connection;
+
+        db.on('error', console.error);
+        db.on('connected', function () {
+            console.log('Mongoose default connection open to ' + dbURI);
         });
-
     }
 
 
-    public api() {
+    private api() {
         let router = express.Router();
+
+        /* Home */
         new HomeAPI(router);
 
         /* Question Answer */
@@ -82,6 +84,12 @@ export class Server {
         new AuthenticationAPI(router, authenticationService);
 
         this.app.use('/api', router);
+    }
+
+    private errorHandler(err : AppError, req : Request, res : Response, next: NextFunction) {
+        console.error(err.stack);
+        res.statusCode = (err.status) ? err.status : 500;
+        res.json({error: err.message});
     }
 
 }

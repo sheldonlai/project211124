@@ -27,6 +27,8 @@ export = {
         'secretKey': 'zzzz'
     },
 
-    'baseUrl' : 'http://localhost:3000',
-    'devMode' : true
+    'dev': {
+        'devMode': true,
+    }
+
 }

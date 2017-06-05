@@ -2,15 +2,15 @@ export class APIUrls {
 
     static MainPage = "/";
 
-    // auth
+    /* Common */
+    static SearchUsers = "/search-users";
+
+    /* authentication */
     static Login = "/auth/login";
     static Register= "/auth/register";
 
-    // Common
-    static SearchUsers = "/search-users";
-
+    /* Question & Answer */
     static CreateQuestion = "/create-question";
     static QuestionPreviews = "/question-previews";
-
 
 }
