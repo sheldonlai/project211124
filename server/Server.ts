@@ -48,9 +48,9 @@ export class Server {
         this.app.use(bodyParser.json({limit: '50mb'}));
         this.app.use(cookieParser());
 
-        //let router = express.Router();
-        //new Route(router);
-        //this.app.use(router);
+        let router = express.Router();
+        new Route(router);
+        this.app.use(router);
         this.api();
 
         /* Error Handler */

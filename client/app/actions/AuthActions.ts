@@ -1,11 +1,12 @@
 import AppDispatcher from '../dispatcher/AppDispatcher';
 import {AuthActionTypes} from './AuthActionTypes';
 import {CommonController} from '../api.controllers/CommonController';
-import {LoginRequest} from '../../../common/dtos/auth/LoginRequest';
 import {Routes} from '../constants/Routes';
+import {LoginRequest} from '../models/LoginRequest';
+import {RegistrationRequest} from '../models/RegistrationRequest';
 
 let apiController : CommonController = CommonController.getInstance();
-class AuthActions {
+export class AuthActions {
     static login(login: LoginRequest){
         apiController.login(login).then(res => {
             apiController.setToken(res.data.token);
@@ -23,7 +24,7 @@ class AuthActions {
         });
     }
 
-    static register(regRequest: any){
+    static register(regRequest: RegistrationRequest){
         apiController.registerUser(regRequest).then(res => {
             apiController.setToken(res.data.token);
             apiController.routerHistory.push(Routes.home);
@@ -34,5 +35,3 @@ class AuthActions {
         })
     }
 }
-
-export default AuthActions;

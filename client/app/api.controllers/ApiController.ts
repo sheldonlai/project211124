@@ -1,9 +1,6 @@
 
 import axios from 'axios';
-import {LoginRequest} from '../../../common/dtos/auth/LoginRequest';
-import {APIUrls} from '../../../common/urls';
-import {AxiosRequestConfig} from 'axios';
-import {Routes} from '../constants/Routes';
+import {AxiosPromise} from 'axios';
 import {Config} from '../constants/configs';
 
 
@@ -21,19 +18,19 @@ export class ApiController {
         return config;
     }
 
-    get = (url: string) : Promise<any> => {
+    get = (url: string) : AxiosPromise => {
         return axios.get(this.apiPrefix + url, this.config);
     }
 
-    post = (url: string, data: any) : Promise<any> => {
+    post = (url: string, data: any) : AxiosPromise => {
         return axios.post(this.apiPrefix + url, data, this.config);
     }
 
-    put = (url: string, data: any) : Promise<any> => {
+    put = (url: string, data: any) : AxiosPromise => {
         return axios.put(this.apiPrefix + url, data, this.config);
     }
 
-    delete = (url: string) : Promise<any> => {
+    delete = (url: string) : AxiosPromise => {
         return axios.delete(this.apiPrefix + url, this.config);
     }
 

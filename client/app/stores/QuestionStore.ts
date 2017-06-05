@@ -1,9 +1,9 @@
 import AppDispatcher from '../dispatcher/AppDispatcher';
 import {CommonController} from '../api.controllers/CommonController';
-import {QuestionPreview} from '../models/quetsions/QuestionPreview';
 import {QuestionPageDto} from '../../../common/dtos/q&a/QuestionPageDto';
 import {ReduceStore} from 'flux/utils';
 import {QuestionActionTypes} from '../actions/QuestionActionTypes';
+import {QuestionPreview} from '../../../common/dtos/q&a/QuestionPreview';
 
 
 export interface QuestionState {

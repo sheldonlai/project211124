@@ -1,7 +1,9 @@
 import {ApiController} from './ApiController';
 import {APIUrls} from '../../../common/urls';
 import {Routes} from '../constants/Routes';
-import {LoginRequest} from '../../../common/dtos/auth/LoginRequest';
+import {LoginRequest} from '../models/LoginRequest';
+import {AxiosPromise} from 'axios';
+import {RegistrationRequest} from '../models/RegistrationRequest';
 
 
 export class CommonController extends ApiController{
@@ -28,7 +30,7 @@ export class CommonController extends ApiController{
         this.routerHistory.push(url)
     }
 
-    login (login: LoginRequest) : Promise<any> {
+    login (login: LoginRequest) : AxiosPromise {
         return this.post(APIUrls.Login, login);
     }
 
@@ -36,7 +38,7 @@ export class CommonController extends ApiController{
         this.removeToken();
     }
 
-    registerUser (regRequest : any) : Promise<any> {
+    registerUser (regRequest : RegistrationRequest) : AxiosPromise {
         return this.post(APIUrls.Register, regRequest);
     }
 

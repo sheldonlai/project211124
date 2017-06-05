@@ -58,11 +58,11 @@ export class App extends React.Component<any, any> {
                                 </Link>
                             </div>
                         </div>
-                        <Route exact path={Routes.home} component={Home}/>
-                        <Route exact path={Routes.login} component={LoginView}/>
+                        <Route exact path={Routes.home} component={Home} {...this.props}/>
+                        <Route exact path={Routes.login} component={LoginView} {...this.props}/>
                         <Route exact path={Routes.registration} component={RegistrationView} {...this.props}/>
-                        <Route exact path={Routes.registration} component={RegistrationView} {...this.props}/>
-                        <Route exact path={Routes.registration} component={RegistrationView} {...this.props}/>
+                        {/*<Route exact path={Routes.registration} component={RegistrationView} {...this.props}/>*/}
+                        {/*<Route exact path={Routes.registration} component={RegistrationView} {...this.props}/>*/}
                     </div>
                 </Router>
             </MuiThemeProvider>

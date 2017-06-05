@@ -42,7 +42,6 @@ class AuthenticationStoreClass extends ReduceStore<AuthState, any> {
                 }
 
             case AuthActionTypes.LOGOUT:
-                this.commonController.logout();
                 return this.getInitialState();
 
             default:
