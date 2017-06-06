@@ -77,6 +77,7 @@ userSchema.pre('save', function(nextFunction) {
     nextFunction();
 });
 
+
 export const UserModel = model<IUser>('user', userSchema);
 
 

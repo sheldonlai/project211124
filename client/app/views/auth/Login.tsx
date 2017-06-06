@@ -22,7 +22,7 @@ export class LoginView extends Component<any, any> {
 
     updateUsername(event) {
         let  loginReq : LoginRequest = this.state.loginRequest;
-        loginReq.username = event.target.value;
+        loginReq.email = event.target.value;
         this.setState(loginReq);
     }
 

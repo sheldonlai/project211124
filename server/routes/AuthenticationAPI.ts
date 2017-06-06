@@ -7,6 +7,8 @@ import {IAuthenticationService} from "../services/AuthenticationService";
 import {BaseAPI} from "./BaseAPI";
 import {User} from "../models/User";
 import {RegistrationDto} from '../../common/dtos/auth/RegistrationDto';
+import {LoginDto} from '../../common/dtos/auth/LoginDto';
+import {TokenDto} from '../../common/dtos/auth/TokenDto';
 
 export class AuthenticationAPI extends BaseAPI {
 
@@ -23,6 +25,11 @@ export class AuthenticationAPI extends BaseAPI {
         let regReq: RegistrationDto = req.body;
         let result: Promise<User> = this.service.registerLocalUser(regReq.email, regReq.username, regReq.password);
         this.respondPromise(result, res, next);
+    }
+
+    public login = (req: Request, res: Response, next: NextFunction) => {
+        let loginReq : LoginDto = req.body;
+        let result: Promise<any> =  this.service.login(loginReq.email, loginReq.password);
     }
 
 }

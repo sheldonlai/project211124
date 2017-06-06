@@ -23,43 +23,43 @@ export abstract class BaseRepository<T extends BaseModel, I extends Document & T
 
     getAll(): Promise<T[]> {
         return this.model.find()
-            .lean().exec().then((res: I[]) => {
+            .lean().exec().then((res: T[]) => {
             return this.getModels(res);
         })
     }
 
     getById(id : string | Types.ObjectId): Promise<T> {
         return this.model.findById(id)
-            .lean().exec().then((res : I) =>{
+            .lean().exec().then((res : T) =>{
             return this.getModel(res);
         })
     }
 
     findOne(query: any): Promise<T> { // Seems weird to throw exception if its not found
         return this.model.findOne(query)
-            .lean().exec().then((res: I) => {
+            .lean().exec().then((res: T) => {
                 return this.getModel(res);
             })
     }
 
     filter(query: any): Promise<T[]> {
         return this.model.find(query)
-            .lean().exec().then((res: I[]) => {
+            .lean().exec().then((res: T[]) => {
             return this.getModels(res);
         })
     }
 
     create(obj: T): Promise<T> {
         delete obj._id;
-        return this.model.create(obj).then((rse:I)=>{
-            return rse.toObject();
+        return this.model.create(obj).then((res:I)=>{
+            return this.getModel(<T> res.toObject());
         })
     }
 
     update(obj: T): Promise<T> {
         return this.model.findByIdAndUpdate(obj._id, obj, {new: true})
             .exec().then((res: I) => {
-            return this.getModel(res);
+            return this.getModel(<T> res.toObject());
         });
     }
 
@@ -76,7 +76,7 @@ export abstract class BaseRepository<T extends BaseModel, I extends Document & T
         })
     }
 
-    private getModel(doc : I): T {
+    private getModel(doc : T): T {
         if (doc == null){
             throw new EntityNotFoundError('Entity not found');
         }

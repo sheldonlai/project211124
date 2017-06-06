@@ -24,4 +24,5 @@ export class UserRepository extends BaseRepository<User, IUser> implements IUser
         })
     }
 
+
 }

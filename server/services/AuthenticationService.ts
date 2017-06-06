@@ -21,17 +21,23 @@ export interface IAuthenticationService{
      * @throws email must not been used
      */
     registerLocalUser(email: string, name: string, password: string): Promise<User>;
+
+    login(username: string , password: string) : Promise<any>;
 }
 
 @injectable()
 export class AuthenticationService implements IAuthenticationService{
 
     private userRepository : IUserRepository;
+    private privateKey : string;
+    private jwt : any;
 
     constructor(
         @inject(TYPES.IUserRepo)  userRepository : IUserRepository,
     ){
         this.userRepository = userRepository;
+        this.privateKey = require('../config').jwt.secretKey;
+        this.jwt = require('jsonwebtoken');
     }
 
     registerLocalUser(email: string, name: string, password: string): Promise<User> {
@@ -50,6 +56,25 @@ export class AuthenticationService implements IAuthenticationService{
                 throw err;
             })
     }
+
+    login(email: string, password: string): Promise<any> {
+        return this.userRepository.getByEmail(email).then((user : User) => {
+            if (!user){
+                throw new Error("The account does not exists!");
+            } else {
+                let salt = user.local.salt;
+                let passwordHash = StringUtils.hashString(password, salt);
+                if (user.local.password != passwordHash){
+                    // incorrect pass
+                    throw new Error("Wrong credentials, please try again");
+                }
+                let token = this.jwt.sign(user, this.privateKey, {algorithm: 'RS384'});
+                return { token : token};
+            }
+        });
+    }
+
+
 
 }
 
