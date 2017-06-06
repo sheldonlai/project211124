@@ -6,7 +6,7 @@ import * as bodyParser from 'body-parser';
 import * as cookieParser from 'cookie-parser';
 import {AppError} from '../common/errors/AppError';
 import {NextFunction, Request, Response} from 'express';
-import {Route} from './routes/Route';
+import {PageProvider} from './routes/PageProvider';
 import {HomeAPI} from './routes/HomeAPI';
 import {Container} from "inversify";
 import {QuestionAnswerAPI} from "./routes/QuestionAnswerAPI";
@@ -39,18 +39,14 @@ export class Server {
         this.connectMongoose();
 
         /* Static files */
-        this.app.use(favicon(path.join(__dirname, '../client/static/favicon.ico')));
-        this.app.use('/', express.static(path.resolve(__dirname, '../client/static/')));
-        this.app.use('/node_modules', express.static(path.resolve(__dirname, '../node_modules')));
+        this.staticFiles();
 
         /* Third party middleware */
         this.app.use(bodyParser.urlencoded({extended: false}));
         this.app.use(bodyParser.json({limit: '50mb'}));
         this.app.use(cookieParser());
 
-        let router = express.Router();
-        new Route(router);
-        this.app.use(router);
+        /* API for client side */
         this.api();
 
         /* Error Handler */
@@ -66,6 +62,15 @@ export class Server {
         db.on('connected', function () {
             console.log('Mongoose default connection open to ' + dbURI);
         });
+    }
+
+    private staticFiles() {
+        this.app.use(favicon(path.join(__dirname, '../client/static/favicon.ico')));
+        this.app.use('/', express.static(path.resolve(__dirname, '../client/static/')));
+        this.app.use('/node_modules', express.static(path.resolve(__dirname, '../node_modules')));
+        let router = express.Router();
+        new PageProvider(router);
+        this.app.use(router);
     }
 
 

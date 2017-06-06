@@ -7,7 +7,7 @@ import * as path from 'path';
 
 
 
-export class Route {
+export class PageProvider {
 
     constructor(router: Router) {
         router.get(APIUrls.MainPage + '*', this.homePage);
