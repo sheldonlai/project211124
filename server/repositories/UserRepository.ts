@@ -11,18 +11,20 @@ export interface IUserRepository extends IBaseRepository<User>{
 }
 
 @injectable()
-export class UserRepository extends BaseRepository<User, IUser> implements IUserRepository{
+export class UserRepository extends BaseRepository<User, IUser> implements IUserRepository {
 
     constructor() {
         super(UserModel)
     }
 
-    getByEmail(email : string): Promise<User> {
-        return this.findOne({email: email})
-            .catch(function() {
-                return Promise.resolve();
-        })
+    getByEmail(email: string): Promise<User> {
+        return UserModel.findOne({email: email}).lean().exec()
     }
 
+    protected applyRestriction(user: User): User {
+        delete user.local;
+        delete user.facebook;
+        return user;
+    }
 
 }
