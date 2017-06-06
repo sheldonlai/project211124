@@ -2,7 +2,7 @@
   "name": "AskAlot",
   "description": "experimental project",
   "author": "Sheldon",
-  "contributors": "",
+  "contributors": "Phillip, John",
   "license": "GPL-3.0",
   "repository": "N/A",
   "bugs": "",
@@ -68,6 +68,6 @@
     "source-map-loader": "^0.2.0",
     "source-map-support": "^0.4.15",
     "ts-node": "^2.0.0",
-    "typescript": "^2.3.2"
+    "typescript": "^2.3.4"
   }
 }

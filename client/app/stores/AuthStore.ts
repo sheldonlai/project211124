@@ -3,13 +3,13 @@ import AppDispatcher from '../dispatcher/AppDispatcher';
 import {AuthActionTypes} from '../actions/AuthActionTypes';
 import {CommonController} from '../api.controllers/CommonController';
 
-export interface AuthState {
+export interface AuthStoreState {
     loggedIn : boolean;
     role : string;
     permissions : any[];
 }
 
-class AuthenticationStoreClass extends ReduceStore<AuthState, any> {
+class AuthenticationStoreClass extends ReduceStore<AuthStoreState, any> {
 
     commonController : CommonController;
 
@@ -18,8 +18,8 @@ class AuthenticationStoreClass extends ReduceStore<AuthState, any> {
         this.commonController = CommonController.getInstance();
     }
 
-    getInitialState() : AuthState {
-        let loggedIn = (CommonController.getInstance().getToken())? true : false;
+    getInitialState() : AuthStoreState {
+        let loggedIn = !!(CommonController.getInstance().getToken())
         return {
             loggedIn: loggedIn,
             role: null,
@@ -28,7 +28,7 @@ class AuthenticationStoreClass extends ReduceStore<AuthState, any> {
     }
 
     isLoggedIn() :boolean {
-        return (CommonController.getInstance().getToken())? true : false;
+        return !!(CommonController.getInstance().getToken())
     }
 
     reduce(state: any, action: any) {
@@ -39,7 +39,7 @@ class AuthenticationStoreClass extends ReduceStore<AuthState, any> {
                     loggedIn: this.isLoggedIn(),
                     role: data.role,
                     permissions : [] // TODO : Add real permissions
-                }
+                };
 
             case AuthActionTypes.LOGOUT:
                 return this.getInitialState();
@@ -50,4 +50,6 @@ class AuthenticationStoreClass extends ReduceStore<AuthState, any> {
     }
 }
 
-export default new AuthenticationStoreClass();
+
+const AuthStore = new AuthenticationStoreClass();
+export default AuthStore;

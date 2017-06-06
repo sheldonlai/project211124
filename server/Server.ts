@@ -1,7 +1,6 @@
 import * as express from 'express';
 import * as mongoose from 'mongoose';
 import * as path from 'path';
-import * as http from 'http';
 import * as bodyParser from 'body-parser';
 import * as cookieParser from 'cookie-parser';
 import {AppError} from '../common/errors/AppError';
@@ -80,7 +79,7 @@ export class Server {
         /* Home */
         new HomeAPI(router);
 
-        /* Question Answer */
+        /* QuestionView Answer */
         let qAService : IQuestionAnswerService = this.container.get<IQuestionAnswerService>(TYPES.IQAService);
         new QuestionAnswerAPI(router, qAService);
 

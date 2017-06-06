@@ -1,16 +1,18 @@
 import * as React from 'react';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
-import * as injectTapEventPlugin from 'react-tap-event-plugin';
 import {Route, Router} from "react-router";
 import {Link} from "react-router-dom";
 import {Home} from "./home/home";
-import createBrowserHistory from 'history/createBrowserHistory'
 import FlatButton from 'material-ui/FlatButton';
 import {LoginView} from './auth/Login';
 import {Routes} from '../constants/Routes';
 import {RegistrationView} from './auth/RegistrationView';
-const history = createBrowserHistory()
+import {CreateQuestion} from './question/CreateQuestion';
+import {AuthStoreState} from '../stores/AuthStore';
+import {AuthActions} from '../actions/AuthActions';
+import {RouterController} from '../api.controllers/RouterController';
+import {QuestionViewContainer} from '../containers/QuestionContainer';
 
 let muiTheme = getMuiTheme({
     palette: {
@@ -28,41 +30,76 @@ let muiTheme = getMuiTheme({
 
 const menuButtonStyle = {
     "height" : "50px"
+};
+
+const flatButtonStyle = {
+    "fontSize": "14px"
+};
+
+export interface AppProps extends AuthStoreState{
+
 }
 
 
-export class App extends React.Component<any, any> {
+export class App extends React.Component<AppProps, any> {
     constructor(props) {
-        injectTapEventPlugin();
         super(props);
+
     }
 
-    render() : any {
+    HomePage =() => {return <Home/>};
+
+    LoginPage = () => {return <LoginView/>};
+
+    RegistrationPage = () => {return <RegistrationView/>};
+
+    CreateQuestionPage = () => {return <CreateQuestion/>};
+
+    buttons = () => {
+        if (this.props.loggedIn) {
+            return (
+                <Link to={Routes.login}>
+                    <FlatButton label="Login" primary={true} style={menuButtonStyle}
+                                labelStyle={flatButtonStyle}/>
+                </Link>
+            )
+        } else {
+            return (
+                <div>
+                    <FlatButton label="Log Out" primary={true} style={menuButtonStyle}
+                                labelStyle={flatButtonStyle} onTouchTap={() => {AuthActions.logout()}}/>
+                </div>
+            )
+        }
+    };
+
+    render() {
         return (
             <MuiThemeProvider muiTheme={muiTheme}>
-                <Router history={history}>
+                <Router history={RouterController.history}>
                     <div>
                         <div className="menu">
                             <ul>
                                 <li>
-                                    <Link to="/">
+                                    <Link to={Routes.home}>
                                         <FlatButton label="Askalot" primary={true} style={menuButtonStyle}
                                                     labelStyle={{"fontSize" : "20px"}}/>
+                                    </Link>
+                                    <Link to={Routes.question}>
+                                        <FlatButton label="Questions" primary={true} style={menuButtonStyle}
+                                                    labelStyle={flatButtonStyle}/>
                                     </Link>
                                 </li>
                             </ul>
                             <div id="login-menu">
-                                <Link to={Routes.login}>
-                                    <FlatButton label="Login" primary={true} style={menuButtonStyle}
-                                                labelStyle={{"fontSize" : "16px"}}/>
-                                </Link>
+                                {this.buttons()}
                             </div>
                         </div>
-                        <Route exact path={Routes.home} component={Home} {...this.props}/>
-                        <Route exact path={Routes.login} component={LoginView} {...this.props}/>
-                        <Route exact path={Routes.registration} component={RegistrationView} {...this.props}/>
-                        {/*<Route exact path={Routes.registration} component={RegistrationView} {...this.props}/>*/}
-                        {/*<Route exact path={Routes.registration} component={RegistrationView} {...this.props}/>*/}
+                        <Route exact path={Routes.home} component={this.HomePage}/>
+                        <Route exact path={Routes.login} component={this.LoginPage}/>
+                        <Route exact path={Routes.registration} component={this.RegistrationPage}/>
+                        <Route exact path={Routes.createQuestion} component={CreateQuestion}/>
+                        <Route exact path={Routes.question} component={QuestionViewContainer}/>
                     </div>
                 </Router>
             </MuiThemeProvider>

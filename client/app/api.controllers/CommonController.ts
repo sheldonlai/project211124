@@ -15,7 +15,7 @@ export class CommonController extends ApiController{
     }
 
     // used to navigate throughout the app
-    // should be passed in by the app container
+    // should be passed in by the app containers
     routerHistory : any;
 
     private constructor() {

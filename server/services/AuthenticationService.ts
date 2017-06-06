@@ -3,13 +3,12 @@
  */
 
 import {injectable, inject} from "inversify";
-import {IQuestionRepository} from "../repositories/QuestionRepository";
 import TYPES from '../enums/ClassTypes';
-import {IAnswerRepository} from '../repositories/AnswerRepository';
 import {IUserRepository} from "../repositories/UserRepository";
 import {LocalProfile, User} from "../models/User";
 import StringUtils from "../../common/utils/stringUtils";
 import {UserTypeEnum} from "../enums/UserTypeEnum";
+import {TokenDto} from '../../common/dtos/auth/TokenDto';
 
 export interface IAuthenticationService{
     /**
@@ -52,12 +51,10 @@ export class AuthenticationService implements IAuthenticationService{
                     let newUser = new User(email, name, UserTypeEnum.NORMAL, localProfile);
                     return this.userRepository.create(newUser) // TODO:should never return passwords. need a "secured profile"
                 }
-            }).catch(function(err) {
-                throw err;
             })
     }
 
-    login(email: string, password: string): Promise<any> {
+    login(email: string, password: string): Promise<TokenDto> {
         return this.userRepository.getByEmail(email).then((user : User) => {
             if (!user){
                 throw new Error("The account does not exists!");
@@ -69,7 +66,7 @@ export class AuthenticationService implements IAuthenticationService{
                     throw new Error("Wrong credentials, please try again");
                 }
                 let token = this.jwt.sign(user, this.privateKey, {algorithm: 'RS384'});
-                return { token : token};
+                return { token : token };
             }
         });
     }
