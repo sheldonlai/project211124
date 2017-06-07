@@ -2,7 +2,7 @@
 import * as React from 'react';
 import {Component} from 'react';
 import {Container} from 'flux/utils';
-import {QuestionView} from '../views/question/Question';
+import {QuestionView} from '../views/question/QuestionView';
 import AuthStore, {AuthStoreState} from '../stores/AuthStore';
 
 export interface QuestionContainerProps extends AuthStoreState{
