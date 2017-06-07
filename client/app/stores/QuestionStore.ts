@@ -51,4 +51,4 @@ class QuestionStoreClass extends ReduceStore<QuestionState, any> {
     }
 }
 
-export default new QuestionStoreClass();
+export const QuestionStore = new QuestionStoreClass();

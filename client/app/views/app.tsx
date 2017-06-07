@@ -5,7 +5,7 @@ import {Route, Router} from "react-router";
 import {Link} from "react-router-dom";
 import {Home} from "./home/home";
 import FlatButton from 'material-ui/FlatButton';
-import {LoginView} from './auth/Login';
+import {LoginView} from './auth/LoginView';
 import {Routes} from '../constants/Routes';
 import {RegistrationView} from './auth/RegistrationView';
 import {CreateQuestion} from './question/CreateQuestion';

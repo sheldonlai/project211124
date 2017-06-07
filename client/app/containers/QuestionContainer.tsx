@@ -3,20 +3,20 @@ import * as React from 'react';
 import {Component} from 'react';
 import {Container} from 'flux/utils';
 import {QuestionView} from '../views/question/QuestionView';
-import AuthStore, {AuthStoreState} from '../stores/AuthStore';
+import {QuestionState, QuestionStore} from '../stores/QuestionStore';
 
-export interface QuestionContainerProps extends AuthStoreState{
+export interface QuestionContainerProps extends QuestionState{
 
 }
 
 class QuestionContainer extends Component<any, QuestionContainerProps> {
 
     static getStores () {
-        return [AuthStore];
+        return [QuestionStore];
     }
 
     static calculateState(){
-        return AuthStore.getState();
+        return QuestionStore.getState();
     }
 
     render() {

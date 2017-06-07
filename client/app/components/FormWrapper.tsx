@@ -12,7 +12,7 @@ export class FormWrapper extends Component<any, any>{
     render() {
         return (
             <div style={{textAlign: 'center'}}>
-                <Paper style={{width : 500, margin: 'auto'}}>
+                <Paper style={{width : 560, margin : '50px auto', padding: '50px'}}>
                     {this.props.children}
                 </Paper>
             </div>
