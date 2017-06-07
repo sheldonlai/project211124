@@ -11,6 +11,7 @@ import RaisedButton from 'material-ui/RaisedButton';
 export interface RegistrationViewState {
     regRequest : RegistrationRequest;
     confirmPassword : string;
+    passwordError  : string;
 }
 
 export class RegistrationView extends Component<any, RegistrationViewState>{
@@ -19,7 +20,8 @@ export class RegistrationView extends Component<any, RegistrationViewState>{
         super(props);
         this.state = {
             regRequest : new RegistrationRequest(),
-            confirmPassword : ''
+            confirmPassword : '',
+            passwordError : ''
         }
     }
 
@@ -46,6 +48,10 @@ export class RegistrationView extends Component<any, RegistrationViewState>{
     }
 
     submit =()=> {
+        if(this.state.regRequest.password != this.state.confirmPassword){
+            this.setState({passwordError : 'Password not matched'});
+            return;
+        }
         AuthActions.register(this.state.regRequest)
     }
 
@@ -63,6 +69,7 @@ export class RegistrationView extends Component<any, RegistrationViewState>{
                     hintText="email"
                     onChange={this.updateEmail}
                 /><br/>
+                <ErrorView errorTxt={this.props.error}/>
                 <TextField
                     floatingLabelText="password"
                     hintText="password"
