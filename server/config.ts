@@ -1,7 +1,7 @@
 /**
  * Created by SHELDON on 12/19/2015.
  */
-export = {
+export const config = {
 
     'database': {
         'URI': 'mongodb://admin:1122312@ds143141.mlab.com:43141/askalot'
@@ -29,6 +29,7 @@ export = {
 
     'dev': {
         'devMode': true,
+        'database' : 'mongodb://127.0.0.1:27017/test'
     }
 
 }

@@ -6,10 +6,9 @@ import container from './inversify.config';
 
 require('source-map-support').install();
 
-let config = require('./config');
-
 import {Worker} from 'cluster';
 import {SocketIOController} from './Socket.io.controller';
+import {config} from "./config";
 
 (<any>mongoose).Promise = global.Promise;
 

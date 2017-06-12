@@ -13,19 +13,21 @@ import {IQuestionAnswerService} from "./services/QuestionAnswerService";
 import TYPES from "./enums/ClassTypes";
 import {IAuthenticationService} from "./services/AuthenticationService";
 import {AuthenticationAPI} from "./routes/AuthenticationAPI";
+import {config} from "./config";
 
 let favicon = require('serve-favicon');
-let config = require('./config');
 
 export class Server {
     public app: express.Application;
     public container : Container;
+    private config;
 
     public static bootstrap(container: Container): Server {
         return new Server(container);
     }
 
-    constructor(container : Container) {
+    constructor(container : Container, custom_config?) {
+        this.config = (custom_config)? custom_config : config;
         //create expressJS application
         this.app = express();
         //configure application
@@ -53,7 +55,7 @@ export class Server {
     }
 
     private connectMongoose(): void {
-        let dbURI = config.database.URI;
+        let dbURI = this.config.database.URI;
         mongoose.connect(dbURI);
         let db = mongoose.connection;
 

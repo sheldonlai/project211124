@@ -1,4 +1,4 @@
-import AppDispatcher from '../dispatcher/AppDispatcher';
+
 import {QuestionActionTypes} from './QuestionActionTypes';
 import {QuestionAPIController} from '../api.controllers/QuestionAPIController';
 import {QuestionDto} from '../../../common/dtos/q&a/QuestionDto';
@@ -8,31 +8,34 @@ let apiController : QuestionAPIController = QuestionAPIController.getInstance();
 export class QuestionActions {
 
     static getQuestionPreviews() {
-        apiController.fetchQuestionPreviews().then(()=> {
-            AppDispatcher.dispatch({
-                type : QuestionActionTypes.FetchedQuestionPreviews
+        return function(dispatch){
+            apiController.fetchQuestionPreviews().then(()=> {
+                dispatch({
+                    // type : QuestionActionTypes.FetchedQuestionPreviews
+                })
+            }).catch(err => {
+                dispatch({
+                    // type: QuestionActionTypes.QuestionCreated,
+                    data: err.response.data
+                })
             })
-        }).catch(err => {
-            AppDispatcher.dispatch({
-                type: QuestionActionTypes.QuestionCreated,
-                data: err.response.data
-            })
-        })
-
+        }
     }
 
     static createQuestion(questionReq : QuestionDto){
-        apiController.createQuestion(questionReq).then(res => {
-            AppDispatcher.dispatch({
-                type: QuestionActionTypes.QuestionCreated,
-                data: res.data
+        return function(dispatch) {
+            apiController.createQuestion(questionReq).then(res => {
+                dispatch({
+                    type: QuestionActionTypes.QuestionCreated,
+                    data: res.data
+                })
+            }).catch(err => {
+                dispatch({
+                    type: QuestionActionTypes.QuestionCreated,
+                    data: err.response.data
+                })
             })
-        }).catch(err => {
-            AppDispatcher.dispatch({
-                type: QuestionActionTypes.QuestionCreated,
-                data: err.response.data
-            })
-        })
+        }
     }
 
 

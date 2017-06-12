@@ -8,11 +8,11 @@ import {LoginRequest} from '../../models/LoginRequest';
 import {Link} from 'react-router-dom';
 import {Routes} from '../../constants/Routes';
 import {FormWrapper} from '../../components/FormWrapper';
+import {connect} from "react-redux";
 
 export interface LoginViewState {
     loginRequest: LoginRequest;
 }
-
 
 export class LoginView extends Component<any, any> {
 
@@ -21,6 +21,7 @@ export class LoginView extends Component<any, any> {
         this.state = {
             loginRequest: new LoginRequest()
         };
+        console.log(props)
 
     }
 
@@ -37,7 +38,7 @@ export class LoginView extends Component<any, any> {
     }
 
     submit = () => {
-        AuthActions.login(this.state.loginRequest)
+        this.props.login(this.state.loginRequest)
     }
 
     render() {
@@ -65,5 +66,9 @@ export class LoginView extends Component<any, any> {
             </FormWrapper>
         )
     }
-
 }
+
+export const LoginPage = connect(
+    state => ({}),
+    dispatch => ({login : (login: LoginRequest) => dispatch(AuthActions.login(login))})
+)(LoginView)

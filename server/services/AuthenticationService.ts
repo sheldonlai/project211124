@@ -9,6 +9,7 @@ import {LocalProfile, User} from "../models/User";
 import StringUtils from "../../common/utils/stringUtils";
 import {UserTypeEnum} from "../enums/UserTypeEnum";
 import {TokenDto} from '../../common/dtos/auth/TokenDto';
+import {config} from "../config";
 
 export interface IAuthenticationService{
     /**
@@ -35,7 +36,7 @@ export class AuthenticationService implements IAuthenticationService{
         @inject(TYPES.IUserRepo)  userRepository : IUserRepository,
     ){
         this.userRepository = userRepository;
-        this.privateKey = require('../config').jwt.secretKey;
+        this.privateKey = config.jwt.secretKey;
         this.jwt = require('jsonwebtoken');
     }
 
