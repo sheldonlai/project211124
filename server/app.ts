@@ -2,7 +2,6 @@ import {Server} from "./Server";
 const cluster = require('cluster');
 const numCPUs = require('os').cpus().length;
 import * as mongoose from 'mongoose';
-import container from './inversify.config';
 
 require('source-map-support').install();
 
@@ -25,10 +24,10 @@ if (cluster.isMaster && !devMode ) {
         cluster.fork();
     });
 } else {
-    let app = Server.bootstrap(container).app;
+    let app = Server.bootstrap().app;
     let server = require('http').Server(app);
     let io = require('socket.io')(server);
-    let socketIoController = new SocketIOController(io, container);
+    let socketIoController = new SocketIOController(io);
     let port: number = 3000;
 
     server.listen(port, function () {

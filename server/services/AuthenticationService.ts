@@ -1,15 +1,10 @@
-/**
- * Created by Phillip on 2017-06-03.
- */
-
-import {injectable, inject} from "inversify";
-import TYPES from '../enums/ClassTypes';
 import {IUserRepository} from "../repositories/UserRepository";
 import {LocalProfile, User} from "../models/User";
 import StringUtils from "../../common/utils/stringUtils";
 import {UserTypeEnum} from "../enums/UserTypeEnum";
 import {TokenDto} from '../../common/dtos/auth/TokenDto';
 import {config} from "../config";
+import {AppError} from "../../common/errors/AppError";
 
 export interface IAuthenticationService{
     /**
@@ -25,7 +20,6 @@ export interface IAuthenticationService{
     login(username: string , password: string) : Promise<any>;
 }
 
-@injectable()
 export class AuthenticationService implements IAuthenticationService{
 
     private userRepository : IUserRepository;
@@ -33,7 +27,7 @@ export class AuthenticationService implements IAuthenticationService{
     private jwt : any;
 
     constructor(
-        @inject(TYPES.IUserRepo)  userRepository : IUserRepository,
+        userRepository : IUserRepository,
     ){
         this.userRepository = userRepository;
         this.privateKey = config.jwt.secretKey;
@@ -44,7 +38,7 @@ export class AuthenticationService implements IAuthenticationService{
         return this.userRepository.getByEmail(email)
             .then((existingUser: User) => {
                 if (existingUser) {
-                    throw new Error("Entered e-mail is already in use.")
+                    throw new AppError("Entered e-mail is already in use.");
                 } else {
                     let salt: string = StringUtils.genRandomString(16);
                     let passwordHash = StringUtils.hashString(password, salt);
@@ -58,13 +52,13 @@ export class AuthenticationService implements IAuthenticationService{
     login(email: string, password: string): Promise<TokenDto> {
         return this.userRepository.getByEmail(email).then((user : User) => {
             if (!user){
-                throw new Error("The account does not exists!");
+                throw new AppError("The account does not exists!");
             } else {
                 let salt = user.local.salt;
                 let passwordHash = StringUtils.hashString(password, salt);
                 if (user.local.password != passwordHash){
                     // incorrect pass
-                    throw new Error("Wrong credentials, please try again");
+                    throw new AppError("Wrong credentials, please try again");
                 }
                 let token = this.jwt.sign(user, this.privateKey, {algorithm: 'RS384'});
                 return { token : token };

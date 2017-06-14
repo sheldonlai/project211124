@@ -1,8 +1,6 @@
 import {EntityNotFoundError} from '../errors/EntityNotFoundError';
-import {injectable} from 'inversify';
 import {model, Document, Model, Types} from 'mongoose';
 import {BaseModel} from '../models/BaseModel';
-import {unmanaged} from 'inversify';
 
 export interface IBaseRepository<T> {
     getAll(): Promise<T[]>
@@ -14,11 +12,11 @@ export interface IBaseRepository<T> {
     deleteById(id : string | Types.ObjectId) : Promise<T>;
 }
 
-@injectable()
+
 export abstract class BaseRepository<T extends BaseModel, I extends Document & T>
     implements IBaseRepository<T>{
 
-    constructor(@unmanaged() private model: Model<I>) {
+    constructor(private model: Model<I>) {
     }
 
     getAll(): Promise<T[]> {

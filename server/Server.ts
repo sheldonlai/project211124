@@ -7,31 +7,29 @@ import {AppError} from '../common/errors/AppError';
 import {NextFunction, Request, Response} from 'express';
 import {PageProvider} from './routes/PageProvider';
 import {HomeAPI} from './routes/HomeAPI';
-import {Container} from "inversify";
 import {QuestionAnswerAPI} from "./routes/QuestionAnswerAPI";
-import {IQuestionAnswerService} from "./services/QuestionAnswerService";
+import {IQuestionAnswerService} from "./services/QuestionService";
 import TYPES from "./enums/ClassTypes";
 import {IAuthenticationService} from "./services/AuthenticationService";
 import {AuthenticationAPI} from "./routes/AuthenticationAPI";
 import {config} from "./config";
+import {ServiceProvider} from "./Container";
 
 let favicon = require('serve-favicon');
 
 export class Server {
     public app: express.Application;
-    public container : Container;
     private config;
 
-    public static bootstrap(container: Container): Server {
-        return new Server(container);
+    public static bootstrap(): Server {
+        return new Server();
     }
 
-    constructor(container : Container, custom_config?) {
+    constructor(custom_config?) {
         this.config = (custom_config)? custom_config : config;
         //create expressJS application
         this.app = express();
         //configure application
-        this.container = container;
         this.configure();
     }
 
@@ -82,12 +80,11 @@ export class Server {
         new HomeAPI(router);
 
         /* QuestionView Answer */
-        let qAService : IQuestionAnswerService = this.container.get<IQuestionAnswerService>(TYPES.IQAService);
-        new QuestionAnswerAPI(router, qAService);
+
+        new QuestionAnswerAPI(router, ServiceProvider.QuestionService);
 
         /* Authentication */
-        let authenticationService: IAuthenticationService = this.container.get<IAuthenticationService>(TYPES.IAuthService);
-        new AuthenticationAPI(router, authenticationService);
+        new AuthenticationAPI(router, ServiceProvider.AuthenticationService);
 
         this.app.use('/api', router);
     }

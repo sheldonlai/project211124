@@ -35,7 +35,6 @@
     "start": "node ./server/app.js"
   },
   "dependencies": {
-    "@types/inversify": "^2.0.33",
     "@types/material-ui": "^0.16.60",
     "@types/passport": "^0.3.3",
     "@types/react-redux": "^4.4.42",
@@ -51,7 +50,6 @@
     "cookie-parser": "^1.4.3",
     "express": "^4.15.2",
     "install": "^0.10.1",
-    "inversify": "^4.1.0",
     "jsonwebtoken": "^7.3.0",
     "material-ui": "^0.17.1",
     "mocha": "^3.2.0",

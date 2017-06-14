@@ -1,10 +1,9 @@
 import * as SocketIO from 'socket.io'
-import {Container} from 'inversify';
 import {User} from './models/User';
 
 // TODO: Move this into routes, or crate a separate module.
 export class SocketIOController {
-    constructor(private io : SocketIO.Server, private container : Container){
+    constructor(private io : SocketIO.Server){
         this.setup()
 
     }

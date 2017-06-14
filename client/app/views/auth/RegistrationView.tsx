@@ -7,22 +7,34 @@ import {FormWrapper} from '../../components/FormWrapper';
 import {AuthActions} from '../../actions/AuthActions';
 import {ErrorView} from '../../components/ErrorView';
 import RaisedButton from 'material-ui/RaisedButton';
+import {connect} from "react-redux";
+import {CommonController} from "../../api.controllers/CommonController";
+import {Routes} from "../../constants/Routes";
 
 export interface RegistrationViewState {
+    error : string;
     regRequest : RegistrationRequest;
     confirmPassword : string;
     passwordError  : string;
 }
 
-export class RegistrationView extends Component<any, RegistrationViewState>{
+export interface RegistrationViewProps {
+    loggedIn : boolean;
+    register : (regReq : RegistrationRequest) => void;
+}
 
+export class RegistrationView extends Component<RegistrationViewProps, RegistrationViewState>{
+
+    apiController : CommonController;
     constructor (props) {
         super(props);
         this.state = {
+            error: '',
             regRequest : new RegistrationRequest(),
             confirmPassword : '',
             passwordError : ''
         }
+        this.apiController = CommonController.getInstance();
     }
 
     updateRequest = (key: string, value: string) => {
@@ -52,13 +64,19 @@ export class RegistrationView extends Component<any, RegistrationViewState>{
             this.setState({passwordError : 'Password not matched'});
             return;
         }
-        AuthActions.register(this.state.regRequest)
+        this.apiController.registerUser(this.state.regRequest).then(res => {
+            this.apiController.setToken(res.data.token);
+            this.apiController.routerHistory.push(Routes.home);
+        }).catch(err=> {
+            console.log(err.response.data.error);
+            this.setState({error : err.response.data.error});
+        })
     }
 
     render(){
         return (
             <FormWrapper>
-                <ErrorView errorTxt={this.props.error}/>
+                <ErrorView errorTxt={this.state.error}/>
                 <TextField
                     floatingLabelText="username"
                     hintText="username"
@@ -69,8 +87,8 @@ export class RegistrationView extends Component<any, RegistrationViewState>{
                     hintText="email"
                     onChange={this.updateEmail}
                 /><br/>
-                <ErrorView errorTxt={this.props.error}/>
                 <TextField
+                    errorText={this.state.passwordError}
                     floatingLabelText="password"
                     hintText="password"
                     type="password"
@@ -87,3 +105,8 @@ export class RegistrationView extends Component<any, RegistrationViewState>{
         )
     }
 }
+
+export const RegistrationPage = connect(
+    state => ({loggedIn: state.AuthReducer.loggedIn}),
+    dispatch => ({register : (regReq : RegistrationRequest) => dispatch(AuthActions.register(regReq))})
+)

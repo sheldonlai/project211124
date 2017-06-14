@@ -1,6 +1,7 @@
 import {model, Schema, Document} from "mongoose";
 import {UserTypeEnum} from "../enums/UserTypeEnum";
 import {BaseModel} from './BaseModel';
+import {AppError} from "../../common/errors/AppError";
 
 export class User extends BaseModel {
     email: string;
@@ -72,7 +73,7 @@ export const userSchema = new Schema({
 
 userSchema.pre('save', function(nextFunction) {
     if (!this.local && !this.facebook) {
-        nextFunction(new Error("Either local or facebook profile must be defined"));
+        nextFunction(new AppError("Either local or facebook profile must be defined"));
     }
     nextFunction();
 });

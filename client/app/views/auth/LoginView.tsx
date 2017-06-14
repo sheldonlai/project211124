@@ -21,8 +21,6 @@ export class LoginView extends Component<any, any> {
         this.state = {
             loginRequest: new LoginRequest()
         };
-        console.log(props)
-
     }
 
     updateUsername = (event) => {
