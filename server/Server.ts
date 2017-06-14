@@ -34,6 +34,9 @@ export class Server {
         /* Database */
         this.connectMongoose();
 
+        /* API for client side */
+        this.api();
+
         /* Static files */
         this.staticFiles();
 
@@ -41,9 +44,6 @@ export class Server {
         this.app.use(bodyParser.urlencoded({extended: false}));
         this.app.use(bodyParser.json({limit: '50mb'}));
         this.app.use(cookieParser());
-
-        /* API for client side */
-        this.api();
 
         /* Error Handler */
         this.app.use(this.errorHandler);

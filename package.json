@@ -32,7 +32,7 @@
     "build-dev": "tsc && webpack --watch",
     "test": "mocha --timeout 10000 -R list",
     "testcover": "mocha --timeout 10000",
-    "start": "node ./server/app.js"
+    "start": "node ./dist/app.js"
   },
   "dependencies": {
     "@types/material-ui": "^0.16.60",
