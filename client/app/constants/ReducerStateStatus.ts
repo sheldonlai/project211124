@@ -4,5 +4,6 @@
 export enum ReducerStateStatus {
     LOADING,
     DONE,
-    ERROR
+    ERROR,
+    NONE
 }

@@ -12,6 +12,7 @@ import {CreateQuestion} from './question/CreateQuestion';
 import {AuthActions} from '../actions/AuthActions';
 import {RouterController} from '../api.controllers/RouterController';
 import {connect, Provider} from "react-redux";
+import {Menu} from "./Menu";
 
 let muiTheme = getMuiTheme({
     palette: {
@@ -27,39 +28,11 @@ let muiTheme = getMuiTheme({
 // a hack because @types/material-ui hasn't included this
 (muiTheme.flatButton as any).textTransform = 'none';
 
-const menuButtonStyle = {
-    "height": "50px"
-};
-
-const flatButtonStyle = {
-    "fontSize": "14px"
-};
-
-export class AppComponent extends React.Component<any, any> {
+export class App extends React.Component<any, any> {
 
     constructor(props){
         super(props);
     }
-
-    buttons = () => {
-        if (this.props.loggedIn) {
-            return (
-                <Link to={Routes.login}>
-                    <FlatButton label="Login" primary={true} style={menuButtonStyle}
-                                labelStyle={flatButtonStyle}/>
-                </Link>
-            )
-        } else {
-            return (
-                <div>
-                    <FlatButton label="Log Out" primary={true} style={menuButtonStyle}
-                                labelStyle={flatButtonStyle} onTouchTap={() => {
-                        AuthActions.logout()
-                    }}/>
-                </div>
-            )
-        }
-    };
 
     render() {
         return (
@@ -67,23 +40,7 @@ export class AppComponent extends React.Component<any, any> {
                 <Provider store={this.props.store}>
                     <Router history={RouterController.history}>
                         <div>
-                            <div className="menu">
-                                <ul>
-                                    <li>
-                                        <Link to={Routes.home}>
-                                            <FlatButton label="Askalot" primary={true} style={menuButtonStyle}
-                                                        labelStyle={{"fontSize": "20px"}}/>
-                                        </Link>
-                                        <Link to={Routes.question}>
-                                            <FlatButton label="Questions" primary={true} style={menuButtonStyle}
-                                                        labelStyle={flatButtonStyle}/>
-                                        </Link>
-                                    </li>
-                                </ul>
-                                <div id="login-menu">
-                                    {this.buttons()}
-                                </div>
-                            </div>
+                            <Route path={Routes.home} component={Menu} />
                             <Route exact path={Routes.home} component={Home}/>
                             <Route exact path={Routes.login} component={LoginPage}/>
                             <Route exact path={Routes.registration} component={RegistrationPage}/>
@@ -95,9 +52,3 @@ export class AppComponent extends React.Component<any, any> {
         )
     }
 }
-
-export const App = connect(
-    (state) => {
-        return ({loggedIn: state.AuthReducer.loggedIn, authStatus : state.AuthReducer.status});
-    }
-)(AppComponent)

@@ -8,12 +8,12 @@ import {RegistrationRequest} from '../models/RegistrationRequest';
 let apiController : CommonController = CommonController.getInstance();
 
 export class AuthActions {
-    static login(login: LoginRequest) {
+    static login(login: LoginRequest){
         return function (dispatch) {
             dispatch({
                 type: AuthActionTypes.LOGIN_REQUEST
             });
-            return apiController.login(login)
+            apiController.login(login)
                 .then(function (response) {
                     apiController.setToken(response.data.token);
                     apiController.routerHistory.push(Routes.home)

@@ -9,6 +9,7 @@ import {Link} from 'react-router-dom';
 import {Routes} from '../../constants/Routes';
 import {FormWrapper} from '../../components/FormWrapper';
 import {connect} from "react-redux";
+import {AppStoreState} from "../../stores/AppStore";
 
 export interface LoginViewState {
     loginRequest: LoginRequest;
@@ -67,6 +68,6 @@ export class LoginView extends Component<any, any> {
 }
 
 export const LoginPage = connect(
-    state => ({loggedIn : state.AuthReducer.loggedIn}),
-    dispatch => ({login : (login: LoginRequest) => dispatch(AuthActions.login(login))})
+    (state : AppStoreState) => ({loggedIn : state.AuthReducer.loggedIn}),
+    (dispatch) => ({login : (login: LoginRequest) => dispatch(AuthActions.login(login))})
 )(LoginView)

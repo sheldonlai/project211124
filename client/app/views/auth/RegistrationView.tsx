@@ -106,6 +106,5 @@ export class RegistrationView extends Component<RegistrationViewProps, Registrat
 }
 
 export const RegistrationPage = connect(
-    state => ({loggedIn: state.AuthReducer.loggedIn}),
-    dispatch => ({register : (regReq : RegistrationRequest) => dispatch(AuthActions.register(regReq))})
+    state => ({loggedIn: state.AuthReducer.loggedIn})
 )(RegistrationView)

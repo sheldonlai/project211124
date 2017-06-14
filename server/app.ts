@@ -1,14 +1,15 @@
 import {Server} from "./Server";
+import * as mongoose from "mongoose";
+import * as http from "http";
+import * as socketio from "socket.io";
+import {Worker} from "cluster";
+import {SocketIOController} from "./Socket.io.controller";
+import {config} from "./config";
+import sourceMapSupport from "source-map-support";
 const cluster = require('cluster');
 const numCPUs = require('os').cpus().length;
-import * as mongoose from 'mongoose';
 
-require('source-map-support').install();
-
-import {Worker} from 'cluster';
-import {SocketIOController} from './Socket.io.controller';
-import {config} from "./config";
-
+sourceMapSupport.install();
 (<any>mongoose).Promise = global.Promise;
 
 let devMode = config.dev.devMode;
@@ -25,8 +26,8 @@ if (cluster.isMaster && !devMode ) {
     });
 } else {
     let app = Server.bootstrap().app;
-    let server = require('http').Server(app);
-    let io = require('socket.io')(server);
+    let server = http.createServer(app);
+    let io = socketio(server);
     let socketIoController = new SocketIOController(io);
     let port: number = 3000;
 
