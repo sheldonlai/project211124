@@ -99,8 +99,5 @@ export class AppComponent extends React.Component<any, any> {
 export const App = connect(
     (state) => {
         return ({loggedIn: state.AuthReducer.loggedIn, authStatus : state.AuthReducer.status});
-    },
-    dispatch => {
-        return {}
     }
 )(AppComponent)

@@ -1,15 +1,10 @@
-import {
-    createStore,
-    applyMiddleware,
-    combineReducers,
-    compose,
-} from 'redux';
-import { createLogger } from 'redux-logger';
+import {applyMiddleware, combineReducers, compose, createStore} from "redux";
+import {createLogger} from "redux-logger";
 import {AuthReducer} from "../reducers/AuthReducer";
+import thunkMiddleware from "redux-thunk";
 
 const loggerMiddleware = createLogger();
 const composeEnhancers = window['__REDUX_DEVTOOLS_EXTENSION_COMPOSE__'] || compose;
-import thunkMiddleware from 'redux-thunk'
 const reducer = combineReducers({
     AuthReducer
 });
