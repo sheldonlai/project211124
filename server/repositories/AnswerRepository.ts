@@ -1,5 +1,5 @@
-import {AnswerModel, Answer, IAnswer} from '../models/Answer';
-import {BaseRepository, IBaseRepository} from './BaseRepository';
+import {Answer, AnswerModel, IAnswer} from "../models/Answer";
+import {BaseRepository, IBaseRepository} from "./BaseRepository";
 export interface IAnswerRepository extends IBaseRepository<Answer>{
 }
 

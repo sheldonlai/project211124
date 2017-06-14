@@ -1,6 +1,6 @@
-import {IQuestion, Question, QuestionModel} from '../models/Question';
-import {BaseRepository, IBaseRepository} from './BaseRepository';
-import {IUser} from '../models/User';
+import {IQuestion, Question, QuestionModel} from "../models/Question";
+import {BaseRepository, IBaseRepository} from "./BaseRepository";
+import {IUser} from "../models/User";
 
 export interface IQuestionRepository extends IBaseRepository<Question>{
     getQuestionByAuthor(user):Promise<any>;
