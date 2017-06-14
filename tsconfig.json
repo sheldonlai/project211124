@@ -13,11 +13,5 @@
   "exclude": [
     "./node_modules",
     "./client"
-  ],
-  "lib": [
-    "ES5",
-    "ES2015",
-    "DOM",
-    "ScriptHost"
   ]
 }
