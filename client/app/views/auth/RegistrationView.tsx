@@ -1,6 +1,5 @@
 import * as React from 'react';
 import {Component} from 'react';
-import Paper from 'material-ui/Paper';
 import TextField from 'material-ui/TextField';
 import {RegistrationRequest} from '../../models/RegistrationRequest';
 import {FormWrapper} from '../../components/FormWrapper';
@@ -109,4 +108,4 @@ export class RegistrationView extends Component<RegistrationViewProps, Registrat
 export const RegistrationPage = connect(
     state => ({loggedIn: state.AuthReducer.loggedIn}),
     dispatch => ({register : (regReq : RegistrationRequest) => dispatch(AuthActions.register(regReq))})
-)
+)(RegistrationView)

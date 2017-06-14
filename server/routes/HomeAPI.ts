@@ -1,6 +1,5 @@
 
 import { NextFunction, Request, Response, Router } from "express";
-import * as path from 'path';
 import {APIUrls} from "../urls";
 
 

@@ -84,10 +84,10 @@ export class AppComponent extends React.Component<any, any> {
                                     {this.buttons()}
                                 </div>
                             </div>
-                            <Route path={Routes.home} component={Home}/>
-                            <Route path={Routes.login} component={LoginPage}/>
-                            <Route path={Routes.registration} component={RegistrationPage}/>
-                            <Route path={Routes.createQuestion} component={CreateQuestion}/>
+                            <Route exact path={Routes.home} component={Home}/>
+                            <Route exact path={Routes.login} component={LoginPage}/>
+                            <Route exact path={Routes.registration} component={RegistrationPage}/>
+                            <Route exact path={Routes.createQuestion} component={CreateQuestion}/>
                         </div>
                     </Router>
                 </Provider>
@@ -103,5 +103,4 @@ export const App = connect(
     dispatch => {
         return {}
     }
-
 )(AppComponent)
