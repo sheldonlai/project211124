@@ -1,8 +1,8 @@
 
 import {ApiController} from './ApiController';
 import {AxiosPromise} from 'axios';
-import {APIUrls} from '../../../common/urls';
-import {QuestionDto} from '../../../common/dtos/q&a/QuestionDto';
+import {APIUrls} from "../../../server/urls";
+import {QuestionDto} from "../../../server/dtos/q&a/QuestionDto";
 export class QuestionAPIController extends ApiController{
 
     public static _instance : QuestionAPIController = new QuestionAPIController();

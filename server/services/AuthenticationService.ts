@@ -1,10 +1,10 @@
 import {IUserRepository} from "../repositories/UserRepository";
 import {LocalProfile, User} from "../models/User";
-import StringUtils from "../../common/utils/stringUtils";
 import {UserTypeEnum} from "../enums/UserTypeEnum";
-import {TokenDto} from '../../common/dtos/auth/TokenDto';
 import {config} from "../config";
-import {AppError} from "../../common/errors/AppError";
+import {AppError} from "../errors/AppError";
+import StringUtils from "../utils/stringUtils";
+import {TokenDto} from "../dtos/auth/TokenDto";
 
 export interface IAuthenticationService{
     /**

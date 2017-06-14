@@ -1,11 +1,7 @@
-import {Container} from "inversify";
-import "reflect-metadata";
 import "mocha";
 import * as chai from "chai";
 import {Question, QuestionComment, QuestionModel} from "../../../server/models/Question";
 import {UserModel} from "../../../server/models/User";
-
-import TYPES from "../../../server/enums/ClassTypes";
 import {AnswerRepository, IAnswerRepository} from "../../../server/repositories/AnswerRepository";
 import {Answer, AnswerModel} from "../../../server/models/Answer";
 import {FakeModels} from "./helpers/FakeModels";
@@ -18,9 +14,7 @@ mongoose.Promise = global.Promise;
 
 
 let expect = chai.expect;
-let container = new Container();
-container.bind<IAnswerRepository>(TYPES.IQuestionRepo).to(AnswerRepository);
-let ansRepo = container.get<IAnswerRepository>(TYPES.IQuestionRepo);
+let ansRepo = new AnswerRepository();
 
 describe('AnswerRepoTest', function () {
 

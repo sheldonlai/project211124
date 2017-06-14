@@ -1,9 +1,9 @@
 import {ApiController} from './ApiController';
-import {APIUrls} from '../../../common/urls';
 import {Routes} from '../constants/Routes';
 import {LoginRequest} from '../models/LoginRequest';
 import {AxiosPromise} from 'axios';
 import {RegistrationRequest} from '../models/RegistrationRequest';
+import {APIUrls} from "../../../server/urls";
 
 
 export class CommonController extends ApiController{

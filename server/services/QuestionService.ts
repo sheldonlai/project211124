@@ -1,5 +1,4 @@
 import {IQuestionRepository} from "../repositories/QuestionRepository";
-import TYPES from '../enums/ClassTypes';
 import {IAnswerRepository} from '../repositories/AnswerRepository';
 
 export interface IQuestionAnswerService{

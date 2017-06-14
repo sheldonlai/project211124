@@ -1,7 +1,7 @@
 import {model, Schema, Document} from "mongoose";
 import {UserTypeEnum} from "../enums/UserTypeEnum";
 import {BaseModel} from './BaseModel';
-import {AppError} from "../../common/errors/AppError";
+import {AppError} from "../errors/AppError";
 
 export class User extends BaseModel {
     email: string;

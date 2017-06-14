@@ -1,11 +1,9 @@
 import {Document, model, Schema} from "mongoose";
 import {BaseModel} from "../../../server/models/BaseModel";
 import {BaseRepository, IBaseRepository} from "../../../server/repositories/BaseRepository";
-import "reflect-metadata";
 import "mocha";
 import * as chai from "chai";
 import {ObjectID} from "bson";
-import {EntityNotFoundError} from "../../../server/errors/EntityNotFoundError";
 
 require('source-map-support').install();
 
@@ -75,7 +73,7 @@ describe("BaseRepositoryTest", function () {
                 expect.fail(error_msg);
                 return;
             }).catch(function(err) {
-                expect(err.name).to.equal("EntityNotFoundError");
+                expect(err.name).to.equal("AppError");
                 return;
             })
         });
@@ -108,7 +106,7 @@ describe("BaseRepositoryTest", function () {
                 expect.fail(error_msg);
                 return
             }).catch(function(err) {
-                expect(err.name).to.equal("EntityNotFoundError");
+                expect(err.name).to.equal("AppError");
                 return;
             })
         });
@@ -179,7 +177,7 @@ describe("BaseRepositoryTest", function () {
                 expect.fail(error_msg);
                 return
             }).catch(function(err) {
-                expect(err.name).to.equal("EntityNotFoundError");
+                expect(err.name).to.equal("AppError");
                 return;
             })
         });
@@ -208,7 +206,7 @@ describe("BaseRepositoryTest", function () {
                expect.fail(error_msg);
                return
            }).catch(function(err) {
-               expect(err.name).to.equal("EntityNotFoundError");
+               expect(err.name).to.equal("AppError");
                return;
            })
         });

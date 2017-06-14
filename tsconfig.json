@@ -3,7 +3,6 @@
     "module": "commonjs",
     "moduleResolution": "node",
     "lib": ["es6", "dom"],
-    "types": ["reflect-metadata"],
     "target": "es5",
     "sourceMap": true,
     "jsx" : "react",

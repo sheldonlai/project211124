@@ -3,17 +3,14 @@ import * as mongoose from 'mongoose';
 import * as path from 'path';
 import * as bodyParser from 'body-parser';
 import * as cookieParser from 'cookie-parser';
-import {AppError} from '../common/errors/AppError';
 import {NextFunction, Request, Response} from 'express';
 import {PageProvider} from './routes/PageProvider';
 import {HomeAPI} from './routes/HomeAPI';
 import {QuestionAnswerAPI} from "./routes/QuestionAnswerAPI";
-import {IQuestionAnswerService} from "./services/QuestionService";
-import TYPES from "./enums/ClassTypes";
-import {IAuthenticationService} from "./services/AuthenticationService";
 import {AuthenticationAPI} from "./routes/AuthenticationAPI";
 import {config} from "./config";
 import {ServiceProvider} from "./Container";
+import {AppError} from "./errors/AppError";
 
 let favicon = require('serve-favicon');
 

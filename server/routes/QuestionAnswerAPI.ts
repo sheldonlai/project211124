@@ -1,7 +1,7 @@
 import {NextFunction, Request, Response, Router} from "express";
-import {APIUrls} from "../../common/urls";
 import {IQuestionAnswerService} from "../services/QuestionService";
 import {BaseAPI} from "./BaseAPI";
+import {APIUrls} from "../urls";
 
 export class QuestionAnswerAPI extends BaseAPI {
 

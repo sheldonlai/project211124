@@ -2,13 +2,12 @@
  * Created by Phillip on 2017-06-03.
  */
 import {NextFunction, Request, Response, Router} from "express";
-import {APIUrls} from "../../common/urls";
 import {IAuthenticationService} from "../services/AuthenticationService";
 import {BaseAPI} from "./BaseAPI";
 import {User} from "../models/User";
-import {RegistrationDto} from '../../common/dtos/auth/RegistrationDto';
-import {LoginDto} from '../../common/dtos/auth/LoginDto';
-
+import {APIUrls} from "../urls";
+import {RegistrationDto} from "../dtos/auth/RegistrationDto";
+import {LoginDto} from "../dtos/auth/LoginDto";
 export class AuthenticationAPI extends BaseAPI {
 
     private service : IAuthenticationService;

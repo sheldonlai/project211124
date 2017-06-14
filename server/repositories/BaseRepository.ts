@@ -1,6 +1,6 @@
-import {EntityNotFoundError} from '../errors/EntityNotFoundError';
 import {model, Document, Model, Types} from 'mongoose';
 import {BaseModel} from '../models/BaseModel';
+import {AppError} from "../errors/AppError";
 
 export interface IBaseRepository<T> {
     getAll(): Promise<T[]>
@@ -71,7 +71,7 @@ export abstract class BaseRepository<T extends BaseModel, I extends Document & T
     private getModel(obj : T | I): T {
         let result: T;
         if (obj == undefined || obj == null) {
-            throw new EntityNotFoundError('Entity not found');
+            throw new AppError('Entity not found');
         } else if ((<I> obj).toObject == undefined) {
             result = <T> obj;
         } else {

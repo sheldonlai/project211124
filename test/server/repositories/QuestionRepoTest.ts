@@ -1,12 +1,8 @@
-import {Container} from "inversify";
-import "reflect-metadata";
 import "mocha";
 import * as chai from "chai";
 import {IQuestionRepository, QuestionRepository} from "../../../server/repositories/QuestionRepository";
 import {Question, QuestionComment, QuestionModel} from "../../../server/models/Question";
 import {UserModel} from "../../../server/models/User";
-
-import TYPES from "../../../server/enums/ClassTypes";
 import {FakeModels} from "./helpers/FakeModels";
 
 require('source-map-support').install();
@@ -16,9 +12,7 @@ let mongoose = require('mongoose');
 mongoose.Promise = global.Promise;
 
 let expect = chai.expect;
-let container = new Container();
-container.bind<IQuestionRepository>(TYPES.IQuestionRepo).to(QuestionRepository);
-let questionRepo :IQuestionRepository = container.get<IQuestionRepository>(TYPES.IQuestionRepo);
+let questionRepo :IQuestionRepository = new QuestionRepository();
 
 describe('QuestionRepoTest', function (){
 

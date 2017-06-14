@@ -1,4 +1,5 @@
-import {RegistrationDto} from '../../../common/dtos/auth/RegistrationDto';
+
+import {RegistrationDto} from "../../../server/dtos/auth/RegistrationDto";
 export class RegistrationRequest implements RegistrationDto{
     email: string;
     username: string;

@@ -2,8 +2,8 @@
  * Created by SHELDON on 5/11/2017.
  */
 import { NextFunction, Request, Response, Router } from "express";
-import {APIUrls} from '../../common/urls';
 import * as path from 'path';
+import {APIUrls} from "../urls";
 
 
 

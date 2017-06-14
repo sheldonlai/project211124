@@ -7,7 +7,7 @@ import {Home} from "./home/home";
 import FlatButton from 'material-ui/FlatButton';
 import {LoginView, LoginPage} from './auth/LoginView';
 import {Routes} from '../constants/Routes';
-import {RegistrationView} from './auth/RegistrationView';
+import {RegistrationPage, RegistrationView} from './auth/RegistrationView';
 import {CreateQuestion} from './question/CreateQuestion';
 import {AuthActions} from '../actions/AuthActions';
 import {RouterController} from '../api.controllers/RouterController';
@@ -86,7 +86,7 @@ export class AppComponent extends React.Component<any, any> {
                             </div>
                             <Route path={Routes.home} component={Home}/>
                             <Route path={Routes.login} component={LoginPage}/>
-                            <Route path={Routes.registration} component={RegistrationView}/>
+                            <Route path={Routes.registration} component={RegistrationPage}/>
                             <Route path={Routes.createQuestion} component={CreateQuestion}/>
                         </div>
                     </Router>

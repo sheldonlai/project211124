@@ -5,7 +5,6 @@
 // import {Document, model, Schema} from "mongoose";
 // import {BaseModel} from "../../../server/models/BaseModel";
 // import {BaseRepository, IBaseRepository} from "../../../server/repositories/BaseRepository";
-// import "reflect-metadata";
 // import "mocha";
 // import * as chai from "chai";
 // import {ObjectID} from "bson";

@@ -1,4 +1,4 @@
-import {LoginDto} from '../../../common/dtos/auth/LoginDto';
+import {LoginDto} from "../../../server/dtos/auth/LoginDto";
 /**
  * Created by SHELDON on 5/22/2017.
  */

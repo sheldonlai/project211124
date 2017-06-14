@@ -1,7 +1,7 @@
 
 import {QuestionActionTypes} from './QuestionActionTypes';
 import {QuestionAPIController} from '../api.controllers/QuestionAPIController';
-import {QuestionDto} from '../../../common/dtos/q&a/QuestionDto';
+import {QuestionDto} from "../../../server/dtos/q&a/QuestionDto";
 
 let apiController : QuestionAPIController = QuestionAPIController.getInstance();
 
