@@ -21,7 +21,7 @@ class MenuClass extends Component<any,any>{
 
     buttons = () => {
         console.log(this.props)
-        if (this.props.loggedIn) {
+        if (!this.props.loggedIn) {
             return (
                 <Link to={Routes.login}>
                     <FlatButton label="Login" primary={true} style={menuButtonStyle}

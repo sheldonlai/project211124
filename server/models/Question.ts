@@ -1,6 +1,7 @@
 import {model, Schema, Document} from "mongoose";
 import {BaseModel} from './BaseModel';
 import {User} from './User';
+import {PublicityStatus} from "../enums/PublicityStatus";
 
 export class QuestionComment {
     commentBy : User;
@@ -18,12 +19,15 @@ export class Question extends BaseModel{
     content: string;
     author: any;
     tags : any[];
+    upVotes : number;
+    downVotes: number;
     isPublished : boolean;
     lastEditedUtc : Date;
     comments : QuestionComment[];
-
+    publicityStatus:  PublicityStatus;
     constructor(
-        title:string, content: string, author: User | string, tags:any[], isPublished : boolean
+        title:string, content: string, author: User | string, tags:any[],
+        isPublished : boolean, publicityStatus:  PublicityStatus
     ){
         super();
         this.title = title;
@@ -31,6 +35,7 @@ export class Question extends BaseModel{
         this.author = author;
         this.tags = tags;
         this.isPublished = isPublished;
+        this.publicityStatus = publicityStatus;
     }
 }
 
@@ -43,8 +48,22 @@ const schema = new Schema({
     content: {type: String, required: true},
     author: {type: Schema.Types.ObjectId, ref: 'user', required: true},
     tags: [{type: Schema.Types.ObjectId, ref: 'tag' }],
-    isPublished:  Boolean,
+    isPublished:  {type: Boolean, default: false},
+    upVotes: {type: Number, default: 0},
+    downVotes : {type : Number, default: 0},
+    resolved: {type: Boolean, default: false},
     lastEditedUtc: {type : Date, default: Date.now},
+    publicityStatus: {
+        type: String,
+        enum: [
+            PublicityStatus.PUBLIC,
+            PublicityStatus.PAID_AND_INVITE,
+            PublicityStatus.INVITE_ONLY
+        ]
+    },
+    uploads: [
+        {fileUrl : String}
+    ],
     comments: [{
         commentBy : {type: Schema.Types.ObjectId, ref: 'user'},
         commentContent : {type: String , required: true},
