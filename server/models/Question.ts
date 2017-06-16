@@ -27,15 +27,15 @@ export class Question extends BaseModel{
     publicityStatus:  PublicityStatus;
     constructor(
         title:string, content: string, author: User | string, tags:any[],
-        isPublished : boolean, publicityStatus:  PublicityStatus
+        isPublished? : boolean, publicityStatus?:  PublicityStatus
     ){
         super();
         this.title = title;
         this.content = content;
         this.author = author;
         this.tags = tags;
-        this.isPublished = isPublished;
-        this.publicityStatus = publicityStatus;
+        this.isPublished = isPublished? isPublished: false;
+        this.publicityStatus = publicityStatus? publicityStatus: PublicityStatus.PUBLIC;
     }
 }
 

@@ -2,9 +2,6 @@ import {AuthActions} from "../actions/AuthActions";
 import {AuthActionTypes} from "../actions/AuthActionTypes";
 import {ReducerStateStatus} from "../constants/ReducerStateStatus";
 import {CommonController} from "../api.controllers/CommonController";
-/**
- * Created by SHELDON on 6/11/2017.
- */
 
 export interface AuthReducerState {
     status : ReducerStateStatus;
@@ -12,12 +9,15 @@ export interface AuthReducerState {
     loggedIn : boolean;
 }
 
+const getLoginStatus = (): boolean => {
+    return (CommonController.getInstance().getToken())? true : false;
+}
+
 const initialState : AuthReducerState = {
     status : ReducerStateStatus.LOADING,
     user: null,
-    loggedIn: (CommonController.getInstance().getToken())? true : false,
+    loggedIn: getLoginStatus(),
 };
-console.log()
 
 export const AuthReducer = (state = initialState, action) : AuthReducerState => {
     switch (action.type) {
@@ -25,19 +25,19 @@ export const AuthReducer = (state = initialState, action) : AuthReducerState => 
             return {
                 status : ReducerStateStatus.LOADING,
                 user : null,
-                loggedIn : false,
+                loggedIn : getLoginStatus(),
             };
         case AuthActionTypes.LOGIN_OK:
             return {
                 status : ReducerStateStatus.DONE,
                 user : null,
-                loggedIn : true,
+                loggedIn : getLoginStatus(),
             };
         case AuthActionTypes.LOGIN_ERR:
             return {
                 status : ReducerStateStatus.ERROR,
                 user : null,
-                loggedIn : false,
+                loggedIn : getLoginStatus(),
             };
         default:
             return state;

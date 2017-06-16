@@ -34,16 +34,16 @@ export class Server {
         /* Database */
         this.connectMongoose();
 
+        /* Third party middleware */
+        this.app.use(bodyParser.urlencoded({extended: false}));
+        this.app.use(bodyParser.json({limit: '50mb'}));
+        this.app.use(cookieParser());
+
         /* API for client side */
         this.api();
 
         /* Static files */
         this.staticFiles();
-
-        /* Third party middleware */
-        this.app.use(bodyParser.urlencoded({extended: false}));
-        this.app.use(bodyParser.json({limit: '50mb'}));
-        this.app.use(cookieParser());
 
         /* Error Handler */
         this.app.use(this.errorHandler);

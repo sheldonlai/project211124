@@ -3,14 +3,10 @@ import createBrowserHistory from 'history/createBrowserHistory';
  * Created by SHELDON on 6/6/2017.
  */
 
-class RouterControllerClass {
-    constructor(public history: any){}
+export class RouterController {
+    static history = createBrowserHistory();
 
-    redirect(url : string) {
-        this.history.push(url);
+    static redirect(url : string) {
+        RouterController.history.push(url);
     }
 }
-
-const history = createBrowserHistory();
-
-export const RouterController = new RouterControllerClass(history);

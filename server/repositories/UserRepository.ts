@@ -12,7 +12,7 @@ export class UserRepository extends BaseRepository<User, IUser> implements IUser
     }
 
     getByEmail(email: string): Promise<User> {
-        return UserModel.findOne({email: email}).lean().exec()
+        return UserModel.findOne({email: email}).lean().exec();
     }
 
     protected applyRestriction(user: User): User {

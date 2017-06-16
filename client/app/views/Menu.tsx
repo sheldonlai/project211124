@@ -5,6 +5,8 @@ import {Link} from "react-router-dom";
 import {Routes} from "../constants/Routes";
 import {AuthActions} from "../actions/AuthActions";
 import {connect} from "react-redux";
+import {LoginRequest} from "../models/LoginRequest";
+import {AuthReducerState} from "../reducers/AuthReducer";
 
 const menuButtonStyle = {
     "height": "50px"
@@ -14,13 +16,16 @@ const flatButtonStyle = {
     "fontSize": "14px"
 };
 
-class MenuClass extends Component<any,any>{
+export interface MenuClassProps extends AuthReducerState {
+    logout : () => void;
+}
+
+class MenuClass extends Component<MenuClassProps,any>{
     constructor(props){
         super(props);
     }
 
     buttons = () => {
-        console.log(this.props)
         if (!this.props.loggedIn) {
             return (
                 <Link to={Routes.login}>
@@ -33,7 +38,7 @@ class MenuClass extends Component<any,any>{
                 <div>
                     <FlatButton label="Log Out" primary={true} style={menuButtonStyle}
                                 labelStyle={flatButtonStyle} onTouchTap={() => {
-                        AuthActions.logout()
+                        this.props.logout()
                     }}/>
                 </div>
             )
@@ -64,5 +69,6 @@ class MenuClass extends Component<any,any>{
 }
 
 export const Menu = connect(
-    (state) => ({loggedIn: state.AuthReducer.loggedIn, authStatus : state.AuthReducer.status})
+    (state) => ({loggedIn: state.AuthReducer.loggedIn, authStatus : state.AuthReducer.status}),
+    (dispatch) => ({logout : () => dispatch(AuthActions.logout())})
 )(MenuClass)

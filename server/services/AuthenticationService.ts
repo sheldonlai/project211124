@@ -5,8 +5,10 @@ import {config} from "../config";
 import {AppError} from "../errors/AppError";
 import StringUtils from "../utils/stringUtils";
 import {TokenDto} from "../dtos/auth/TokenDto";
+import {sign} from "jsonwebtoken";
+import {ServiceProvider} from "../Container";
 
-export interface IAuthenticationService{
+export interface IAuthenticationService {
     /**
      *  Creates an account in the repository for a new user.
      * @param email the email of the user.
@@ -17,21 +19,17 @@ export interface IAuthenticationService{
      */
     registerLocalUser(email: string, name: string, password: string): Promise<User>;
 
-    login(username: string , password: string) : Promise<any>;
+    login(username: string, password: string): Promise<any>;
 }
 
-export class AuthenticationService implements IAuthenticationService{
+export class AuthenticationService implements IAuthenticationService {
 
-    private userRepository : IUserRepository;
-    private privateKey : string;
-    private jwt : any;
+    private userRepository: IUserRepository;
+    private privateKey: string;
 
-    constructor(
-        userRepository : IUserRepository,
-    ){
+    constructor(userRepository: IUserRepository,) {
         this.userRepository = userRepository;
         this.privateKey = config.jwt.secretKey;
-        this.jwt = require('jsonwebtoken');
     }
 
     registerLocalUser(email: string, name: string, password: string): Promise<User> {
@@ -44,28 +42,28 @@ export class AuthenticationService implements IAuthenticationService{
                     let passwordHash = StringUtils.hashString(password, salt);
                     let localProfile = new LocalProfile(passwordHash, salt);
                     let newUser = new User(email, name, UserTypeEnum.NORMAL, localProfile);
-                    return this.userRepository.create(newUser) // TODO:should never return passwords. need a "secured profile"
+                    return this.userRepository.create(newUser);
                 }
             })
     }
 
     login(email: string, password: string): Promise<TokenDto> {
-        return this.userRepository.getByEmail(email).then((user : User) => {
-            if (!user){
-                throw new AppError("The account does not exists!");
-            } else {
-                let salt = user.local.salt;
-                let passwordHash = StringUtils.hashString(password, salt);
-                if (user.local.password != passwordHash){
-                    // incorrect pass
-                    throw new AppError("Wrong credentials, please try again");
+        return this.userRepository.getByEmail(email)
+            .then((user: User) => {
+                if (!user) {
+                    throw new AppError("The account does not exists!");
+                } else {
+                    let salt = user.local.salt;
+                    let passwordHash = StringUtils.hashString(password, salt);
+                    if (user.local.password != passwordHash) {
+                        // incorrect pass
+                        throw new AppError("Wrong credentials, please try again");
+                    }
+                    let token = sign(user, this.privateKey);
+                    return {token: token};
                 }
-                let token = this.jwt.sign(user, this.privateKey, {algorithm: 'RS384'});
-                return { token : token };
-            }
-        });
+            });
     }
-
 
 
 }

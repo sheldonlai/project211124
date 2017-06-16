@@ -9,6 +9,7 @@ import RaisedButton from "material-ui/RaisedButton";
 import {connect} from "react-redux";
 import {CommonController} from "../../api.controllers/CommonController";
 import {Routes} from "../../constants/Routes";
+import {RouterController} from "../../api.controllers/RouterController";
 
 export interface RegistrationViewState {
     error : string;
@@ -47,7 +48,7 @@ export class RegistrationView extends Component<RegistrationViewProps, Registrat
     }
 
     updateUsername = (event) => {
-        this.updateRequest('username', event.target.value);
+        this.updateRequest('name', event.target.value);
     }
 
     updateEmail = (event) => {
@@ -65,7 +66,7 @@ export class RegistrationView extends Component<RegistrationViewProps, Registrat
         }
         this.apiController.registerUser(this.state.regRequest).then(res => {
             this.apiController.setToken(res.data.token);
-            this.apiController.routerHistory.push(Routes.home);
+            RouterController.history.push(Routes.login);
         }).catch(err=> {
             console.log(err.response.data.error);
             this.setState({error : err.response.data.error});
@@ -77,15 +78,15 @@ export class RegistrationView extends Component<RegistrationViewProps, Registrat
             <FormWrapper>
                 <ErrorView errorTxt={this.state.error}/>
                 <TextField
-                    floatingLabelText="username"
-                    hintText="username"
-                    onChange={this.updateUsername}
-                /><br />
-                <TextField
                     floatingLabelText="email"
                     hintText="email"
                     onChange={this.updateEmail}
                 /><br/>
+                <TextField
+                    floatingLabelText="name"
+                    hintText="name"
+                    onChange={this.updateUsername}
+                /><br />
                 <TextField
                     errorText={this.state.passwordError}
                     floatingLabelText="password"

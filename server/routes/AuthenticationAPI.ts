@@ -22,7 +22,7 @@ export class AuthenticationAPI extends BaseAPI {
 
     public register = (req: Request, res: Response, next: NextFunction) => {
         let regReq: RegistrationDto = req.body;
-        let result: Promise<User> = this.service.registerLocalUser(regReq.email, regReq.username, regReq.password);
+        let result: Promise<User> = this.service.registerLocalUser(regReq.email, regReq.name, regReq.password);
         this.respondPromise(result, res, next);
     }
 

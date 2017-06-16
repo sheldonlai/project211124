@@ -4,6 +4,7 @@ import {CommonController} from '../api.controllers/CommonController';
 import {Routes} from '../constants/Routes';
 import {LoginRequest} from '../models/LoginRequest';
 import {RegistrationRequest} from '../models/RegistrationRequest';
+import {RouterController} from "../api.controllers/RouterController";
 
 let apiController : CommonController = CommonController.getInstance();
 
@@ -16,7 +17,7 @@ export class AuthActions {
             apiController.login(login)
                 .then(function (response) {
                     apiController.setToken(response.data.token);
-                    apiController.routerHistory.push(Routes.home)
+                    RouterController.history.push(Routes.home)
                     dispatch({
                         type: AuthActionTypes.LOGIN_OK,
                         data: response
@@ -43,7 +44,7 @@ export class AuthActions {
             dispatch({type: AuthActionTypes.REGISTER_REQUEST});
             apiController.registerUser(regRequest).then(res => {
                 apiController.setToken(res.data.token);
-                apiController.routerHistory.push(Routes.home);
+                RouterController.history.push(Routes.home);
                 dispatch({
                     type: AuthActionTypes.REGISTER_REQUEST,
                     data : res

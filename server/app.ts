@@ -5,11 +5,11 @@ import * as socketio from "socket.io";
 import {Worker} from "cluster";
 import {SocketIOController} from "./Socket.io.controller";
 import {config} from "./config";
-import sourceMapSupport from "source-map-support";
+import * as support from "source-map-support";
 const cluster = require('cluster');
 const numCPUs = require('os').cpus().length;
 
-sourceMapSupport.install();
+support.install();
 (<any>mongoose).Promise = global.Promise;
 
 let devMode = config.dev.devMode;
