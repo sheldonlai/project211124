@@ -1,5 +1,6 @@
 import {IQuestionRepository} from "../repositories/QuestionRepository";
 import {IAnswerRepository} from '../repositories/AnswerRepository';
+import {QuestionDto} from "../dtos/q&a/QuestionDto";
 
 export interface IQuestionAnswerService{
     createQuestion(question: any, user: any): Promise<any>;
@@ -18,7 +19,7 @@ export class QuestionService implements IQuestionAnswerService{
         this.answerRepository = answerRepository;
     }
 
-    createQuestion(question: any, user: any): Promise<any> {
+    createQuestion(question: QuestionDto, user: any): Promise<any> {
         throw new Error("Method not implemented.");
     }
 }

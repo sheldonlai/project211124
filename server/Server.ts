@@ -6,7 +6,7 @@ import * as cookieParser from 'cookie-parser';
 import {NextFunction, Request, Response} from 'express';
 import {PageProvider} from './routes/PageProvider';
 import {HomeAPI} from './routes/HomeAPI';
-import {QuestionAnswerAPI} from "./routes/QuestionAnswerAPI";
+import {QuestionAPI} from "./routes/QuestionAPI";
 import {AuthenticationAPI} from "./routes/AuthenticationAPI";
 import {config} from "./config";
 import {ServiceProvider} from "./Container";
@@ -78,7 +78,7 @@ export class Server {
 
         /* QuestionView Answer */
 
-        new QuestionAnswerAPI(router, ServiceProvider.QuestionService);
+        new QuestionAPI(router, ServiceProvider.QuestionService);
 
         /* Authentication */
         new AuthenticationAPI(router, ServiceProvider.AuthenticationService);

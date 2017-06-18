@@ -2,16 +2,16 @@ import {NextFunction, Request, Response, Router} from "express";
 import {IQuestionAnswerService} from "../services/QuestionService";
 import {BaseAPI} from "./BaseAPI";
 import {APIUrls} from "../urls";
+import {isAuthenticated} from "../middlewares/AuthMiddleware";
 
-export class QuestionAnswerAPI extends BaseAPI {
+export class QuestionAPI extends BaseAPI {
 
     private service : IQuestionAnswerService;
 
     constructor(router: Router, service: IQuestionAnswerService) {
         super();
         this.service = service;
-        router.get(APIUrls.CreateQuestion, this.createQuestion);
-
+        router.get(APIUrls.CreateQuestion, isAuthenticated, this.createQuestion);
     }
 
     public createQuestion = (req: Request, res: Response, next: NextFunction) =>{

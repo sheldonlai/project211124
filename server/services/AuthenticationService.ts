@@ -7,6 +7,7 @@ import StringUtils from "../utils/stringUtils";
 import {TokenDto} from "../dtos/auth/TokenDto";
 import {sign} from "jsonwebtoken";
 import {ServiceProvider} from "../Container";
+import {generateToken} from "../utils/JsonWebTokenUtil";
 
 export interface IAuthenticationService {
     /**
@@ -25,11 +26,9 @@ export interface IAuthenticationService {
 export class AuthenticationService implements IAuthenticationService {
 
     private userRepository: IUserRepository;
-    private privateKey: string;
 
     constructor(userRepository: IUserRepository,) {
         this.userRepository = userRepository;
-        this.privateKey = config.jwt.secretKey;
     }
 
     registerLocalUser(email: string, name: string, password: string): Promise<User> {
@@ -59,12 +58,10 @@ export class AuthenticationService implements IAuthenticationService {
                         // incorrect pass
                         throw new AppError("Wrong credentials, please try again");
                     }
-                    let token = sign(user, this.privateKey);
+                    let token = generateToken(user);
                     return {token: token};
                 }
             });
     }
-
-
 }
 
