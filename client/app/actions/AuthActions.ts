@@ -33,6 +33,7 @@ export class AuthActions {
 
     static logout() {
         return function(dispatch) {
+            apiController.logout();
             return {
                type: AuthActionTypes.LOGOUT
             };

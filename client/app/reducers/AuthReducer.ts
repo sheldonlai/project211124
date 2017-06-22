@@ -1,4 +1,3 @@
-import {AuthActions} from "../actions/AuthActions";
 import {AuthActionTypes} from "../actions/AuthActionTypes";
 import {ReducerStateStatus} from "../constants/ReducerStateStatus";
 import {CommonController} from "../api.controllers/CommonController";

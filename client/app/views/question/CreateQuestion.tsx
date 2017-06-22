@@ -1,14 +1,20 @@
 import * as React from 'react';
-import {Component} from 'react';
 import MenuItem from 'material-ui/MenuItem';
 import TextField from 'material-ui/TextField';
 import RaisedButton from 'material-ui/RaisedButton';
+import {connect} from "react-redux";
+import {QuestionActions} from "../../actions/QuestionActions";
+import {QuestionDto} from "../../../../server/dtos/q&a/QuestionDto";
+import {LoginRequiredComponent} from "../../components/LoginRequiredComponent";
 let SelectField = require('material-ui/SelectField').default;
 
-export class CreateQuestion extends Component<any, any> {
+class CreateQuestion extends LoginRequiredComponent<any, any> {
     constructor(props) {
         super(props);
-
+        this.state = {
+            title : '',
+            content : ''
+        }
     }
 
     reset = ()=> {
@@ -88,3 +94,10 @@ export class CreateQuestion extends Component<any, any> {
     }
 
 }
+
+export const CreateQuestionPage = connect(
+    state => ({loggedIn: state.AuthReducer.loggedIn}),
+    dispatch => ({
+        createQuestion : (question: QuestionDto) => dispatch(QuestionActions.createQuestion(question))
+    })
+)(CreateQuestion)

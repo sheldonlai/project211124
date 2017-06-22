@@ -1,6 +1,6 @@
 
 import axios from 'axios';
-import {AxiosPromise} from 'axios';
+import {AxiosPromise, AxiosError} from 'axios';
 import {Config} from '../constants/configs';
 
 
@@ -44,6 +44,10 @@ export class ApiController {
 
     removeToken () {
         localStorage.removeItem(Config.tokenKey);
+    }
+
+    defaultErrorHandler (err: AxiosError) {
+        throw new Error(err.response.data.error);
     }
 
 

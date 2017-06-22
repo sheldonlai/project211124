@@ -3,6 +3,7 @@ import * as mongoose from 'mongoose';
 import * as path from 'path';
 import * as bodyParser from 'body-parser';
 import * as cookieParser from 'cookie-parser';
+import * as helmet from 'helmet';
 import {NextFunction, Request, Response} from 'express';
 import {PageProvider} from './routes/PageProvider';
 import {HomeAPI} from './routes/HomeAPI';
@@ -35,6 +36,7 @@ export class Server {
         this.connectMongoose();
 
         /* Third party middleware */
+        this.app.use(helmet())
         this.app.use(bodyParser.urlencoded({extended: false}));
         this.app.use(bodyParser.json({limit: '50mb'}));
         this.app.use(cookieParser());
