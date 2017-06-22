@@ -1,6 +1,3 @@
-/**
- * Created by SHELDON on 12/19/2015.
- */
 export const config = {
 
     'database': {

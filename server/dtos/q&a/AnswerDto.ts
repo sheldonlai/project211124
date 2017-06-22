@@ -1,11 +1,12 @@
+import {QuestionComment} from "../../models/Question";
 export interface AnswerDto {
-    id: string;
-    title: string;
+    _id: string;
     question: any;
     content: string;
     author: any;
     upVotes : number;
     downVotes: number;
-    groups: any[];
     lastEditedUtc : Date;
+    createdUtc : Date;
+    comments: QuestionComment[];
 }

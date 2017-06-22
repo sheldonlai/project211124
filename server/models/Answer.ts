@@ -11,6 +11,7 @@ export class Answer extends BaseModel{
     upVotes : number;
     downVotes: number;
     lastEditedUtc : Date;
+    createdUtc : Date;
     comments: QuestionComment[];
 
     constructor(
@@ -36,6 +37,7 @@ const schema = new Schema({
     upVotes: {type: Number, default: 0},
     downVotes : {type : Number, default: 0},
     lastEditedUtc: {type: Date, default: Date.now},
+    createdUtc : {type: Date, default: Date.now},
     comments: [{
         commentBy : {type: Schema.Types.ObjectId, ref: 'user'},
         commentContent : {type: String , required: true},

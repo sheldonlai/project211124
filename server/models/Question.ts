@@ -23,6 +23,7 @@ export class Question extends BaseModel{
     downVotes: number;
     isPublished : boolean;
     lastEditedUtc : Date;
+    createdUtc: Date;
     comments : QuestionComment[];
     publicityStatus:  PublicityStatus;
     constructor(
@@ -53,6 +54,7 @@ const schema = new Schema({
     downVotes : {type : Number, default: 0},
     resolved: {type: Boolean, default: false},
     lastEditedUtc: {type : Date, default: Date.now},
+    createdUtc : {type: Date, default: Date.now},
     publicityStatus: {
         type: String,
         enum: [
