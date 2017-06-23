@@ -8,6 +8,7 @@ import {TokenDto} from "../dtos/auth/TokenDto";
 import {sign} from "jsonwebtoken";
 import {ServiceProvider} from "../Container";
 import {generateToken} from "../utils/JsonWebTokenUtil";
+import {BaseService} from "./BaseService";
 
 export interface IAuthenticationService {
     /**
@@ -23,11 +24,12 @@ export interface IAuthenticationService {
     login(username: string, password: string): Promise<any>;
 }
 
-export class AuthenticationService implements IAuthenticationService {
+export class AuthenticationService extends BaseService implements IAuthenticationService {
 
     private userRepository: IUserRepository;
 
     constructor(userRepository: IUserRepository,) {
+        super();
         this.userRepository = userRepository;
     }
 

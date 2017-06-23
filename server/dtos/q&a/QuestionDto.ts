@@ -1,9 +1,11 @@
 
 import {PublicityStatus} from "../../enums/PublicityStatus";
-import {QuestionComment} from "../../models/Question";
+import {QuestionComment, QuestionDifficulty} from "../../models/Question";
+
 export class QuestionDto{
     _id : string;
     title : string;
+    author: string;
     content : string;
     dateCreated?: Date;
     isPublished : boolean;
@@ -11,6 +13,7 @@ export class QuestionDto{
     tags : any[];
     comments : QuestionComment[];
     publicityStatus:  PublicityStatus;
+    difficulty: QuestionDifficulty;
 
     constructor() {
 

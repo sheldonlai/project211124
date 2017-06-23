@@ -34,9 +34,9 @@ export interface INotice extends Notice, Document {
 const schema = new Schema({
     recipient: {type: Schema.Types.ObjectId, ref: 'user', required: true},
     sender: {type: Schema.Types.ObjectId, ref: 'user'}, // Optional because system can send a notice as well
-    type: {type: String, enum: [NoticeType.ONE_TIME, NoticeType.REPEATED], required: true},
+    type: {type: String, enum: Object.keys(NoticeType), required: true},
     repeatPattern: {
-        type: {type: String, enum: [RepeatPatternEnum.DAILY, RepeatPatternEnum.WEEKLY, RepeatPatternEnum.MONTHLY]},
+        type: {type: String, enum: Object.keys(RepeatPatternEnum)},
         gap: {type: Number}
     },
     message: {type: String, required: true},

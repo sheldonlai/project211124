@@ -63,7 +63,7 @@ const FacebookSubSchema = new Schema({
 export const userSchema = new Schema({
     email:           {type: String, required: true, unique: true},
     name:            {type: String, required: true},
-    role:            {type: String, enum: [UserTypeEnum.ADMIN, UserTypeEnum.MOD, UserTypeEnum.NORMAL], required: true, default: 'normal'},
+    role:            {type: String, enum: Object.keys(UserTypeEnum), required: true, default: 'normal'},
     verified:        {type: Boolean, required: true, default: false},
     local:           {type: LocalSubSchema},
     facebook:        {type: FacebookSubSchema}
