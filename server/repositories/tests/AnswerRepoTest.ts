@@ -1,9 +1,7 @@
-import "mocha";
-import * as chai from "chai";
-import {Question, QuestionComment, QuestionModel} from "../../../server/models/Question";
-import {UserModel} from "../../../server/models/User";
-import {AnswerRepository, IAnswerRepository} from "../../../server/repositories/AnswerRepository";
-import {Answer, AnswerModel} from "../../../server/models/Answer";
+import {Question, QuestionComment, QuestionModel} from "../../models/Question";
+import {UserModel} from "../../models/User";
+import {AnswerRepository} from "../AnswerRepository";
+import {Answer, AnswerModel} from "../../models/Answer";
 import {FakeModels} from "./helpers/FakeModels";
 
 require('source-map-support').install();
@@ -13,7 +11,6 @@ let mongoose = require('mongoose');
 mongoose.Promise = global.Promise;
 
 
-let expect = chai.expect;
 let ansRepo = new AnswerRepository();
 
 describe('AnswerRepoTest', function () {
@@ -22,11 +19,11 @@ describe('AnswerRepoTest', function () {
     let sampleUser;
     let sampleQuestion;
 
-    before(function(){
+    beforeAll(function(){
         return mongoose.connect('mongodb://admin:1122312@ds143141.mlab.com:43141/askalot');
     });
 
-    after(function(){
+    afterAll(function(){
         return mongoose.disconnect();
     });
 
@@ -56,34 +53,28 @@ describe('AnswerRepoTest', function () {
     it ('should create new Answer', function () {
         return ansRepo.create(new Answer(sampleQuestion, 'content', sampleUser, []))
             .then(function (answer) {
-                expect(answer.content).equals('content');
-                expect(answer._id).not.equals(undefined);
-                expect(answer.upVotes).equals(0);
-                expect(answer.downVotes).equals(0);
+                expect(answer.content).toBe('content');
+                expect(answer._id).not.toBe(undefined);
+                expect(answer.upVotes).toBe(0);
+                expect(answer.downVotes).toBe(0);
                 return;
             })
     });
 
     it ('should fail when create with no question', function () {
-        let error_msg = "fail expected but actually passed";
+        expect.assertions(1);
         return ansRepo.create(new Answer(null, 'content', sampleUser, []))
-            .then(function () {
-                expect.fail(error_msg);
-            }).catch(function(err){
-                expect(err.message).to.be.not.equal(error_msg);
-                console.log('test passed');
+            .catch(function(err){
+                expect(err.message).toBeDefined();
                 return;
             })
     });
 
     it ('should fail when create with no author', function () {
-        let error_msg = "fail expected but actually passed";
+        expect.assertions(1);
         return ansRepo.create(new Answer(null, 'content', sampleUser, []))
-            .then(function () {
-                expect.fail(error_msg);
-            }).catch(function(err){
-                expect(err.message).to.be.not.equal(error_msg);
-                console.log('test passed');
+            .catch(function(err){
+                expect(err.message).toBeDefined();
                 return;
             })
     });
@@ -99,10 +90,10 @@ describe('AnswerRepoTest', function () {
                 answer.upVotes = 200;
                 return ansRepo.update(answer);
             }).then(function (answer){
-                expect(answer.comments.length).equals(1);
-                expect(answer.upVotes).equals(200);
-                expect(answer.downVotes).equals(100);
-                expect(answer.content).equals('new content');
+                expect(answer.comments.length).toBe(1);
+                expect(answer.upVotes).toBe(200);
+                expect(answer.downVotes).toBe(100);
+                expect(answer.content).toBe('new content');
                 return;
             })
     })

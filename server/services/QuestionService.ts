@@ -1,10 +1,9 @@
 import {IQuestionRepository} from "../repositories/QuestionRepository";
-import {IAnswerRepository} from '../repositories/AnswerRepository';
+import {IAnswerRepository} from "../repositories/AnswerRepository";
 import {QuestionDto} from "../dtos/q&a/QuestionDto";
 import {Question} from "../models/Question";
 import {User} from "../models/User";
 import {QuestionPageDto} from "../dtos/q&a/QuestionPageDto";
-import {AnswerDto} from "../dtos/q&a/AnswerDto";
 import {Answer} from "../models/Answer";
 import {AppError} from "../errors/AppError";
 import {BaseService} from "./BaseService";
@@ -59,7 +58,7 @@ export class QuestionService extends BaseService implements IQuestionAnswerServi
 
     updateQuestion(questionDto: QuestionDto, user: User): Promise<QuestionDto> {
         return this.questionsRepository.getById(questionDto._id).then((questionObj: Question) => {
-            this.checkPermissionForModification(questionDto, questionObj, user)
+            this.checkPermissionForModification(questionDto, questionObj, user);
             // do not allow user to change these
             delete questionDto.title;
             delete questionDto.author;
@@ -74,17 +73,17 @@ export class QuestionService extends BaseService implements IQuestionAnswerServi
 
             // update last edited utc
             questionDto.lastEditedUtc = new Date(Date.now());
-            questionObj = this.mapKeysOntoObject(questionObj, questionDto)
+            questionObj = this.mapKeysOntoObject(questionObj, questionDto);
 
             return this.questionsRepository.update(questionObj);
         })
     }
 
-    private checkPermissionForModification = (questionDto: QuestionDto, questionObj: Question, currenUser: User) => {
-        if (questionObj.author != currenUser._id) {
+    private checkPermissionForModification = (questionDto: QuestionDto, questionObj: Question, currentUser: User) => {
+        if (questionObj.author != currentUser._id) {
             throw new AppError("You are not the owner of this question!")
         }
-        if (currenUser.name != questionDto.author) {
+        if (currentUser.name != questionDto.author) {
             throw new AppError("You cannot change the name of the author")
         }
         return true;

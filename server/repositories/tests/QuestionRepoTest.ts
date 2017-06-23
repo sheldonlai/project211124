@@ -1,8 +1,6 @@
-import "mocha";
-import * as chai from "chai";
-import {IQuestionRepository, QuestionRepository} from "../../../server/repositories/QuestionRepository";
-import {Question, QuestionComment, QuestionModel} from "../../../server/models/Question";
-import {UserModel} from "../../../server/models/User";
+import {IQuestionRepository, QuestionRepository} from "../QuestionRepository";
+import {Question, QuestionComment, QuestionModel} from "../../models/Question";
+import {UserModel} from "../../models/User";
 import {FakeModels} from "./helpers/FakeModels";
 
 require('source-map-support').install();
@@ -11,18 +9,17 @@ let mongoose = require('mongoose');
 
 mongoose.Promise = global.Promise;
 
-let expect = chai.expect;
 let questionRepo :IQuestionRepository = new QuestionRepository();
 
 describe('QuestionRepoTest', function (){
 
     let fakeModels = new FakeModels();
 
-    before(function(){
+    beforeAll(function(){
         return mongoose.connect('mongodb://admin:1122312@ds143141.mlab.com:43141/askalot');
     });
 
-    after(function(){
+    afterAll(function(){
         return mongoose.disconnect();
     });
 
@@ -34,14 +31,12 @@ describe('QuestionRepoTest', function (){
     });
 
     it('should fail with no author', function () {
-        let error_msg = 'should fail';
         let newQuestion = new Question(
            'title', 'content', null, [], false
         );
-        return questionRepo.create(newQuestion).then(function(){
-            expect.fail(error_msg);
-        }).catch(function(err){
-            expect(err.message).to.be.not.equal(error_msg);
+        expect.assertions(1);
+        return questionRepo.create(newQuestion).catch(function(err){
+            expect(err.message).toBeDefined();
             console.log('test passed')
         })
     });
@@ -59,11 +54,10 @@ describe('QuestionRepoTest', function (){
             // should not be able to change last edited
             newQuestion.lastEditedUtc = dateTime;
             return questionRepo.create(newQuestion).then(function(question){
-                expect(question._id).to.be.not.equal(undefined);
-                expect(question._id).to.be.not.equal(null);
-                expect(question.title).equals('title');
-                expect(question.content).equals('content');
-                expect(question.lastEditedUtc).to.be.not.eql(dateTime);
+                expect(question._id).toBeDefined();
+                expect(question.title).toBe('title');
+                expect(question.content).toBe('content');
+                expect(question.lastEditedUtc).not.toEqual(dateTime);
                 console.log('test passed', question._id);
                 return;
             });
@@ -87,7 +81,7 @@ describe('QuestionRepoTest', function (){
             return questionRepo.create(newQuestion);
         }).then(function(question){
             // update question
-            expect(question._id).to.be.not.equal(undefined);
+            expect(question._id).toBeDefined();
             question.isPublished = true;
             question.title = 'new';
             // TODO: test question.tags
@@ -101,11 +95,11 @@ describe('QuestionRepoTest', function (){
 
             return questionRepo.update(question);
         }).then(function(question){
-            expect(question.lastEditedUtc).not.eql(dateTime);
-            expect(question.content).equals('changed content');
-            expect(question.title).equals('new');
-            expect(question.isPublished).equals(true);
-            expect(question.comments.length).equals(1);
+            expect(question.lastEditedUtc).not.toEqual(dateTime);
+            expect(question.content).toBe('changed content');
+            expect(question.title).toBe('new');
+            expect(question.isPublished).toBe(true);
+            expect(question.comments.length).toBe(1);
         })
     });
 
@@ -124,8 +118,8 @@ describe('QuestionRepoTest', function (){
         }).then(function(question){
             return questionRepo.getById(question._id);
         }).then(function(question){
-            expect(question.title).equals('title');
-            expect(question.content).equals('content');
+            expect(question.title).toBe('title');
+            expect(question.content).toBe('content');
         })
     });
 
@@ -144,8 +138,8 @@ describe('QuestionRepoTest', function (){
         }).then(function(question){
             return questionRepo.getById(question._id.toString());
         }).then(function(question){
-            expect(question.title).equals('title');
-            expect(question.content).equals('content');
+            expect(question.title).toBe('title');
+            expect(question.content).toBe('content');
         })
     });
 
@@ -166,7 +160,7 @@ describe('QuestionRepoTest', function (){
         }).then(function(){
             return QuestionModel.find({}).exec();
         }).then(function(questions){
-            expect(questions.length).equals(0);
+            expect(questions.length).toBe(0);
         })
     });
 
@@ -187,7 +181,7 @@ describe('QuestionRepoTest', function (){
         }).then(function(){
             return QuestionModel.find({}).exec();
         }).then(function(questions){
-            expect(questions.length).equals(0);
+            expect(questions.length).toBe(0);
         })
     })
 });

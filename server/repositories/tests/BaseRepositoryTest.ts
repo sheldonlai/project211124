@@ -1,15 +1,12 @@
 import {Document, model, Schema} from "mongoose";
-import {BaseModel} from "../../../server/models/BaseModel";
-import {BaseRepository, IBaseRepository} from "../../../server/repositories/BaseRepository";
-import "mocha";
-import * as chai from "chai";
+import {BaseModel} from "../../models/BaseModel";
+import {BaseRepository, IBaseRepository} from "../BaseRepository";
 import {ObjectID} from "bson";
 
 require('source-map-support').install();
 
 let mongoose = require('mongoose');
 mongoose.Promise = global.Promise;
-const expect = chai.expect;
 
 class TestModel extends BaseModel {
     age: number;
@@ -29,11 +26,11 @@ describe("BaseRepositoryTest", function () {
     
     const repo: TestRepository = new TestRepository;
 
-    before(function(){
+    beforeAll(function(){
         return mongoose.connect('mongodb://admin:1122312@ds143141.mlab.com:43141/askalot');
     });
 
-    after(function(){
+    afterAll(function(){
         return mongoose.disconnect();
     });
 
@@ -47,7 +44,7 @@ describe("BaseRepositoryTest", function () {
     describe("test getAll method", function() {
         it("should return empty array when repo is not populated", function() {
             return repo.getAll().then(function(arr) {
-                expect(arr).to.be.empty;
+                expect(arr.length).toBe(0);
                 return;
             });
         });
@@ -59,7 +56,7 @@ describe("BaseRepositoryTest", function () {
             return Promise.all(createPromises).then(function() {
                 return repo.getAll();
             }).then(function(arr) {
-                expect(arr).to.have.lengthOf(2);
+                expect(arr.length).toBe(2);
                 return;
             });
         })
@@ -67,13 +64,12 @@ describe("BaseRepositoryTest", function () {
 
     describe("test getById method", function() {
         it("should throw exception when entity is not found ", function() {
-            let error_msg = "fail expected but actually passed";
+            expect.assertions(1);
             let objectId = new ObjectID();
             return repo.getById(objectId).then(function() {
-                expect.fail(error_msg);
                 return;
             }).catch(function(err) {
-                expect(err.name).to.equal("AppError");
+                expect(err.name).toBe("AppError");
                 return;
             })
         });
@@ -83,7 +79,7 @@ describe("BaseRepositoryTest", function () {
             return repo.create(testModel).then(function(created) {
                 return repo.getById(created._id);
             }).then(function(model) {
-                expect(model.age).to.equal(testModel.age);
+                expect(model.age).toBe(testModel.age);
                 return;
             });
         });
@@ -93,7 +89,7 @@ describe("BaseRepositoryTest", function () {
             return repo.create(testModel).then(function(created) {
                 return repo.getById(created._id.toString());
             }).then(function(model) {
-                expect(model.age).to.equal(testModel.age);
+                expect(model.age).toBe(testModel.age);
                 return;
             });
         })
@@ -101,12 +97,9 @@ describe("BaseRepositoryTest", function () {
 
     describe("test findOne method", function() {
         it("should throw exception if no entity matches the given query predicates", function() {
-            let error_msg = "fail expected but actually passed";
-            return repo.findOne({age: 50}).then(function() {
-                expect.fail(error_msg);
-                return
-            }).catch(function(err) {
-                expect(err.name).to.equal("AppError");
+            expect.assertions(1);
+            return repo.findOne({age: 50}).catch(function(err) {
+                expect(err.name).toBe("AppError");
                 return;
             })
         });
@@ -119,7 +112,7 @@ describe("BaseRepositoryTest", function () {
                let query = { age: 20 };
                return repo.findOne(query);
            }).then(function(model) {
-               expect(model.age).to.equal(20);
+               expect(model.age).toBe(20);
                return;
            })
        })
@@ -136,9 +129,9 @@ describe("BaseRepositoryTest", function () {
                 return repo.filter(query);
             }).then(function(arr) {
                 let ages = arr.map(function(model) { return model.age} );
-                expect(ages).to.have.lengthOf(2);
-                expect(ages).contains(testModel1.age);
-                expect(ages).contains(testModel2.age);
+                expect(ages.length).toBe(2);
+                expect(ages).toEqual(expect.arrayContaining([testModel1.age]));
+                expect(ages).toEqual(expect.arrayContaining([testModel2.age]));
                 return;
             })
         })
@@ -150,7 +143,7 @@ describe("BaseRepositoryTest", function () {
             return repo.create(testModel).then(function(created) {
                 return repo.getById(created._id);
             }).then(function(model) {
-                expect(model.age).to.equal(testModel.age);
+                expect(model.age).toBe(testModel.age);
                 return;
             })
         });
@@ -161,8 +154,8 @@ describe("BaseRepositoryTest", function () {
             return repo.create(testModel).then(function() {
                 return repo.getAll()
             }).then(function(arr) {
-                expect(arr[0]._id).to.not.eql(testModel._id);
-                expect(arr[0].age).to.equal(testModel.age);
+                expect(arr[0]._id).not.toEqual(testModel._id);
+                expect(arr[0].age).toBe(testModel.age);
                 return;
             })
         });
@@ -172,12 +165,9 @@ describe("BaseRepositoryTest", function () {
         it("should throw exception if no entity matches the given id", function() {
             let testModel = new TestModel(1);
             testModel._id = new ObjectID();
-            let error_msg = "fail expected but actually passed";
-            return repo.update(testModel).then(function() {
-                expect.fail(error_msg);
-                return
-            }).catch(function(err) {
-                expect(err.name).to.equal("AppError");
+            expect.assertions(1);
+            return repo.update(testModel).catch(function(err) {
+                expect(err.name).toBe("AppError");
                 return;
             })
         });
@@ -189,11 +179,11 @@ describe("BaseRepositoryTest", function () {
                 created.age = 100;
                 return repo.update(created);
             }).then(function(updated) {
-                expect(updated._id).eql(testModel._id);
-                expect(updated.age).to.equal(100);
+                expect(updated._id).toEqual(testModel._id);
+                expect(updated.age).toBe(100);
                 return repo.getById(updated._id);
             }).then(function(model) {
-                expect(model.age).to.equal(100);
+                expect(model.age).toBe(100);
             })
         });
     });
@@ -201,12 +191,9 @@ describe("BaseRepositoryTest", function () {
     describe("test deleteById method", function() {
         it("should throw exception if no entity matches the given id", function() {
            let objectId = new ObjectID();
-           let error_msg = "fail expected but actually passed";
-           return repo.deleteById(objectId).then(function() {
-               expect.fail(error_msg);
-               return
-           }).catch(function(err) {
-               expect(err.name).to.equal("AppError");
+           expect.assertions(1);
+           return repo.deleteById(objectId).catch(function(err) {
+               expect(err.name).toBe("AppError");
                return;
            })
         });
@@ -217,11 +204,11 @@ describe("BaseRepositoryTest", function () {
                 testModel = created;
                 return repo.deleteById(created._id);
             }).then(function(deleted) {
-                expect(deleted._id).eql(testModel._id);
-                expect(deleted.age).to.equal(testModel.age);
+                expect(deleted._id).toEqual(testModel._id);
+                expect(deleted.age).toBe(testModel.age);
                 return repo.getAll();
             }).then(function(arr) {
-                expect(arr).to.be.empty;
+                expect(arr.length).toBe(0);
                 return;
             })
         });
