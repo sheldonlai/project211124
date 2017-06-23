@@ -12,40 +12,44 @@ class CreateQuestion extends LoginRequiredComponent<any, any> {
     constructor(props) {
         super(props);
         this.state = {
-            title : '',
-            content : ''
+            title: '',
+            tags: [],
+            isPublished: '',
+            content: '',
+            publicityStatus: ''
         }
     }
 
-    reset = ()=> {
+    reset = () => {
         this.setState({title: '', content: ''})
     }
 
-    titleChange = (event : any, value: string)  => {
-        this.setState({title : value});
+    titleChange = (event: any, value: string) => {
+        this.setState({title: value});
     }
 
-    contentChange = (event: any)  => {
+    contentChange = (event: any) => {
         this.setState({content: event.target.value});
     }
 
     submit = () => {
-        let postReq:  any = {
-            title : this.state.title,
-            content : this.state.content,
-            tags: this.state.selectedFolders.map((folder : any)=> {
+        let postReq: any = {
+            title: this.state.title,
+            content: this.state.content,
+            tags: this.state.selectedFolders.map((folder: any) => {
                 return folder.folderName
             })
         }
+        this.props.createQuestion(postReq);
         //
     }
 
-    selectFieldChange = (event: any , index : number, value : any[]) => {
-        this.setState({selectedFolders : value});
+    selectFieldChange = (event: any, index: number, value: any[]) => {
+        this.setState({selectedFolders: value});
     }
 
     menuItems = () => {
-        return this.props.tags.map((tag : any) => (
+        return this.props.tags.map((tag: any) => (
             <MenuItem
                 key={tag.name}
                 value={tag}
@@ -55,15 +59,17 @@ class CreateQuestion extends LoginRequiredComponent<any, any> {
     }
 
     folderMenu = () => {
-        if (this.props.tags != null && this.props.folders.length > 0){
-            return (<SelectField
-                multiple={true}
-                hintText="Select Folders"
-                value={this.state.selectedFolders}
-                onChange={this.selectFieldChange}
-                fullWidth={true}>
-                {this.menuItems()}
-            </SelectField>)
+        if (this.props.tags != undefined) {
+            return (
+                <SelectField
+                    multiple={true}
+                    hintText="Select Folders"
+                    value={this.state.selectedFolders}
+                    onChange={this.selectFieldChange}
+                    fullWidth={true}>
+                    {this.menuItems()}
+                </SelectField>
+            )
         }
     }
 
@@ -83,7 +89,7 @@ class CreateQuestion extends LoginRequiredComponent<any, any> {
                 <div>{folderMenu}</div>
                 <h4 style={{float: 'left'}}>Content :</h4>
                 <textarea value={this.state.content} onChange={this.contentChange}
-                          style={{minHeight : '400px', width : '100%'}}
+                          style={{minHeight: '400px', width: '100%'}}
                 />
                 <RaisedButton
                     label="Make Post"
@@ -98,6 +104,6 @@ class CreateQuestion extends LoginRequiredComponent<any, any> {
 export const CreateQuestionPage = connect(
     state => ({loggedIn: state.AuthReducer.loggedIn}),
     dispatch => ({
-        createQuestion : (question: QuestionDto) => dispatch(QuestionActions.createQuestion(question))
+        createQuestion: (question: QuestionDto) => dispatch(QuestionActions.createQuestion(question))
     })
 )(CreateQuestion)

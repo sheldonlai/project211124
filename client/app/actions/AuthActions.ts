@@ -1,14 +1,15 @@
 
-import {AuthActionTypes} from './AuthActionTypes';
+import {AuthActionTypes} from '../constants/AuthActionTypes';
 import {CommonController} from '../api.controllers/CommonController';
 import {Routes} from '../constants/Routes';
 import {LoginRequest} from '../models/LoginRequest';
 import {RegistrationRequest} from '../models/RegistrationRequest';
 import {RouterController} from "../api.controllers/RouterController";
+import {BaseActions} from "./BaseActions";
 
 let apiController : CommonController = CommonController.getInstance();
 
-export class AuthActions {
+export class AuthActions extends BaseActions {
     static login(login: LoginRequest){
         return function (dispatch) {
             dispatch({

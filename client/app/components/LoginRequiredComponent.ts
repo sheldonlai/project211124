@@ -21,4 +21,9 @@ export class LoginRequiredComponent<P extends LoginRequiredComponentProps, S> ex
     //     }
     // }
 
+    componentWillReceiveProps(nextProps){
+        if (!this.props.loggedIn){
+            RouterController.history.goBack();
+        }
+    }
 }
