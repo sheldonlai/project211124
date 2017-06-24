@@ -44,3 +44,9 @@
 //     });
 //
 // });
+
+describe('User empty test', function() {
+    test('should pass', ()=> {
+        expect.anything();
+    })
+})

@@ -23,10 +23,31 @@ describe('BaseServiceTest', function () {
         };
         testService.mapKeysOntoObject(obj, dict);
         expect(obj).toEqual(dict);
-
     })
 
-
+    test('should not map extra field into object', function () {
+        let obj = {
+            a: 1,
+            b: 2,
+            c: 3,
+            d: 4
+        };
+        let dict = {
+            a: 100,
+            b: 200,
+            c: 300,
+            d: 400,
+            e: 500
+        };
+        testService.mapKeysOntoObject(obj, dict);
+        let expected = {
+            a: 100,
+            b: 200,
+            c: 300,
+            d: 400,
+        }
+        expect(obj).toEqual(expected);
+    })
 });
 
 
