@@ -8,14 +8,14 @@ import {Answer} from "../models/Answer";
 import {AppError} from "../errors/AppError";
 import {BaseService} from "./BaseService";
 
-export interface IQuestionAnswerService {
+export interface IQuestionService {
     createQuestion(question: QuestionDto, user: User): Promise<any>;
     getQuestionPageById(id: string): Promise<QuestionPageDto>;
     getUserQuestions(currentUser: User): Promise<QuestionDto[]>;
     updateQuestion(question: QuestionDto, user: User): Promise<QuestionDto>;
 }
 
-export class QuestionService extends BaseService implements IQuestionAnswerService {
+export class QuestionService extends BaseService implements IQuestionService {
 
     private questionsRepository: IQuestionRepository;
     private answerRepository: IAnswerRepository;

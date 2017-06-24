@@ -1,5 +1,5 @@
 import {NextFunction, Request, Response, Router} from "express";
-import {IQuestionAnswerService} from "../services/QuestionService";
+import {IQuestionService} from "../services/QuestionService";
 import {BaseAPI} from "./BaseAPI";
 import {APIUrls} from "../urls";
 import {maybeAuthenticated, mustBeAuthenticated} from "../middlewares/AuthMiddleware";
@@ -8,9 +8,9 @@ import {User} from "../models/User";
 
 export class QuestionAPI extends BaseAPI {
 
-    private service : IQuestionAnswerService;
+    private service : IQuestionService;
 
-    constructor(router: Router, service: IQuestionAnswerService) {
+    constructor(router: Router, service: IQuestionService) {
         super();
         this.service = service;
         router.post(APIUrls.CreateQuestion, mustBeAuthenticated, this.createQuestion);

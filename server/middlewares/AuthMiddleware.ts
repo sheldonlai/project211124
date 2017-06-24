@@ -9,7 +9,7 @@ import {AppError} from "../errors/AppError";
 export const mustBeAuthenticated = function (req, res, next) {
     try {
         let userRepository = RepositoryProvider.UserRepository;
-        let payload = verifyToken(req.headers.token);
+        let payload = verifyToken(req.headers.authorization);
         userRepository.getById(payload._id).then((user: User) => {
             req.user = user;
             next();

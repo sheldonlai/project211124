@@ -6,17 +6,36 @@ import {connect} from "react-redux";
 import {QuestionActions} from "../../actions/QuestionActions";
 import {QuestionDto} from "../../../../server/dtos/q&a/QuestionDto";
 import {LoginRequiredComponent} from "../../components/LoginRequiredComponent";
+import {PublicityStatus} from "../../../../server/enums/PublicityStatus";
+import {QuestionDifficulty} from "../../../../server/models/Question";
+import {AppStoreState} from "../../stores/AppStore";
+import {QuestionCreationDto} from "../../../../server/dtos/q&a/QuestionCreationDto";
+import {DifficultyLevel, QuestionEducationLevel} from "../../../../server/enums/QuestionEducationLevel";
 let SelectField = require('material-ui/SelectField').default;
 
-class CreateQuestion extends LoginRequiredComponent<any, any> {
+export interface CreateQuestionState {
+    title: string;
+    tags: string[]
+    isPublished: boolean;
+    content: string;
+    publicityStatus: PublicityStatus
+    difficulty: QuestionDifficulty
+}
+
+class CreateQuestion extends LoginRequiredComponent<any, QuestionCreationDto> {
     constructor(props) {
         super(props);
         this.state = {
             title: '',
+            author: '',
             tags: [],
-            isPublished: '',
+            isPublished: false,
             content: '',
-            publicityStatus: ''
+            publicityStatus: PublicityStatus.PUBLIC,
+            difficulty: {
+                educationLevel: QuestionEducationLevel.NOT_SPECIFIED,
+                difficultyLevel: DifficultyLevel.NOT_SPECIFIED
+            }
         }
     }
 
@@ -33,19 +52,13 @@ class CreateQuestion extends LoginRequiredComponent<any, any> {
     }
 
     submit = () => {
-        let postReq: any = {
-            title: this.state.title,
-            content: this.state.content,
-            tags: this.state.selectedFolders.map((folder: any) => {
-                return folder.folderName
-            })
-        }
+        let postReq: QuestionCreationDto = this.state;
         this.props.createQuestion(postReq);
         //
     }
 
     selectFieldChange = (event: any, index: number, value: any[]) => {
-        this.setState({selectedFolders: value});
+        this.setState({tags: value});
     }
 
     menuItems = () => {
@@ -64,7 +77,7 @@ class CreateQuestion extends LoginRequiredComponent<any, any> {
                 <SelectField
                     multiple={true}
                     hintText="Select Folders"
-                    value={this.state.selectedFolders}
+                    value={this.state.tags}
                     onChange={this.selectFieldChange}
                     fullWidth={true}>
                     {this.menuItems()}
@@ -102,8 +115,8 @@ class CreateQuestion extends LoginRequiredComponent<any, any> {
 }
 
 export const CreateQuestionPage = connect(
-    state => ({loggedIn: state.AuthReducer.loggedIn}),
-    dispatch => ({
+    (state: AppStoreState) => ({loggedIn: state.AuthReducer.loggedIn}),
+    (dispatch) => ({
         createQuestion: (question: QuestionDto) => dispatch(QuestionActions.createQuestion(question))
     })
 )(CreateQuestion)
