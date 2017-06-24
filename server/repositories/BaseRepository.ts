@@ -3,30 +3,40 @@ import {BaseModel} from "../models/BaseModel";
 import {AppError} from "../errors/AppError";
 
 export interface IBaseRepository<T> {
-    getAll(): Promise<T[]>
-    getById(id : string | Types.ObjectId) : Promise<T>;
+    getAll(options?: SortLimitOptions): Promise<T[]>
+    getById(id: string | Types.ObjectId): Promise<T>;
     findOne(query: any): Promise<T>;
     filter(query: any): Promise<T[]>
-    create(obj : T): Promise<T>;
-    update(obj : T): Promise<T>;
-    deleteById(id : string | Types.ObjectId) : Promise<T>;
+    create(obj: T): Promise<T>;
+    update(obj: T): Promise<T>;
+    deleteById(id: string | Types.ObjectId): Promise<T>;
+}
+
+export interface SortLimitOptions {
+    sort?: any;
+    limit?: number;
 }
 
 
 export abstract class BaseRepository<T extends BaseModel, I extends Document & T>
-    implements IBaseRepository<T>{
+    implements IBaseRepository<T> {
 
     constructor(private model: Model<I>) {
     }
 
-    getAll(): Promise<T[]> {
-        return this.model.find().lean().exec().then((res: T[]) => {
+    getAll(options?: SortLimitOptions): Promise<T[]> {
+        let promise = this.model.find();
+        if (options) {
+            promise = (options.sort) ? promise.sort(options.sort) : promise;
+            promise = (options.limit) ? promise.limit(options.limit) : promise;
+        }
+        return promise.lean().exec().then((res: T[]) => {
             return this.getModels(res);
         })
     }
 
-    getById(id : string | Types.ObjectId): Promise<T> {
-        return this.model.findById(id).lean().exec().then((res : T) =>{
+    getById(id: string | Types.ObjectId): Promise<T> {
+        return this.model.findById(id).lean().exec().then((res: T) => {
             return this.getModel(res);
         })
     }
@@ -56,7 +66,7 @@ export abstract class BaseRepository<T extends BaseModel, I extends Document & T
         });
     }
 
-    deleteById(id : string | Types.ObjectId): Promise<T> {
+    deleteById(id: string | Types.ObjectId): Promise<T> {
         return this.model.findByIdAndRemove(id).exec().then((res: I) => {
             return this.getModel(res);
         });
@@ -68,7 +78,7 @@ export abstract class BaseRepository<T extends BaseModel, I extends Document & T
         });
     }
 
-    private getModel(obj : T | I): T {
+    private getModel(obj: T | I): T {
         let result: T;
         if (obj == undefined || obj == null) {
             throw new AppError('Entity not found');

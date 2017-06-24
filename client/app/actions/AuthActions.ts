@@ -35,9 +35,9 @@ export class AuthActions extends BaseActions {
     static logout() {
         return function(dispatch) {
             apiController.logout();
-            return {
+            dispatch({
                type: AuthActionTypes.LOGOUT
-            };
+            });
         }
     }
 

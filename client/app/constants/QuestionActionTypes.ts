@@ -4,7 +4,7 @@
 export enum QuestionActionTypes {
     QuestionPreviewsRequest = <any> "QuestionPreviewsError",
     QuestionPreviewsError = <any> "QuestionPreviewsError",
-    FetchedQuestionPreviews = <any> "FetchedQuestionPreviews",
+    QuestionPreviewsOK = <any> "QuestionPreviewsOK",
 
     CreateQuestionRequest = <any> "CreateQuestionRequest",
     CreateQuestionError = <any> "CreateQuestionError",

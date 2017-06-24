@@ -1,13 +1,16 @@
 
 import {ErrorActionTypes} from "../constants/ErrorActionTypes";
 export interface ErrorReducerState {
-    error : string;
-    errorTime : number;
+    errors : ErrorObject[];
+}
+
+export interface  ErrorObject {
+    message: string;
+    time: number;
 }
 
 const initialState : ErrorReducerState = {
-    error : '',
-    errorTime : Date.now()
+    errors : []
 };
 
 
@@ -15,17 +18,16 @@ const initialState : ErrorReducerState = {
 export const ErrorReducer = (state = initialState, action) : ErrorReducerState => {
     switch (action.type) {
         case ErrorActionTypes.ADD_ERROR:
+            state.errors.push({message: action.data, time: Date.now()})
             return {
-                error : action.data,
-                errorTime : Date.now()
+                errors : state.errors
             };
         case ErrorActionTypes.CLEAR_ERROR:
             return {
-                error : '',
-                errorTime : Date.now()
+                errors : [],
             };
         default:
-            // clear error
+            // clear errors
             return state;
     }
 };

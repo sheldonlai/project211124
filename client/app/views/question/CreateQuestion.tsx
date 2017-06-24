@@ -115,7 +115,7 @@ class CreateQuestion extends LoginRequiredComponent<any, QuestionCreationDto> {
 }
 
 export const CreateQuestionPage = connect(
-    (state: AppStoreState) => ({loggedIn: state.AuthReducer.loggedIn}),
+    (state: AppStoreState) => ({loggedIn: state.auth.loggedIn}),
     (dispatch) => ({
         createQuestion: (question: QuestionDto) => dispatch(QuestionActions.createQuestion(question))
     })

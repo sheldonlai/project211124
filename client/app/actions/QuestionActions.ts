@@ -3,28 +3,26 @@ import {QuestionActionTypes} from '../constants/QuestionActionTypes';
 import {QuestionAPIController} from '../api.controllers/QuestionAPIController';
 import {QuestionDto} from "../../../server/dtos/q&a/QuestionDto";
 import {BaseActions} from "./BaseActions";
+import {AxiosResponse} from "axios";
 
 let apiController : QuestionAPIController = QuestionAPIController.getInstance();
 
 export class QuestionActions extends BaseActions{
 
-    static getQuestionPreviews() {
+    static getQuestionPreviews() : (dispatch: any) => void {
         return function(dispatch){
-            apiController.fetchQuestionPreviews().then(()=> {
+            apiController.fetchQuestionPreviews().then((res : AxiosResponse)=> {
                 dispatch({
-                    // type : QuestionActionTypes.FetchedQuestionPreviews
-
+                    type : QuestionActionTypes.QuestionPreviewsOK,
+                    data : res.data
                 })
             }).catch(err => {
-                dispatch({
-                    // type: QuestionActionTypes.QuestionCreated,
-                    data: err.response.data
-                })
+                QuestionActions.handleError(dispatch, err, QuestionActionTypes.QuestionPreviewsError)
             })
         }
     }
 
-    static createQuestion(questionReq : QuestionDto){
+    static createQuestion(questionReq : QuestionDto) : (dispatch: any) => void {
         return function(dispatch) {
             apiController.createQuestion(questionReq).then(res => {
                 dispatch({

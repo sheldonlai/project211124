@@ -1,6 +1,7 @@
 import {AuthActionTypes} from "../constants/AuthActionTypes";
 import {ReducerStateStatus} from "../constants/ReducerStateStatus";
 import {CommonController} from "../api.controllers/CommonController";
+import {QuestionPreview} from "../../../server/dtos/q&a/QuestionPreview";
 
 export interface RegistrationReducerState {
     status : ReducerStateStatus;
@@ -18,11 +19,13 @@ export const RegistrationReducer = (state = initialState, action) : Registration
     switch (action.type) {
         case AuthActionTypes.REGISTER_REQUEST:
             return {
-                status : ReducerStateStatus.LOADING
+                status : ReducerStateStatus.LOADING,
+
             };
         case AuthActionTypes.REGISTER_OK:
             return {
-                status : ReducerStateStatus.DONE
+                status : ReducerStateStatus.DONE,
+
             };
         case AuthActionTypes.REGISTER_ERR:
             return {

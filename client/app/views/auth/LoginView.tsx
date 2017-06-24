@@ -68,6 +68,6 @@ export class LoginView extends Component<any, any> {
 }
 
 export const LoginPage = connect(
-    (state : AppStoreState) => ({loggedIn : state.AuthReducer.loggedIn}),
+    (state : AppStoreState) => ({loggedIn : state.auth.loggedIn}),
     (dispatch) => ({login : (login: LoginRequest) => dispatch(AuthActions.login(login))})
 )(LoginView)

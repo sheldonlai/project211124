@@ -2,11 +2,16 @@ import {RepositoryProvider, ServiceProvider} from "../Container";
 import {verifyToken} from "../utils/JsonWebTokenUtil";
 import {User} from "../models/User";
 import {AppError} from "../errors/AppError";
+import {NextFunction, Request, Response} from "express";
 /**
  * Created by SHELDON on 6/18/2017.
  */
 
-export const mustBeAuthenticated = function (req, res, next) {
+export interface AuthRequest extends Request {
+    user?: User;
+}
+
+export const mustBeAuthenticated = function (req: Request, res: Response, next: NextFunction) {
     try {
         let userRepository = RepositoryProvider.UserRepository;
         let payload = verifyToken(req.headers.authorization);
@@ -19,7 +24,7 @@ export const mustBeAuthenticated = function (req, res, next) {
     }
 }
 
-export const maybeAuthenticated = function (req, res, next) {
+export const maybeAuthenticated = function (req: Request, res: Response, next: NextFunction) {
     try {
         let userRepository = RepositoryProvider.UserRepository;
         let payload = verifyToken(req.headers.token);

@@ -1,9 +1,9 @@
 import {IQuestion, Question, QuestionModel} from "../models/Question";
 import {BaseRepository, IBaseRepository} from "./BaseRepository";
-import {IUser} from "../models/User";
+import {IUser, User} from "../models/User";
 
 export interface IQuestionRepository extends IBaseRepository<Question>{
-    getQuestionByAuthor(user):Promise<any>;
+    getQuestionByAuthor(user: User):Promise<any>;
 }
 
 export class QuestionRepository extends
@@ -22,11 +22,10 @@ export class QuestionRepository extends
         return super.update(question);
     }
 
-    getQuestionByAuthor(user: IUser): Promise<any>{
+    getQuestionByAuthor(user: User): Promise<Question[]>{
         return QuestionModel.find({author : user})
-            .lean().exec().then(function(question: Question){
-            return this.getModel(question);
+            .lean().exec().then(function(question: Question[]){
+            return this.getModels(question);
         });
     }
-
 }

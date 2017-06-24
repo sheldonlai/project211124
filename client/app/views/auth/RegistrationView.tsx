@@ -3,13 +3,13 @@ import {Component} from "react";
 import TextField from "material-ui/TextField";
 import {RegistrationRequest} from "../../models/RegistrationRequest";
 import {FormWrapper} from "../../components/FormWrapper";
-import {AuthActions} from "../../actions/AuthActions";
 import {ErrorView} from "../../components/ErrorView";
 import RaisedButton from "material-ui/RaisedButton";
 import {connect} from "react-redux";
 import {CommonController} from "../../api.controllers/CommonController";
 import {Routes} from "../../constants/Routes";
 import {RouterController} from "../../api.controllers/RouterController";
+import {AppStoreState} from "../../stores/AppStore";
 
 export interface RegistrationViewState {
     error : string;
@@ -107,5 +107,5 @@ export class RegistrationView extends Component<RegistrationViewProps, Registrat
 }
 
 export const RegistrationPage = connect(
-    state => ({loggedIn: state.AuthReducer.loggedIn})
+    (state: AppStoreState)=> ({loggedIn: state.auth.loggedIn})
 )(RegistrationView)
