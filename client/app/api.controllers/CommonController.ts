@@ -33,5 +33,4 @@ export class CommonController extends ApiController{
     registerUser (regRequest : RegistrationRequest) : AxiosPromise {
         return this.post(APIUrls.Register, regRequest);
     }
-
 }

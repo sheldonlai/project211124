@@ -123,7 +123,7 @@ export class AuthenticationService extends BaseService implements IAuthenticatio
      * Hard coded email template... please use an template engine
      */
     private html(user: User, code: string) {
-        return '<div class="PlainText">Dear ' + user.name + ' <br> <br>' +
+        return '<div class="PlainText">Dear ' + user.username + ' <br> <br>' +
             'Verify that you own ' + user.email + ' <br> <br>' +
             '<a href="' + '/' + code + '" target="_blank">' + 'Confirm' + '</a> <br> <br>' +
             'Once verified, please login via our app. <br> <br>' +

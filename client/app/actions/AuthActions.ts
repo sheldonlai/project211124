@@ -18,7 +18,7 @@ export class AuthActions extends BaseActions {
             apiController.login(login)
                 .then(function (response) {
                     apiController.setToken(response.data.token);
-                    RouterController.history.push(Routes.home)
+                    RouterController.history.push(Routes.home);
                     dispatch({
                         type: AuthActionTypes.LOGIN_OK,
                         data: response
@@ -48,7 +48,7 @@ export class AuthActions extends BaseActions {
                 apiController.setToken(res.data.token);
                 RouterController.history.push(Routes.home);
                 dispatch({
-                    type: AuthActionTypes.REGISTER_REQUEST,
+                    type: AuthActionTypes.REGISTER_OK,
                     data : res
                 });
             }).catch(err=> {

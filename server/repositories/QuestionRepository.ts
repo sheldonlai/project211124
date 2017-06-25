@@ -1,9 +1,10 @@
-import {IQuestion, Question, QuestionModel} from "../models/Question";
+import {IQuestion, Question, QuestionComment, QuestionModel} from "../models/Question";
 import {BaseRepository, IBaseRepository} from "./BaseRepository";
 import {IUser, User} from "../models/User";
 
 export interface IQuestionRepository extends IBaseRepository<Question>{
-    getQuestionByAuthor(user: User):Promise<any>;
+    getQuestionsByAuthor(user: User):Promise<Question[]>;
+    getQuestionByTitle(title: string): Promise<Question>;
 }
 
 export class QuestionRepository extends
@@ -14,18 +15,32 @@ export class QuestionRepository extends
     }
 
     create(question : Question): Promise<Question>{
-        delete question.lastEditedUtc;
         return super.create(question);
     }
     update(question : Question): Promise<Question>{
-        delete question.lastEditedUtc;
         return super.update(question);
     }
 
-    getQuestionByAuthor(user: User): Promise<Question[]>{
+    getQuestionByTitle(title: string): Promise<Question>{
+        return QuestionModel.findOne({title : title})
+            .lean().exec().then((question: Question) => {
+                return this.getModel(question);
+            });
+    }
+
+    getQuestionsByAuthor(user: User): Promise<Question[]>{
         return QuestionModel.find({author : user})
-            .lean().exec().then(function(question: Question[]){
+            .lean().exec().then((question: Question[]) => {
             return this.getModels(question);
         });
+    }
+
+    protected applyRestriction(question: Question): Question {
+        delete question.author.local;
+        question.comments = question.comments.map((comment: QuestionComment) => {
+            delete comment.commentBy.local;
+            return comment;
+        });
+        return question;
     }
 }

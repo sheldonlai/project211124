@@ -48,7 +48,7 @@ export class RegistrationView extends Component<RegistrationViewProps, Registrat
     }
 
     updateUsername = (event) => {
-        this.updateRequest('name', event.target.value);
+        this.updateRequest('username', event.target.value);
     }
 
     updateEmail = (event) => {
@@ -83,8 +83,8 @@ export class RegistrationView extends Component<RegistrationViewProps, Registrat
                     onChange={this.updateEmail}
                 /><br/>
                 <TextField
-                    floatingLabelText="name"
-                    hintText="name"
+                    floatingLabelText="username"
+                    hintText="username"
                     onChange={this.updateUsername}
                 /><br />
                 <TextField

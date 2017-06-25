@@ -10,7 +10,8 @@ import {CreateQuestionPage} from "./question/CreateQuestion";
 import {RouterController} from "../api.controllers/RouterController";
 import {Provider} from "react-redux";
 import {Menu} from "./Menu";
-import {QuestionPage} from "./question/QuestionView";
+import {QuestionHomePage} from "./question/QuestionHome";
+import {QuestionPage} from "./question/QuestionPage";
 
 let muiTheme = getMuiTheme({
     palette: {
@@ -42,8 +43,9 @@ export class App extends React.Component<any, any> {
                             <Route exact path={Routes.home} component={Home}/>
                             <Route exact path={Routes.login} component={LoginPage}/>
                             <Route exact path={Routes.registration} component={RegistrationPage}/>
-                            <Route exact path={Routes.question} component={QuestionPage}/>
+                            <Route exact path={Routes.question} component={QuestionHomePage}/>
                             <Route exact path={Routes.createQuestion} component={CreateQuestionPage}/>
+                            <Route path={Routes.question_by_title} component={QuestionPage} />
                         </div>
                     </Router>
                 </Provider>

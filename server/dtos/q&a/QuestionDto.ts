@@ -1,11 +1,11 @@
-
 import {PublicityStatus} from "../../enums/PublicityStatus";
 import {QuestionComment, QuestionDifficulty} from "../../models/Question";
+import {UserDto} from "../auth/UserDto";
 
 export class QuestionDto{
     _id : string;
     title : string;
-    author: string;
+    author: UserDto;
     content : string;
     dateCreated?: Date;
     isPublished : boolean;
