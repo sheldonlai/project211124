@@ -30,4 +30,8 @@ export class QuestionAPIController extends ApiController{
         return this.post(APIUrls.CreateQuestion, question);
     }
 
+    fetchQuestionByTitle(name: string): AxiosPromise {
+        return this.get(APIUrls.GetQuestionPage.replace(":title", name) );
+    }
+
 }

@@ -4,7 +4,6 @@ import {User} from './User';
 import {PublicityStatus} from "../enums/PublicityStatus";
 import {DifficultyLevel, QuestionEducationLevel} from "../enums/QuestionEducationLevel";
 import {listNumericalEnumValues} from "../utils/EnumsUtil";
-
 export class QuestionComment {
     commentBy: User;
     commentContent: string;
@@ -24,7 +23,7 @@ export interface QuestionDifficulty {
 export class Question extends BaseModel {
     title: string;
     content: string;
-    author: any;
+    author: User;
     tags: any[];
     upVotes: number;
     downVotes: number;
@@ -35,7 +34,7 @@ export class Question extends BaseModel {
     publicityStatus: PublicityStatus;
     difficulty: QuestionDifficulty;
 
-    constructor(title: string, content: string, author: User | string, tags: any[],
+    constructor(title: string, content: string, author: User, tags: any[],
                 isPublished?: boolean, publicityStatus?: PublicityStatus,
                 difficulty?: QuestionDifficulty) {
         super();
@@ -55,39 +54,48 @@ export interface IQuestion extends Question, Document {
 }
 
 const schema = new Schema({
-    title: {type: String, required: true},
-    content: {type: String, required: true},
-    author: {type: Schema.Types.ObjectId, ref: 'user', required: true},
-    tags: [{type: Schema.Types.ObjectId, ref: 'tag'}],
-    isPublished: {type: Boolean, default: false},
-    upVotes: {type: Number, default: 0},
-    downVotes: {type: Number, default: 0},
-    resolved: {type: Boolean, default: false},
-    lastEditedUtc: {type: Date, default: Date.now},
-    createdUtc: {type: Date, default: Date.now},
-    publicityStatus: {
-        type: String,
-        enum: Object.keys(PublicityStatus)
-    },
-    difficulty: {
-        educationLevel: {
+        title: {type: String, required: true, unique: true},
+        content: {type: String, required: true},
+        author: {type: Schema.Types.ObjectId, ref: 'user', required: true},
+        tags: [{type: Schema.Types.ObjectId, ref: 'tag'}],
+        isPublished: {type: Boolean, default: false},
+        upVotes: {type: Number, default: 0},
+        downVotes: {type: Number, default: 0},
+        resolved: {type: Boolean, default: false},
+        lastEditedUtc: {type: Date, default: Date.now},
+        createdUtc: {type: Date, default: Date.now},
+        publicityStatus: {
             type: String,
-            enum: Object.keys(QuestionEducationLevel),
-            default: QuestionEducationLevel.NOT_SPECIFIED
+            enum: Object.keys(PublicityStatus)
         },
-        difficultyLevel: {
-            type: Number,
-            enum: listNumericalEnumValues(DifficultyLevel),
-            default: DifficultyLevel.NOT_SPECIFIED
-        }
-    },
-    uploads: [
-        {fileUrl: String}
-    ],
-    comments: [{
-        commentBy: {type: Schema.Types.ObjectId, ref: 'user'},
-        commentContent: {type: String, required: true},
-        lastEditedUtc: {type: Date, default: Date.now}
-    }]
-});
+        difficulty: {
+            educationLevel: {
+                type: String,
+                enum: Object.keys(QuestionEducationLevel),
+                default: QuestionEducationLevel.NOT_SPECIFIED
+            },
+            difficultyLevel: {
+                type: Number,
+                enum: listNumericalEnumValues(DifficultyLevel),
+                default: DifficultyLevel.NOT_SPECIFIED
+            }
+        },
+        uploads: [
+            {fileUrl: String}
+        ],
+        comments: [{
+            commentBy: {type: Schema.Types.ObjectId, ref: 'user'},
+            commentContent: {type: String, required: true},
+            lastEditedUtc: {type: Date, default: Date.now}
+        }]
+    });
+
+
+const autoPopulateUsers = function(next) {
+    this.populate(['author', "comments.commentBy"]);
+    next();
+};
+
+schema.pre('findOne', autoPopulateUsers).pre('find', autoPopulateUsers);
+
 export const QuestionModel = model<IQuestion>('question', schema);

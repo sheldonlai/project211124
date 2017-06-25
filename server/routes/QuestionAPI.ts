@@ -32,8 +32,8 @@ export class QuestionAPI extends BaseAPI {
     }
 
     public getQuestion = (req: AuthRequest, res: Response, next: NextFunction) => {
-        let id = req.params.id;
-        let result = this.service.getQuestionPageById(id);
+        let title = req.params.title;
+        let result = this.service.getQuestionPageByTitle(title);
         this.respondPromise(result, res, next);
     }
 
@@ -43,4 +43,5 @@ export class QuestionAPI extends BaseAPI {
         let result = this.service.updateQuestion(question, user);
         this.respondPromise(result, res, next);
     }
+
 }

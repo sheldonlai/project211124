@@ -11,7 +11,7 @@ export class FakeModels {
     localUser(): User {
         let localProfile: LocalProfile = new LocalProfile("hashedPassword", "bestSalt");
         let random = Math.random() * 10000 / 3000;
-        return new User("sampleUser" + random + "@askalot.corp", "Chuck Norris", UserTypeEnum.NORMAL, localProfile);
+        return new User("sampleUser" + random + "@askalot.corp", "Chuck Norris" + random, UserTypeEnum.NORMAL, localProfile);
     }
 
 }

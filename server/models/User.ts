@@ -5,9 +5,9 @@ import {AppError} from "../errors/AppError";
 
 export class User extends BaseModel {
     email: string;
-    name: string;
+    username: string;
     role: UserTypeEnum;
-    verified: Boolean;
+    verified: boolean;
     local?: LocalProfile;
     facebook?: FacebookProfile;
 
@@ -16,7 +16,7 @@ export class User extends BaseModel {
     ){
         super();
         this.email = email;
-        this.name = name;
+        this.username = name;
         this.role = role;
         this.verified = false;
         this.local = local;
@@ -62,7 +62,7 @@ const FacebookSubSchema = new Schema({
 
 export const userSchema = new Schema({
     email:           {type: String, required: true, unique: true},
-    name:            {type: String, required: true},
+    username:        {type: String, required: true, unique: true},
     role:            {type: String, enum: Object.keys(UserTypeEnum), required: true, default: 'normal'},
     verified:        {type: Boolean, required: true, default: false},
     local:           {type: LocalSubSchema},

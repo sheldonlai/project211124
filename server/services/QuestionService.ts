@@ -9,6 +9,7 @@ import {Answer} from "../models/Answer";
 import {AppError} from "../errors/AppError";
 import {BaseService} from "./BaseService";
 import {QuestionPreviewDto} from "../dtos/q&a/QuestionPreviewDto";
+import {ClientError} from "../errors/HttpStatus";
 
 export interface IAnswerService {
     createAnswer(user : User, answer: AnswerDto): Promise<AnswerDto>;
@@ -62,7 +63,7 @@ export class AnswerService extends BaseService implements IAnswerService{
 export interface IQuestionService {
     getQuestionPreview(user? : User): Promise<QuestionPreviewDto>;
     createQuestion(question: QuestionDto, user: User): Promise<QuestionDto>;
-    getQuestionPageById(id: string): Promise<QuestionPageDto>;
+    getQuestionPageByTitle(name: string): Promise<QuestionPageDto>;
     getUserQuestions(currentUser: User): Promise<QuestionDto[]>;
     updateQuestion(question: QuestionDto, user: User): Promise<QuestionDto>;
 };
@@ -83,7 +84,7 @@ export class QuestionService extends BaseService implements IQuestionService {
         let promises = [];
         promises.push(this.questionRepository.getAll({sort: "-dateCreated", limit: 25 }))
         if (user) {
-            promises.push((this.questionRepository.getQuestionByAuthor(user)));
+            promises.push((this.questionRepository.getQuestionsByAuthor(user)));
         }
         return Promise.all(promises).then((result)=> {
             return {
@@ -101,12 +102,12 @@ export class QuestionService extends BaseService implements IQuestionService {
         return this.questionRepository.create(questionObject);
     }
 
-    getQuestionPageById(id: string): Promise<QuestionPageDto> {
+    getQuestionPageByTitle(name: string): Promise<QuestionPageDto> {
         let questionPage: QuestionPageDto = {
             question: null,
             answers: []
         };
-        return this.questionRepository.getById(id).then((question: Question) => {
+        return this.questionRepository.getQuestionByTitle(name).then((question: Question) => {
             questionPage.question = question;
             return this.answerRepository.getByQuestionId(question._id);
         }).then((answers: Answer[]) => {
@@ -116,7 +117,7 @@ export class QuestionService extends BaseService implements IQuestionService {
     }
 
     getUserQuestions(currentUser: User): Promise<QuestionDto[]> {
-        return this.questionRepository.getQuestionByAuthor(currentUser).then((questions: Question[]) => {
+        return this.questionRepository.getQuestionsByAuthor(currentUser).then((questions: Question[]) => {
             return questions;
         });
 
@@ -125,6 +126,7 @@ export class QuestionService extends BaseService implements IQuestionService {
     updateQuestion(questionDto: QuestionDto, user: User): Promise<QuestionDto> {
         return this.questionRepository.getById(questionDto._id).then((questionObj: Question) => {
             this.checkPermissionForModification(questionDto, questionObj, user);
+<<<<<<< HEAD
             // do not allow user to change these
             delete questionDto.title;
             delete questionDto.author;
@@ -136,24 +138,45 @@ export class QuestionService extends BaseService implements IQuestionService {
             if (questionDto.isPublished) {
                 delete questionDto.isPublished;
             }
+=======
+            let restrictedDto: QuestionDto = this.applyUpdateRestrictions(questionDto, questionObj);
+>>>>>>> 39c6a554269add9e0204d2ad40587657410bd21a
 
             // update last edited utc
-            questionDto.lastEditedUtc = new Date(Date.now());
-            questionObj = this.mapKeysOntoObject(questionObj, questionDto);
+            restrictedDto.lastEditedUtc = new Date(Date.now());
+            questionObj = this.mapKeysOntoObject(questionObj, restrictedDto);
 
             return this.questionRepository.update(questionObj);
         })
     }
 
     private checkPermissionForModification = (questionDto: QuestionDto, questionObj: Question, currentUser: User) => {
-        if (questionObj.author != currentUser._id) {
+        if (questionObj.author._id != currentUser._id) {
             throw new AppError("You are not the owner of this question!")
         }
-        if (currentUser.name != questionDto.author) {
-            throw new AppError("You cannot change the name of the author")
+        if (currentUser.username != questionDto.author.username) {
+            throw new AppError("You cannot change the username of the author")
         }
         return true;
+    };
+
+    protected applyUpdateRestrictions(questionDto: QuestionDto, questionInDB: Question): QuestionDto {
+        delete questionDto._id;
+        delete questionDto.author;
+        delete questionDto.dateCreated;
+        if (questionDto.isPublished) {
+            delete questionDto.isPublished
+        }
+        if (questionDto.publicityStatus !== questionInDB.publicityStatus) {
+            throw new AppError("You cannot change the publicity status", ClientError.BAD_REQUEST)
+        }
+        delete questionDto.publicityStatus;
+        return questionDto;
     }
 }
 
+<<<<<<< HEAD
 
+=======
+}
+>>>>>>> 39c6a554269add9e0204d2ad40587657410bd21a

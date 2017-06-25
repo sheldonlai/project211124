@@ -1,4 +1,5 @@
 import {QuestionComment} from "../../models/Question";
+import {CommentDto} from "./CommentDto";
 export interface AnswerDto {
     _id: string;
     question: any;
@@ -8,5 +9,5 @@ export interface AnswerDto {
     downVotes: number;
     lastEditedUtc : Date;
     createdUtc : Date;
-    comments: QuestionComment[];
+    comments: CommentDto[];
 }

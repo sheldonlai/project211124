@@ -91,7 +91,7 @@ export class Server {
 
     private errorHandler(err : AppError, req : Request, res : Response, next: NextFunction) {
         console.error(err.stack);
-        res.statusCode = (err.status) ? err.status : 500;
+        res.statusCode = err.status.code;
         res.json({error: err.message});
     }
 

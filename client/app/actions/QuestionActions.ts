@@ -4,6 +4,7 @@ import {QuestionAPIController} from '../api.controllers/QuestionAPIController';
 import {QuestionDto} from "../../../server/dtos/q&a/QuestionDto";
 import {BaseActions} from "./BaseActions";
 import {AxiosResponse} from "axios";
+import {QuestionPageDto} from "../../../server/dtos/q&a/QuestionPageDto";
 
 let apiController : QuestionAPIController = QuestionAPIController.getInstance();
 
@@ -32,6 +33,30 @@ export class QuestionActions extends BaseActions{
             }).catch(err =>
                 QuestionActions.handleError(dispatch, err, QuestionActionTypes.CreateQuestionError)
             )
+        }
+    }
+
+    static fetchQuestionPage(name: string){
+        return function(dispatch) {
+            dispatch({
+                type: QuestionActionTypes.FetchQuestionPageRequest
+            })
+            apiController.fetchQuestionByTitle(name).then(res => {
+                dispatch({
+                    type: QuestionActionTypes.FetchQuestionPageOK,
+                    data: res.data
+                })
+            }).catch(err =>
+                QuestionActions.handleError(dispatch, err, QuestionActionTypes.FetchQuestionPageError)
+            )
+        }
+    }
+
+
+    static changeQuestionPage(question: QuestionPageDto){
+        return {
+            type: QuestionActionTypes.ChangePostPage,
+            data: question
         }
     }
 

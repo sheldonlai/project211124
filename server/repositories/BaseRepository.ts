@@ -72,13 +72,13 @@ export abstract class BaseRepository<T extends BaseModel, I extends Document & T
         });
     }
 
-    private getModels(objs: T[]): T[] {
+    protected getModels(objs: T[]): T[] {
         return objs.map((obj) => {
             return this.getModel(obj);
         });
     }
 
-    private getModel(obj: T | I): T {
+    protected getModel(obj: T | I): T {
         let result: T;
         if (obj == undefined || obj == null) {
             throw new AppError('Entity not found');

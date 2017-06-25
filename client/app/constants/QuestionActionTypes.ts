@@ -10,7 +10,21 @@ export enum QuestionActionTypes {
     CreateQuestionError = <any> "CreateQuestionError",
     QuestionCreated = <any> "QuestionCreated",
 
-    FetchQuestionRequest = <any> "FetchQuestionRequest",
-    FetchQuestionError = <any> "FetchQuestionError",
-    FetchedQuestion = <any> "FetchedQuestion",
+    FetchQuestionPageRequest = <any> "FetchQuestionPageRequest",
+    FetchQuestionPageOK = <any> "FetchQuestionPageOK",
+    FetchQuestionPageError = <any> "FetchQuestionPageError",
+
+    EditQuestionRequest = <any> "EditQuestionRequest",
+    EditQuestionOK = <any> "EditQuestionOK",
+    EditQuestionError = <any> "EditQuestionError",
+
+    AddAnswerRequest = <any> "AddAnswerRequest",
+    AddAnswerOK = <any> "AddAnswerOK",
+    AddAnswerError = <any> "AddAnswerError",
+
+    EditAnswerRequest = <any> "EditAnswerRequest",
+    EditAnswerOK = <any> "EditAnswerOK",
+    EditAnswerError = <any> "EditAnswerError",
+
+    ChangePostPage = <any> "ChangePostPage"
 }

@@ -49,6 +49,4 @@ export class ApiController {
     defaultErrorHandler (err: AxiosError) {
         throw new Error(err.response.data.error);
     }
-
-
 }
