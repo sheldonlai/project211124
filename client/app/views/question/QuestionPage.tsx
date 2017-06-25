@@ -20,12 +20,12 @@ import {QuestionPageDto} from "../../../../server/dtos/q&a/QuestionPageDto";
 import {AnswerDto} from "../../../../server/dtos/q&a/AnswerDto";
 import {CommentDto} from "../../../../server/dtos/q&a/CommentDto";
 import {RouteComponentProps} from "react-router";
+import {QuestionPageReducerState} from "../../reducers/QuestionPageReducer";
 
-export interface QuestionPageProps extends RouteComponentProps<{title: string}> {
+export interface QuestionPageProps extends QuestionPageReducerState, RouteComponentProps<{ title: string }> {
     user: UserDto
-    questionPage: QuestionPageDto
-    fetchQuestionPage: (title : string) => any;
-    changeQuestionPage : (questionPage: QuestionPageDto)=>any;
+    fetchQuestionPage: (title: string) => any;
+    changeQuestionPage: (questionPage: QuestionPageDto) => any;
 }
 
 export interface QuestionPageState {
@@ -59,14 +59,17 @@ export class QuestionPageComponent extends React.Component<QuestionPageProps, Qu
         }
     }
 
-    componentWillMount(){
-        if (this.props.questionPage == undefined){
-            console.log(this.props.match)
+    componentWillMount() {
+        if (
+            this.props.questionPage == undefined ||
+            this.props.questionPage.question.title !== this.props.match.params.title ||
+                this.props.lastUpdated - Date.now() > 15000
+        ) {
             this.props.fetchQuestionPage(this.props.match.params.title);
         }
     }
 
-    componentWillReceiveProps(nextProps: QuestionPageProps){
+    componentWillReceiveProps(nextProps: QuestionPageProps) {
         if (nextProps.questionPage != this.props.questionPage) {
             this.resetStates();
         }
@@ -88,7 +91,7 @@ export class QuestionPageComponent extends React.Component<QuestionPageProps, Qu
     }
 
 
-    onQuestionTitleChange = (event : any, value: string) => {
+    onQuestionTitleChange = (event: any, value: string) => {
         let temp: QuestionPageDto = this.props.questionPage;
         temp.question.title = value;
         this.props.changeQuestionPage(temp);
@@ -100,7 +103,7 @@ export class QuestionPageComponent extends React.Component<QuestionPageProps, Qu
     }
     onAnswerChange = (event: ChangeEvent<HTMLTextAreaElement>) => {
         let temp: QuestionPageDto = this.props.questionPage;
-        temp.answers.map((answer : AnswerDto) => {
+        temp.answers.map((answer: AnswerDto) => {
             if (answer._id === this.state.answerId) {
                 answer.content = event.target.value;
             }
@@ -161,14 +164,14 @@ export class QuestionPageComponent extends React.Component<QuestionPageProps, Qu
             <div>
                 <p style={{margin: "30px 0px"}}>{ans.content}</p>
                 <Divider />
-                {this.getFooterPostedBy(new Date(ans.createdUtc).toLocaleString(),ans.author)}
+                {this.getFooterPostedBy(new Date(ans.createdUtc).toLocaleString(), ans.author)}
             </div>
         );
     }
 
     getQuestionContent = () => {
         let question = this.props.questionPage.question;
-        let editBut = (question.author.username == this.props.user.username && !this.state.editQuestion)?
+        let editBut = ( this.props.user && question.author.username == this.props.user.username && !this.state.editQuestion) ?
             <div style={{float: "right"}}>
                 <RaisedButton label="Edit" onClick={this.editPost} style={{float: "right"}}/>
             </div>
@@ -191,9 +194,9 @@ export class QuestionPageComponent extends React.Component<QuestionPageProps, Qu
         if (this.state.editQuestion) {
             content = this.getEditor(this.props.questionPage.question.content, this.onQuestionContentChange, this.submitPost);
         } else {
-            let tags = (this.props.questionPage.question.tags != null)?
-                this.props.questionPage.question.tags.map((folderName : string)=> {
-                    return <span style={{fontSize: 14, color: grey800, backgroundColor: grey300, padding : 4, margin : 4}}
+            let tags = (this.props.questionPage.question.tags != null) ?
+                this.props.questionPage.question.tags.map((folderName: string) => {
+                    return <span style={{fontSize: 14, color: grey800, backgroundColor: grey300, padding: 4, margin: 4}}
                                  key={folderName}
                     >
                         {folderName}
@@ -206,7 +209,7 @@ export class QuestionPageComponent extends React.Component<QuestionPageProps, Qu
                         {tags}
                     </div>
                     <Divider />
-                    {this.getFooterPostedBy(new Date(question.dateCreated).toLocaleString(),question.author.username)}
+                    {this.getFooterPostedBy(new Date(question.dateCreated).toLocaleString(), question.author.username)}
                 </div>
         }
         return (
@@ -278,7 +281,6 @@ export class QuestionPageComponent extends React.Component<QuestionPageProps, Qu
         // }
         // // update comment
     }
-
 
 
     // getComments = () => {
@@ -368,11 +370,11 @@ export class QuestionPageComponent extends React.Component<QuestionPageProps, Qu
 
 export const QuestionPage = connect(
     (state: AppStoreState) => ({
-        user : state.auth.user,
+        user: state.auth.user,
         ...state.questionPage
     }),
     (dispatch) => ({
         fetchQuestionPage: (title: string) => dispatch(QuestionActions.fetchQuestionPage(title)),
-        changeQuestionPage : (questionPage: QuestionPageDto) => dispatch(QuestionActions.changeQuestionPage(questionPage))
+        changeQuestionPage: (questionPage: QuestionPageDto) => dispatch(QuestionActions.changeQuestionPage(questionPage))
     })
 )(QuestionPageComponent)

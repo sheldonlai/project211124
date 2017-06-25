@@ -30,8 +30,7 @@
     "webpack": "^2.5.1"
   },
   "scripts": {
-    "build": "tsc && webpack",
-    "build-dev": "tsc && webpack --watch",
+    "build": "tsc --watch && webpack --watch",
     "test": "jest",
     "testcover": "jest --coverage",
     "start": "node ./dist/app.js"
