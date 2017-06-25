@@ -21,6 +21,7 @@ import {AnswerDto} from "../../../../server/dtos/q&a/AnswerDto";
 import {CommentDto} from "../../../../server/dtos/q&a/CommentDto";
 import {RouteComponentProps} from "react-router";
 import {QuestionPageReducerState} from "../../reducers/QuestionPageReducer";
+import {QuestionPageAnswer} from "../../models/QuestionPageAnswer";
 
 export interface QuestionPageProps extends QuestionPageReducerState, RouteComponentProps<{ title: string }> {
     user: UserDto
@@ -42,7 +43,7 @@ let headerStyle = {
     display: "inline-block"
 }
 
-let paperStyle = {height: "100%", margin: 10, padding: 15, paddingBottom: 0};
+let paperStyle = {height: "100%", padding: 15, paddingBottom: 0};
 
 export class QuestionPageComponent extends React.Component<QuestionPageProps, QuestionPageState> {
 
@@ -63,7 +64,7 @@ export class QuestionPageComponent extends React.Component<QuestionPageProps, Qu
         if (
             this.props.questionPage == undefined ||
             this.props.questionPage.question.title !== this.props.match.params.title ||
-                this.props.lastUpdated - Date.now() > 15000
+            this.props.lastUpdated - Date.now() > 15000
         ) {
             this.props.fetchQuestionPage(this.props.match.params.title);
         }
@@ -125,7 +126,12 @@ export class QuestionPageComponent extends React.Component<QuestionPageProps, Qu
         // update post
     }
 
-    editAnswer = () => {
+    addAnswer = () => {
+            let questionPage = this.props.questionPage;
+            questionPage.answers.push(new QuestionPageAnswer(this.props.questionPage.question, this.props.user))
+            this.props.changeQuestionPage(questionPage);
+            this.setState({editAnswer: true});
+
     }
 
 
@@ -222,21 +228,20 @@ export class QuestionPageComponent extends React.Component<QuestionPageProps, Qu
     }
 
     getAnswersContent = () => {
-        for (let sAns of this.props.questionPage.answers) {
+        let list = [];
+        for (let ans of this.props.questionPage.answers) {
             let content;
 
-            let editButton = (this.props.user.role != 1) ? null : ( // is instructor then null
-                <RaisedButton label="Edit" onClick={this.editAnswer}
-                              style={{float: "right"}}/>
-            );
+            let editButton = undefined;
+            if (this.props.user.username != ans.author.username)
+                editButton = <RaisedButton label="Edit" onClick={this.addAnswer} style={{float: "right"}}/>
             if (this.state.editAnswer) {
                 editButton = null;
-                content = this.getEditor(sAns.content,
-                    this.onAnswerChange, this.submitStudentAnswer);
-            } else if (sAns != null) {
-                content = this.getAnswerContent(sAns);
+                content = this.getEditor(ans.content, this.onAnswerChange, this.submitStudentAnswer);
+            } else if (ans != null) {
+                content = this.getAnswerContent(ans);
             }
-            return (
+            list.push(
                 <Paper style={paperStyle}>
                     <h4 style={headerStyle}>Student Answer</h4>
                     {editButton}
@@ -245,6 +250,14 @@ export class QuestionPageComponent extends React.Component<QuestionPageProps, Qu
                 </Paper>
             );
         }
+        if (this.props.user != undefined) {
+            list.push(
+                <div style={{float: 'right', marginTop : 5}}>
+                    <RaisedButton label="Answer" onTouchTap={this.addAnswer}/>
+                </div>
+            )
+        }
+        return list;
     }
 
     editComment = (index?: number) => {
@@ -358,11 +371,11 @@ export class QuestionPageComponent extends React.Component<QuestionPageProps, Qu
             )
         }
         let postDisplay = this.getQuestionContent();
-        let studentAns = this.getAnswersContent();
+        let answers = this.getAnswersContent();
         return (
-            <div style={{}}>
+            <div style={{padding: 10}}>
                 {postDisplay}
-                {studentAns}
+                {answers}
             </div>
         )
     }
