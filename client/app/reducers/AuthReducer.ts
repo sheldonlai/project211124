@@ -1,42 +1,45 @@
 import {AuthActionTypes} from "../constants/AuthActionTypes";
 import {ReducerStateStatus} from "../constants/ReducerStateStatus";
 import {CommonController} from "../api.controllers/CommonController";
-
+import * as JwtDecode from 'jwt-decode';
 export interface AuthReducerState {
     status: ReducerStateStatus;
     user: any;
     loggedIn: boolean;
 }
 
-const getLoginStatus = (): boolean => {
-    return (CommonController.getInstance().getToken()) ? true : false;
+const getLoginStatusAndUser = (): any => {
+    let token = CommonController.getInstance().getToken();
+    if (token){
+        return {
+            loggedIn: true,
+            user: JwtDecode(token)
+        }
+    }
+    return {
+        loggedIn: false,
+        user: undefined
+    }
 }
 
 const initialState: AuthReducerState = {
     status: ReducerStateStatus.LOADING,
-    user: null,
-    loggedIn: getLoginStatus(),
+    ...getLoginStatusAndUser()
 };
 
 export const AuthReducer = (state = initialState, action): AuthReducerState => {
     switch (action.type) {
         case AuthActionTypes.LOGIN_REQUEST:
-            return {
-                status: ReducerStateStatus.LOADING,
-                user: null,
-                loggedIn: getLoginStatus(),
-            };
+            return initialState;
         case AuthActionTypes.LOGIN_OK:
             return {
                 status: ReducerStateStatus.DONE,
-                user: null,
-                loggedIn: getLoginStatus(),
+                ...getLoginStatusAndUser()
             };
         case AuthActionTypes.LOGIN_ERR:
             return {
                 status: ReducerStateStatus.ERROR,
-                user: null,
-                loggedIn: getLoginStatus(),
+                ...getLoginStatusAndUser()
             };
         case AuthActionTypes.LOGOUT:
             return {

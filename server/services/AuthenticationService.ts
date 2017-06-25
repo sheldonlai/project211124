@@ -85,6 +85,7 @@ export class AuthenticationService extends BaseService implements IAuthenticatio
                         // incorrect pass
                         throw new AppError("Wrong credentials, please try again");
                     }
+                    delete user.local
                     let token = generateToken(user);
                     return {token: token};
                 }

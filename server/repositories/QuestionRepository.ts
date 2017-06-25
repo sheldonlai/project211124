@@ -36,7 +36,9 @@ export class QuestionRepository extends
     }
 
     protected applyRestriction(question: Question): Question {
-        delete question.author.local;
+        if (question.author) {
+            delete question.author.local;
+        }
         question.comments = question.comments.map((comment: QuestionComment) => {
             delete comment.commentBy.local;
             return comment;
