@@ -7,9 +7,9 @@ export class QuestionDto{
     title : string;
     author: UserDto;
     content : string;
-    dateCreated?: Date;
+    createdUtc?: Date;
     isPublished : boolean;
-    lastEditedUtc : Date;
+    lastEditedUtc? : Date;
     tags : any[];
     comments : QuestionComment[];
     publicityStatus:  PublicityStatus;

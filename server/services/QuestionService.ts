@@ -82,7 +82,7 @@ export class QuestionService extends BaseService implements IQuestionService {
 
     getQuestionPreview(user? : User): Promise<QuestionPreviewDto>{
         let promises = [];
-        promises.push(this.questionRepository.getAll({sort: "-dateCreated", limit: 25 }))
+        promises.push(this.questionRepository.getAll({sort: "-createdUtc", limit: 25 }))
         if (user) {
             promises.push((this.questionRepository.getQuestionsByAuthor(user)));
         }
@@ -149,7 +149,7 @@ export class QuestionService extends BaseService implements IQuestionService {
     protected applyUpdateRestrictions(questionDto: QuestionDto, questionInDB: Question): QuestionDto {
         delete questionDto._id;
         delete questionDto.author;
-        delete questionDto.dateCreated;
+        delete questionDto.createdUtc;
         if (questionDto.isPublished) {
             delete questionDto.isPublished
         }

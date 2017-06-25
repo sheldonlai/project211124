@@ -209,7 +209,7 @@ export class QuestionPageComponent extends React.Component<QuestionPageProps, Qu
                         {tags}
                     </div>
                     <Divider />
-                    {this.getFooterPostedBy(new Date(question.dateCreated).toLocaleString(), question.author.username)}
+                    {this.getFooterPostedBy(new Date(question.createdUtc).toLocaleString(), question.author.username)}
                 </div>
         }
         return (
