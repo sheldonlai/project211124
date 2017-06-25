@@ -18,5 +18,6 @@ export class BaseActions {
                 data: err.message
             })
         }
+        console.error(err)
     }
 }

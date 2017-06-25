@@ -51,7 +51,7 @@ class QuestionView extends Component<QuestionViewProps, any> {
 export const QuestionPage = connect(
     (state: AppStoreState) => ({
         loggedIn: state.auth.loggedIn,
-        globalError: state.error,
+        globalError: state.errors,
         ...state.question
     }),
     (dispatch) => ({
