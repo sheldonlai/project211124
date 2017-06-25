@@ -13,6 +13,9 @@ export class APIUrls {
     static CreateQuestion = "/create-question";
     static QuestionPreviews = "/question-previews";
     static GetQuestionPage = "/question-page/:id";
-    static UpdateQuestion = "/update-question"
-
+    static UpdateQuestion = "/update-question";
+    
+    static CreateAnswer = "/create-answer";
+    // Answer preview ?
+    static UpdateAnswer = "/update-answer";
 }

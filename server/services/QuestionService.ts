@@ -1,6 +1,7 @@
 import {IQuestionRepository} from "../repositories/QuestionRepository";
 import {IAnswerRepository} from "../repositories/AnswerRepository";
 import {QuestionDto} from "../dtos/q&a/QuestionDto";
+import {AnswerDto} from "../dtos/q&a/AnswerDto";
 import {Question} from "../models/Question";
 import {User} from "../models/User";
 import {QuestionPageDto} from "../dtos/q&a/QuestionPageDto";
@@ -9,13 +10,62 @@ import {AppError} from "../errors/AppError";
 import {BaseService} from "./BaseService";
 import {QuestionPreviewDto} from "../dtos/q&a/QuestionPreviewDto";
 
+export interface IAnswerService {
+    createAnswer(user : User, answer: AnswerDto): Promise<AnswerDto>;
+    updateAnswer(user : User, answer: AnswerDto): Promise<AnswerDto>;
+}
+
+export class AnswerService extends BaseService implements IAnswerService{
+    private answerRepository: IAnswerRepository;
+
+    constructor(answerRepository : IAnswerRepository){
+        super();
+
+        this.answerRepository = answerRepository;
+    }
+
+    createAnswer(current_user : User, new_answer: AnswerDto): Promise<AnswerDto>{
+        let answerObj = new Answer(
+            new_answer.question, new_answer.content, current_user
+        );
+
+        return this.answerRepository.create(answerObj);
+    }
+
+    updateAnswer(current_user: User, updated_answer: AnswerDto): Promise<AnswerDto>{
+        return this.answerRepository.getById(updated_answer._id).then((answer_found: Answer) => {
+            this.checkPermissionForModification(updated_answer, answer_found, current_user);
+
+            //filter out non-modifiable fields
+            delete updated_answer.author;
+            delete updated_answer.upVotes;
+            delete updated_answer.downVotes;
+            delete updated_answer.createdUtc;
+            delete updated_answer.question;
+            delete updated_answer.comments;
+
+            updated_answer.lastEditedUtc = new Date(Date.now());
+            answer_found = this.mapKeysOntoObject(answer_found, updated_answer);
+
+            return this.answerRepository.update(answer_found);
+        });
+    }
+
+    private checkPermissionForModification = (answer_by_user: AnswerDto, answer_found_in_db: Answer, currentUser: User) => {
+        if(answer_by_user._id != currentUser._id){
+            throw new AppError("You are not the owner of this answer");
+        }
+        return true;
+    }
+};
+
 export interface IQuestionService {
     getQuestionPreview(user? : User): Promise<QuestionPreviewDto>;
     createQuestion(question: QuestionDto, user: User): Promise<QuestionDto>;
     getQuestionPageById(id: string): Promise<QuestionPageDto>;
     getUserQuestions(currentUser: User): Promise<QuestionDto[]>;
     updateQuestion(question: QuestionDto, user: User): Promise<QuestionDto>;
-}
+};
 
 export class QuestionService extends BaseService implements IQuestionService {
 
@@ -84,7 +134,7 @@ export class QuestionService extends BaseService implements IQuestionService {
 
             // question cannot change back into a draft
             if (questionDto.isPublished) {
-                delete questionDto.isPublished
+                delete questionDto.isPublished;
             }
 
             // update last edited utc
@@ -104,6 +154,6 @@ export class QuestionService extends BaseService implements IQuestionService {
         }
         return true;
     }
-
-
 }
+
+

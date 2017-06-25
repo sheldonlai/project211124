@@ -8,6 +8,7 @@ import {NextFunction, Request, Response} from 'express';
 import {PageProvider} from './routes/PageProvider';
 import {HomeAPI} from './routes/HomeAPI';
 import {QuestionAPI} from "./routes/QuestionAPI";
+import {AnswerAPI} from "./routes/AnswerAPI";
 import {AuthenticationAPI} from "./routes/AuthenticationAPI";
 import {config} from "./config";
 import {ServiceProvider} from "./Container";

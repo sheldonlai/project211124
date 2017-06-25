@@ -16,4 +16,14 @@ export class AnswerRepository extends BaseRepository<Answer, IAnswer> implements
         return AnswerModel.find({question : questionId}).sort(sortOption).lean().exec();
     }
 
+    create(answer: Answer): Promise<Answer>{
+    	delete answer.lastEditedUtc;
+    	return super.create(answer);
+    }
+
+    update(answer: Answer): Promise<Answer>{
+    	delete answer.lastEditedUtc;
+    	return super.update(answer);
+    }
+
 }
