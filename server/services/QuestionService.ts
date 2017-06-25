@@ -8,6 +8,7 @@ import {Answer} from "../models/Answer";
 import {AppError} from "../errors/AppError";
 import {BaseService} from "./BaseService";
 import {QuestionPreviewDto} from "../dtos/q&a/QuestionPreviewDto";
+import {ClientError} from "../errors/HttpStatus";
 
 export interface IQuestionService {
     getQuestionPreview(user? : User): Promise<QuestionPreviewDto>;
@@ -75,21 +76,11 @@ export class QuestionService extends BaseService implements IQuestionService {
     updateQuestion(questionDto: QuestionDto, user: User): Promise<QuestionDto> {
         return this.questionRepository.getById(questionDto._id).then((questionObj: Question) => {
             this.checkPermissionForModification(questionDto, questionObj, user);
-            // do not allow user to change these
-            delete questionDto.title;
-            delete questionDto.author;
-            delete questionDto.publicityStatus;
-            delete questionDto.dateCreated;
-            //TODO: errors check for other fields and send a errors or log if they are changed
-
-            // question cannot change back into a draft
-            if (questionDto.isPublished) {
-                delete questionDto.isPublished
-            }
+            let restrictedDto: QuestionDto = this.applyUpdateRestrictions(questionDto, questionObj);
 
             // update last edited utc
-            questionDto.lastEditedUtc = new Date(Date.now());
-            questionObj = this.mapKeysOntoObject(questionObj, questionDto);
+            restrictedDto.lastEditedUtc = new Date(Date.now());
+            questionObj = this.mapKeysOntoObject(questionObj, restrictedDto);
 
             return this.questionRepository.update(questionObj);
         })
@@ -103,7 +94,20 @@ export class QuestionService extends BaseService implements IQuestionService {
             throw new AppError("You cannot change the name of the author")
         }
         return true;
-    }
+    };
 
+    protected applyUpdateRestrictions(questionDto: QuestionDto, questionInDB: Question): QuestionDto {
+        delete questionDto._id;
+        delete questionDto.author;
+        delete questionDto.dateCreated;
+        if (questionDto.isPublished) {
+            delete questionDto.isPublished
+        }
+        if (questionDto.publicityStatus !== questionInDB.publicityStatus) {
+            throw new AppError("You cannot change the publicity status", ClientError.BAD_REQUEST)
+        }
+        delete questionDto.publicityStatus;
+        return questionDto;
+    }
 
 }

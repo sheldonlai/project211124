@@ -14,8 +14,8 @@ export const config = {
     },
 
     'email': {
-        'address': '20K@gg.com',
-        'password': 'asdcaweqwe'
+        'address': 'noreply.eztextbook@gmail.com',
+        'password': '8UvThpWqrutj'
     },
 
     'aws': {
