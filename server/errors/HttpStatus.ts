@@ -7,7 +7,7 @@ export class HttpStatus {
     public static isSuccess = (code: number) => code >= 200 && code <= 299;
     public static isRedirect = (code: number) => code >= 300 && code <= 399;
     public static isClientError = (code: number) => code >= 400 && code <= 499;
-    public static isServerError = (code: number) => code >= 400 && code <= 499;
+    public static isServerError = (code: number) => code >= 500 && code <= 599;
 
 }
 
