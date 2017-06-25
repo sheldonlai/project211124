@@ -126,22 +126,8 @@ export class QuestionService extends BaseService implements IQuestionService {
     updateQuestion(questionDto: QuestionDto, user: User): Promise<QuestionDto> {
         return this.questionRepository.getById(questionDto._id).then((questionObj: Question) => {
             this.checkPermissionForModification(questionDto, questionObj, user);
-<<<<<<< HEAD
             // do not allow user to change these
-            delete questionDto.title;
-            delete questionDto.author;
-            delete questionDto.publicityStatus;
-            delete questionDto.dateCreated;
-            //TODO: errors check for other fields and send a errors or log if they are changed
-
-            // question cannot change back into a draft
-            if (questionDto.isPublished) {
-                delete questionDto.isPublished;
-            }
-=======
             let restrictedDto: QuestionDto = this.applyUpdateRestrictions(questionDto, questionObj);
->>>>>>> 39c6a554269add9e0204d2ad40587657410bd21a
-
             // update last edited utc
             restrictedDto.lastEditedUtc = new Date(Date.now());
             questionObj = this.mapKeysOntoObject(questionObj, restrictedDto);
@@ -175,8 +161,3 @@ export class QuestionService extends BaseService implements IQuestionService {
     }
 }
 
-<<<<<<< HEAD
-
-=======
-}
->>>>>>> 39c6a554269add9e0204d2ad40587657410bd21a
