@@ -1,8 +1,8 @@
 import {BaseService} from "./BaseService";
 import {SendMailOptions, SentMessageInfo} from "nodemailer";
+import {config} from "../config";
 
 let nodemailer = require('nodemailer');
-let config = require('../config.ts');
 
 export interface IMailService {
     sendMail(options: SendMailOptions): Promise<SentMessageInfo>
@@ -11,7 +11,6 @@ export interface IMailService {
 export class MailService extends BaseService implements IMailService {
 
     sendMail(options: SendMailOptions): Promise<SentMessageInfo> {
-        console.log("sending emaillllls");
         return this.transporter.sendMail(options);
     }
 

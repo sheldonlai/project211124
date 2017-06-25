@@ -47,6 +47,7 @@ export class AuthenticationService extends BaseService implements IAuthenticatio
                 userRepository: IUserRepository,
                 emailVerificationRepository: IEmailVerificationRepository) {
         super();
+        this.mailService = mailService;
         this.userRepository = userRepository;
         this.emailVerificationRepository = emailVerificationRepository;
     }
@@ -56,22 +57,18 @@ export class AuthenticationService extends BaseService implements IAuthenticatio
         return this.userRepository.getByEmail(email)
             .then((existingUser: User) => {
                 if (existingUser) {
-                    console.log("!23123123123");
                     throw new AppError("Entered e-mail is already in use.");
                 } else {
                     let salt: string = StringUtils.genRandomString(16);
                     let passwordHash = StringUtils.hashString(password, salt);
                     let localProfile = new LocalProfile(passwordHash, salt);
                     let user = new User(email, name, UserTypeEnum.NORMAL, localProfile);
-                    console.log("!23123123123");
                     return this.userRepository.create(user);
                 }
             }).then((userCreated) => {
-                console.log("!23123123123");
                 newUser = userCreated;
                 return this.sendEmailVerification(newUser);
             }).then(() => {
-                console.log("!23123123123");
                 return newUser;
             })
     }
@@ -95,13 +92,13 @@ export class AuthenticationService extends BaseService implements IAuthenticatio
     }
 
     sendEmailVerification(currentUser: User): Promise<any> {
-        let options: SendMailOptions;
         let code: string = StringUtils.genRandomString(32);
-        options.to = currentUser.email;
-        options.subject = "Askalot is asking you to confirm";
-        options.html = this.html(currentUser, code);
+        let options = {
+            to: currentUser.email,
+            subject: "Askalot is asking you to confirm",
+            html: this.html(currentUser, code)
+        };
         return this.mailService.sendMail(options);
-
     }
 
     verifyAccount(code: string): Promise<User> {
