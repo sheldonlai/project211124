@@ -16,8 +16,8 @@ import TransitionGroup =require('react-transition-group/TransitionGroup');
 
 let muiTheme = getMuiTheme({
     palette: {
-        primary1Color: '#d3ffbb',
-        primary2Color: '#d3ffbb',
+        primary1Color: '#3f7ef8',
+        primary2Color: '#56ffdb',
         primary3Color: '#d3ffbb',
     },
     appBar: {
