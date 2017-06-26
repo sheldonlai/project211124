@@ -43,10 +43,16 @@ class QuestionView extends Component<QuestionViewProps, any> {
             )) : undefined;
     };
 
+    createQuestionButton = () => {
+        if (this.props.loggedIn)
+            return  <Link to={Routes.createQuestion}>Make new question</Link>;
+        return undefined;
+    }
+
     render() {
         return (
             <div>
-                <Link to={Routes.createQuestion}>Make new question</Link>
+                {this.createQuestionButton()}
                 {this.featuredQuestions()}
             </div>
         )
