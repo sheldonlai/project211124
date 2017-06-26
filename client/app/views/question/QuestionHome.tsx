@@ -8,6 +8,7 @@ import {QuestionActions} from "../../actions/QuestionActions";
 import {QuestionReducerState} from "../../reducers/QuestionReducer";
 import {QuestionPreview} from "../../../../server/dtos/q&a/QuestionPreview";
 import {ErrorReducerState} from "../../reducers/ErrorReducer";
+import AnimatedWrapper from "../../components/AnimatedWrapper";
 
 export interface QuestionViewProps extends QuestionReducerState {
     loggedIn : boolean;
@@ -52,7 +53,7 @@ class QuestionView extends Component<QuestionViewProps, any> {
     }
 }
 
-export const QuestionHomePage = connect(
+export const QuestionHomePage = AnimatedWrapper(connect(
     (state: AppStoreState) => ({
         loggedIn: state.auth.loggedIn,
         globalError: state.errors,
@@ -61,4 +62,4 @@ export const QuestionHomePage = connect(
     (dispatch) => ({
         fetchQuestion: () => dispatch(QuestionActions.getQuestionPreviews())
     })
-)(QuestionView);
+)(QuestionView));

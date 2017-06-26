@@ -4,3 +4,30 @@
 .menu {font-family: "Calibri Light"}
 #login-menu{float: right;}
 body {margin : 0;}
+html,body,#root {
+    height: 100%;
+    width: 100%;
+}
+body {
+    margin: 0;
+    padding: 62px 0 0 0;
+    font-family: sans-serif;
+}
+.App {
+    display: flex;
+    flex-flow: column;
+}
+.menu {
+    position: fixed;
+    top: 0;
+    left: 0;
+    display: flex;
+    flex-flow: row nowrap;
+    align-items: center;
+    width: 100%;
+    height: 62px;
+    padding: 0 24px;
+}
+.page {
+    padding: 0 24px;
+}

@@ -2,7 +2,7 @@ import * as React from "react";
 import MuiThemeProvider from "material-ui/styles/MuiThemeProvider";
 import getMuiTheme from "material-ui/styles/getMuiTheme";
 import {Route, Router} from "react-router";
-import {Home} from "./home/home";
+import {Home, HomeComponent} from "./home/home";
 import {LoginPage} from "./auth/LoginView";
 import {Routes} from "../constants/Routes";
 import {RegistrationPage} from "./auth/RegistrationView";
@@ -12,6 +12,7 @@ import {Provider} from "react-redux";
 import {Menu} from "./Menu";
 import {QuestionHomePage} from "./question/QuestionHome";
 import {QuestionPage} from "./question/QuestionPage";
+import TransitionGroup =require('react-transition-group/TransitionGroup');
 
 let muiTheme = getMuiTheme({
     palette: {
@@ -27,9 +28,14 @@ let muiTheme = getMuiTheme({
 // a hack because @types/material-ui hasn't included this
 (muiTheme.flatButton as any).textTransform = 'none';
 
+const firstChild = props => {
+    const childrenArray = React.Children.toArray(props.children);
+    return childrenArray[0] || null;
+};
+
 export class App extends React.Component<any, any> {
 
-    constructor(props){
+    constructor(props) {
         super(props);
     }
 
@@ -39,13 +45,48 @@ export class App extends React.Component<any, any> {
                 <Provider store={this.props.store}>
                     <Router history={RouterController.history}>
                         <div>
-                            <Route path={Routes.home} component={Menu} />
-                            <Route exact path={Routes.home} component={Home}/>
-                            <Route exact path={Routes.login} component={LoginPage}/>
-                            <Route exact path={Routes.registration} component={RegistrationPage}/>
-                            <Route exact path={Routes.question} component={QuestionHomePage}/>
-                            <Route exact path={Routes.createQuestion} component={CreateQuestionPage}/>
-                            <Route path={Routes.question_by_title} component={QuestionPage} />
+                            <Route path={Routes.home} component={Menu}/>
+                            <Route exact path={Routes.home}
+                                   render={({match, ...rest}) => (
+                                       <TransitionGroup component={firstChild}>
+                                           <Home match={match} {...rest} />
+                                       </TransitionGroup>
+                                   )}/>
+                            <Route exact path={Routes.login}
+                                   render={({match, ...rest}) => (
+                                       <TransitionGroup component={firstChild}>
+                                           <LoginPage match={match} {...rest} />
+                                       </TransitionGroup>
+                                   )}
+                            />
+                            <Route exact path={Routes.registration}
+                                   render={({match, ...rest}) => (
+                                       <TransitionGroup component={firstChild}>
+                                           <RegistrationPage match={match} {...rest} />
+                                       </TransitionGroup>
+                                   )}
+                            />
+                            <Route exact path={Routes.question}
+                                   render={({match, ...rest}) => (
+                                       <TransitionGroup component={firstChild}>
+                                           <QuestionHomePage match={match} {...rest} />
+                                       </TransitionGroup>
+                                   )}
+                            />
+                            <Route exact path={Routes.createQuestion}
+                                   render={({match, ...rest}) => (
+                                       <TransitionGroup component={firstChild}>
+                                           <CreateQuestionPage match={match} {...rest} />
+                                       </TransitionGroup>
+                                   )}
+                            />
+                            <Route path={Routes.question_by_title}
+                                   render={({match, ...rest}) => (
+                                       <TransitionGroup component={firstChild}>
+                                           <QuestionPage match={match} {...rest} />
+                                       </TransitionGroup>
+                                   )}
+                            />
                         </div>
                     </Router>
                 </Provider>

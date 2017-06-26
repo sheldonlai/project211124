@@ -10,6 +10,7 @@ import {CommonController} from "../../api.controllers/CommonController";
 import {Routes} from "../../constants/Routes";
 import {RouterController} from "../../api.controllers/RouterController";
 import {AppStoreState} from "../../stores/AppStore";
+import AnimatedWrapper from "../../components/AnimatedWrapper";
 
 export interface RegistrationViewState {
     error : string;
@@ -106,6 +107,6 @@ export class RegistrationView extends Component<RegistrationViewProps, Registrat
     }
 }
 
-export const RegistrationPage = connect(
+export const RegistrationPage = AnimatedWrapper(connect(
     (state: AppStoreState)=> ({loggedIn: state.auth.loggedIn})
-)(RegistrationView)
+)(RegistrationView));
