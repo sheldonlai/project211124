@@ -11,6 +11,8 @@ import {IEmailVerificationRepository} from "../repositories/EmailVerificationRep
 import {EmailVerification} from "../models/EmailVerification";
 import {IMailService} from "./MailService";
 import {SendMailOptions} from "nodemailer";
+import {MailOptionsBuilder} from "./builders/MailOptionsBuilder";
+import {TemplatesProvider} from "./TemplatesProvider";
 
 export interface IAuthenticationService {
     /**
@@ -42,6 +44,7 @@ export class AuthenticationService extends BaseService implements IAuthenticatio
     private mailService: IMailService;
     private userRepository: IUserRepository;
     private emailVerificationRepository: IEmailVerificationRepository;
+    private templateProvider: TemplatesProvider = new TemplatesProvider();
 
     constructor(mailService: IMailService,
                 userRepository: IUserRepository,
@@ -85,7 +88,7 @@ export class AuthenticationService extends BaseService implements IAuthenticatio
                         // incorrect pass
                         throw new AppError("Wrong credentials, please try again");
                     }
-                    delete user.local
+                    delete user.local;
                     let token = generateToken(user);
                     return {token: token};
                 }
@@ -94,11 +97,13 @@ export class AuthenticationService extends BaseService implements IAuthenticatio
 
     sendEmailVerification(currentUser: User): Promise<any> {
         let code: string = StringUtils.genRandomString(32);
-        let options = {
-            to: currentUser.email,
-            subject: "Askalot is asking you to confirm",
-            html: this.html(currentUser, code)
-        };
+        let html: string = this.templateProvider.emailVerification(currentUser.username, code);
+        console.log(html);
+        let options: SendMailOptions = new MailOptionsBuilder()
+            .setReceiver(currentUser.email)
+            .setSubject("Askalot is asking you to confirm") // Get string from messages
+            .setHTML(html)
+            .build();
         return this.mailService.sendMail(options);
     }
 
@@ -118,18 +123,6 @@ export class AuthenticationService extends BaseService implements IAuthenticatio
                     return this.userRepository.update(user);
                 }
             })
-    }
-
-    /**
-     * Hard coded email template... please use an template engine
-     */
-    private html(user: User, code: string) {
-        return '<div class="PlainText">Dear ' + user.username + ' <br> <br>' +
-            'Verify that you own ' + user.email + ' <br> <br>' +
-            '<a href="' + '/' + code + '" target="_blank">' + 'Confirm' + '</a> <br> <br>' +
-            'Once verified, please login via our app. <br> <br>' +
-            'Best regards, <br>' +
-            'EZTextbook Team'
     }
 
 }

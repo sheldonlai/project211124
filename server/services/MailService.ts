@@ -1,21 +1,25 @@
 import {BaseService} from "./BaseService";
-import {SendMailOptions, SentMessageInfo} from "nodemailer";
+import {SendMailOptions, SentMessageInfo, Transporter} from "nodemailer";
 import {config} from "../config";
 
 let nodemailer = require('nodemailer');
 
 export interface IMailService {
-    sendMail(options: SendMailOptions): Promise<SentMessageInfo>
+    sendMail(options: SendMailOptions, transporter?: Transporter): Promise<SentMessageInfo>
 }
 
 export class MailService extends BaseService implements IMailService {
 
-    sendMail(options: SendMailOptions): Promise<SentMessageInfo> {
-        return this.transporter.sendMail(options);
+    sendMail(options: SendMailOptions, transporter?: Transporter): Promise<SentMessageInfo> {
+        transporter = (transporter)? transporter : MailTransporters.Default;
+        return transporter.sendMail(options);
     }
 
-    // create reusable transporter object using the default SMTP transport
-    private transporter = nodemailer.createTransport({
+}
+
+export class MailTransporters {
+
+    public static Gmail = nodemailer.createTransport({
         service: 'gmail',
         auth: {
             user: config.email.address,
@@ -23,4 +27,5 @@ export class MailService extends BaseService implements IMailService {
         }
     });
 
+    public static Default = MailTransporters.Gmail;
 }

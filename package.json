@@ -51,6 +51,7 @@
     "chai-as-promised": "^6.0.0",
     "cookie-parser": "^1.4.3",
     "express": "^4.15.2",
+    "express-es6-template-engine": "^2.0.1",
     "file-uploader": "^1.0.0",
     "helmet": "^3.6.1",
     "install": "^0.10.1",

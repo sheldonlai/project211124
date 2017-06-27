@@ -8,10 +8,10 @@ export class AppError extends Error{
     //rci: RCI;
     message: string;
 
-    constructor(message: string, status?: HttpStatus){
+    constructor(message: string, status?: HttpStatus) {
         super(message);
         this.name = 'AppError'; // this needs to be changed
-        this.status = (status)? status : ServerError.INTERNAL_SERVER_ERROR;
+        this.status = ServerError.INTERNAL_SERVER_ERROR;
     }
 
 }
