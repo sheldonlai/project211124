@@ -22,6 +22,7 @@ import {CommentDto} from "../../../../server/dtos/q&a/CommentDto";
 import {RouteComponentProps} from "react-router";
 import {QuestionPageReducerState} from "../../reducers/QuestionPageReducer";
 import {QuestionPageAnswer} from "../../models/QuestionPageAnswer";
+import AnimatedWrapper from "../../components/AnimatedWrapper";
 
 export interface QuestionPageProps extends QuestionPageReducerState, RouteComponentProps<{ title: string }> {
     user: UserDto
@@ -381,7 +382,7 @@ export class QuestionPageComponent extends React.Component<QuestionPageProps, Qu
     }
 }
 
-export const QuestionPage = connect(
+export const QuestionPage = AnimatedWrapper(connect(
     (state: AppStoreState) => ({
         user: state.auth.user,
         ...state.questionPage
@@ -390,4 +391,4 @@ export const QuestionPage = connect(
         fetchQuestionPage: (title: string) => dispatch(QuestionActions.fetchQuestionPage(title)),
         changeQuestionPage: (questionPage: QuestionPageDto) => dispatch(QuestionActions.changeQuestionPage(questionPage))
     })
-)(QuestionPageComponent)
+)(QuestionPageComponent));

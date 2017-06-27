@@ -14,6 +14,7 @@ const menuButtonStyle = {
 };
 
 const flatButtonStyle = {
+    color: "white",
     "fontSize": "14px"
 };
 
@@ -30,7 +31,7 @@ class MenuClass extends Component<MenuClassProps,any>{
         if (!this.props.loggedIn) {
             return (
                 <Link to={Routes.login}>
-                    <FlatButton label="Login" primary={true} style={menuButtonStyle}
+                    <FlatButton label="Login" linkButton={true} primary={true} style={menuButtonStyle}
                                 labelStyle={flatButtonStyle}/>
                 </Link>
             )
@@ -54,7 +55,7 @@ class MenuClass extends Component<MenuClassProps,any>{
                     <li>
                         <Link to={Routes.home}>
                             <FlatButton label="Askalot" primary={true} style={menuButtonStyle}
-                                        labelStyle={{"fontSize": "20px"}}/>
+                                        labelStyle={{"fontSize": "20px", color : "white"}}/>
                         </Link>
                         <Link to={Routes.question}>
                             <FlatButton label="Questions" primary={true} style={menuButtonStyle}

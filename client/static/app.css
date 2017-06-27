@@ -1,6 +1,32 @@
 .menu a{text-decoration: none; height: 30px; font-size:24px;color: #d3ffbb;}
 .menu ul {list-style-type: none; margin: 0; padding: 0; display: inline-block;}
-.menu {background-color: #3b3738; height : 50px; border-bottom: solid #d3ffbb;}
+.menu {background-color: #3d7dee; height : 50px; border-bottom: solid #d3ffbb;}
 .menu {font-family: "Calibri Light"}
-#login-menu{float: right;}
+#login-menu{right:0;position: fixed;}
 body {margin : 0;}
+html,body,#root {
+    height: 100%;
+    width: 100%;
+}
+body {
+    margin: 0;
+    padding: 62px 0 0 0;
+    font-family: sans-serif;
+}
+.App {
+    display: flex;
+    flex-flow: column;
+}
+.menu {
+    position: fixed;
+    top: 0;
+    left: 0;
+    display: flex;
+    flex-flow: row nowrap;
+    align-items: center;
+    width: 100%;
+    padding: 0 24px;
+}
+.page {
+    padding: 0 24px;
+}

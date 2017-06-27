@@ -11,6 +11,7 @@ import {QuestionDifficulty} from "../../../../server/models/Question";
 import {AppStoreState} from "../../stores/AppStore";
 import {QuestionCreationDto} from "../../../../server/dtos/q&a/QuestionCreationDto";
 import {DifficultyLevel, QuestionEducationLevel} from "../../../../server/enums/QuestionEducationLevel";
+import AnimatedWrapper from "../../components/AnimatedWrapper";
 let SelectField = require('material-ui/SelectField').default;
 
 export interface CreateQuestionState {
@@ -114,9 +115,9 @@ class CreateQuestion extends LoginRequiredComponent<any, QuestionCreationDto> {
 
 }
 
-export const CreateQuestionPage = connect(
+export const CreateQuestionPage = AnimatedWrapper(connect(
     (state: AppStoreState) => ({loggedIn: state.auth.loggedIn}),
     (dispatch) => ({
         createQuestion: (question: QuestionDto) => dispatch(QuestionActions.createQuestion(question))
     })
-)(CreateQuestion)
+)(CreateQuestion));

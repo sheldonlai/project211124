@@ -10,6 +10,7 @@ import {Routes} from '../../constants/Routes';
 import {FormWrapper} from '../../components/FormWrapper';
 import {connect} from "react-redux";
 import {AppStoreState} from "../../stores/AppStore";
+import AnimatedWrapper from "../../components/AnimatedWrapper";
 
 export interface LoginViewState {
     loginRequest: LoginRequest;
@@ -67,7 +68,7 @@ export class LoginView extends Component<any, any> {
     }
 }
 
-export const LoginPage = connect(
+export const LoginPage = AnimatedWrapper(connect(
     (state : AppStoreState) => ({loggedIn : state.auth.loggedIn}),
     (dispatch) => ({login : (login: LoginRequest) => dispatch(AuthActions.login(login))})
-)(LoginView)
+)(LoginView));
