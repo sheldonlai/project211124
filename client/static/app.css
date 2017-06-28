@@ -34,6 +34,10 @@ body {
 .public-DraftEditor-content[contenteditable=true] {
     min-height: 150px;
     border: 1px #ececec solid;
-    margin-top: 5px;
-    margin-bottom: 5px;
+
+}
+
+.DraftEditor-root{
+    margin-top: 10px;
+    margin-bottom: 10px;
 }

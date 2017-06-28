@@ -158,13 +158,16 @@ export class QuestionPageComponent extends React.Component<QuestionPageProps, Qu
         )
     };
 
-    getEditor = (value: string, onChange: (text: string) => any, onSubmit: () => any) => {
+    getEditor = (value: string, onChange: (text: string) => any, onSubmit: () => any, readOnly:boolean =false) => {
+        const button = (
+            <div style={{textAlign: "right"}}>
+                <RaisedButton label="save" onClick={onSubmit}/>
+            </div>
+        );
         return (
             <div style={{marginBottom: 15}}>
-                    <CustomEditor value={value} onChange={onChange}/>
-                <div style={{textAlign: "right"}}>
-                    <RaisedButton label="save" onClick={onSubmit}/>
-                </div>
+                    <CustomEditor value={value} onChange={onChange} readOnly={readOnly}/>
+                    {!readOnly && button}
             </div>
         )
     };
@@ -172,7 +175,7 @@ export class QuestionPageComponent extends React.Component<QuestionPageProps, Qu
     getAnswerContent = (ans: AnswerDto) => {
         return (
             <div>
-                <p style={{margin: "30px 0px"}}>{ans.content}</p>
+                this.getEditor(ans.content, this.onAnswerChange, this.submitStudentAnswer, true);
                 <Divider />
                 {this.getFooterPostedBy(new Date(ans.createdUtc).toLocaleString(), ans.author)}
             </div>
@@ -214,7 +217,7 @@ export class QuestionPageComponent extends React.Component<QuestionPageProps, Qu
                 }) : null;
             content =
                 <div>
-                    <p style={{margin: "30px 0px"}}>{question.content}</p>
+                    {this.getEditor(question.content, this.onQuestionContentChange, this.submitPost, true)}
                     <div style={{height: 24}}>
                         {tags}
                     </div>
@@ -248,9 +251,9 @@ export class QuestionPageComponent extends React.Component<QuestionPageProps, Qu
             console.log(editButton, content);
             list.push(
                 <Paper key={ans._id + ans.author} style={paperStyle}>
-                    <h4 style={headerStyle}>Student Answer</h4>
-                    {editButton}
-                    <Divider />
+                    <div>
+                        {editButton}
+                    </div>
                     {content}
                 </Paper>
             );

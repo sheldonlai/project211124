@@ -1,10 +1,11 @@
-import {Editor, EditorState, RichUtils, ContentState, DraftEntityType} from "draft-js";
+import {Editor, EditorState, RichUtils, ContentState, DraftEntityType, convertToRaw } from "draft-js";
 import * as React from "react";
 // import FormatBold from "material-ui/svg-icons/editor/format-bold";
 import 'draft-js/dist/Draft.css';
 
 export interface CustomEditorProps {
     value: string;
+    readOnly?: boolean;
     onChange: (text) => void;
 }
 
@@ -24,6 +25,7 @@ export class CustomEditor extends React.Component<CustomEditorProps, {editorStat
         // TODO: support other formatting, currently only uses plain text
         let content = editorState.getCurrentContent();
         let text = content.getPlainText();
+        console.log(convertToRaw(content))
         // let block = content.getBlockMap();
         // let entity = content.getEntityMap();
         // console.log(text)
@@ -59,6 +61,7 @@ export class CustomEditor extends React.Component<CustomEditorProps, {editorStat
                 <Editor
                     editorState={this.state.editorState}
                     handleKeyCommand={this.handleKeyCommand}
+                    readOnly={this.props.readOnly}
                     onChange={this.onChange}
                     blockStyleFn={this.myBlockStyleFn}
                 />
