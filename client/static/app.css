@@ -30,3 +30,10 @@ body {
 .page {
     padding: 0 24px;
 }
+
+.public-DraftEditor-content[contenteditable=true] {
+    min-height: 150px;
+    border: 1px #ececec solid;
+    margin-top: 5px;
+    margin-bottom: 5px;
+}

@@ -51,6 +51,8 @@
     "caniuse-api": "^1.5.2",
     "chai-as-promised": "^6.0.0",
     "cookie-parser": "^1.4.3",
+    "css-loader": "^0.28.4",
+    "draft-js": "^0.10.1",
     "express": "^4.15.2",
     "express-es6-template-engine": "^2.0.1",
     "file-uploader": "^1.0.0",
@@ -82,6 +84,7 @@
     "socket.io": "^2.0.1",
     "source-map-loader": "^0.2.0",
     "source-map-support": "^0.4.15",
+    "style-loader": "^0.18.2",
     "ts-jest": "^20.0.6",
     "typescript": "^2.3.4"
   },

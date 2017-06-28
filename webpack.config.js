@@ -1,8 +1,8 @@
-var path = require('path');
+const path = require('path');
 
 module.exports = {
     entry: {
-        app : './client/app/main.tsx'
+        app: './client/app/main.tsx'
     },
     devtool: 'source-maps',
     cache: true,
@@ -18,8 +18,10 @@ module.exports = {
     module: {
         rules: [
             // All files with a '.ts' or '.tsx' extension will be handled by 'awesome-typescript-loader'.
-            { test: /\.tsx?$/, loader: 'awesome-typescript-loader'}
+            {test: /\.tsx?$/, loader: 'awesome-typescript-loader'},
+            {test: /\.css$/, use: [{loader: 'style-loader'},{loader: 'css-loader'},]},
         ],
+
 
         // plugins : [
         //     new LoaderOptionsPlugin({
