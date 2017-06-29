@@ -22,7 +22,7 @@ export interface QuestionDifficulty {
 
 export class Question extends BaseModel {
     title: string;
-    content: string;
+    content: any;
     author: User;
     tags: any[];
     upVotes: number;
@@ -55,7 +55,7 @@ export interface IQuestion extends Question, Document {
 
 const schema = new Schema({
         title: {type: String, required: true, unique: true},
-        content: {type: String, required: true},
+        content: {type: Schema.Types.Mixed, required: true},
         author: {type: Schema.Types.ObjectId, ref: 'user', required: true},
         tags: [{type: Schema.Types.ObjectId, ref: 'tag'}],
         isPublished: {type: Boolean, default: false},

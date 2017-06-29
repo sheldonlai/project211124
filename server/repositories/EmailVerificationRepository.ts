@@ -15,11 +15,13 @@ export class EmailVerificationRepository
     }
 
     findByCode(code: string): Promise<EmailVerification> {
-        return EmailVerificationModel.findOne({code: code}).lean().exec();
+        return EmailVerificationModel.findOne({code: code}).lean().exec()
+            .then((emailVerification: EmailVerification)=> emailVerification);
     }
 
     findByUser(user: string): Promise<EmailVerification> {
-        return EmailVerificationModel.findOne({user: user}).lean().exec();
+        return EmailVerificationModel.findOne({user: user}).lean().exec()
+            .then((emailVerification: EmailVerification)=> emailVerification);
     }
 
 }

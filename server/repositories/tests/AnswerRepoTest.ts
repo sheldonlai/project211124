@@ -15,7 +15,6 @@ let ansRepo = new AnswerRepository();
 
 describe('AnswerRepoTest', function () {
 
-
     let sampleUser;
     let sampleQuestion;
 

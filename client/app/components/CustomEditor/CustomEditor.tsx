@@ -1,4 +1,4 @@
-import {ContentState, convertToRaw, DraftEntityType, Editor, EditorState, RichUtils} from "draft-js";
+import {ContentState, convertFromRaw, convertToRaw, DraftEntityType, Editor, EditorState, RichUtils} from "draft-js";
 import * as React from "react";
 // import FormatBold from "material-ui/svg-icons/editor/format-bold";
 import "draft-js/dist/Draft.css";
@@ -8,16 +8,21 @@ export interface CustomEditorProps {
     value: string;
     readOnly?: boolean;
     onChange: (text) => void;
-    height? : number;
+    height?: number;
 }
 
-export class CustomEditor extends React.Component<CustomEditorProps, {editorState: EditorState}> {
+export class CustomEditor extends React.Component<CustomEditorProps, { editorState: EditorState }> {
     constructor(props) {
         super(props);
-        const content = ContentState.createFromText(this.props.value);
+        let content;
+        if (!this.props.value ||  typeof this.props.value === "string") {
+            content = ContentState.createFromText(this.props.value);
+        } else {
+            content = convertFromRaw(this.props.value);
+        }
         const editorState = EditorState.createWithContent(content);
         this.state = {
-            editorState:editorState
+            editorState: editorState
         };
         this.handleKeyCommand = this.handleKeyCommand.bind(this);
     }
@@ -26,14 +31,12 @@ export class CustomEditor extends React.Component<CustomEditorProps, {editorStat
         this.setState({editorState});
         // TODO: support other formatting, currently only uses plain text
         let content = editorState.getCurrentContent();
-        let text = content.getPlainText();
-        console.log(convertToRaw(content))
         // let block = content.getBlockMap();
         // let entity = content.getEntityMap();
         // console.log(text)
         // console.log(block.toObject())
         // console.log(entity)
-        this.props.onChange(text);
+        this.props.onChange(convertToRaw(content));
     };
 
     onBoldClick = () => {
@@ -50,9 +53,9 @@ export class CustomEditor extends React.Component<CustomEditorProps, {editorStat
     }
 
     myBlockStyleFn = (contentBlock) => {
-        const type = contentBlock.getType();
-        console.log(type)
+        // const type = contentBlock.getType();
     };
+
     render() {
         // const styleMap = this.state.editorState.getCurrentInlineStyle().toObject();
         return (
@@ -60,13 +63,16 @@ export class CustomEditor extends React.Component<CustomEditorProps, {editorStat
                 <div>
 
                 </div>
+                <div style={{minHeight: 150}}>
                 <Editor
+                    style={{minHeight: 200}}
                     editorState={this.state.editorState}
                     handleKeyCommand={this.handleKeyCommand}
                     readOnly={this.props.readOnly}
                     onChange={this.onChange}
                     blockStyleFn={this.myBlockStyleFn}
                 />
+                </div>
             </div>
         );
     }

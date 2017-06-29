@@ -22,7 +22,7 @@ import {QuestionPageAnswer} from "../../models/QuestionPageAnswer";
 import AnimatedWrapper from "../../components/AnimatedWrapper";
 import CircularProgress from "material-ui/CircularProgress";
 import Add from 'material-ui/svg-icons/content/add';
-import {CustomEditor} from "../../components/CustomEditor";
+import {CustomEditor} from "../../components/CustomEditor/CustomEditor";
 import {isNullOrUndefined} from "util";
 
 export interface QuestionPageProps extends QuestionPageReducerState, RouteComponentProps<{ title: string }> {

@@ -6,7 +6,7 @@ import {User} from './User';
 
 export class Answer extends BaseModel{
     question: any;
-    content: string;
+    content: any;
     author: any;
     upVotes : number;
     downVotes: number;
@@ -17,14 +17,14 @@ export class Answer extends BaseModel{
     constructor(
         question: Question, content: string, author: User, comments?: QuestionComment[]
     ){
-        super()
+        super();
         this.question = question;
         this.content = content;
         this.author = author;
         this.comments = (comments == null)? [] : comments;
     }
 
-};
+}
 
 export interface IAnswer extends Answer, Document{
 
@@ -32,7 +32,7 @@ export interface IAnswer extends Answer, Document{
 
 const schema = new Schema({
     question: {type: Schema.Types.ObjectId, ref : 'question', required: true},
-    content: {type: String, required: true},
+    content: {type: Schema.Types.Mixed, required: true},
     author: {type: Schema.Types.ObjectId, ref: 'user', required: true},
     upVotes: {type: Number, default: 0},
     downVotes : {type : Number, default: 0},

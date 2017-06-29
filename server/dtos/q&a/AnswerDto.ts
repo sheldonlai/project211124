@@ -3,7 +3,7 @@ import {CommentDto} from "./CommentDto";
 export interface AnswerDto {
     _id: string;
     question: any;
-    content: string;
+    content: any;
     author: any;
     upVotes : number;
     downVotes: number;

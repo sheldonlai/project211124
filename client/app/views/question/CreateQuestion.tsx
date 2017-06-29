@@ -12,6 +12,7 @@ import {AppStoreState} from "../../stores/AppStore";
 import {QuestionCreationDto} from "../../../../server/dtos/q&a/QuestionCreationDto";
 import {DifficultyLevel, QuestionEducationLevel} from "../../../../server/enums/QuestionEducationLevel";
 import AnimatedWrapper from "../../components/AnimatedWrapper";
+import {CustomEditor} from "../../components/CustomEditor/CustomEditor";
 let SelectField = require('material-ui/SelectField').default;
 
 export interface CreateQuestionState {
@@ -19,8 +20,8 @@ export interface CreateQuestionState {
     tags: string[]
     isPublished: boolean;
     content: string;
-    publicityStatus: PublicityStatus
-    difficulty: QuestionDifficulty
+    publicityStatus: PublicityStatus;
+    difficulty: QuestionDifficulty;
 }
 
 class CreateQuestion extends LoginRequiredComponent<any, QuestionCreationDto> {
@@ -42,25 +43,25 @@ class CreateQuestion extends LoginRequiredComponent<any, QuestionCreationDto> {
 
     reset = () => {
         this.setState({title: '', content: ''})
-    }
+    };
 
     titleChange = (event: any, value: string) => {
         this.setState({title: value});
-    }
+    };
 
-    contentChange = (event: any) => {
-        this.setState({content: event.target.value});
-    }
+    contentChange = (value: any) => {
+        this.setState({content: value});
+    };
 
     submit = () => {
         let postReq: QuestionCreationDto = this.state;
         this.props.createQuestion(postReq);
         //
-    }
+    };
 
     selectFieldChange = (event: any, index: number, value: any[]) => {
         this.setState({tags: value});
-    }
+    };
 
     menuItems = () => {
         return this.props.tags.map((tag: any) => (
@@ -70,7 +71,7 @@ class CreateQuestion extends LoginRequiredComponent<any, QuestionCreationDto> {
                 primaryText={tag.folderName}
             />
         ));
-    }
+    };
 
     folderMenu = () => {
         if (this.props.tags != undefined) {
@@ -85,7 +86,7 @@ class CreateQuestion extends LoginRequiredComponent<any, QuestionCreationDto> {
                 </SelectField>
             )
         }
-    }
+    };
 
     render() {
         let folderMenu;
@@ -101,10 +102,11 @@ class CreateQuestion extends LoginRequiredComponent<any, QuestionCreationDto> {
                     onChange={this.titleChange}
                 />
                 <div>{folderMenu}</div>
-                <h4 style={{float: 'left'}}>Content :</h4>
-                <textarea value={this.state.content} onChange={this.contentChange}
-                          style={{minHeight: '400px', width: '100%'}}
-                />
+                <div style={{textAlign: "left", color : "#e3e3e3"}}>
+                    <h4>Content :</h4>
+                </div>
+                <CustomEditor value={this.state.content}
+                              onChange={this.contentChange} />
                 <RaisedButton
                     label="Make Post"
                     onClick={this.submit}

@@ -5,9 +5,8 @@ import {Link} from "react-router-dom";
 import {Routes} from "../constants/Routes";
 import {AuthActions} from "../actions/AuthActions";
 import {connect} from "react-redux";
-import {LoginRequest} from "../models/LoginRequest";
-import {AuthReducerState} from "../reducers/AuthReducer";
 import {AppStoreState} from "../stores/AppStore";
+import {ReducerStateStatus} from "../constants/ReducerStateStatus";
 
 const menuButtonStyle = {
     "height": "50px"
@@ -18,11 +17,13 @@ const flatButtonStyle = {
     "fontSize": "14px"
 };
 
-export interface MenuClassProps extends AuthReducerState {
+export interface MenuClassProps {
     logout : () => void;
+    loggedIn : boolean;
+    authStatus: ReducerStateStatus;
 }
 
-class MenuClass extends Component<MenuClassProps,any>{
+class MenuClass extends Component<MenuClassProps, any>{
     constructor(props){
         super(props);
     }
@@ -74,4 +75,4 @@ class MenuClass extends Component<MenuClassProps,any>{
 export const Menu = connect(
     (state : AppStoreState) => ({loggedIn: state.auth.loggedIn, authStatus : state.auth.status}),
     (dispatch) => ({logout : () => dispatch(AuthActions.logout())})
-)(MenuClass)
+)(MenuClass);

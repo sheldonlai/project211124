@@ -1,5 +1,5 @@
 import * as React from "react";
-import {Component} from "react";
+import {Component, ReactNode} from "react";
 import TextField from "material-ui/TextField";
 import {RegistrationRequest} from "../../models/RegistrationRequest";
 import {FormWrapper} from "../../components/FormWrapper";
@@ -11,6 +11,7 @@ import {Routes} from "../../constants/Routes";
 import {RouterController} from "../../api.controllers/RouterController";
 import {AppStoreState} from "../../stores/AppStore";
 import AnimatedWrapper from "../../components/AnimatedWrapper";
+import {RouteComponentProps} from "react-router";
 
 export interface RegistrationViewState {
     error : string;
@@ -21,7 +22,6 @@ export interface RegistrationViewState {
 
 export interface RegistrationViewProps {
     loggedIn : boolean;
-    register : (regReq : RegistrationRequest) => void;
 }
 
 export class RegistrationView extends Component<RegistrationViewProps, RegistrationViewState>{
@@ -34,7 +34,7 @@ export class RegistrationView extends Component<RegistrationViewProps, Registrat
             regRequest : new RegistrationRequest(),
             confirmPassword : '',
             passwordError : ''
-        }
+        };
         this.apiController = CommonController.getInstance();
     }
 
@@ -42,23 +42,23 @@ export class RegistrationView extends Component<RegistrationViewProps, Registrat
         let regRequest = this.state.regRequest;
         regRequest[key] = value;
         this.setState({regRequest : regRequest});
-    }
+    };
 
     updatePassword = (event) => {
         this.updateRequest('password', event.target.value);
-    }
+    };
 
     updateUsername = (event) => {
         this.updateRequest('username', event.target.value);
-    }
+    };
 
     updateEmail = (event) => {
         this.updateRequest('email', event.target.value);
-    }
+    };
 
     updateConfirmPassword = (event) => {
         this.setState({confirmPassword : event.target.value});
-    }
+    };
 
     submit =()=> {
         if(this.state.regRequest.password != this.state.confirmPassword){
@@ -72,7 +72,7 @@ export class RegistrationView extends Component<RegistrationViewProps, Registrat
             console.log(err.response.data.error);
             this.setState({error : err.response.data.error});
         })
-    }
+    };
 
     render(){
         return (
@@ -108,5 +108,6 @@ export class RegistrationView extends Component<RegistrationViewProps, Registrat
 }
 
 export const RegistrationPage = AnimatedWrapper(connect(
-    (state: AppStoreState)=> ({loggedIn: state.auth.loggedIn})
+    (state: AppStoreState)=> ({loggedIn: state.auth.loggedIn}),
+    (dispatch) => ({})
 )(RegistrationView));

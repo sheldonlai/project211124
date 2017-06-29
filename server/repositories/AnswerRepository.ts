@@ -13,7 +13,8 @@ export class AnswerRepository extends BaseRepository<Answer, IAnswer> implements
 
     getByQuestionId(questionId: Types.ObjectId, sort? : any) : Promise<Answer[]>{
         let sortOption = sort? sort: '-createdUtc';
-        return AnswerModel.find({question : questionId}).sort(sortOption).lean().exec();
+        return AnswerModel.find({question : questionId}).sort(sortOption).lean().exec()
+            .then((answers: Answer[]) => answers);
     }
 
     create(answer: Answer): Promise<Answer>{

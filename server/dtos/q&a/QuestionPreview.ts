@@ -3,7 +3,7 @@
  */
 export interface QuestionPreview {
     title : string;
-    content : string;
+    content : any;
     author: string;
     dateCreated: Date;
     answered: boolean;

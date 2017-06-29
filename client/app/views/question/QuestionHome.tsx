@@ -9,45 +9,52 @@ import {QuestionReducerState} from "../../reducers/QuestionReducer";
 import {QuestionPreview} from "../../../../server/dtos/q&a/QuestionPreview";
 import {ErrorReducerState} from "../../reducers/ErrorReducer";
 import AnimatedWrapper from "../../components/AnimatedWrapper";
+import {convertFromRaw} from "draft-js";
 
 export interface QuestionViewProps extends QuestionReducerState {
-    loggedIn : boolean;
+    loggedIn: boolean;
     globalError: ErrorReducerState;
     fetchQuestion: () => void;
 }
 
 class QuestionView extends Component<QuestionViewProps, any> {
 
-    constructor(props){
+    constructor(props) {
         super(props);
     }
 
-    componentWillMount(){
+    componentWillMount() {
         console.log(this.props);
         if ((this.props.featuredQuestions.length === 0 || this.props.lastUpdated - Date.now() > 300000))
             this.props.fetchQuestion()
     }
 
     featuredQuestions = () => {
-        return this.props.featuredQuestions?
-            this.props.featuredQuestions.map( (e: QuestionPreview) => (
-                <div key={e.title}>
-                    <Link to={Routes.question_by_title.replace(':title', e.title)}>
-                        <div>
-                            <h2>{e.title}</h2>
-                            <p>{e.content}</p>
-                            <p>{e.dateCreated}</p>
+        return this.props.featuredQuestions ?
+            this.props.featuredQuestions.map((e: QuestionPreview) => {
+                    if (!e.content.entityMap) e.content.entityMap = {};
+                    const content = convertFromRaw(e.content);
+                    const text = content.getPlainText();
+                    return (
+                        <div key={e.title}>
+                            <Link to={Routes.question_by_title.replace(':title', e.title)}>
+                                <div>
+                                    <h2>{e.title}</h2>
+                                    <p>{text}</p>
+                                    <p>{e.dateCreated}</p>
+                                </div>
+                            </Link>
                         </div>
-                    </Link>
-                </div>
-            )) : undefined;
+                    )
+                }
+            ) : undefined;
     };
 
     createQuestionButton = () => {
         if (this.props.loggedIn)
-            return  <Link to={Routes.createQuestion}>Make new question</Link>;
+            return <Link to={Routes.createQuestion}>Make new question</Link>;
         return undefined;
-    }
+    };
 
     render() {
         return (

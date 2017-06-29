@@ -3,7 +3,7 @@ import {PublicityStatus} from "../../enums/PublicityStatus";
 export interface QuestionCreationDto{
     title : string;
     author: string;
-    content : string;
+    content : any;
     isPublished : boolean;
     tags : any[];
     publicityStatus:  PublicityStatus;

@@ -3,12 +3,8 @@ import {Question, QuestionComment, QuestionModel} from "../../models/Question";
 import {UserModel} from "../../models/User";
 import {FakeModels} from "./helpers/FakeModels";
 
-require('source-map-support').install();
-
-let mongoose = require('mongoose');
-
+const mongoose = require('mongoose');
 mongoose.Promise = global.Promise;
-
 let questionRepo :IQuestionRepository = new QuestionRepository();
 
 describe('QuestionRepoTest', function (){

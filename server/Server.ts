@@ -105,7 +105,7 @@ export class Server {
        // console.log(err.message);   err may not be an AppError, need to check whether status presents or not
        //  console.log(err.status);
         console.error(err.stack);
-       //  res.statusCode = err.status.code;
+        res.statusCode = err.status.code;
         res.json({error: err.message});
     }
 
