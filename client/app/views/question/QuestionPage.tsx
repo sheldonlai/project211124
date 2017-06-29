@@ -21,9 +21,11 @@ import {QuestionPageReducerState} from "../../reducers/QuestionPageReducer";
 import {QuestionPageAnswer} from "../../models/QuestionPageAnswer";
 import AnimatedWrapper from "../../components/AnimatedWrapper";
 import CircularProgress from "material-ui/CircularProgress";
-import Add from 'material-ui/svg-icons/content/add';
+import Add from "material-ui/svg-icons/content/add";
 import {CustomEditor} from "../../components/CustomEditor/CustomEditor";
 import {isNullOrUndefined} from "util";
+import {ContentState, convertFromRaw, EditorState, RawDraftContentState} from "draft-js";
+
 
 export interface QuestionPageProps extends QuestionPageReducerState, RouteComponentProps<{ title: string }> {
     user: UserDto
@@ -158,15 +160,17 @@ export class QuestionPageComponent extends React.Component<QuestionPageProps, Qu
         )
     };
 
-    getEditor = (value: string, onChange: (text: string) => any, onSubmit: () => any, readOnly:boolean =false) => {
+    getEditor = (value: RawDraftContentState, onChange: (text: string) => any, onSubmit: () => any, readOnly:boolean =false) => {
         const button = (
             <div style={{textAlign: "right"}}>
                 <RaisedButton label="save" onClick={onSubmit}/>
             </div>
         );
+        if (!value.entityMap) value.entityMap = {};
+        const editorState = EditorState.createWithContent(convertFromRaw(value))
         return (
             <div style={{marginBottom: 15}}>
-                    <CustomEditor value={value} onChange={onChange} readOnly={readOnly}/>
+                    <CustomEditor value={editorState} onChange={onChange} readOnly={readOnly}/>
                     {!readOnly && button}
             </div>
         )
