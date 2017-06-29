@@ -291,88 +291,13 @@ export class QuestionPageComponent extends React.Component<QuestionPageProps, Qu
     };
 
     onCommentTextChange = (event: ChangeEvent<HTMLTextAreaElement>) => {
-        let temp = this.state.questionPage;
-        // temp.question.comments[this.state.commentId].content = event.target.value;
-        // this.props.changeQuestionPage(temp);
     };
 
     onCommentSubmit = () => {
-        // let comment = this.state.questionPage.comments[this.state.commentId];
-        // if (comment.commentDate == null) {
-        //     // add comment
-        // } else {
-        // }
-        // // update comment
     };
 
 
-    // getComments = () => {
-    //     let content = [];
-    //     if (this.state.questionPage.comments.length <= 0 && !this.state.editComment) {
-    //         content.push(<p key={"0"} style={{color: "grey", textAlign: "center"}}>There are currently no comments</p>);
-    //     } else {
-    //         for (let i = 0; i < this.state.questionPage.comments.length; i++) {
-    //             if (this.state.commentId != i) {
-    //                 let comment = this.state.questionPage.comments[i];
-    //                 let edit = (comment.userEmail == this.props.user.email)?
-    //                     (<div>
-    //                             <RaisedButton label="Edit" onClick={() => {this.editComment(i)}}
-    //                                           style={{float: "left"}}/>
-    //                             <RaisedButton label="Delete" onClick={() => {this.deleteComment(i)}}
-    //                                           style={{float: "left"}}/></div>
-    //
-    //                     ) : null;
-    //                 content.push(
-    //                     <Paper key={i.toString()} zDepth={3} style={{padding: 10, margin : "10px 0px"}}>
-    //                         <p>{comment.content}</p>
-    //                         <Divider />
-    //                         {edit}
-    //                         {this.getFooterPostedBy(new Date(comment.commentDate).toLocaleString(), comment.userEmail)}
-    //                     </Paper>
-    //                 )
-    //             } else {
-    //                 content.push(
-    //                     <div key={i.toString()}>
-    //                         {this.getEditor(this.state.questionPage.comments[i].content,
-    //                             this.onCommentTextChange, this.onCommentSubmit)}
-    //                         <Divider />
-    //                     </div>
-    //                 )
-    //             }
-    //         }
-    //     }
-    //     let newEditTextBox;
-    //     if (this.state.editComment && this.state.commentId == null) {
-    //         let commentIndex = this.getCommentIndexFromComment(this.generateNewComment(), this.state.questionPage.comments);
-    //
-    //         newEditTextBox = this.getEditor(this.state.questionPage.comments[commentIndex].content,
-    //             this.onCommentTextChange, this.onCommentSubmit);
-    //     }
-    //
-    //
-    //     let newPostButton = (this.state.editComment) ? null :
-    //         <div style={{textAlign: "right"}}>
-    //             <FloatingActionButton mini={true} onTouchTap={() => {
-    //                 this.editComment()
-    //             }}>
-    //                 <ContentAdd />
-    //             </FloatingActionButton>
-    //         </div>;
-    //
-    //
-    //     return (
-    //         <Paper style={{height: "100%", margin: 10, padding: 15}}>
-    //             <h4 style={headerStyle}>comments</h4>
-    //             <Divider />
-    //             {content}
-    //             {newEditTextBox}
-    //             {newPostButton}
-    //         </Paper>
-    //     );
-    // }
-
-
-    render() {
+    render(){
         if (this.state.questionPage == null) {
             return (
                 <div style={{height: "100%", margin: 10, padding: "200px 0px", textAlign: "center"}}>
@@ -392,13 +317,11 @@ export class QuestionPageComponent extends React.Component<QuestionPageProps, Qu
                     message={location => (
                         `All unsaved changes will be discarded. Are you sure you want to leave?`
                     )}
-
                 />
                 {postDisplay}
                 {answers}
             </div>
         );
-
     }
 }
 

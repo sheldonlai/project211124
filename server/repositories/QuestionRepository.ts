@@ -15,9 +15,13 @@ export class QuestionRepository extends
     }
 
     create(question : Question): Promise<Question>{
+        delete question.createdUtc;
+        delete question.lastEditedUtc;
         return super.create(question);
     }
     update(question : Question): Promise<Question>{
+        delete question.createdUtc;
+        question.lastEditedUtc = new Date(Date.now());
         return super.update(question);
     }
 

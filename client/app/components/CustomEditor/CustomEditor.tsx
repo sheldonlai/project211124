@@ -1,12 +1,14 @@
-import {Editor, EditorState, RichUtils, ContentState, DraftEntityType, convertToRaw } from "draft-js";
+import {ContentState, convertToRaw, DraftEntityType, Editor, EditorState, RichUtils} from "draft-js";
 import * as React from "react";
 // import FormatBold from "material-ui/svg-icons/editor/format-bold";
-import 'draft-js/dist/Draft.css';
+import "draft-js/dist/Draft.css";
+import "./custom_editor.css";
 
 export interface CustomEditorProps {
     value: string;
     readOnly?: boolean;
     onChange: (text) => void;
+    height? : number;
 }
 
 export class CustomEditor extends React.Component<CustomEditorProps, {editorState: EditorState}> {

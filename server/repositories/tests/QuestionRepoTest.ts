@@ -32,7 +32,7 @@ describe('QuestionRepoTest', function (){
 
     it('should fail with no author', function () {
         let newQuestion = new Question(
-           'title', 'content', null, [], false
+           'title0', 'content', null, [], false
         );
         expect.assertions(1);
         return questionRepo.create(newQuestion).catch(function(err){
@@ -45,7 +45,7 @@ describe('QuestionRepoTest', function (){
         let dateTime = new Date(2016, 1 ,1);
         return UserModel.create(fakeModels.localUser()).then(function(user){
             let newQuestion = new Question(
-                'title',
+                'title1',
                 'content',
                 user,
                 [],
@@ -55,7 +55,7 @@ describe('QuestionRepoTest', function (){
             newQuestion.lastEditedUtc = dateTime;
             return questionRepo.create(newQuestion).then(function(question){
                 expect(question._id).toBeDefined();
-                expect(question.title).toBe('title');
+                expect(question.title).toBe('title1');
                 expect(question.content).toBe('content');
                 expect(question.lastEditedUtc).not.toEqual(dateTime);
                 console.log('test passed', question._id);
@@ -108,7 +108,7 @@ describe('QuestionRepoTest', function (){
         return UserModel.create(fakeModels.localUser()).then(function(user){
             new_user = user;
             let newQuestion = new Question(
-                'title',
+                'title3',
                 'content',
                 user,
                 [],
@@ -118,7 +118,7 @@ describe('QuestionRepoTest', function (){
         }).then(function(question){
             return questionRepo.getById(question._id);
         }).then(function(question){
-            expect(question.title).toBe('title');
+            expect(question.title).toBe('title3');
             expect(question.content).toBe('content');
         })
     });
@@ -128,7 +128,7 @@ describe('QuestionRepoTest', function (){
         return UserModel.create(fakeModels.localUser()).then(function(user){
             new_user = user;
             let newQuestion = new Question(
-                'title',
+                'title4',
                 'content',
                 user,
                 [],
@@ -138,7 +138,7 @@ describe('QuestionRepoTest', function (){
         }).then(function(question){
             return questionRepo.getById(question._id.toString());
         }).then(function(question){
-            expect(question.title).toBe('title');
+            expect(question.title).toBe('title4');
             expect(question.content).toBe('content');
         })
     });
@@ -148,7 +148,7 @@ describe('QuestionRepoTest', function (){
         return UserModel.create(fakeModels.localUser()).then(function(user){
             new_user = user;
             let newQuestion = new Question(
-                'title',
+                'title5',
                 'content',
                 user,
                 [],
@@ -169,7 +169,7 @@ describe('QuestionRepoTest', function (){
         return UserModel.create(fakeModels.localUser()).then(function(user){
             new_user = user;
             let newQuestion = new Question(
-                'title',
+                'title6',
                 'content',
                 user,
                 [],
