@@ -47,14 +47,14 @@ export class CustomEditor extends React.Component<CustomEditorProps, {}> {
 
                 </div>
                 <div style={{minHeight: 150}}>
-                <Editor
-                    style={{minHeight: 200}}
-                    editorState={this.props.value}
-                    handleKeyCommand={this.handleKeyCommand}
-                    readOnly={this.props.readOnly}
-                    onChange={this.onChange}
-                    blockStyleFn={this.myBlockStyleFn}
-                />
+                    <Editor
+                        style={{minHeight: 200}}
+                        editorState={this.props.value}
+                        handleKeyCommand={this.handleKeyCommand}
+                        readOnly={this.props.readOnly}
+                        onChange={this.onChange}
+                        blockStyleFn={this.myBlockStyleFn}
+                    />
                 </div>
             </div>
         );
