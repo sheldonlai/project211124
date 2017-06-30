@@ -112,7 +112,9 @@ class CreateQuestion extends LoginRequiredComponent<any, QuestionCreationDto> {
                     raised
                     label="Make Post"
                     onClick={this.submit}
-                />
+                >
+                    Make Post
+                </Button>
             </div>
         )
     }
