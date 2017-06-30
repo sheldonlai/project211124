@@ -4,7 +4,7 @@ import TextField from "material-ui/TextField";
 import {RegistrationRequest} from "../../models/RegistrationRequest";
 import {FormWrapper} from "../../components/FormWrapper";
 import {ErrorView} from "../../components/ErrorView";
-import RaisedButton from "material-ui/RaisedButton";
+import Button from "material-ui/Button";
 import {connect} from "react-redux";
 import {CommonController} from "../../api.controllers/CommonController";
 import {Routes} from "../../constants/Routes";
@@ -101,7 +101,7 @@ export class RegistrationView extends Component<RegistrationViewProps, Registrat
                     type="password"
                     onChange={this.updateConfirmPassword}
                 /><br />
-                <RaisedButton onTouchTap={this.submit} label="Submit"/>
+                <Button raised onTouchTap={this.submit} label="Submit"/>
             </FormWrapper>
         )
     }

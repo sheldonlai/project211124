@@ -5,6 +5,6 @@ export interface QuestionPreview {
     title : string;
     content : any;
     author: string;
-    dateCreated: Date;
+    createdUtc: Date;
     answered: boolean;
 }

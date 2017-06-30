@@ -1,7 +1,7 @@
 import * as React from 'react';
-import MenuItem from 'material-ui/MenuItem';
+import { MenuItem } from 'material-ui/Menu';
 import TextField from 'material-ui/TextField';
-import RaisedButton from 'material-ui/RaisedButton';
+import Button from 'material-ui/Button';
 import {connect} from "react-redux";
 import {QuestionActions} from "../../actions/QuestionActions";
 import {QuestionDto} from "../../../../server/dtos/q&a/QuestionDto";
@@ -13,7 +13,7 @@ import {QuestionCreationDto} from "../../../../server/dtos/q&a/QuestionCreationD
 import {DifficultyLevel, QuestionEducationLevel} from "../../../../server/enums/QuestionEducationLevel";
 import AnimatedWrapper from "../../components/AnimatedWrapper";
 import {CustomEditor} from "../../components/CustomEditor/CustomEditor";
-let SelectField = require('material-ui/SelectField').default;
+// let SelectField = require('material-ui/SelectField').default;
 
 export interface CreateQuestionState {
     title: string;
@@ -75,16 +75,17 @@ class CreateQuestion extends LoginRequiredComponent<any, QuestionCreationDto> {
 
     folderMenu = () => {
         if (this.props.tags != undefined) {
-            return (
-                <SelectField
-                    multiple={true}
-                    hintText="Select Folders"
-                    value={this.state.tags}
-                    onChange={this.selectFieldChange}
-                    fullWidth={true}>
-                    {this.menuItems()}
-                </SelectField>
-            )
+            // return (
+            //     {/*<SelectField*/}
+            //         {/*multiple={true}*/}
+            //         {/*hintText="Select Folders"*/}
+            //         {/*value={this.state.tags}*/}
+            //         {/*onChange={this.selectFieldChange}*/}
+            //         {/*fullWidth={true}>*/}
+            //         {/*{this.menuItems()}*/}
+            //     {/*</SelectField>*/}
+            // )
+
         }
     };
 
@@ -101,13 +102,14 @@ class CreateQuestion extends LoginRequiredComponent<any, QuestionCreationDto> {
                     value={this.state.title}
                     onChange={this.titleChange}
                 />
-                <div>{folderMenu}</div>
+                {/*<div>{folderMenu}</div>*/}
                 <div style={{textAlign: "left", color : "#e3e3e3"}}>
                     <h4>Content :</h4>
                 </div>
                 <CustomEditor value={this.state.content}
                               onChange={this.contentChange} />
-                <RaisedButton
+                <Button
+                    raised
                     label="Make Post"
                     onClick={this.submit}
                 />

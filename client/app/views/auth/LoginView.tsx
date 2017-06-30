@@ -2,7 +2,7 @@ import * as React from 'react';
 import {Component} from 'react';
 import Paper from 'material-ui/Paper';
 import TextField from 'material-ui/TextField';
-import RaisedButton from 'material-ui/RaisedButton';
+import Button from 'material-ui/Button';
 import {AuthActions} from '../../actions/AuthActions';
 import {LoginRequest} from '../../models/LoginRequest';
 import {Link} from 'react-router-dom';
@@ -62,7 +62,7 @@ export class LoginView extends Component<any, any> {
                         Register Here
                     </Link>
                 </p>
-                <RaisedButton primary={true} label="login" onTouchTap={this.submit}/>
+                <Button raised color="primary" label="login" onTouchTap={this.submit}/>
             </FormWrapper>
         )
     }

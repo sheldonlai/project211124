@@ -1,6 +1,6 @@
 import * as React from "react";
 import {Component} from "react";
-import FlatButton from "material-ui/FlatButton";
+import Button from 'material-ui/Button';
 import {Link} from "react-router-dom";
 import {Routes} from "../constants/Routes";
 import {AuthActions} from "../actions/AuthActions";
@@ -18,13 +18,14 @@ const flatButtonStyle = {
 };
 
 export interface MenuClassProps {
-    logout : () => void;
-    loggedIn : boolean;
+    logout: () => void;
+    loggedIn: boolean;
     authStatus: ReducerStateStatus;
 }
 
-class MenuClass extends Component<MenuClassProps, any>{
-    constructor(props){
+class MenuClass extends Component<MenuClassProps, any> {
+
+    constructor(props) {
         super(props);
     }
 
@@ -32,35 +33,37 @@ class MenuClass extends Component<MenuClassProps, any>{
         if (!this.props.loggedIn) {
             return (
                 <Link to={Routes.login}>
-                    <FlatButton label="Login" linkButton={true} primary={true} style={menuButtonStyle}
-                                labelStyle={flatButtonStyle}/>
+                    <Button linkButton={true} color="contrast" style={menuButtonStyle}>
+                        Login
+                    </Button>
                 </Link>
             )
         } else {
             return (
                 <div>
-                    <FlatButton label="Log Out" primary={true} style={menuButtonStyle}
-                                labelStyle={flatButtonStyle} onTouchTap={() => {
-                        this.props.logout()
-                    }}/>
+                    <Button color="contrast" style={menuButtonStyle}
+                            onClick={() => this.props.logout()}>
+                        Log Out
+                    </Button>
                 </div>
             )
         }
     };
 
-    render(){
+    render() {
         console.log('render menu');
         return (
             <div className="menu">
                 <ul>
                     <li>
                         <Link to={Routes.home}>
-                            <FlatButton label="Askalot" primary={true} style={menuButtonStyle}
-                                        labelStyle={{"fontSize": "20px", color : "white"}}/>
+                            <Button color="contrast" style={menuButtonStyle}
+                            >Askalot</Button>
                         </Link>
                         <Link to={Routes.question}>
-                            <FlatButton label="Questions" primary={true} style={menuButtonStyle}
-                                        labelStyle={flatButtonStyle}/>
+                            <Button color="contrast" style={menuButtonStyle}>
+                                Questions
+                            </Button>
                         </Link>
                     </li>
                 </ul>
@@ -73,6 +76,6 @@ class MenuClass extends Component<MenuClassProps, any>{
 }
 
 export const Menu = connect(
-    (state : AppStoreState) => ({loggedIn: state.auth.loggedIn, authStatus : state.auth.status}),
-    (dispatch) => ({logout : () => dispatch(AuthActions.logout())})
+    (state: AppStoreState) => ({loggedIn: state.auth.loggedIn, authStatus: state.auth.status}),
+    (dispatch) => ({logout: () => dispatch(AuthActions.logout())})
 )(MenuClass);

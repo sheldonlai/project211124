@@ -1,6 +1,6 @@
 import * as React from "react";
-import MuiThemeProvider from "material-ui/styles/MuiThemeProvider";
-import getMuiTheme from "material-ui/styles/getMuiTheme";
+import { MuiThemeProvider, createMuiTheme } from 'material-ui/styles';
+import createPalette from 'material-ui/styles/palette';
 import {Route, Router} from "react-router";
 import {Home, HomeComponent} from "./home/home";
 import {LoginPage} from "./auth/LoginView";
@@ -14,19 +14,15 @@ import {QuestionHomePage} from "./question/QuestionHome";
 import {QuestionPage} from "./question/QuestionPage";
 import TransitionGroup =require('react-transition-group/TransitionGroup');
 
-let muiTheme = getMuiTheme({
-    palette: {
+let muiTheme = createMuiTheme({
+    palette: createPalette({
         primary1Color: '#3f7ef8',
         primary2Color: '#56ffdb',
         primary3Color: '#d3ffbb',
-    },
-    appBar: {
-        height: 50,
-    }
-
+    })
 });
 // a hack because @types/material-ui hasn't included this
-(muiTheme.flatButton as any).textTransform = 'none';
+//(muiTheme.flatButton as any).textTransform = 'none';
 
 const firstChild = props => {
     const childrenArray = React.Children.toArray(props.children);

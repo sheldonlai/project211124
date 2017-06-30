@@ -7,10 +7,9 @@ import {connect} from "react-redux";
 import {AppStoreState} from "../../stores/AppStore";
 import {QuestionActions} from "../../actions/QuestionActions";
 import {grey300, grey800} from "material-ui/styles/colors";
-import RaisedButton from "material-ui/RaisedButton";
+import Button from "material-ui/Button";
 import Divider from "material-ui/Divider";
 import Paper from "material-ui/Paper";
-import FloatingActionButton from "material-ui/FloatingActionButton";
 import TextField from "material-ui/TextField";
 import {UserDto} from "../../../../server/dtos/auth/UserDto";
 import {QuestionPageDto} from "../../../../server/dtos/q&a/QuestionPageDto";
@@ -20,8 +19,8 @@ import {Prompt, RouteComponentProps} from "react-router";
 import {QuestionPageReducerState} from "../../reducers/QuestionPageReducer";
 import {QuestionPageAnswer} from "../../models/QuestionPageAnswer";
 import AnimatedWrapper from "../../components/AnimatedWrapper";
-import CircularProgress from "material-ui/CircularProgress";
-import Add from "material-ui/svg-icons/content/add";
+import { CircularProgress } from 'material-ui/Progress';
+import AddIcon from 'material-ui-icons/Add';
 import {CustomEditor} from "../../components/CustomEditor/CustomEditor";
 import {isNullOrUndefined} from "util";
 import {ContentState, convertFromRaw, EditorState, RawDraftContentState} from "draft-js";
@@ -163,7 +162,7 @@ export class QuestionPageComponent extends React.Component<QuestionPageProps, Qu
     getEditor = (value: RawDraftContentState, onChange: (text: string) => any, onSubmit: () => any, readOnly:boolean =false) => {
         const button = (
             <div style={{textAlign: "right"}}>
-                <RaisedButton label="save" onClick={onSubmit}/>
+                <Button raised label="save" onClick={onSubmit}/>
             </div>
         );
         if (!value.entityMap) value.entityMap = {};
@@ -190,7 +189,7 @@ export class QuestionPageComponent extends React.Component<QuestionPageProps, Qu
         let question = this.state.questionPage.question;
         let editBut = ( this.props.user && question.author.username == this.props.user.username && !this.state.editQuestion) ?
             <div style={{float: "right"}}>
-                <RaisedButton label="Edit" onClick={this.editPost} style={{float: "right"}}/>
+                <Button raised label="Edit" onClick={this.editPost} style={{float: "right"}}/>
             </div>
             : undefined;
         let title = (!this.state.editQuestion) ?
@@ -245,7 +244,7 @@ export class QuestionPageComponent extends React.Component<QuestionPageProps, Qu
 
             let editButton = undefined;
             if (this.props.user.username != ans.author.username)
-                editButton = <RaisedButton label="Edit" onClick={this.addAnswer} style={{float: "right"}}/>;
+                editButton = <Button raised label="Edit" onClick={this.addAnswer} style={{float: "right"}}/>;
             if (this.state.editAnswer) {
                 editButton = null;
                 content = this.getEditor(ans.content, this.onAnswerChange, this.submitStudentAnswer);
@@ -265,9 +264,9 @@ export class QuestionPageComponent extends React.Component<QuestionPageProps, Qu
         if (this.props.user != undefined && !this.state.editAnswer) {
             list.push(
                 <div key="edit-answer-button" style={{float: 'right', marginTop: 5}}>
-                    <FloatingActionButton onTouchTap={this.addAnswer}>
-                        <Add/>
-                    </FloatingActionButton >
+                    <Button fab onTouchTap={this.addAnswer}>
+                        <AddIcon/>
+                    </Button>
                 </div>
             )
         }

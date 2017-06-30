@@ -9,7 +9,11 @@ import {QuestionReducerState} from "../../reducers/QuestionReducer";
 import {QuestionPreview} from "../../../../server/dtos/q&a/QuestionPreview";
 import {ErrorReducerState} from "../../reducers/ErrorReducer";
 import AnimatedWrapper from "../../components/AnimatedWrapper";
+import {Card, CardActions, CardHeader, CardMedia, CardTitle, CardText} from 'material-ui/Card';
 import {convertFromRaw} from "draft-js";
+import {CustomCard} from "../../components/CardComponent/CardComponent";
+import {CustomLink} from "../../components/CustomLink";
+import Button from "material-ui/Button";
 
 export interface QuestionViewProps extends QuestionReducerState {
     loggedIn: boolean;
@@ -36,14 +40,14 @@ class QuestionView extends Component<QuestionViewProps, any> {
                     const content = convertFromRaw(e.content);
                     const text = content.getPlainText();
                     return (
-                        <div key={e.title}>
-                            <Link to={Routes.question_by_title.replace(':title', e.title)}>
-                                <div>
-                                    <h2>{e.title}</h2>
-                                    <p>{text}</p>
-                                    <p>{e.dateCreated}</p>
-                                </div>
-                            </Link>
+                        <div key={e.title} style={{marginTop: 16}}>
+                            <CustomLink to={Routes.question_by_title.replace(':title', e.title)}>
+                                <CustomCard
+                                    title={e.title}
+                                    content={text}
+                                    date={e.createdUtc}
+                                />
+                            </CustomLink>
                         </div>
                     )
                 }
@@ -52,7 +56,7 @@ class QuestionView extends Component<QuestionViewProps, any> {
 
     createQuestionButton = () => {
         if (this.props.loggedIn)
-            return <Link to={Routes.createQuestion}>Make new question</Link>;
+            return <CustomLink to={Routes.createQuestion}><Button raised color="primary">Make new question</Button></CustomLink>;
         return undefined;
     };
 
