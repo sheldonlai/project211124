@@ -13,6 +13,7 @@ import {QuestionCreationDto} from "../../../../server/dtos/q&a/QuestionCreationD
 import {DifficultyLevel, QuestionEducationLevel} from "../../../../server/enums/QuestionEducationLevel";
 import AnimatedWrapper from "../../components/AnimatedWrapper";
 import {CustomEditor} from "../../components/CustomEditor/CustomEditor";
+import {ContentState, EditorState} from "draft-js";
 // let SelectField = require('material-ui/SelectField').default;
 
 export interface CreateQuestionState {
@@ -32,7 +33,7 @@ class CreateQuestion extends LoginRequiredComponent<any, QuestionCreationDto> {
             author: '',
             tags: [],
             isPublished: false,
-            content: '',
+            content: EditorState.createWithContent(ContentState.createFromText('')),
             publicityStatus: PublicityStatus.PUBLIC,
             difficulty: {
                 educationLevel: QuestionEducationLevel.NOT_SPECIFIED,
@@ -96,9 +97,11 @@ class CreateQuestion extends LoginRequiredComponent<any, QuestionCreationDto> {
         return (
             <div style={{textAlign: 'center'}}>
                 <TextField
-                    hintText="Title"
-                    floatingLabelText="Title"
-                    fullWidth={true}
+                    id="Title"
+                    label="Title"
+                    type="text"
+                    helperText="Title"
+                    marginForm
                     value={this.state.title}
                     onChange={this.titleChange}
                 />
