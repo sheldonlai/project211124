@@ -24,6 +24,7 @@ import {isNullOrUndefined} from "util";
 import {EditorState} from "draft-js";
 import QuestionPage = FrontEndQuestionModels.QuestionPage;
 import Answer = FrontEndQuestionModels.Answer;
+import cloneQuestionPage = FrontEndQuestionModels.cloneQuestionPage;
 
 
 export interface QuestionPageProps extends QuestionPageReducerState, RouteComponentProps<{ title: string }> {
@@ -62,12 +63,11 @@ export class QuestionPageComponent extends React.Component<QuestionPageProps, Qu
             editComment: false,
             commentId: undefined,
             loading: false,
-            questionPage: this.props.questionPage
+            questionPage: this.props.questionPage? cloneQuestionPage(this.props.questionPage): undefined
         }
     }
 
     componentWillMount() {
-        console.log(this.props, this.state);
         if (
             isNullOrUndefined(this.props.questionPage) ||
             this.props.questionPage.question.title !== this.props.match.params.title ||
@@ -81,8 +81,12 @@ export class QuestionPageComponent extends React.Component<QuestionPageProps, Qu
     componentWillReceiveProps(nextProps: QuestionPageProps) {
         if (nextProps.questionPage != this.props.questionPage) {
             this.resetStates();
-            this.setState({questionPage: nextProps.questionPage});
+            this.setState({questionPage: nextProps.questionPage? cloneQuestionPage(nextProps.questionPage): undefined});
         }
+    }
+
+    componentWillUnmount(){
+        this.setState({questionPage: this.props.questionPage});
     }
 
     titleChange = (event: any, value: string) => {
@@ -116,7 +120,7 @@ export class QuestionPageComponent extends React.Component<QuestionPageProps, Qu
         temp.answers = temp.answers.map((state) => {
             state.content = (this.state.answerId === state._id)? editorState: state.content;
             return state;
-        })
+        });
         this.setState({questionPage:temp});
     };
 
@@ -134,9 +138,9 @@ export class QuestionPageComponent extends React.Component<QuestionPageProps, Qu
     };
 
     addAnswer = () => {
-        let questionPage = this.state.questionPage;
-        questionPage.answers.push(new Answer(questionPage.question, this.props.user));
-        this.setState({editAnswer: true, questionPage:questionPage});
+        let temp_questionPage = this.state.questionPage;
+        temp_questionPage.answers.push(new Answer(temp_questionPage.question._id, this.props.user));
+        this.setState({editAnswer: true, questionPage:temp_questionPage});
 
     };
 
@@ -144,8 +148,6 @@ export class QuestionPageComponent extends React.Component<QuestionPageProps, Qu
     submitStudentAnswer = () => {
         let temp = this.state.questionPage;
         this.setState({loading: true});
-        // add Answer
-        // update Answer
     };
 
     getFooterPostedBy = (date: string, name: string) => {
@@ -249,7 +251,6 @@ export class QuestionPageComponent extends React.Component<QuestionPageProps, Qu
             } else if (ans != null) {
                 content = this.getAnswerContent(ans);
             }
-            console.log(editButton, content);
             list.push(
                 <Paper key={ans._id + ans.author} style={paperStyle}>
                     <div>

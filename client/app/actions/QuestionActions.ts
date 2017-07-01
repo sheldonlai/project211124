@@ -20,7 +20,7 @@ export class QuestionActions extends BaseActions{
                 })
             }).catch(err => {
                 QuestionActions.handleError(dispatch, err, QuestionActionTypes.QuestionPreviewsError)
-            })
+            });
         }
     }
 
