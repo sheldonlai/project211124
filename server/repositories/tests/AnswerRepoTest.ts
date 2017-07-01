@@ -3,6 +3,7 @@ import {UserModel} from "../../models/User";
 import {AnswerRepository} from "../AnswerRepository";
 import {Answer, AnswerModel} from "../../models/Answer";
 import {FakeModels} from "./helpers/FakeModels";
+import {createRawDraftContentState} from "../../utils/TestUtils";
 
 require('source-map-support').install();
 
@@ -26,7 +27,7 @@ describe('AnswerRepoTest', function () {
                 sampleUser = user;
                 let newQuestion = new Question(
                     'AnswerRepoTest',
-                    'content',
+                    createRawDraftContentState(),
                     user,
                     [],
                     false
@@ -51,9 +52,9 @@ describe('AnswerRepoTest', function () {
     });
 
     it('should create new Answer', function () {
-        return ansRepo.create(new Answer(sampleQuestion, 'content', sampleUser, []))
+        return ansRepo.create(new Answer(sampleQuestion, createRawDraftContentState(), sampleUser, []))
             .then(function (answer) {
-                expect(answer.content).toBe('content');
+                expect(answer.content).toBeDefined();
                 expect(answer._id).not.toBe(undefined);
                 expect(answer.upVotes).toBe(0);
                 expect(answer.downVotes).toBe(0);
@@ -63,7 +64,7 @@ describe('AnswerRepoTest', function () {
 
     it('should fail when create with no question', function () {
         expect.assertions(1);
-        return ansRepo.create(new Answer(null, 'content', sampleUser, []))
+        return ansRepo.create(new Answer(null, createRawDraftContentState(), sampleUser, []))
             .catch(function (err) {
                 expect(err.message).toBeDefined();
                 return;
@@ -72,7 +73,7 @@ describe('AnswerRepoTest', function () {
 
     it('should fail when create with no author', function () {
         expect.assertions(1);
-        return ansRepo.create(new Answer(null, 'content', sampleUser, []))
+        return ansRepo.create(new Answer(null, createRawDraftContentState(), sampleUser, []))
             .catch(function (err) {
                 expect(err.message).toBeDefined();
                 return;
@@ -80,9 +81,9 @@ describe('AnswerRepoTest', function () {
     });
 
     it('should updated ', function () {
-        return ansRepo.create(new Answer(sampleQuestion, 'content', sampleUser, []))
+        return ansRepo.create(new Answer(sampleQuestion, createRawDraftContentState(), sampleUser, []))
             .then(function (answer) {
-                answer.content = 'new content';
+                answer.content = createRawDraftContentState();
                 answer.comments.push(new QuestionComment(
                     sampleUser, 'good'
                 ));
@@ -90,10 +91,10 @@ describe('AnswerRepoTest', function () {
                 answer.upVotes = 200;
                 return ansRepo.update(answer);
             }).then(function (answer) {
+                expect(answer.content).toBeDefined();
                 expect(answer.comments.length).toBe(1);
                 expect(answer.upVotes).toBe(200);
                 expect(answer.downVotes).toBe(100);
-                expect(answer.content).toBe('new content');
                 return;
             })
     })

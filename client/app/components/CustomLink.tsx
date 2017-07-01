@@ -4,7 +4,7 @@ const style = {
     textDecoration: "None"
 };
 
-export class CustomLink extends React.Component<LinkProps, void> {
+export class CustomLink extends React.Component<LinkProps> {
     render() {
         let tempProps = {...this.props};
         delete tempProps.children;

@@ -1,6 +1,5 @@
-import {ContentState, convertFromRaw, convertToRaw, DraftEntityType, Editor, EditorState, RichUtils} from "draft-js";
+import {ContentBlock, Editor, EditorState, RichUtils} from "draft-js";
 import * as React from "react";
-// import FormatBold from "material-ui/svg-icons/editor/format-bold";
 import "draft-js/dist/Draft.css";
 import "./custom_editor.css";
 
@@ -17,9 +16,7 @@ export class CustomEditor extends React.Component<CustomEditorProps, {}> {
     }
 
     onChange = (editorState: EditorState) => {
-        this.setState({editorState});
-        let content = editorState.getCurrentContent();
-        this.props.onChange(convertToRaw(content));
+        this.props.onChange(editorState);
     };
 
     onBoldClick = () => {
@@ -35,12 +32,12 @@ export class CustomEditor extends React.Component<CustomEditorProps, {}> {
         return 'not-handled';
     };
 
-    myBlockStyleFn = (contentBlock) => {
+    myBlockStyleFn = (contentBlock: ContentBlock) => {
         // const type = contentBlock.getType();
+        return '';
     };
 
     render() {
-        // const styleMap = this.state.editorState.getCurrentInlineStyle().toObject();
         return (
             <div>
                 <div>
@@ -48,7 +45,6 @@ export class CustomEditor extends React.Component<CustomEditorProps, {}> {
                 </div>
                 <div style={{minHeight: 150}}>
                     <Editor
-                        style={{minHeight: 200}}
                         editorState={this.props.value}
                         handleKeyCommand={this.handleKeyCommand}
                         readOnly={this.props.readOnly}

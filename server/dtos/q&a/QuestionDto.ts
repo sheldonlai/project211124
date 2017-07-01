@@ -1,21 +1,19 @@
 import {PublicityStatus} from "../../enums/PublicityStatus";
 import {QuestionComment, QuestionDifficulty} from "../../models/Question";
 import {UserDto} from "../auth/UserDto";
-
-export class QuestionDto{
+import {RawDraftContentState} from "draft-js";
+export interface QuestionDto{
     _id : string;
     title : string;
     author: UserDto;
-    content : string;
-    createdUtc?: Date;
+    content : RawDraftContentState;
+    createdUtc: Date;
     isPublished : boolean;
-    lastEditedUtc? : Date;
+    lastEditedUtc : Date;
+    upVotes: number;
+    downVotes: number;
     tags : any[];
     comments : QuestionComment[];
     publicityStatus:  PublicityStatus;
     difficulty: QuestionDifficulty;
-
-    constructor() {
-
-    }
 }

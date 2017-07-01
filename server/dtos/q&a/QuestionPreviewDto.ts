@@ -1,8 +1,11 @@
-import {QuestionPreview} from "./QuestionPreview";
 /**
- * Created by SHELDON on 6/24/2017.
+ * Created by SHELDON on 6/3/2017.
  */
+import {RawDraftContentState} from "draft-js";
 export interface QuestionPreviewDto {
-    featuredQuestions: QuestionPreview[];
-    myQuestions: QuestionPreview[];
+    title : string;
+    content : RawDraftContentState;
+    author: string;
+    createdUtc: Date;
+    answered: boolean;
 }

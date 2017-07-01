@@ -1,14 +1,8 @@
 import {AuthActionTypes} from "../constants/AuthActionTypes";
 import {ReducerStateStatus} from "../constants/ReducerStateStatus";
-import {CommonController} from "../api.controllers/CommonController";
-import {QuestionPreview} from "../../../server/dtos/q&a/QuestionPreview";
 
 export interface RegistrationReducerState {
     status : ReducerStateStatus;
-}
-
-const getLoginStatus = (): boolean => {
-    return (CommonController.getInstance().getToken())? true : false;
 }
 
 const initialState : RegistrationReducerState = {

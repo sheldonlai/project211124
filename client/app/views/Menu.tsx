@@ -12,11 +12,6 @@ const menuButtonStyle = {
     "height": "50px"
 };
 
-const flatButtonStyle = {
-    color: "white",
-    "fontSize": "14px"
-};
-
 export interface MenuClassProps {
     logout: () => void;
     loggedIn: boolean;
@@ -33,7 +28,7 @@ class MenuClass extends Component<MenuClassProps, any> {
         if (!this.props.loggedIn) {
             return (
                 <Link to={Routes.login}>
-                    <Button linkButton={true} color="contrast" style={menuButtonStyle}>
+                    <Button color="contrast" style={menuButtonStyle}>
                         Login
                     </Button>
                 </Link>

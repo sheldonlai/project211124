@@ -1,7 +1,6 @@
 import * as React from "react";
-import {Component, ReactNode} from "react";
+import {Component} from "react";
 import TextField from "material-ui/TextField";
-import {RegistrationRequest} from "../../models/RegistrationRequest";
 import {FormWrapper} from "../../components/FormWrapper";
 import {ErrorView} from "../../components/ErrorView";
 import Button from "material-ui/Button";
@@ -11,7 +10,8 @@ import {Routes} from "../../constants/Routes";
 import {RouterController} from "../../api.controllers/RouterController";
 import {AppStoreState} from "../../stores/AppStore";
 import AnimatedWrapper from "../../components/AnimatedWrapper";
-import {RouteComponentProps} from "react-router";
+import {FrontEndAuthModels} from "../../models/AuthModels";
+import RegistrationRequest = FrontEndAuthModels.RegistrationRequest;
 
 export interface RegistrationViewState {
     error : string;
@@ -79,29 +79,25 @@ export class RegistrationView extends Component<RegistrationViewProps, Registrat
             <FormWrapper>
                 <ErrorView errorTxt={this.state.error}/>
                 <TextField
-                    floatingLabelText="email"
-                    hintText="email"
+                    label="Email"
                     onChange={this.updateEmail}
                 /><br/>
                 <TextField
-                    floatingLabelText="username"
-                    hintText="username"
+                    label="Username"
                     onChange={this.updateUsername}
                 /><br />
                 <TextField
-                    errorText={this.state.passwordError}
-                    floatingLabelText="password"
-                    hintText="password"
+                    error={!!this.state.passwordError}
+                    label="password"
                     type="password"
                     onChange={this.updatePassword}
                 /><br />
                 <TextField
-                    floatingLabelText="Confirm password"
-                    hintText="Confirm Password"
+                    label="confirm password"
                     type="password"
                     onChange={this.updateConfirmPassword}
                 /><br />
-                <Button raised onTouchTap={this.submit} label="Submit"/>
+                <Button raised onClick={this.submit}>Submit</Button>
             </FormWrapper>
         )
     }

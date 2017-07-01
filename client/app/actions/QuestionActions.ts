@@ -1,10 +1,11 @@
 
 import {QuestionActionTypes} from '../constants/QuestionActionTypes';
 import {QuestionAPIController} from '../api.controllers/QuestionAPIController';
-import {QuestionDto} from "../../../server/dtos/q&a/QuestionDto";
 import {BaseActions} from "./BaseActions";
 import {AxiosResponse} from "axios";
-import {QuestionPageDto} from "../../../server/dtos/q&a/QuestionPageDto";
+import {FrontEndQuestionModels} from "../models/QuestionModels";
+import Question = FrontEndQuestionModels.Question;
+import QuestionPage = FrontEndQuestionModels.QuestionPage;
 
 let apiController : QuestionAPIController = QuestionAPIController.getInstance();
 
@@ -23,7 +24,7 @@ export class QuestionActions extends BaseActions{
         }
     }
 
-    static createQuestion(questionReq : QuestionDto) : (dispatch: any) => void {
+    static createQuestion(questionReq : Question) : (dispatch: any) => void {
         return function(dispatch) {
             apiController.createQuestion(questionReq).then(res => {
                 dispatch({
@@ -40,7 +41,7 @@ export class QuestionActions extends BaseActions{
         return function(dispatch) {
             dispatch({
                 type: QuestionActionTypes.FetchQuestionPageRequest
-            })
+            });
             apiController.fetchQuestionByTitle(name).then(res => {
                 dispatch({
                     type: QuestionActionTypes.FetchQuestionPageOK,
@@ -53,7 +54,7 @@ export class QuestionActions extends BaseActions{
     }
 
 
-    static changeQuestionPage(question: QuestionPageDto){
+    static changeQuestionPage(question: QuestionPage){
         return {
             type: QuestionActionTypes.ChangePostPage,
             data: question

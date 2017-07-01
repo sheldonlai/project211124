@@ -1,10 +1,9 @@
-import * as React from 'react';
-import { MenuItem } from 'material-ui/Menu';
-import TextField from 'material-ui/TextField';
-import Button from 'material-ui/Button';
+import * as React from "react";
+import {MenuItem} from "material-ui/Menu";
+import TextField from "material-ui/TextField";
+import Button from "material-ui/Button";
 import {connect} from "react-redux";
 import {QuestionActions} from "../../actions/QuestionActions";
-import {QuestionDto} from "../../../../server/dtos/q&a/QuestionDto";
 import {LoginRequiredComponent} from "../../components/LoginRequiredComponent";
 import {PublicityStatus} from "../../../../server/enums/PublicityStatus";
 import {QuestionDifficulty} from "../../../../server/models/Question";
@@ -13,8 +12,9 @@ import {QuestionCreationDto} from "../../../../server/dtos/q&a/QuestionCreationD
 import {DifficultyLevel, QuestionEducationLevel} from "../../../../server/enums/QuestionEducationLevel";
 import AnimatedWrapper from "../../components/AnimatedWrapper";
 import {CustomEditor} from "../../components/CustomEditor/CustomEditor";
-import {ContentState, EditorState} from "draft-js";
-// let SelectField = require('material-ui/SelectField').default;
+import {EditorState} from "draft-js";
+import {FrontEndQuestionModels} from "../../models/QuestionModels";
+import Question = FrontEndQuestionModels.Question;
 
 export interface CreateQuestionState {
     title: string;
@@ -33,7 +33,7 @@ class CreateQuestion extends LoginRequiredComponent<any, QuestionCreationDto> {
             author: '',
             tags: [],
             isPublished: false,
-            content: EditorState.createWithContent(ContentState.createFromText('')),
+            content: EditorState.createEmpty(),
             publicityStatus: PublicityStatus.PUBLIC,
             difficulty: {
                 educationLevel: QuestionEducationLevel.NOT_SPECIFIED,
@@ -46,11 +46,11 @@ class CreateQuestion extends LoginRequiredComponent<any, QuestionCreationDto> {
         this.setState({title: '', content: ''})
     };
 
-    titleChange = (event: any, value: string) => {
-        this.setState({title: value});
+    titleChange = (event: any) => {
+        this.setState({title: event.target.value});
     };
 
-    contentChange = (value: any) => {
+    contentChange = (value: EditorState) => {
         this.setState({content: value});
     };
 
@@ -97,11 +97,8 @@ class CreateQuestion extends LoginRequiredComponent<any, QuestionCreationDto> {
         return (
             <div style={{textAlign: 'center'}}>
                 <TextField
-                    id="Title"
                     label="Title"
                     type="text"
-                    helperText="Title"
-                    marginForm
                     value={this.state.title}
                     onChange={this.titleChange}
                 />
@@ -127,6 +124,6 @@ class CreateQuestion extends LoginRequiredComponent<any, QuestionCreationDto> {
 export const CreateQuestionPage = AnimatedWrapper(connect(
     (state: AppStoreState) => ({loggedIn: state.auth.loggedIn}),
     (dispatch) => ({
-        createQuestion: (question: QuestionDto) => dispatch(QuestionActions.createQuestion(question))
+        createQuestion: (question: Question) => dispatch(QuestionActions.createQuestion(question))
     })
 )(CreateQuestion));

@@ -8,24 +8,24 @@ import {QuestionPageDto} from "../dtos/q&a/QuestionPageDto";
 import {Answer} from "../models/Answer";
 import {AppError} from "../errors/AppError";
 import {BaseService} from "./BaseService";
-import {QuestionPreviewDto} from "../dtos/q&a/QuestionPreviewDto";
+import {QuestionPreviewCollectionsDto} from "../dtos/q&a/QuestionPreviewCollectionsDto";
 import {ClientError} from "../errors/HttpStatus";
 
 export interface IAnswerService {
-    createAnswer(user : User, answer: AnswerDto): Promise<AnswerDto>;
-    updateAnswer(user : User, answer: AnswerDto): Promise<AnswerDto>;
+    createAnswer(user: User, answer: AnswerDto): Promise<AnswerDto>;
+    updateAnswer(user: User, answer: AnswerDto): Promise<AnswerDto>;
 }
 
-export class AnswerService extends BaseService implements IAnswerService{
+export class AnswerService extends BaseService implements IAnswerService {
     private answerRepository: IAnswerRepository;
 
-    constructor(answerRepository : IAnswerRepository){
+    constructor(answerRepository: IAnswerRepository) {
         super();
 
         this.answerRepository = answerRepository;
     }
 
-    createAnswer(current_user : User, new_answer: AnswerDto): Promise<AnswerDto>{
+    createAnswer(current_user: User, new_answer: AnswerDto): Promise<AnswerDto> {
         let answerObj = new Answer(
             new_answer.question, new_answer.content, current_user
         );
@@ -33,7 +33,7 @@ export class AnswerService extends BaseService implements IAnswerService{
         return this.answerRepository.create(answerObj);
     }
 
-    updateAnswer(current_user: User, updated_answer: AnswerDto): Promise<AnswerDto>{
+    updateAnswer(current_user: User, updated_answer: AnswerDto): Promise<AnswerDto> {
         return this.answerRepository.getById(updated_answer._id).then((answer_found: Answer) => {
             this.checkPermissionForModification(updated_answer, answer_found, current_user);
 
@@ -53,20 +53,20 @@ export class AnswerService extends BaseService implements IAnswerService{
     }
 
     private checkPermissionForModification = (answer_by_user: AnswerDto, answer_found_in_db: Answer, currentUser: User) => {
-        if(answer_by_user._id != currentUser._id){
+        if (answer_by_user._id != currentUser._id) {
             throw new AppError("You are not the owner of this answer");
         }
         return true;
     }
-};
+}
 
 export interface IQuestionService {
-    getQuestionPreview(user? : User): Promise<QuestionPreviewDto>;
+    getQuestionPreview(user?: User): Promise<QuestionPreviewCollectionsDto>;
     createQuestion(question: QuestionDto, user: User): Promise<QuestionDto>;
     getQuestionPageByTitle(name: string): Promise<QuestionPageDto>;
     getUserQuestions(currentUser: User): Promise<QuestionDto[]>;
     updateQuestion(question: QuestionDto, user: User): Promise<QuestionDto>;
-};
+}
 
 export class QuestionService extends BaseService implements IQuestionService {
 
@@ -80,16 +80,16 @@ export class QuestionService extends BaseService implements IQuestionService {
         this.answerRepository = answerRepository;
     }
 
-    getQuestionPreview(user? : User): Promise<QuestionPreviewDto>{
+    getQuestionPreview(user?: User): Promise<QuestionPreviewCollectionsDto> {
         let promises = [];
-        promises.push(this.questionRepository.getAll({sort: "-createdUtc", limit: 25 }))
+        promises.push(this.questionRepository.getAll({sort: "-createdUtc", limit: 25}))
         if (user) {
             promises.push((this.questionRepository.getQuestionsByAuthor(user)));
         }
-        return Promise.all(promises).then((result)=> {
+        return Promise.all(promises).then((result) => {
             return {
-                featuredQuestions: result[0]? result[0] : [],
-                myQuestions: result[1]? result[1] : []
+                featuredQuestions: result[0] ? result[0] : [],
+                myQuestions: result[1] ? result[1] : []
             };
         })
     }

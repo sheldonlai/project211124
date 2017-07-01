@@ -1,15 +1,16 @@
-import {Component} from 'react';
-import {Link} from 'react-router-dom';
-import {Routes} from '../../constants/Routes';
-import * as React from 'react';
+import * as React from "react";
+import {Component} from "react";
+import {Link} from "react-router-dom";
+import {Routes} from "../../constants/Routes";
 import {connect} from "react-redux";
 import {AppStoreState} from "../../stores/AppStore";
 import {QuestionActions} from "../../actions/QuestionActions";
-import {QuestionReducerState} from "../../reducers/QuestionReducer";
-import {QuestionPreview} from "../../../../server/dtos/q&a/QuestionPreview";
+import {QuestionHomeReducerState} from "../../reducers/QuestionHomeReducer";
 import {ErrorReducerState} from "../../reducers/ErrorReducer";
+import {FrontEndQuestionModels} from "../../models/QuestionModels";
+import QuestionPreview = FrontEndQuestionModels.QuestionPreview;
 
-export interface QuestionViewProps extends QuestionReducerState {
+export interface QuestionViewProps extends QuestionHomeReducerState {
     loggedIn : boolean;
     globalError: ErrorReducerState;
     fetchQuestion: () => void;
@@ -22,7 +23,7 @@ class QuestionView extends Component<QuestionViewProps, any> {
     }
 
     componentWillMount(){
-        console.log(this.props)
+        console.log(this.props);
         if ((this.props.featuredQuestions.length === 0 || this.props.lastUpdated - Date.now() > 300000))
             this.props.fetchQuestion()
     }
@@ -33,10 +34,10 @@ class QuestionView extends Component<QuestionViewProps, any> {
                 <div key={e.title}>
                     <h2>{e.title}</h2>
                     <p>{e.content}</p>
-                    <p>{e.dateCreated}</p>
+                    <p>{e.createdUtc}</p>
                 </div>
             )) : undefined;
-    }
+    };
 
     render() {
         return (
@@ -57,4 +58,4 @@ export const QuestionPage = connect(
     (dispatch) => ({
         fetchQuestion: () => dispatch(QuestionActions.getQuestionPreviews())
     })
-)(QuestionView)
+)(QuestionView);

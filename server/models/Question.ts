@@ -4,6 +4,8 @@ import {User} from './User';
 import {PublicityStatus} from "../enums/PublicityStatus";
 import {DifficultyLevel, QuestionEducationLevel} from "../enums/QuestionEducationLevel";
 import {listNumericalEnumValues} from "../utils/EnumsUtil";
+import {RawDraftContentState} from "draft-js";
+
 export class QuestionComment {
     commentBy: User;
     commentContent: string;
@@ -22,7 +24,7 @@ export interface QuestionDifficulty {
 
 export class Question extends BaseModel {
     title: string;
-    content: any;
+    content: RawDraftContentState;
     author: User;
     tags: any[];
     upVotes: number;
@@ -34,7 +36,7 @@ export class Question extends BaseModel {
     publicityStatus: PublicityStatus;
     difficulty: QuestionDifficulty;
 
-    constructor(title: string, content: string, author: User, tags: any[],
+    constructor(title: string, content: RawDraftContentState, author: User, tags: any[],
                 isPublished?: boolean, publicityStatus?: PublicityStatus,
                 difficulty?: QuestionDifficulty) {
         super();

@@ -1,9 +1,10 @@
-import {QuestionComment} from "../../models/Question";
 import {CommentDto} from "./CommentDto";
+import {QuestionDto} from "./QuestionDto";
+import {RawDraftContentState} from "draft-js";
 export interface AnswerDto {
     _id: string;
-    question: any;
-    content: any;
+    question: QuestionDto;
+    content: RawDraftContentState;
     author: any;
     upVotes : number;
     downVotes: number;

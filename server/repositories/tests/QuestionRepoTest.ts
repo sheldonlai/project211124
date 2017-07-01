@@ -2,6 +2,7 @@ import {IQuestionRepository, QuestionRepository} from "../QuestionRepository";
 import {Question, QuestionComment, QuestionModel} from "../../models/Question";
 import {UserModel} from "../../models/User";
 import {FakeModels} from "./helpers/FakeModels";
+import {createRawDraftContentState} from "../../utils/TestUtils";
 
 const mongoose = require('mongoose');
 mongoose.Promise = global.Promise;
@@ -28,7 +29,7 @@ describe('QuestionRepoTest', function (){
 
     it('should fail with no author', function () {
         let newQuestion = new Question(
-           'title0', 'content', null, [], false
+           'title0', createRawDraftContentState(), null, [], false
         );
         expect.assertions(1);
         return questionRepo.create(newQuestion).catch(function(err){
@@ -42,7 +43,7 @@ describe('QuestionRepoTest', function (){
         return UserModel.create(fakeModels.localUser()).then(function(user){
             let newQuestion = new Question(
                 'title1',
-                'content',
+                createRawDraftContentState(),
                 user,
                 [],
                 false
@@ -51,8 +52,8 @@ describe('QuestionRepoTest', function (){
             newQuestion.lastEditedUtc = dateTime;
             return questionRepo.create(newQuestion).then(function(question){
                 expect(question._id).toBeDefined();
+                expect(question.content).toBeDefined();
                 expect(question.title).toBe('title1');
-                expect(question.content).toBe('content');
                 expect(question.lastEditedUtc).not.toEqual(dateTime);
                 console.log('test passed', question._id);
                 return;
@@ -63,13 +64,14 @@ describe('QuestionRepoTest', function (){
     it('should update', function () {
         let dateTime = new Date(2016, 1 ,1);
         let new_user;
+        let prev_content;
         // create user
         return UserModel.create(fakeModels.localUser()).then(function(user){
             // create new QuestionView
             new_user = user;
             let newQuestion = new Question(
                 'title',
-                'content',
+                createRawDraftContentState(),
                 user,
                 [],
                 false
@@ -84,7 +86,8 @@ describe('QuestionRepoTest', function (){
             question.comments.push(
                 new QuestionComment(new_user, 'comment')
             );
-            question.content = 'changed content';
+            prev_content = question.content;
+            question.content = createRawDraftContentState('changed');
 
             // should not change
             question.lastEditedUtc = dateTime;
@@ -92,7 +95,8 @@ describe('QuestionRepoTest', function (){
             return questionRepo.update(question);
         }).then(function(question){
             expect(question.lastEditedUtc).not.toEqual(dateTime);
-            expect(question.content).toBe('changed content');
+            expect(prev_content).toBeDefined();
+            expect(question.content).not.toBe(prev_content);
             expect(question.title).toBe('new');
             expect(question.isPublished).toBe(true);
             expect(question.comments.length).toBe(1);
@@ -105,7 +109,7 @@ describe('QuestionRepoTest', function (){
             new_user = user;
             let newQuestion = new Question(
                 'title3',
-                'content',
+                createRawDraftContentState(),
                 user,
                 [],
                 false
@@ -115,7 +119,6 @@ describe('QuestionRepoTest', function (){
             return questionRepo.getById(question._id);
         }).then(function(question){
             expect(question.title).toBe('title3');
-            expect(question.content).toBe('content');
         })
     });
 
@@ -125,7 +128,7 @@ describe('QuestionRepoTest', function (){
             new_user = user;
             let newQuestion = new Question(
                 'title4',
-                'content',
+                createRawDraftContentState(),
                 user,
                 [],
                 false
@@ -135,7 +138,6 @@ describe('QuestionRepoTest', function (){
             return questionRepo.getById(question._id.toString());
         }).then(function(question){
             expect(question.title).toBe('title4');
-            expect(question.content).toBe('content');
         })
     });
 
@@ -145,7 +147,7 @@ describe('QuestionRepoTest', function (){
             new_user = user;
             let newQuestion = new Question(
                 'title5',
-                'content',
+                createRawDraftContentState(),
                 user,
                 [],
                 false
@@ -166,7 +168,7 @@ describe('QuestionRepoTest', function (){
             new_user = user;
             let newQuestion = new Question(
                 'title6',
-                'content',
+                createRawDraftContentState(),
                 user,
                 [],
                 false

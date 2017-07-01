@@ -1,21 +1,20 @@
-import {Component} from 'react';
-import {Link} from 'react-router-dom';
-import {Routes} from '../../constants/Routes';
-import * as React from 'react';
+import * as React from "react";
+import {Component} from "react";
+import {Routes} from "../../constants/Routes";
 import {connect} from "react-redux";
 import {AppStoreState} from "../../stores/AppStore";
 import {QuestionActions} from "../../actions/QuestionActions";
-import {QuestionReducerState} from "../../reducers/QuestionReducer";
-import {QuestionPreview} from "../../../../server/dtos/q&a/QuestionPreview";
+import {QuestionHomeReducerState} from "../../reducers/QuestionHomeReducer";
 import {ErrorReducerState} from "../../reducers/ErrorReducer";
 import AnimatedWrapper from "../../components/AnimatedWrapper";
-import {Card, CardActions, CardHeader, CardMedia, CardTitle, CardText} from 'material-ui/Card';
-import {convertFromRaw} from "draft-js";
+import {Card, CardActions, CardHeader, CardMedia, CardText, CardTitle} from "material-ui/Card";
 import {CustomCard} from "../../components/CardComponent/CardComponent";
 import {CustomLink} from "../../components/CustomLink";
 import Button from "material-ui/Button";
+import {FrontEndQuestionModels} from "../../models/QuestionModels";
+import QuestionPreview = FrontEndQuestionModels.QuestionPreview;
 
-export interface QuestionViewProps extends QuestionReducerState {
+export interface QuestionViewProps extends QuestionHomeReducerState {
     loggedIn: boolean;
     globalError: ErrorReducerState;
     fetchQuestion: () => void;
@@ -25,6 +24,7 @@ class QuestionView extends Component<QuestionViewProps, any> {
 
     constructor(props) {
         super(props);
+        console.log(this.props)
     }
 
     componentWillMount() {
@@ -36,15 +36,12 @@ class QuestionView extends Component<QuestionViewProps, any> {
     featuredQuestions = () => {
         return this.props.featuredQuestions ?
             this.props.featuredQuestions.map((e: QuestionPreview) => {
-                    if (!e.content.entityMap) e.content.entityMap = {};
-                    const content = convertFromRaw(e.content);
-                    const text = content.getPlainText();
                     return (
                         <div key={e.title} style={{marginTop: 16}}>
                             <CustomLink to={Routes.question_by_title.replace(':title', e.title)}>
                                 <CustomCard
                                     title={e.title}
-                                    content={text}
+                                    content={e.content}
                                     date={e.createdUtc}
                                 />
                             </CustomLink>

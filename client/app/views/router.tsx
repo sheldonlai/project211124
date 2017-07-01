@@ -1,8 +1,8 @@
 import * as React from "react";
-import { MuiThemeProvider, createMuiTheme } from 'material-ui/styles';
-import createPalette from 'material-ui/styles/palette';
+import {createMuiTheme, MuiThemeProvider} from "material-ui/styles";
+import createPalette from "material-ui/styles/palette";
 import {Route, Router} from "react-router";
-import {Home, HomeComponent} from "./home/home";
+import {Home} from "./home/home";
 import {LoginPage} from "./auth/LoginView";
 import {Routes} from "../constants/Routes";
 import {RegistrationPage} from "./auth/RegistrationView";
@@ -11,7 +11,7 @@ import {RouterController} from "../api.controllers/RouterController";
 import {Provider} from "react-redux";
 import {Menu} from "./Menu";
 import {QuestionHomePage} from "./question/QuestionHome";
-import {QuestionPage} from "./question/QuestionPage";
+import {QuestionPageView} from "./question/QuestionPage";
 import TransitionGroup =require('react-transition-group/TransitionGroup');
 
 let muiTheme = createMuiTheme({
@@ -79,7 +79,7 @@ export class App extends React.Component<any, any> {
                             <Route path={Routes.question_by_title}
                                    render={({match, ...rest}) => (
                                        <TransitionGroup component={firstChild}>
-                                           <QuestionPage match={match} {...rest} />
+                                           <QuestionPageView match={match} {...rest} />
                                        </TransitionGroup>
                                    )}
                             />

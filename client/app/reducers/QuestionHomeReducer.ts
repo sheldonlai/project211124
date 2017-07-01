@@ -1,10 +1,10 @@
-import {AuthActionTypes} from "../constants/AuthActionTypes";
 import {ReducerStateStatus} from "../constants/ReducerStateStatus";
-import {QuestionPreview} from "../../../server/dtos/q&a/QuestionPreview";
-import {QuestionPreviewDto} from "../../../server/dtos/q&a/QuestionPreviewDto";
 import {QuestionActionTypes} from "../constants/QuestionActionTypes";
+import {FrontEndQuestionModels} from "../models/QuestionModels";
+import QuestionPreview = FrontEndQuestionModels.QuestionPreview;
+import QuestionPreviewCollections = FrontEndQuestionModels.QuestionPreviewCollections;
 
-export interface QuestionReducerState {
+export interface QuestionHomeReducerState {
     status : ReducerStateStatus;
     featuredQuestions :  QuestionPreview[];
     myQuestions : QuestionPreview[];
@@ -12,7 +12,7 @@ export interface QuestionReducerState {
     error: string;
 }
 
-const initialState : QuestionReducerState = {
+const initialState : QuestionHomeReducerState = {
     status : ReducerStateStatus.LOADING,
     featuredQuestions : [],
     myQuestions : [],
@@ -20,7 +20,7 @@ const initialState : QuestionReducerState = {
     error : ''
 };
 
-export const QuestionReducer = (state = initialState, action) : QuestionReducerState => {
+export const QuestionHomeReducer = (state = initialState, action) : QuestionHomeReducerState => {
     switch (action.type) {
         case QuestionActionTypes.QuestionPreviewsRequest:
             return {
@@ -31,7 +31,7 @@ export const QuestionReducer = (state = initialState, action) : QuestionReducerS
                 error : ''
             };
         case QuestionActionTypes.QuestionPreviewsOK:
-            let data: QuestionPreviewDto = action.data;
+            let data: QuestionPreviewCollections = action.data;
             return {
                 status : ReducerStateStatus.DONE,
                 featuredQuestions: data.featuredQuestions,

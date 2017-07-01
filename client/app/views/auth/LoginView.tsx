@@ -1,16 +1,16 @@
-import * as React from 'react';
-import {Component} from 'react';
-import Paper from 'material-ui/Paper';
-import TextField from 'material-ui/TextField';
-import Button from 'material-ui/Button';
-import {AuthActions} from '../../actions/AuthActions';
-import {LoginRequest} from '../../models/LoginRequest';
-import {Link} from 'react-router-dom';
-import {Routes} from '../../constants/Routes';
-import {FormWrapper} from '../../components/FormWrapper';
+import * as React from "react";
+import {Component} from "react";
+import TextField from "material-ui/TextField";
+import Button from "material-ui/Button";
+import {AuthActions} from "../../actions/AuthActions";
+import {Link} from "react-router-dom";
+import {Routes} from "../../constants/Routes";
+import {FormWrapper} from "../../components/FormWrapper";
 import {connect} from "react-redux";
 import {AppStoreState} from "../../stores/AppStore";
 import AnimatedWrapper from "../../components/AnimatedWrapper";
+import {FrontEndAuthModels} from "../../models/AuthModels";
+import LoginRequest = FrontEndAuthModels.LoginRequest;
 
 export interface LoginViewState {
     loginRequest: LoginRequest;
@@ -25,33 +25,31 @@ export class LoginView extends Component<any, any> {
         };
     }
 
-    updateUsername = (event) => {
+    updateEmail = (event) => {
         let loginReq: LoginRequest = this.state.loginRequest;
         loginReq.email = event.target.value;
         this.setState(loginReq);
-    }
+    };
 
     updatePassword = (event) => {
         let loginReq: LoginRequest = this.state.loginRequest;
         loginReq.password = event.target.value;
         this.setState(loginReq);
-    }
+    };
 
     submit = () => {
         this.props.login(this.state.loginRequest)
-    }
+    };
 
     render() {
         return (
             <FormWrapper>
                 <TextField
-                    floatingLabelText="username"
-                    hintText="username"
-                    onChange={this.updateUsername}
+                    label="email"
+                    onChange={this.updateEmail}
                 /><br/>
                 <TextField
-                    floatingLabelText="password"
-                    hintText="password"
+                    label="password"
                     type="password"
                     onChange={this.updatePassword}
                 /><br />
@@ -62,7 +60,7 @@ export class LoginView extends Component<any, any> {
                         Register Here
                     </Link>
                 </p>
-                <Button raised color="primary" label="login" onTouchTap={this.submit}/>
+                <Button raised color="primary" onClick={this.submit}>login</Button>
             </FormWrapper>
         )
     }

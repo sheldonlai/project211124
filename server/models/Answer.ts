@@ -2,11 +2,11 @@ import {model, Schema, Document} from 'mongoose';
 import {BaseModel} from './BaseModel';
 import {Question, QuestionComment} from './Question';
 import {User} from './User';
-
+import {RawDraftContentState} from "draft-js";
 
 export class Answer extends BaseModel{
     question: any;
-    content: any;
+    content: RawDraftContentState;
     author: any;
     upVotes : number;
     downVotes: number;
@@ -15,7 +15,7 @@ export class Answer extends BaseModel{
     comments: QuestionComment[];
 
     constructor(
-        question: Question, content: string, author: User, comments?: QuestionComment[]
+        question: Question, content: RawDraftContentState, author: User, comments?: QuestionComment[]
     ){
         super();
         this.question = question;

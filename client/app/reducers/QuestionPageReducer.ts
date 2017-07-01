@@ -2,14 +2,13 @@
  * Created by SHELDON on 6/24/2017.
  */
 import {ReducerStateStatus} from "../constants/ReducerStateStatus";
-import {QuestionPreview} from "../../../server/dtos/q&a/QuestionPreview";
-import {QuestionPreviewDto} from "../../../server/dtos/q&a/QuestionPreviewDto";
 import {QuestionActionTypes} from "../constants/QuestionActionTypes";
-import {QuestionPageDto} from "../../../server/dtos/q&a/QuestionPageDto";
+import {FrontEndQuestionModels} from "../models/QuestionModels";
+import QuestionPage = FrontEndQuestionModels.QuestionPage;
 
 export interface QuestionPageReducerState {
     status : ReducerStateStatus;
-    questionPage : QuestionPageDto;
+    questionPage : QuestionPage;
     lastUpdated: number;
     error: string;
 }
@@ -50,7 +49,7 @@ export const QuestionPageReducer = (state = initialState, action) : QuestionPage
                 questionPage : action.data,
                 lastUpdated: Date.now(),
                 error : ''
-            }
+            };
         default:
             return state;
     }

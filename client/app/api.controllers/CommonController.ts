@@ -1,9 +1,9 @@
-import {ApiController} from './ApiController';
-import {Routes} from '../constants/Routes';
-import {LoginRequest} from '../models/LoginRequest';
-import {AxiosPromise} from 'axios';
-import {RegistrationRequest} from '../models/RegistrationRequest';
+import {ApiController} from "./ApiController";
+import {AxiosPromise} from "axios";
 import {APIUrls} from "../../../server/urls";
+import {FrontEndAuthModels} from "../models/AuthModels";
+import LoginRequest = FrontEndAuthModels.LoginRequest;
+import RegistrationRequest = FrontEndAuthModels.RegistrationRequest;
 
 
 export class CommonController extends ApiController{

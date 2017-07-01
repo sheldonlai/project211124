@@ -2,10 +2,11 @@
 import {AuthActionTypes} from '../constants/AuthActionTypes';
 import {CommonController} from '../api.controllers/CommonController';
 import {Routes} from '../constants/Routes';
-import {LoginRequest} from '../models/LoginRequest';
-import {RegistrationRequest} from '../models/RegistrationRequest';
 import {RouterController} from "../api.controllers/RouterController";
 import {BaseActions} from "./BaseActions";
+import {FrontEndAuthModels} from "../models/AuthModels";
+import LoginRequest = FrontEndAuthModels.LoginRequest;
+import RegistrationRequest = FrontEndAuthModels.RegistrationRequest;
 
 let apiController : CommonController = CommonController.getInstance();
 

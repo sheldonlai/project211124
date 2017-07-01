@@ -12,24 +12,24 @@ import Divider from "material-ui/Divider";
 import Paper from "material-ui/Paper";
 import TextField from "material-ui/TextField";
 import {UserDto} from "../../../../server/dtos/auth/UserDto";
-import {QuestionPageDto} from "../../../../server/dtos/q&a/QuestionPageDto";
-import {AnswerDto} from "../../../../server/dtos/q&a/AnswerDto";
 import {CommentDto} from "../../../../server/dtos/q&a/CommentDto";
 import {Prompt, RouteComponentProps} from "react-router";
 import {QuestionPageReducerState} from "../../reducers/QuestionPageReducer";
-import {QuestionPageAnswer} from "../../models/QuestionPageAnswer";
+import {FrontEndQuestionModels} from "../../models/QuestionModels";
 import AnimatedWrapper from "../../components/AnimatedWrapper";
-import { CircularProgress } from 'material-ui/Progress';
-import AddIcon from 'material-ui-icons/Add';
+import {CircularProgress} from "material-ui/Progress";
+import AddIcon from "material-ui-icons/Add";
 import {CustomEditor} from "../../components/CustomEditor/CustomEditor";
 import {isNullOrUndefined} from "util";
-import {ContentState, convertFromRaw, EditorState, RawDraftContentState} from "draft-js";
+import {EditorState} from "draft-js";
+import QuestionPage = FrontEndQuestionModels.QuestionPage;
+import Answer = FrontEndQuestionModels.Answer;
 
 
 export interface QuestionPageProps extends QuestionPageReducerState, RouteComponentProps<{ title: string }> {
     user: UserDto
     fetchQuestionPage: (title: string) => any;
-    changeQuestionPage: (questionPage: QuestionPageDto) => any;
+    changeQuestionPage: (questionPage: QuestionPage) => any;
 }
 
 export interface QuestionPageState {
@@ -39,7 +39,7 @@ export interface QuestionPageState {
     editComment: boolean;
     commentId: string;
     loading: boolean;
-    questionPage: QuestionPageDto;
+    questionPage: QuestionPage;
 }
 
 let headerStyle = {
@@ -48,6 +48,7 @@ let headerStyle = {
 };
 
 let paperStyle = {height: "100%", padding: 15, paddingBottom: 0};
+
 
 export class QuestionPageComponent extends React.Component<QuestionPageProps, QuestionPageState> {
 
@@ -101,23 +102,21 @@ export class QuestionPageComponent extends React.Component<QuestionPageProps, Qu
 
 
     onQuestionTitleChange = (event: any, value: string) => {
-        let temp: QuestionPageDto = this.state.questionPage;
+        let temp: QuestionPage = this.state.questionPage;
         temp.question.title = value;
         this.setState({questionPage:temp});
     };
-    onQuestionContentChange = (text: string) => {
-        let temp: QuestionPageDto = this.state.questionPage;
+    onQuestionContentChange = (text: any) => {
+        let temp: QuestionPage = this.state.questionPage;
         temp.question.content = text;
         this.setState({questionPage:temp});
     };
-    onAnswerChange = (text: string) => {
-        let temp: QuestionPageDto = this.state.questionPage;
-        temp.answers.map((answer: AnswerDto) => {
-            if (answer._id === this.state.answerId) {
-                answer.content = text;
-            }
-            return answer;
-        });
+    onAnswerChange = (editorState: EditorState) => {
+        let temp: QuestionPage = this.state.questionPage;
+        temp.answers = temp.answers.map((state) => {
+            state.content = (this.state.answerId === state._id)? editorState: state.content;
+            return state;
+        })
         this.setState({questionPage:temp});
     };
 
@@ -136,7 +135,7 @@ export class QuestionPageComponent extends React.Component<QuestionPageProps, Qu
 
     addAnswer = () => {
         let questionPage = this.state.questionPage;
-        questionPage.answers.push(new QuestionPageAnswer(questionPage.question, this.props.user));
+        questionPage.answers.push(new Answer(questionPage.question, this.props.user));
         this.setState({editAnswer: true, questionPage:questionPage});
 
     };
@@ -159,23 +158,22 @@ export class QuestionPageComponent extends React.Component<QuestionPageProps, Qu
         )
     };
 
-    getEditor = (value: RawDraftContentState, onChange: (text: string) => any, onSubmit: () => any, readOnly:boolean =false) => {
+    getEditor = (value: EditorState, onChange: (state: EditorState) => any, onSubmit: () => any, readOnly:boolean =false) => {
         const button = (
             <div style={{textAlign: "right"}}>
-                <Button raised label="save" onClick={onSubmit}/>
+                <Button raised  onClick={onSubmit}>save</Button>
             </div>
         );
-        if (!value.entityMap) value.entityMap = {};
-        const editorState = EditorState.createWithContent(convertFromRaw(value))
+
         return (
             <div style={{marginBottom: 15}}>
-                    <CustomEditor value={editorState} onChange={onChange} readOnly={readOnly}/>
+                    <CustomEditor value={value} onChange={onChange} readOnly={readOnly}/>
                     {!readOnly && button}
             </div>
         )
     };
 
-    getAnswerContent = (ans: AnswerDto) => {
+    getAnswerContent = (ans: Answer) => {
         return (
             <div>
                 this.getEditor(ans.content, this.onAnswerChange, this.submitStudentAnswer, true);
@@ -189,7 +187,7 @@ export class QuestionPageComponent extends React.Component<QuestionPageProps, Qu
         let question = this.state.questionPage.question;
         let editBut = ( this.props.user && question.author.username == this.props.user.username && !this.state.editQuestion) ?
             <div style={{float: "right"}}>
-                <Button raised label="Edit" onClick={this.editPost} style={{float: "right"}}/>
+                <Button raised onClick={this.editPost} style={{float: "right"}}>Edit</Button>
             </div>
             : undefined;
         let title = (!this.state.editQuestion) ?
@@ -264,7 +262,7 @@ export class QuestionPageComponent extends React.Component<QuestionPageProps, Qu
         if (this.props.user != undefined && !this.state.editAnswer) {
             list.push(
                 <div key="edit-answer-button" style={{float: 'right', marginTop: 5}}>
-                    <Button fab onTouchTap={this.addAnswer}>
+                    <Button fab onClick={this.addAnswer}>
                         <AddIcon/>
                     </Button>
                 </div>
@@ -274,15 +272,6 @@ export class QuestionPageComponent extends React.Component<QuestionPageProps, Qu
     };
 
     editComment = (index?: number) => {
-        // let comments = this.state.questionPage.comments;
-        // if (index == null) {
-        //     comments.push(this.generateNewComment());
-        //     index = comments.length - 1;
-        //     let updateObj = this.state.questionPage;
-        //     updateObj.comments = comments;
-        //     this.props.onChange(updateObj);
-        // }
-        // this.setState({editComment: true, commentId: index});
     };
 
     generateNewComment = (): CommentDto => {
@@ -304,10 +293,10 @@ export class QuestionPageComponent extends React.Component<QuestionPageProps, Qu
         if (this.state.questionPage == null) {
             return (
                 <div style={{height: "100%", margin: 10, padding: "200px 0px", textAlign: "center"}}>
-                    <CircularProgress
-                        size={150}
-                        style={{display: 'inline-block', position: 'relative'}}
-                    />
+                    {/*<CircularProgress*/}
+                        {/*size={150}*/}
+                        {/*style={{display: 'inline-block', position: 'relative'}}*/}
+                    {/*/>*/}
                 </div>
             )
         }
@@ -328,13 +317,13 @@ export class QuestionPageComponent extends React.Component<QuestionPageProps, Qu
     }
 }
 
-export const QuestionPage = AnimatedWrapper(connect(
+export const QuestionPageView = AnimatedWrapper(connect(
     (state: AppStoreState) => ({
         user: state.auth.user,
         ...state.questionPage
     }),
     (dispatch) => ({
         fetchQuestionPage: (title: string) => dispatch(QuestionActions.fetchQuestionPage(title)),
-        changeQuestionPage: (questionPage: QuestionPageDto) => dispatch(QuestionActions.changeQuestionPage(questionPage))
+        changeQuestionPage: (questionPage: QuestionPage) => dispatch(QuestionActions.changeQuestionPage(questionPage))
     })
 )(QuestionPageComponent));
