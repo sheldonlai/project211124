@@ -8,10 +8,10 @@ import {QuestionHomeReducerState} from "../../reducers/QuestionHomeReducer";
 import {ErrorReducerState} from "../../reducers/ErrorReducer";
 import AnimatedWrapper from "../../components/AnimatedWrapper";
 import {Card, CardActions, CardHeader, CardMedia, CardText, CardTitle} from "material-ui/Card";
-import {CustomCard} from "../../components/CardComponent/CardComponent";
 import {CustomLink} from "../../components/CustomLink";
 import Button from "material-ui/Button";
 import {FrontEndQuestionModels} from "../../models/QuestionModels";
+import {QuestionPreviewCardsComponent} from "./QuestionPreviewCardsComponent";
 import QuestionPreview = FrontEndQuestionModels.QuestionPreview;
 
 export interface QuestionViewProps extends QuestionHomeReducerState {
@@ -20,36 +20,12 @@ export interface QuestionViewProps extends QuestionHomeReducerState {
     fetchQuestion: () => void;
 }
 
-class QuestionView extends Component<QuestionViewProps, any> {
-
-    constructor(props) {
-        super(props);
-        console.log(this.props)
-    }
-
+class QuestionHomeComponent extends Component<QuestionViewProps> {
     componentWillMount() {
         console.log(this.props);
         if ((this.props.featuredQuestions.length === 0 || this.props.lastUpdated - Date.now() > 300000))
             this.props.fetchQuestion()
     }
-
-    featuredQuestions = () => {
-        return this.props.featuredQuestions ?
-            this.props.featuredQuestions.map((e: QuestionPreview) => {
-                    return (
-                        <div key={e.title} style={{marginTop: 16}}>
-                            <CustomLink to={Routes.question_by_title.replace(':title', e.title)}>
-                                <CustomCard
-                                    title={e.title}
-                                    content={e.content}
-                                    date={e.createdUtc}
-                                />
-                            </CustomLink>
-                        </div>
-                    )
-                }
-            ) : undefined;
-    };
 
     createQuestionButton = () => {
         if (this.props.loggedIn)
@@ -61,7 +37,7 @@ class QuestionView extends Component<QuestionViewProps, any> {
         return (
             <div>
                 {this.createQuestionButton()}
-                {this.featuredQuestions()}
+                <QuestionPreviewCardsComponent list={this.props.featuredQuestions} />
             </div>
         )
     }
@@ -76,4 +52,4 @@ export const QuestionHomePage = AnimatedWrapper(connect(
     (dispatch) => ({
         fetchQuestion: () => dispatch(QuestionActions.getQuestionPreviews())
     })
-)(QuestionView));
+)(QuestionHomeComponent));

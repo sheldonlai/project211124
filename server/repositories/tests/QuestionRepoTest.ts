@@ -67,7 +67,7 @@ describe('QuestionRepoTest', function (){
         let prev_content;
         // create user
         return UserModel.create(fakeModels.localUser()).then(function(user){
-            // create new QuestionView
+            // create new QuestionHomeComponent
             new_user = user;
             let newQuestion = new Question(
                 'title',

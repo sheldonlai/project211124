@@ -14,11 +14,10 @@ import AnimatedWrapper from "../../components/AnimatedWrapper";
 import {CustomEditor} from "../../components/CustomEditor/CustomEditor";
 import {EditorState} from "draft-js";
 import {FrontEndQuestionModels} from "../../models/QuestionModels";
-import Question = FrontEndQuestionModels.Question;
-import Grid from 'material-ui/Grid';
-import {withStyles, createStyleSheet} from 'material-ui/styles';
-import Chip from 'material-ui/Chip';
+import Grid from "material-ui/Grid";
+import {createStyleSheet, withStyles} from "material-ui/styles";
 import {TagsSelector} from "../../components/TagsComponent/TagsComponent";
+import Question = FrontEndQuestionModels.Question;
 
 const styleSheet = createStyleSheet('CreateQuestion', theme => ({
     root: {
@@ -95,10 +94,7 @@ class CreateQuestion extends LoginRequiredComponent<any, QuestionCreationDto> {
     }
 
     render() {
-        let folderMenu;
         const classes = this.props.classes;
-
-
         return (
             <Grid container justify="center" gutter={0}>
                 <Grid item xs={12}>

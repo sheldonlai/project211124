@@ -1,14 +1,13 @@
-import * as express from 'express';
-import * as mongoose from 'mongoose';
-import * as path from 'path';
-import * as bodyParser from 'body-parser';
-import * as cookieParser from 'cookie-parser';
-import * as helmet from 'helmet';
-import {NextFunction, Request, Response} from 'express';
-import {PageProvider} from './routes/PageProvider';
-import {HomeAPI} from './routes/HomeAPI';
+import * as express from "express";
+import {NextFunction, Request, Response} from "express";
+import * as mongoose from "mongoose";
+import * as path from "path";
+import * as bodyParser from "body-parser";
+import * as cookieParser from "cookie-parser";
+import * as helmet from "helmet";
+import {PageProvider} from "./routes/PageProvider";
+import {HomeAPI} from "./routes/HomeAPI";
 import {QuestionAPI} from "./routes/QuestionAPI";
-import {AnswerAPI} from "./routes/AnswerAPI";
 import {AuthenticationAPI} from "./routes/AuthenticationAPI";
 import {config} from "./config";
 import {ServiceProvider} from "./Container";
@@ -91,7 +90,7 @@ export class Server {
         /* Home */
         new HomeAPI(router);
 
-        /* QuestionView Answer */
+        /* QuestionHomeComponent Answer */
 
         new QuestionAPI(router, ServiceProvider.QuestionService);
 

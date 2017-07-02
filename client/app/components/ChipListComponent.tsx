@@ -10,6 +10,9 @@ export interface ChipListComponentProps {
     [key: string]: any;
 }
 export class ChipListComponent extends Component<ChipListComponentProps> {
+    chipStyle = {
+        display: "inline-block"
+    };
     handleRequestDelete = (data) => {
         let chipData = [...this.props.chips];
         const chipToDelete = chipData.indexOf(data);
@@ -20,16 +23,16 @@ export class ChipListComponent extends Component<ChipListComponentProps> {
     render() {
         return (<div>
             {this.props.chips.map(data => {
-                const value = (this.props.keyName) ? data[this.props.keyName] : data
+                const value = (this.props.keyName) ? data[this.props.keyName] : data;
                 let rest = {...this.props};
                 delete rest.chips;
                 delete rest.keyName;
                 delete rest.onRequestDelete;
                 delete rest.handleRequestDelete;
                 return (
+                <div style={this.chipStyle} key={value}>
                     <Chip
                         label={value}
-                        key={value}
                         onRequestDelete={
                             this.props.handleRequestDelete ?
                                 () => this.handleRequestDelete(data) :
@@ -37,6 +40,7 @@ export class ChipListComponent extends Component<ChipListComponentProps> {
                         }
                         {...rest}
                     />
+                </div>
                 );
             })}
         </div>);
