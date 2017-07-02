@@ -39,11 +39,11 @@ export class Server {
 
         /* Set up a template engine */
         this.app.engine('html', es6Renderer);
-        this.app.set('views', './server/views');
+        this.app.set('views', './templates');
         this.app.set('view engine', 'html');
 
         this.app.get('/123', function(req, res) {
-            let x = es6Renderer('emailVerificationTemplate.html', {locals: {name: 'Welcome!', link:"qwe"}});
+            let x = es6Renderer('./templates/emailVerificationTemplate.html', {locals: {name: 'Welcome!', link:"qwe"}});
             console.log(x);
             res.json(x);
         });

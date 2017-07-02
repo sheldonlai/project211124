@@ -6,6 +6,7 @@ import {AuthenticationService} from "./services/AuthenticationService";
 import {QuestionService} from "./services/QuestionService";
 import {EmailVerificationRepository} from "./repositories/EmailVerificationRepository";
 import {IMailService, MailService} from "./services/MailService";
+import {TemplatesProvider} from "./services/TemplatesProvider";
 
 export class RepositoryProvider {
     static AnswerRepository = new AnswerRepository();
@@ -17,8 +18,13 @@ export class RepositoryProvider {
 
 export class ServiceProvider {
 
+    static TemplatesProvider: TemplatesProvider = new TemplatesProvider();
     static MailService: IMailService = new MailService();
-    static AuthenticationService = new AuthenticationService(ServiceProvider.MailService, RepositoryProvider.UserRepository, RepositoryProvider.EmailVerificationRepository);
+    static AuthenticationService = new AuthenticationService(
+        ServiceProvider.MailService,
+        ServiceProvider.TemplatesProvider,
+        RepositoryProvider.UserRepository,
+        RepositoryProvider.EmailVerificationRepository);
     static QuestionService = new QuestionService(RepositoryProvider.QuestionRepository, RepositoryProvider.AnswerRepository);
 
 }
