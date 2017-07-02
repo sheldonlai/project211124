@@ -42,15 +42,17 @@ export interface IAuthenticationService {
 export class AuthenticationService extends BaseService implements IAuthenticationService {
 
     private mailService: IMailService;
+    private templatesProvider: TemplatesProvider;
     private userRepository: IUserRepository;
     private emailVerificationRepository: IEmailVerificationRepository;
-    private templateProvider: TemplatesProvider = new TemplatesProvider();
 
     constructor(mailService: IMailService,
+                templatesProvider: TemplatesProvider,
                 userRepository: IUserRepository,
                 emailVerificationRepository: IEmailVerificationRepository) {
         super();
         this.mailService = mailService;
+        this.templatesProvider = templatesProvider;
         this.userRepository = userRepository;
         this.emailVerificationRepository = emailVerificationRepository;
     }
@@ -97,7 +99,7 @@ export class AuthenticationService extends BaseService implements IAuthenticatio
 
     sendEmailVerification(currentUser: User): Promise<any> {
         let code: string = StringUtils.genRandomString(32);
-        let html: string = this.templateProvider.emailVerification(currentUser.username, code);
+        let html: string = this.templatesProvider.emailVerification(currentUser.username, code);
         console.log(html);
         let options: SendMailOptions = new MailOptionsBuilder()
             .setReceiver(currentUser.email)

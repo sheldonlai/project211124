@@ -28,4 +28,5 @@ export class MailTransporters {
     });
 
     public static Default = MailTransporters.Gmail;
+
 }
