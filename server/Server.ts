@@ -15,6 +15,7 @@ import {ServiceProvider} from "./Container";
 import {AppError} from "./errors/AppError";
 
 let favicon = require('serve-favicon');
+let morgan = require('morgan');
 
 export class Server {
     public app: express.Application;
@@ -41,6 +42,7 @@ export class Server {
         this.app.use(bodyParser.urlencoded({extended: false}));
         this.app.use(bodyParser.json({limit: '50mb'}));
         this.app.use(cookieParser());
+        this.app.use(morgan('dev'));
 
         /* API for client side */
         this.api();

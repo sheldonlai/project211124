@@ -98,32 +98,39 @@ export class AuthenticationService extends BaseService implements IAuthenticatio
     }
 
     sendEmailVerification(currentUser: User): Promise<any> {
-        let code: string = StringUtils.genRandomString(32);
-        let verificationLink: string = "http://localhost:3000/api/auth/verify/" + code; // TODO: try not to hardcode
-        let html: string = this.templatesProvider.emailVerification(currentUser.username, verificationLink);
-        let options: SendMailOptions = new MailOptionsBuilder()
-            .setReceiver(currentUser.email)
-            .setSubject("Askalot is asking you to confirm") // TODO: get string from a "messages" class
-            .setHTML(html)
-            .build();
-        return this.mailService.sendMail(options);
+        let emailVerification: EmailVerification = new EmailVerification(
+            currentUser._id,
+            StringUtils.genRandomString(32),
+            new Date()
+        );
+        return this.emailVerificationRepository.create(emailVerification).then(() => {
+            let verificationLink: string = "http://localhost:3000/api/auth/verify/" + emailVerification.code; // TODO: try not to hardcode
+            let html: string = this.templatesProvider.emailVerification(currentUser.username, verificationLink);
+            let options: SendMailOptions = new MailOptionsBuilder()
+                .setReceiver(currentUser.email)
+                .setSubject("Askalot is asking you to confirm") // TODO: get string from a "messages" class
+                .setHTML(html)
+                .build();
+            return this.mailService.sendMail(options);
+        });
     }
 
     verifyAccount(code: string): Promise<User> {
         return this.emailVerificationRepository.findByCode(code)
             .then((emailVerification: EmailVerification) => {
                 if (!emailVerification) {
+                    console.log(code);
                     throw new AppError("Invalid confirmation code");
-                } else {
-                    return this.userRepository.getById(emailVerification.code);
                 }
+                return this.emailVerificationRepository.deleteById(emailVerification._id);
+            }).then((deletedVerification: EmailVerification) => {
+                return this.userRepository.getById(deletedVerification.user);
             }).then((user: User) => {
                 if (user.verified) {
                     throw new AppError("Account already verified.", ClientError.BAD_REQUEST);
-                } else {
-                    user.verified = true; // delete verification entity
-                    return this.userRepository.update(user);
                 }
+                user.verified = true;
+                return this.userRepository.update(user);
             })
     }
 

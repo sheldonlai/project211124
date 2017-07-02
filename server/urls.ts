@@ -7,7 +7,8 @@ export class APIUrls {
 
     /* authentication */
     static Login = "/auth/login";
-    static Register= "/auth/register";
+    static Register = "/auth/register";
+    static Verify = "/auth/verify/:code";
 
     /* Question & Answer */
     static CreateQuestion = "/create-question";

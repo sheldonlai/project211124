@@ -17,6 +17,7 @@ export class AuthenticationAPI extends BaseAPI {
         this.service = service;
         router.post(APIUrls.Login, this.login);
         router.post(APIUrls.Register, this.register);
+        router.get(APIUrls.Verify, this.verify);
 
     }
 
@@ -24,12 +25,17 @@ export class AuthenticationAPI extends BaseAPI {
         let regReq: RegistrationDto = req.body;
         let result: Promise<User> = this.service.registerLocalUser(regReq.email, regReq.username, regReq.password);
         this.respondPromise(result, res, next);
-    }
+    };
 
     public login = (req: Request, res: Response, next: NextFunction) => {
         let loginReq : LoginDto = req.body;
         let result: Promise<any> =  this.service.login(loginReq.email, loginReq.password);
         this.respondPromise(result, res, next);
-    }
+    };
 
+    public verify = (req: Request, res: Response, next: NextFunction) => {
+        let code: string = req.params.code;
+        let result: Promise<User> = this.service.verifyAccount(code);
+        this.respondPromise(result, res, next);
+    };
 }
