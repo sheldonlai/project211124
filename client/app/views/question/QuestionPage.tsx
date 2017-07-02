@@ -6,7 +6,7 @@ import {ChangeEvent} from "react";
 import {connect} from "react-redux";
 import {AppStoreState} from "../../stores/AppStore";
 import {QuestionActions} from "../../actions/QuestionActions";
-import {grey300, grey800} from "material-ui/styles/colors";
+import {grey} from "material-ui/styles/colors";
 import Button from "material-ui/Button";
 import Divider from "material-ui/Divider";
 import Paper from "material-ui/Paper";
@@ -25,6 +25,7 @@ import {EditorState} from "draft-js";
 import QuestionPage = FrontEndQuestionModels.QuestionPage;
 import Answer = FrontEndQuestionModels.Answer;
 import cloneQuestionPage = FrontEndQuestionModels.cloneQuestionPage;
+import {ChipListComponent} from "../../components/ChipListComponent";
 
 
 export interface QuestionPageProps extends QuestionPageReducerState, RouteComponentProps<{ title: string }> {
@@ -210,18 +211,19 @@ export class QuestionPageComponent extends React.Component<QuestionPageProps, Qu
         if (this.state.editQuestion) {
             content = this.getEditor(this.state.questionPage.question.content, this.onQuestionContentChange, this.submitPost);
         } else {
-            let tags = (this.state.questionPage.question.tags != null) ?
-                this.state.questionPage.question.tags.map((name: string, index) => {
-                    return <span style={{fontSize: 14, color: grey800, backgroundColor: grey300, padding: 4, margin: 4}}
-                                 key={name+index}
+            let tags = (this.state.questionPage.question.tags) ?
+                this.state.questionPage.question.tags.map((tag: any, index) => {
+                    return <span style={{fontSize: 14, color: grey[800], backgroundColor: grey[300], padding: 4, margin: 4}}
+                                 key={tag.name+index}
                     >
-                        {name}
+                        {tag.tag}
                     </span>
                 }) : null;
             content =
                 <div>
                     {this.getEditor(question.content, this.onQuestionContentChange, this.submitPost, true)}
                     <div style={{height: 24}}>
+                        {/*<ChipListComponent chips={tags} keyName={"tag"} />*/}
                         {tags}
                     </div>
                     <Divider />

@@ -94,7 +94,7 @@ const schema = new Schema({
 
 
 const autoPopulateUsers = function(next) {
-    this.populate(['author', "comments.commentBy"]);
+    this.populate(['author', "comments.commentBy", "tags"]);
     next();
 };
 

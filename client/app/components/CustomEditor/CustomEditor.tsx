@@ -10,7 +10,13 @@ export interface CustomEditorProps {
     height?: number;
 }
 
-export class CustomEditor extends React.Component<CustomEditorProps, {}> {
+const style = {
+    border: "1px #ececec solid",
+    marginTop: "10px",
+    marginBottom: "10px"
+}
+
+export class CustomEditor extends React.Component<CustomEditorProps> {
     constructor(props) {
         super(props);
     }
@@ -32,18 +38,21 @@ export class CustomEditor extends React.Component<CustomEditorProps, {}> {
         return 'not-handled';
     };
 
+
     myBlockStyleFn = (contentBlock: ContentBlock) => {
         // const type = contentBlock.getType();
         return '';
     };
 
     render() {
+        let modifiedStyle = style;
+        modifiedStyle['height'] = this.props.height? this.props.height: 150;
         return (
             <div>
                 <div>
 
                 </div>
-                <div style={{minHeight: 150}}>
+                <div style={modifiedStyle}>
                     <Editor
                         editorState={this.props.value}
                         handleKeyCommand={this.handleKeyCommand}

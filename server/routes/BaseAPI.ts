@@ -1,8 +1,4 @@
-import {NextFunction, Request, Response, Router} from "express";
-
-/**
- * Created by Phillip on 2017-06-04.
- */
+import {NextFunction, Response} from "express";
 
 export abstract class BaseAPI {
 

@@ -6,12 +6,14 @@ import {AuthenticationService} from "./services/AuthenticationService";
 import {QuestionService} from "./services/QuestionService";
 import {EmailVerificationRepository} from "./repositories/EmailVerificationRepository";
 import {IMailService, MailService} from "./services/MailService";
+import {TagRepository} from "./repositories/TagRepository";
 
 export class RepositoryProvider {
     static AnswerRepository = new AnswerRepository();
     static QuestionRepository = new QuestionRepository();
     static UserRepository = new UserRepository();
     static EmailVerificationRepository = new EmailVerificationRepository();
+    static TagRepository = new TagRepository();
 
 }
 
@@ -19,6 +21,6 @@ export class ServiceProvider {
 
     static MailService: IMailService = new MailService();
     static AuthenticationService = new AuthenticationService(ServiceProvider.MailService, RepositoryProvider.UserRepository, RepositoryProvider.EmailVerificationRepository);
-    static QuestionService = new QuestionService(RepositoryProvider.QuestionRepository, RepositoryProvider.AnswerRepository);
+    static QuestionService = new QuestionService(RepositoryProvider.QuestionRepository, RepositoryProvider.AnswerRepository, RepositoryProvider.TagRepository);
 
 }
