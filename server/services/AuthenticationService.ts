@@ -99,11 +99,11 @@ export class AuthenticationService extends BaseService implements IAuthenticatio
 
     sendEmailVerification(currentUser: User): Promise<any> {
         let code: string = StringUtils.genRandomString(32);
-        let html: string = this.templatesProvider.emailVerification(currentUser.username, code);
-        console.log(html);
+        let verificationLink: string = "http://localhost:3000/api/auth/verify/" + code; // TODO: try not to hardcode
+        let html: string = this.templatesProvider.emailVerification(currentUser.username, verificationLink);
         let options: SendMailOptions = new MailOptionsBuilder()
             .setReceiver(currentUser.email)
-            .setSubject("Askalot is asking you to confirm") // Get string from messages
+            .setSubject("Askalot is asking you to confirm") // TODO: get string from a "messages" class
             .setHTML(html)
             .build();
         return this.mailService.sendMail(options);

@@ -15,7 +15,6 @@ import {ServiceProvider} from "./Container";
 import {AppError} from "./errors/AppError";
 
 let favicon = require('serve-favicon');
-let es6Renderer = require('express-es6-template-engine');
 
 export class Server {
     public app: express.Application;
@@ -36,17 +35,6 @@ export class Server {
     private configure(): void {
         /* Database */
         this.connectMongoose();
-
-        /* Set up a template engine */
-        this.app.engine('html', es6Renderer);
-        this.app.set('views', './templates');
-        this.app.set('view engine', 'html');
-
-        this.app.get('/123', function(req, res) {
-            let x = es6Renderer('./templates/emailVerificationTemplate.html', {locals: {name: 'Welcome!', link:"qwe"}});
-            console.log(x);
-            res.json(x);
-        });
 
         /* Third party middleware */
         this.app.use(helmet());
@@ -105,7 +93,7 @@ export class Server {
        // console.log(err.message);   err may not be an AppError, need to check whether status presents or not
        //  console.log(err.status);
         console.error(err.stack);
-        res.statusCode = err.status.code;
+        res.statusCode = (err.status)? err.status.code : 500;
         res.json({error: err.message});
     }
 

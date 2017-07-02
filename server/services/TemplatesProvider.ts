@@ -1,20 +1,25 @@
-/**
- * Created by Phillip on 2017-06-25.
- */
-
-let es6Renderer = require('express-es6-template-engine');
+let mustache = require('mustache');
+let fs = require('fs');
+let path = require('path');
 
 export class TemplatesProvider {
 
-    private readonly _emailVerificationTemplate: string = "server/views/emailVerificationTemplate.html";
-    private readonly _callBack = (err, content) => err || content;
+    private readonly _emailVerificationTemplate: string = 'emailVerificationTemplate.html';
+
+    private readTemplate(fileName: string): string {
+        let filePath = path.join(__dirname, '..', '..', 'templates', fileName);
+        return fs.readFileSync(filePath).toString();
+    }
 
     emailVerification(recipientName: string, verificationLink: string): string {
-        console.log(recipientName);
-        console.log(verificationLink);
-        let x = es6Renderer(this._emailVerificationTemplate, {locals: {name: 'Welcome!', link:"qwe"}}   );
-        console.log(x);
-        return "123";
+        let view: Object = {
+            name: recipientName,
+            link: verificationLink
+        };
+        return mustache.render(
+            this.readTemplate(this._emailVerificationTemplate),
+            view
+        );
     }
 
 }
