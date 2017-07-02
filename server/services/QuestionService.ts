@@ -10,6 +10,8 @@ import {AppError} from "../errors/AppError";
 import {BaseService} from "./BaseService";
 import {QuestionPreviewCollectionsDto} from "../dtos/q&a/QuestionPreviewCollectionsDto";
 import {ClientError} from "../errors/HttpStatus";
+import {ITagRepository} from "../repositories/TagRepository";
+import {ITag} from "../models/Tags";
 
 export interface IAnswerService {
     createAnswer(user: User, answer: AnswerDto): Promise<AnswerDto>;
@@ -72,12 +74,15 @@ export class QuestionService extends BaseService implements IQuestionService {
 
     private questionRepository: IQuestionRepository;
     private answerRepository: IAnswerRepository;
+    private tagRepository: ITagRepository;
 
     constructor(questionRepository: IQuestionRepository,
-                answerRepository: IAnswerRepository) {
+                answerRepository: IAnswerRepository,
+                tagRepository: ITagRepository) {
         super();
         this.questionRepository = questionRepository;
         this.answerRepository = answerRepository;
+        this.tagRepository = tagRepository;
     }
 
     getQuestionPreview(user?: User): Promise<QuestionPreviewCollectionsDto> {
@@ -95,11 +100,13 @@ export class QuestionService extends BaseService implements IQuestionService {
     }
 
     createQuestion(question: QuestionDto, currentUser: User): Promise<QuestionDto> {
-        let questionObject = new Question(
-            question.title, question.content, currentUser, question.tags,
-            question.isPublished, question.publicityStatus
-        );
-        return this.questionRepository.create(questionObject);
+        return this.tagRepository.getTags(question.tags).then((tags: ITag[]) => {
+            let questionObject = new Question(
+                question.title, question.content, currentUser, tags,
+                question.isPublished, question.publicityStatus
+            );
+            return this.questionRepository.create(questionObject);
+        })
     }
 
     getQuestionPageByTitle(name: string): Promise<QuestionPageDto> {

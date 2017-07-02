@@ -14,7 +14,22 @@ import AnimatedWrapper from "../../components/AnimatedWrapper";
 import {CustomEditor} from "../../components/CustomEditor/CustomEditor";
 import {EditorState} from "draft-js";
 import {FrontEndQuestionModels} from "../../models/QuestionModels";
+import Grid from "material-ui/Grid";
+import {createStyleSheet, withStyles} from "material-ui/styles";
+import {TagsSelector} from "../../components/TagsComponent/TagsComponent";
 import Question = FrontEndQuestionModels.Question;
+
+const styleSheet = createStyleSheet('CreateQuestion', theme => ({
+    root: {
+        marginLeft: theme.spacing.unit,
+        marginRight: theme.spacing.unit,
+    },
+    input: {
+        width: "100%",
+    },
+    inputContainer: {paddingLeft: 20, paddingRight: 20},
+
+}));
 
 export interface CreateQuestionState {
     title: string;
@@ -43,7 +58,7 @@ class CreateQuestion extends LoginRequiredComponent<any, QuestionCreationDto> {
     }
 
     reset = () => {
-        this.setState({title: '', content: ''})
+        this.setState({title: '', content: '', tags: []})
     };
 
     titleChange = (event: any) => {
@@ -74,56 +89,57 @@ class CreateQuestion extends LoginRequiredComponent<any, QuestionCreationDto> {
         ));
     };
 
-    folderMenu = () => {
-        if (this.props.tags != undefined) {
-            // return (
-            //     {/*<SelectField*/}
-            //         {/*multiple={true}*/}
-            //         {/*hintText="Select Folders"*/}
-            //         {/*value={this.state.tags}*/}
-            //         {/*onChange={this.selectFieldChange}*/}
-            //         {/*fullWidth={true}>*/}
-            //         {/*{this.menuItems()}*/}
-            //     {/*</SelectField>*/}
-            // )
-
-        }
-    };
+    updateTags = (tags : string[]) => {
+        this.setState({tags: tags });
+    }
 
     render() {
-        let folderMenu;
-
-
+        const classes = this.props.classes;
         return (
-            <div style={{textAlign: 'center'}}>
-                <TextField
-                    label="Title"
-                    type="text"
-                    value={this.state.title}
-                    onChange={this.titleChange}
-                />
-                {/*<div>{folderMenu}</div>*/}
-                <div style={{textAlign: "left", color : "#e3e3e3"}}>
-                    <h4>Content :</h4>
-                </div>
-                <CustomEditor value={this.state.content}
-                              onChange={this.contentChange} />
-                <Button
-                    raised
-                    label="Make Post"
-                    onClick={this.submit}
-                >
-                    Make Post
-                </Button>
-            </div>
+            <Grid container justify="center" gutter={0}>
+                <Grid item xs={12}>
+                    <Grid container className={classes.inputContainer}>
+                        <Grid item xs={12} md={6}>
+                            <TextField
+                                className={classes.input}
+                                label="Title"
+                                type="text"
+                                value={this.state.title}
+                                onChange={this.titleChange}
+                            />
+                        </Grid>
+                        <Grid item xs={12} md={12}>
+                            <TagsSelector selectedTags={this.state.tags}  onChange={this.updateTags}/>
+                        </Grid>
+
+                        <Grid item xs={12} md={12}>
+                            <div style={{textAlign: "left", color: "#e3e3e3"}}>
+                                <h4>Content :</h4>
+                            </div>
+                            <CustomEditor value={this.state.content}
+                                          onChange={this.contentChange}
+                                          height={350}
+                            />
+                        </Grid>
+                    </Grid>
+                    <Grid container justify="flex-end" className={classes.inputContainer}>
+                        <Grid item>
+                            <Button raised label="Make Post" onClick={this.submit}>
+                                Make Post
+                            </Button>
+                        </Grid>
+                    </Grid>
+
+                </Grid>
+            </Grid>
         )
     }
 
 }
 
-export const CreateQuestionPage = AnimatedWrapper(connect(
+export const CreateQuestionPage = AnimatedWrapper(withStyles(styleSheet)(connect(
     (state: AppStoreState) => ({loggedIn: state.auth.loggedIn}),
     (dispatch) => ({
         createQuestion: (question: Question) => dispatch(QuestionActions.createQuestion(question))
     })
-)(CreateQuestion));
+)(CreateQuestion)));

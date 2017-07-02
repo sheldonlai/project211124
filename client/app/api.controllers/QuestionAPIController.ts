@@ -78,7 +78,7 @@ export class QuestionAPIController extends ApiController {
     }
 
     private convertQuestionToDto(question: Question) {
-        let questionDto: QuestionDto = <any>question;
+        let questionDto: QuestionDto = <any>{...question};
         questionDto.content = this.convertEditorStateToRaw(question.content);
         return questionDto;
     }

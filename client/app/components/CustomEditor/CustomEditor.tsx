@@ -1,16 +1,22 @@
 import {ContentBlock, Editor, EditorState, RichUtils} from "draft-js";
 import * as React from "react";
 import "draft-js/dist/Draft.css";
-import "./custom_editor.css";
 
 export interface CustomEditorProps {
     value: EditorState;
     readOnly?: boolean;
     onChange: (text) => void;
     height?: number;
+    border?: boolean;
 }
 
-export class CustomEditor extends React.Component<CustomEditorProps, {}> {
+const style = {
+    border: "1px #ececec solid",
+    marginTop: "10px",
+    marginBottom: "10px"
+};
+
+export class CustomEditor extends React.Component<CustomEditorProps> {
     constructor(props) {
         super(props);
     }
@@ -32,18 +38,23 @@ export class CustomEditor extends React.Component<CustomEditorProps, {}> {
         return 'not-handled';
     };
 
+
     myBlockStyleFn = (contentBlock: ContentBlock) => {
         // const type = contentBlock.getType();
         return '';
     };
 
     render() {
+        let modifiedStyle = {...style};
+        if (this.props.border === false)
+            delete modifiedStyle.border;
+        modifiedStyle['height'] = this.props.height? this.props.height: 150;
         return (
             <div>
                 <div>
 
                 </div>
-                <div style={{minHeight: 150}}>
+                <div style={modifiedStyle}>
                     <Editor
                         editorState={this.props.value}
                         handleKeyCommand={this.handleKeyCommand}

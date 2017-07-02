@@ -6,7 +6,7 @@ import {ChangeEvent} from "react";
 import {connect} from "react-redux";
 import {AppStoreState} from "../../stores/AppStore";
 import {QuestionActions} from "../../actions/QuestionActions";
-import {grey300, grey800} from "material-ui/styles/colors";
+import {grey} from "material-ui/styles/colors";
 import Button from "material-ui/Button";
 import Divider from "material-ui/Divider";
 import Paper from "material-ui/Paper";
@@ -19,9 +19,10 @@ import {FrontEndQuestionModels} from "../../models/QuestionModels";
 import AnimatedWrapper from "../../components/AnimatedWrapper";
 import {CircularProgress} from "material-ui/Progress";
 import AddIcon from "material-ui-icons/Add";
-import {CustomEditor} from "../../components/CustomEditor/CustomEditor";
 import {isNullOrUndefined} from "util";
 import {EditorState} from "draft-js";
+import {ChipListComponent} from "../../components/ChipListComponent";
+import {QAEditorComponent} from "./Q&AEditorComponent";
 import QuestionPage = FrontEndQuestionModels.QuestionPage;
 import Answer = FrontEndQuestionModels.Answer;
 import cloneQuestionPage = FrontEndQuestionModels.cloneQuestionPage;
@@ -105,9 +106,9 @@ export class QuestionPageComponent extends React.Component<QuestionPageProps, Qu
     };
 
 
-    onQuestionTitleChange = (event: any, value: string) => {
+    onQuestionTitleChange = (event: any) => {
         let temp: QuestionPage = this.state.questionPage;
-        temp.question.title = value;
+        temp.question.title = event.target.value;
         this.setState({questionPage:temp});
     };
     onQuestionContentChange = (text: any) => {
@@ -160,20 +161,9 @@ export class QuestionPageComponent extends React.Component<QuestionPageProps, Qu
         )
     };
 
-    getEditor = (value: EditorState, onChange: (state: EditorState) => any, onSubmit: () => any, readOnly:boolean =false) => {
-        const button = (
-            <div style={{textAlign: "right"}}>
-                <Button raised  onClick={onSubmit}>save</Button>
-            </div>
-        );
-
-        return (
-            <div style={{marginBottom: 15}}>
-                    <CustomEditor value={value} onChange={onChange} readOnly={readOnly}/>
-                    {!readOnly && button}
-            </div>
-        )
-    };
+    getEditor = (value: EditorState, onChange: (state: EditorState) => any,
+                 onSubmit: () => any, readOnly:boolean =false) =>
+        (<QAEditorComponent value={value} onChange={onChange} onSubmit={onSubmit} readOnly={readOnly} />);
 
     getAnswerContent = (ans: Answer) => {
         return (
@@ -192,37 +182,25 @@ export class QuestionPageComponent extends React.Component<QuestionPageProps, Qu
                 <Button raised onClick={this.editPost} style={{float: "right"}}>Edit</Button>
             </div>
             : undefined;
-        let title = (!this.state.editQuestion) ?
-            (<div>
-                <h3 style={headerStyle}>{question.title}</h3>
-                {editBut}
-            </div>)
-            : (<div>
-                <TextField
-                    hintText="Title"
-                    floatingLabelText="Title"
-                    fullWidth={true}
-                    value={question.title}
-                    onChange={this.onQuestionTitleChange}
-                />
-            </div>);
+        let title;
         let content;
         if (this.state.editQuestion) {
+            title = (
+                <TextField
+                    label="Title"
+                    value={question.title}
+                    onChange={this.onQuestionTitleChange}
+                    style={{width: "100%"}}
+                />
+            );
             content = this.getEditor(this.state.questionPage.question.content, this.onQuestionContentChange, this.submitPost);
         } else {
-            let tags = (this.state.questionPage.question.tags != null) ?
-                this.state.questionPage.question.tags.map((name: string, index) => {
-                    return <span style={{fontSize: 14, color: grey800, backgroundColor: grey300, padding: 4, margin: 4}}
-                                 key={name+index}
-                    >
-                        {name}
-                    </span>
-                }) : null;
+            title = (<div><h3 style={headerStyle}>{question.title}</h3>{editBut}</div>);
             content =
                 <div>
                     {this.getEditor(question.content, this.onQuestionContentChange, this.submitPost, true)}
-                    <div style={{height: 24}}>
-                        {tags}
+                    <div>
+                        <ChipListComponent chips={this.state.questionPage.question.tags} keyName={"tag"} />
                     </div>
                     <Divider />
                     {this.getFooterPostedBy(new Date(question.createdUtc).toLocaleString(), question.author.username)}
@@ -241,21 +219,17 @@ export class QuestionPageComponent extends React.Component<QuestionPageProps, Qu
         let list = [];
         for (let ans of this.state.questionPage.answers) {
             let content;
-
             let editButton = undefined;
             if (this.props.user.username != ans.author.username)
-                editButton = <Button raised label="Edit" onClick={this.addAnswer} style={{float: "right"}}/>;
+                editButton = <Button raised onClick={this.addAnswer} style={{float: "right"}}>Edit</Button>;
             if (this.state.editAnswer) {
-                editButton = null;
                 content = this.getEditor(ans.content, this.onAnswerChange, this.submitStudentAnswer);
             } else if (ans != null) {
                 content = this.getAnswerContent(ans);
             }
             list.push(
-                <Paper key={ans._id + ans.author} style={paperStyle}>
-                    <div>
-                        {editButton}
-                    </div>
+                <Paper key={ans._id} style={paperStyle}>
+                    <div>{editButton}</div>
                     {content}
                 </Paper>
             );
@@ -294,10 +268,10 @@ export class QuestionPageComponent extends React.Component<QuestionPageProps, Qu
         if (this.state.questionPage == null) {
             return (
                 <div style={{height: "100%", margin: 10, padding: "200px 0px", textAlign: "center"}}>
-                    {/*<CircularProgress*/}
-                        {/*size={150}*/}
-                        {/*style={{display: 'inline-block', position: 'relative'}}*/}
-                    {/*/>*/}
+                    <CircularProgress
+                        size={150}
+                        style={{display: 'inline-block', position: 'relative'}}
+                    />
                 </div>
             )
         }
