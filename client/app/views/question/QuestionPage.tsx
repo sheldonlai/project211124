@@ -16,7 +16,7 @@ import {Prompt, RouteComponentProps} from "react-router";
 import {QuestionPageReducerState} from "../../reducers/QuestionPageReducer";
 import {FrontEndQuestionModels} from "../../models/QuestionModels";
 import AnimatedWrapper from "../../components/AnimatedWrapper";
-import {CircularProgress} from "material-ui/Progress";
+// import {CircularProgress} from "material-ui/Progress";
 import AddIcon from "material-ui-icons/Add";
 import {isNullOrUndefined} from "util";
 import {EditorState} from "draft-js";
@@ -191,8 +191,6 @@ export class QuestionPageComponent extends React.Component<QuestionPageProps, Qu
         return list;
     };
 
-    editComment = (index?: number) => {
-    };
 
     generateNewComment = (): CommentDto => {
         return {
@@ -202,21 +200,14 @@ export class QuestionPageComponent extends React.Component<QuestionPageProps, Qu
         };
     };
 
-    onCommentTextChange = (event: ChangeEvent<HTMLTextAreaElement>) => {
-    };
-
-    onCommentSubmit = () => {
-    };
-
-
     render(){
         if (this.state.questionPage == null) {
             return (
                 <div style={{height: "100%", margin: 10, padding: "200px 0px", textAlign: "center"}}>
-                    <CircularProgress
-                        size={150}
-                        style={{display: 'inline-block', position: 'relative'}}
-                    />
+                    {/*<CircularProgress*/}
+                        {/*size={150}*/}
+                        {/*style={{display: 'inline-block', position: 'relative'}}*/}
+                    {/*/>*/}
                 </div>
             )
         }

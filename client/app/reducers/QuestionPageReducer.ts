@@ -39,17 +39,20 @@ export const QuestionPageReducer = (state = initialState, action) : QuestionPage
         case QuestionActionTypes.FetchQuestionPageError:
             return {
                 status : ReducerStateStatus.ERROR,
-                questionPage : undefined,
+                questionPage : state.questionPage,
                 lastUpdated: Date.now(),
                 error : action.data
             };
-        case QuestionActionTypes.ChangePostPage:
+        case QuestionActionTypes.EditQuestionRequest:
             return {
-                status : ReducerStateStatus.ERROR,
+                status : ReducerStateStatus.DONE,
                 questionPage : action.data,
                 lastUpdated: Date.now(),
                 error : ''
             };
+        case QuestionActionTypes.EditQuestionOK:
+
+
         default:
             return state;
     }
