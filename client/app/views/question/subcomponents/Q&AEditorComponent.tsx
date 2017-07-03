@@ -10,7 +10,8 @@ export interface QAEditorProps{
     value: EditorState;
     onChange: (state: EditorState) => any;
     onSubmit: () => any;
-    readOnly?: boolean
+    readOnly?: boolean;
+    style?:any;
 }
 
 export class QAEditorComponent extends Component<QAEditorProps> {
@@ -19,7 +20,7 @@ export class QAEditorComponent extends Component<QAEditorProps> {
         return (
             <div style={{marginBottom: 15}}>
                 <CustomEditor value={this.props.value} onChange={this.props.onChange} readOnly={readOnly}
-                            border={!readOnly}
+                            border={!readOnly} style={this.props.style}
                 />
                 {
                     !this.props.readOnly &&

@@ -55,7 +55,9 @@ export class QuestionBoxComponent extends Component<QuestionBoxComponentProps> {
                 <Divider />
                 <div>
                     <QAEditorComponent value={this.props.question.content} onChange={this.onContentChange}
-                                       onSubmit={this.props.onSubmit} readOnly={!this.props.editMode}/>
+                                       onSubmit={this.props.onSubmit} readOnly={!this.props.editMode}
+                                        style={{fontSize: 14}}
+                    />
                     <div>
                         <ChipListComponent chips={question.tags} keyName={"tag"}/>
                     </div>
