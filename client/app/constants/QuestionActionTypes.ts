@@ -2,6 +2,7 @@
  * Created by SHELDON on 6/1/2017.
  */
 export enum QuestionActionTypes {
+
     QuestionPreviewsRequest = <any> "QuestionPreviewsError",
     QuestionPreviewsError = <any> "QuestionPreviewsError",
     QuestionPreviewsOK = <any> "QuestionPreviewsOK",
@@ -26,5 +27,6 @@ export enum QuestionActionTypes {
     EditAnswerOK = <any> "EditAnswerOK",
     EditAnswerError = <any> "EditAnswerError",
 
-    ChangePostPage = <any> "ChangePostPage"
+    ChangePostPage = <any> "ChangePostPage",
+    QuestionPageError = <any> "QuestionPageError",
 }

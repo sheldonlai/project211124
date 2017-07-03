@@ -15,7 +15,7 @@ import {AppError} from "./errors/AppError";
 import {FileUploadAPI} from "./routes/FileUploadAPI";
 
 let favicon = require('serve-favicon');
-let morgan = require('morgan');
+import * as morgan from 'morgan';
 
 export class Server {
     public app: express.Application;

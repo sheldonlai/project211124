@@ -37,6 +37,19 @@ export class QuestionActions extends BaseActions{
         }
     }
 
+    static updateQuestion(questionReq : Question) : (dispatch: any) => void {
+        return function(dispatch) {
+            apiController.createQuestion(questionReq).then(res => {
+                dispatch({
+                    type: QuestionActionTypes.EditAnswerOK,
+                    data: res.data
+                })
+            }).catch(err =>
+                QuestionActions.handleError(dispatch, err, QuestionActionTypes.EditAnswerError)
+            )
+        }
+    }
+
     static fetchQuestionPage(name: string){
         return function(dispatch) {
             dispatch({
