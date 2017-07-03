@@ -24,13 +24,13 @@ let paperStyle = {height: "100%", padding: 15, paddingBottom: 0};
 
 export class QuestionBoxComponent extends Component<QuestionBoxComponentProps> {
     onTitleChange = (event) => {
-        let question = {...this.props.question};
+        let question = this.props.question;
         question.title = event.target.value;
         this.props.onQuestionChange(question);
     };
 
     onContentChange = (editorState) => {
-        let question = {...this.props.question};
+        let question = this.props.question;
         question.content = editorState;
         this.props.onQuestionChange(question);
     };
@@ -39,7 +39,7 @@ export class QuestionBoxComponent extends Component<QuestionBoxComponentProps> {
         const question = {...this.props.question};
         const editable = this.props.user.username === question.author.username;
         let editButton;
-        if (editable){
+        if (editable && !this.props.editMode){
             editButton = (
                 <div style={{float: "right"}}>
                     <Button raised onClick={this.props.onEditClick} style={{float: "right"}}>Edit</Button>

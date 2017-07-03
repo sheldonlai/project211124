@@ -1,4 +1,3 @@
-
 import {QuestionActionTypes} from '../constants/QuestionActionTypes';
 import {QuestionAPIController} from '../api.controllers/QuestionAPIController';
 import {BaseActions} from "./BaseActions";
@@ -7,16 +6,16 @@ import {FrontEndQuestionModels} from "../models/QuestionModels";
 import Question = FrontEndQuestionModels.Question;
 import QuestionPage = FrontEndQuestionModels.QuestionPage;
 
-let apiController : QuestionAPIController = QuestionAPIController.getInstance();
+let apiController: QuestionAPIController = QuestionAPIController.getInstance();
 
-export class QuestionActions extends BaseActions{
+export class QuestionActions extends BaseActions {
 
-    static getQuestionPreviews() : (dispatch: any) => void {
-        return function(dispatch){
-            apiController.fetchQuestionPreviews().then((res : AxiosResponse)=> {
+    static getQuestionPreviews(): (dispatch: any) => void {
+        return function (dispatch) {
+            apiController.fetchQuestionPreviews().then((res: AxiosResponse) => {
                 dispatch({
-                    type : QuestionActionTypes.QuestionPreviewsOK,
-                    data : res.data
+                    type: QuestionActionTypes.QuestionPreviewsOK,
+                    data: res.data
                 })
             }).catch(err => {
                 QuestionActions.handleError(dispatch, err, QuestionActionTypes.QuestionPreviewsError)
@@ -24,8 +23,8 @@ export class QuestionActions extends BaseActions{
         }
     }
 
-    static createQuestion(questionReq : Question) : (dispatch: any) => void {
-        return function(dispatch) {
+    static createQuestion(questionReq: Question): (dispatch: any) => void {
+        return function (dispatch) {
             apiController.createQuestion(questionReq).then(res => {
                 dispatch({
                     type: QuestionActionTypes.QuestionCreated,
@@ -37,21 +36,25 @@ export class QuestionActions extends BaseActions{
         }
     }
 
-    static updateQuestion(questionReq : Question) : (dispatch: any) => void {
-        return function(dispatch) {
-            apiController.createQuestion(questionReq).then(res => {
-                dispatch({
-                    type: QuestionActionTypes.EditAnswerOK,
-                    data: res.data
-                })
-            }).catch(err =>
-                QuestionActions.handleError(dispatch, err, QuestionActionTypes.EditAnswerError)
-            )
-        }
+    static updateQuestion(question: Question): any {
+        // return function(dispatch) {
+        //     apiController.createQuestion(questionReq).then(res => {
+        //         dispatch({
+        //             type: QuestionActionTypes.EditAnswerOK,
+        //             data: res.data
+        //         })
+        //     }).catch(err =>
+        //         QuestionActions.handleError(dispatch, err, QuestionActionTypes.EditAnswerError)
+        //     )
+        // }
+        return {
+            type: QuestionActionTypes.EditAnswerOK,
+            data: question
+        };
     }
 
-    static fetchQuestionPage(name: string){
-        return function(dispatch) {
+    static fetchQuestionPage(name: string) {
+        return function (dispatch) {
             dispatch({
                 type: QuestionActionTypes.FetchQuestionPageRequest
             });
@@ -65,14 +68,5 @@ export class QuestionActions extends BaseActions{
             )
         }
     }
-
-
-    static changeQuestionPage(question: QuestionPage){
-        return {
-            type: QuestionActionTypes.ChangePostPage,
-            data: question
-        }
-    }
-
 
 }

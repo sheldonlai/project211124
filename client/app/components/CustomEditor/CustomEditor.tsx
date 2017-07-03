@@ -5,7 +5,7 @@ import "draft-js/dist/Draft.css";
 export interface CustomEditorProps {
     value: EditorState;
     readOnly?: boolean;
-    onChange: (text) => void;
+    onChange: (text: EditorState) => void;
     height?: number;
     border?: boolean;
 }

@@ -13,6 +13,7 @@ import {Menu} from "./Menu";
 import {QuestionHomePage} from "./question/QuestionHome";
 import {QuestionPageView} from "./question/QuestionPage";
 import TransitionGroup =require('react-transition-group/TransitionGroup');
+import {ErrorSnackBar} from "./ErrorView";
 
 let muiTheme = createMuiTheme({
     palette: createPalette({
@@ -42,6 +43,7 @@ export class App extends React.Component<any, any> {
                     <Router history={RouterController.history}>
                         <div>
                             <Route path={Routes.home} component={Menu}/>
+                            <Route path={Routes.home} component={ErrorSnackBar}/>
                             <Route exact path={Routes.home}
                                    render={({match, ...rest}) => (
                                        <TransitionGroup component={firstChild}>

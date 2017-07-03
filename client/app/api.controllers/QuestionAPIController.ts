@@ -1,5 +1,5 @@
 import {ApiController} from "./ApiController";
-import {AxiosPromise, AxiosResponse} from "axios";
+import {AxiosError, AxiosPromise, AxiosResponse} from "axios";
 import {APIUrls} from "../../../server/urls";
 import {QuestionDto} from "../../../server/dtos/q&a/QuestionDto";
 import {convertFromRaw, convertToRaw, EditorState, RawDraftContentState} from "draft-js";
@@ -58,6 +58,11 @@ export class QuestionAPIController extends ApiController {
         return this.post(APIUrls.CreateQuestion, questionDto);
     }
 
+    updateQuestion(question: Question): AxiosPromise{
+        const questionDto = this.convertQuestionToDto(question);
+        return this.put(APIUrls.UpdateQuestion, questionDto);
+    }
+
     fetchQuestionByTitle(name: string): AxiosPromise {
         return this.get(APIUrls.GetQuestionPage.replace(":title", name))
             .then((response: AxiosResponse) => {
@@ -71,10 +76,32 @@ export class QuestionAPIController extends ApiController {
             });
     }
 
-    private convertDtoToAnswer(questionDto: AnswerDto): Answer {
+    createAnswer(answer: Answer): AxiosPromise {
+        const answerDto = this.convertAnswerToDto(answer);
+        return this.post(APIUrls.CreateAnswer, answer).then((response: AxiosResponse) => {
+            response.data = this.convertDtoToAnswer(response.data);
+            return response;
+        });
+    }
+
+    updateAnswer(answer: Answer): AxiosPromise {
+        const answerDto = this.convertAnswerToDto(answer);
+        return this.put(APIUrls.UpdateAnswer, answer).then((response: AxiosResponse) => {
+            response.data = this.convertDtoToAnswer(response.data);
+            return response;
+        });
+    }
+
+    private convertDtoToAnswer(questionDto: AnswerDto): any {
         let answer: Answer = <any>questionDto;
         answer.content = this.convertRawToEditorState(questionDto.content);
         return answer;
+    }
+
+    private convertAnswerToDto(answer: Answer): AnswerDto {
+        let answerDto: AnswerDto= <any>{...answer};
+        answerDto.content = this.convertEditorStateToRaw(answer.content);
+        return answerDto;
     }
 
     private convertQuestionToDto(question: Question) {

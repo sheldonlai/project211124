@@ -17,6 +17,5 @@ export class APIUrls {
     static UpdateQuestion = "/update-question";
     
     static CreateAnswer = "/create-answer";
-    // Answer preview ?
     static UpdateAnswer = "/update-answer";
 }

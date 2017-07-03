@@ -26,12 +26,17 @@ import QuestionPage = FrontEndQuestionModels.QuestionPage;
 import Answer = FrontEndQuestionModels.Answer;
 import cloneQuestionPage = FrontEndQuestionModels.cloneQuestionPage;
 import Question = FrontEndQuestionModels.Question;
+import {AnswerActions} from "../../actions/AnswerActions";
+import {QuestionAPIController} from "../../api.controllers/QuestionAPIController";
 
 
 export interface QuestionPageProps extends QuestionPageReducerState, RouteComponentProps<{ title: string }> {
     user: UserDto
     fetchQuestionPage: (title: string) => any;
-    changeQuestionPage: (questionPage: QuestionPage) => any;
+    editQuestion: (question: Question) => any;
+    editAnswer: (answer: Answer) => any;
+    addAnswer: (answer: Answer) => any;
+    newError: (message: string) => any;
 }
 
 export interface QuestionPageState {
@@ -49,6 +54,8 @@ let paperStyle = {height: "100%", padding: 15, paddingBottom: 0};
 
 export class QuestionPageComponent extends React.Component<QuestionPageProps, QuestionPageState> {
 
+    apiController : QuestionAPIController;
+
     constructor(props) {
         super(props);
 
@@ -61,6 +68,7 @@ export class QuestionPageComponent extends React.Component<QuestionPageProps, Qu
             loading: false,
             questionPage: this.props.questionPage? cloneQuestionPage(this.props.questionPage): undefined
         }
+        this.apiController = QuestionAPIController.getInstance();
     }
 
     componentWillMount() {
@@ -96,7 +104,8 @@ export class QuestionPageComponent extends React.Component<QuestionPageProps, Qu
         })
     };
     onQuestionChange = (question: Question) => {
-        let temp: QuestionPage = {...this.state.questionPage};
+        let temp: QuestionPage = new QuestionPage();
+        temp.answers = this.props.questionPage.answers;
         temp.question = question;
         this.setState({questionPage:temp});
     };
@@ -118,16 +127,21 @@ export class QuestionPageComponent extends React.Component<QuestionPageProps, Qu
         if (!this.state.editQuestion)
             this.setState({editQuestion: true});
     };
-    submitPost = () => {
+    submitQuestion = () => {
         this.setState({loading: true});
-        // update post
+        this.apiController.updateQuestion(this.state.questionPage.question).then((res) => {
+            this.props.editQuestion(res.data);
+            this.setState({editQuestion: false});
+        }).catch((err)=> {
+            this.props.newError("Unable to update question.");
+        })
+
     };
 
     addAnswer = () => {
         let temp_questionPage = this.state.questionPage;
         temp_questionPage.answers.push(new Answer(temp_questionPage.question._id, this.props.user));
         this.setState({editAnswer: true, questionPage:temp_questionPage});
-
     };
 
 
@@ -153,7 +167,7 @@ export class QuestionPageComponent extends React.Component<QuestionPageProps, Qu
     getAnswerContent = (ans: Answer) => {
         return (
             <div>
-                this.getEditor(ans.content, this.onAnswerChange, this.submitStudentAnswer, true);
+                {this.getEditor(ans.content, this.onAnswerChange, this.submitStudentAnswer, true)}
                 <Divider />
                 {this.getFooterPostedBy(new Date(ans.createdUtc).toLocaleString(), ans.author)}
             </div>
@@ -222,7 +236,7 @@ export class QuestionPageComponent extends React.Component<QuestionPageProps, Qu
                 />
                 <QuestionBoxComponent onQuestionChange={this.onQuestionChange}
                                       question={this.props.questionPage.question}
-                                      onSubmit={this.submitPost}
+                                      onSubmit={this.submitQuestion}
                                       onEditClick={this.editPost}
                                       editMode={this.state.editQuestion}
                                       user={this.props.user}
@@ -240,6 +254,9 @@ export const QuestionPageView = AnimatedWrapper(connect(
     }),
     (dispatch) => ({
         fetchQuestionPage: (title: string) => dispatch(QuestionActions.fetchQuestionPage(title)),
-        changeQuestionPage: (questionPage: QuestionPage) => dispatch(QuestionActions.changeQuestionPage(questionPage))
+        editQuestion: (question: Question) => dispatch(QuestionActions.updateQuestion(question)),
+        editAnswer: (answer: Answer) => dispatch(AnswerActions.updateAnswer(answer)),
+        addAnswer: (answer: Answer) => dispatch(AnswerActions.createAnswer(answer)),
+        newError: (message: string) => dispatch(QuestionActions.addError(message)),
     })
 )(QuestionPageComponent));

@@ -6,6 +6,13 @@ import {ErrorActionTypes} from "../constants/ErrorActionTypes";
 
 export class BaseActions {
 
+    static addError(message){
+        return {
+            type: ErrorActionTypes.ADD_ERROR,
+            data: message
+        }
+    }
+
     static handleError(dispatch, err, otherErrorType?){
         if (err.response != null){
             dispatch({

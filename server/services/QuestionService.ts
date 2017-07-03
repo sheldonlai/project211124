@@ -144,7 +144,7 @@ export class QuestionService extends BaseService implements IQuestionService {
     }
 
     private checkPermissionForModification = (questionDto: QuestionDto, questionObj: Question, currentUser: User) => {
-        if (questionObj.author._id != currentUser._id) {
+        if (questionObj.author._id.toString() != currentUser._id) {
             throw new AppError("You are not the owner of this question!")
         }
         if (currentUser.username != questionDto.author.username) {
