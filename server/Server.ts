@@ -12,6 +12,7 @@ import {AuthenticationAPI} from "./routes/AuthenticationAPI";
 import {config} from "./config";
 import {ServiceProvider} from "./Container";
 import {AppError} from "./errors/AppError";
+import {FileUploadAPI} from "./routes/FileUploadAPI";
 
 let favicon = require('serve-favicon');
 import * as morgan from 'morgan';
@@ -79,13 +80,12 @@ export class Server {
 
         /* Home */
         new HomeAPI(router);
-
         /* QuestionHomeComponent Answer */
-
         new QuestionAPI(router, ServiceProvider.QuestionService);
-
         /* Authentication */
         new AuthenticationAPI(router, ServiceProvider.AuthenticationService);
+        /* File Upload */
+        new FileUploadAPI(router);
 
         this.app.use('/api', router);
     }

@@ -4,13 +4,9 @@ import {AnswerRepository} from "../AnswerRepository";
 import {Answer, AnswerModel} from "../../models/Answer";
 import {FakeModels} from "./helpers/FakeModels";
 import {createRawDraftContentState} from "../../utils/TestUtils";
+import {TestDatabase} from "./helpers/TestDatabase";
 
 require('source-map-support').install();
-
-let mongoose = require('mongoose');
-
-mongoose.Promise = global.Promise;
-
 
 let ansRepo = new AnswerRepository();
 
@@ -18,9 +14,10 @@ describe('AnswerRepoTest', function () {
 
     let sampleUser;
     let sampleQuestion;
+    const testDatabase = new TestDatabase();
 
     beforeAll(function () {
-        return mongoose.connect('mongodb://admin:1122312@ds143141.mlab.com:43141/askalot')
+        return testDatabase.connect()
             .then(function () {
                 return UserModel.create(new FakeModels().localUser())
             }).then(function (user) {
@@ -40,7 +37,7 @@ describe('AnswerRepoTest', function () {
     });
 
     afterAll(function () {
-        return mongoose.disconnect();
+        return testDatabase.disconnect();
     });
 
     beforeEach(function () {

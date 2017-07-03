@@ -7,7 +7,7 @@ export class TemplatesProvider {
     private readonly _emailVerificationTemplate: string = 'emailVerificationTemplate.html';
 
     private readTemplate(fileName: string): string {
-        let filePath = path.join(__dirname, '..', '..', 'templates', fileName);
+        let filePath = path.join(__dirname, '..', '..', 'static', 'templates', fileName);
         return fs.readFileSync(filePath).toString();
     }
 
