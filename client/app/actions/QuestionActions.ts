@@ -53,12 +53,12 @@ export class QuestionActions extends BaseActions {
         };
     }
 
-    static fetchQuestionPage(name: string) {
+    static fetchQuestionPage(id: string) {
         return function (dispatch) {
             dispatch({
                 type: QuestionActionTypes.FetchQuestionPageRequest
             });
-            apiController.fetchQuestionByTitle(name).then(res => {
+            apiController.fetchQuestionByID(id).then(res => {
                 dispatch({
                     type: QuestionActionTypes.FetchQuestionPageOK,
                     data: res.data

@@ -13,7 +13,8 @@ export interface CustomEditorProps {
 const style = {
     border: "1px #ececec solid",
     marginTop: "10px",
-    marginBottom: "10px"
+    marginBottom: "10px",
+    minHeight: 150,
 };
 
 export class CustomEditor extends React.Component<CustomEditorProps> {
@@ -48,7 +49,7 @@ export class CustomEditor extends React.Component<CustomEditorProps> {
         let modifiedStyle = {...style};
         if (this.props.border === false)
             delete modifiedStyle.border;
-        modifiedStyle['height'] = this.props.height? this.props.height: 150;
+        modifiedStyle['height'] = this.props.height? this.props.height: undefined;
         return (
             <div>
                 <div>

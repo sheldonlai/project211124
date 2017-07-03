@@ -6,5 +6,5 @@ export class Routes {
     static registration = '/registration';
     static question = '/question';
     static createQuestion = '/create-question';
-    static question_by_title = '/question/:title'
+    static question_by_id = '/question/:id'
 }

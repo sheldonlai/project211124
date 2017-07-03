@@ -22,20 +22,20 @@ export class QuestionAPI extends BaseAPI {
     public getQuestionPreviews = (req: AuthRequest, res: Response, next: NextFunction) => {
         let result = this.service.getQuestionPreview(req.user);
         this.respondPromise(result, res, next);
-    }
+    };
 
     public createQuestion = (req: AuthRequest, res: Response, next: NextFunction) =>{
         let question: QuestionDto = req.body;
         let user : User = req.user;
         let result = this.service.createQuestion(question, user);
         this.respondPromise(result, res, next);
-    }
+    };
 
     public getQuestion = (req: AuthRequest, res: Response, next: NextFunction) => {
-        let title = req.params.title;
-        let result = this.service.getQuestionPageByTitle(title);
+        let id = req.params.id;
+        let result = this.service.getQuestionPageByID(id);
         this.respondPromise(result, res, next);
-    }
+    };
 
     public updateQuestion = (req: AuthRequest, res: Response, next: NextFunction) => {
         let question: QuestionDto = req.body;

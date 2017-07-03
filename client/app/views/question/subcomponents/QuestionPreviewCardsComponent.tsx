@@ -16,7 +16,7 @@ export class QuestionPreviewCardsComponent extends React.Component<QuestionPrevi
                 {this.props.list.map((e: QuestionPreview) => (
                     <Grid item key={e.title}>
                         <div style={{marginTop: 16, display: "inline-block"}}>
-                            <CustomLink to={Routes.question_by_title.replace(':title', e.title)}>
+                            <CustomLink to={Routes.question_by_id.replace(':id', e._id)}>
                                 <CustomCard
                                     title={e.title}
                                     content={e.content}

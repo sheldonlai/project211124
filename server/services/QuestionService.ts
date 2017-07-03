@@ -65,7 +65,7 @@ export class AnswerService extends BaseService implements IAnswerService {
 export interface IQuestionService {
     getQuestionPreview(user?: User): Promise<QuestionPreviewCollectionsDto>;
     createQuestion(question: QuestionDto, user: User): Promise<QuestionDto>;
-    getQuestionPageByTitle(name: string): Promise<QuestionPageDto>;
+    getQuestionPageByID(name: string): Promise<QuestionPageDto>;
     getUserQuestions(currentUser: User): Promise<QuestionDto[]>;
     updateQuestion(question: QuestionDto, user: User): Promise<QuestionDto>;
 }
@@ -87,7 +87,7 @@ export class QuestionService extends BaseService implements IQuestionService {
 
     getQuestionPreview(user?: User): Promise<QuestionPreviewCollectionsDto> {
         let promises = [];
-        promises.push(this.questionRepository.getAll({sort: "-createdUtc", limit: 25}))
+        promises.push(this.questionRepository.getAll({sort: "-createdUtc", limit: 25}));
         if (user) {
             promises.push((this.questionRepository.getQuestionsByAuthor(user)));
         }
@@ -109,12 +109,12 @@ export class QuestionService extends BaseService implements IQuestionService {
         })
     }
 
-    getQuestionPageByTitle(name: string): Promise<QuestionPageDto> {
+    getQuestionPageByID(id: string): Promise<QuestionPageDto> {
         let questionPage: QuestionPageDto = {
             question: null,
             answers: []
         };
-        return this.questionRepository.getQuestionByTitle(name).then((question: Question) => {
+        return this.questionRepository.getById(id).then((question: Question) => {
             questionPage.question = question;
             return this.answerRepository.getByQuestionId(question._id);
         }).then((answers: Answer[]) => {

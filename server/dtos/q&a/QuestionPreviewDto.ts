@@ -3,6 +3,7 @@
  */
 import {RawDraftContentState} from "draft-js";
 export interface QuestionPreviewDto {
+    _id: any;
     title : string;
     content : RawDraftContentState;
     author: string;

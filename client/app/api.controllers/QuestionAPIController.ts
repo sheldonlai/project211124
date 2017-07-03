@@ -63,8 +63,8 @@ export class QuestionAPIController extends ApiController {
         return this.put(APIUrls.UpdateQuestion, questionDto);
     }
 
-    fetchQuestionByTitle(name: string): AxiosPromise {
-        return this.get(APIUrls.GetQuestionPage.replace(":title", name))
+    fetchQuestionByID(id: string): AxiosPromise {
+        return this.get(APIUrls.GetQuestionPage.replace(":id", id))
             .then((response: AxiosResponse) => {
                 let data: QuestionPageDto = response.data;
                 let converted_data: QuestionPage = {question: undefined, answers:[]};
@@ -78,7 +78,7 @@ export class QuestionAPIController extends ApiController {
 
     createAnswer(answer: Answer): AxiosPromise {
         const answerDto = this.convertAnswerToDto(answer);
-        return this.post(APIUrls.CreateAnswer, answer).then((response: AxiosResponse) => {
+        return this.post(APIUrls.CreateAnswer, answerDto).then((response: AxiosResponse) => {
             response.data = this.convertDtoToAnswer(response.data);
             return response;
         });
@@ -86,7 +86,7 @@ export class QuestionAPIController extends ApiController {
 
     updateAnswer(answer: Answer): AxiosPromise {
         const answerDto = this.convertAnswerToDto(answer);
-        return this.put(APIUrls.UpdateAnswer, answer).then((response: AxiosResponse) => {
+        return this.put(APIUrls.UpdateAnswer, answerDto).then((response: AxiosResponse) => {
             response.data = this.convertDtoToAnswer(response.data);
             return response;
         });

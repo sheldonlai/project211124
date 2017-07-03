@@ -2,7 +2,6 @@
  * Created by SHELDON on 6/24/2017.
  */
 import * as React from "react";
-import {ChangeEvent} from "react";
 import {connect} from "react-redux";
 import {AppStoreState} from "../../stores/AppStore";
 import {QuestionActions} from "../../actions/QuestionActions";
@@ -22,15 +21,15 @@ import {isNullOrUndefined} from "util";
 import {EditorState} from "draft-js";
 import {QAEditorComponent} from "./subcomponents/Q&AEditorComponent";
 import {QuestionBoxComponent} from "./subcomponents/QuestionBoxComponent";
+import {AnswerActions} from "../../actions/AnswerActions";
+import {QuestionAPIController} from "../../api.controllers/QuestionAPIController";
 import QuestionPage = FrontEndQuestionModels.QuestionPage;
 import Answer = FrontEndQuestionModels.Answer;
 import cloneQuestionPage = FrontEndQuestionModels.cloneQuestionPage;
 import Question = FrontEndQuestionModels.Question;
-import {AnswerActions} from "../../actions/AnswerActions";
-import {QuestionAPIController} from "../../api.controllers/QuestionAPIController";
 
 
-export interface QuestionPageProps extends QuestionPageReducerState, RouteComponentProps<{ title: string }> {
+export interface QuestionPageProps extends QuestionPageReducerState, RouteComponentProps<{ id: string }> {
     user: UserDto
     fetchQuestionPage: (title: string) => any;
     editQuestion: (question: Question) => any;
@@ -67,18 +66,18 @@ export class QuestionPageComponent extends React.Component<QuestionPageProps, Qu
             commentId: undefined,
             loading: false,
             questionPage: this.props.questionPage? cloneQuestionPage(this.props.questionPage): undefined
-        }
+        };
         this.apiController = QuestionAPIController.getInstance();
     }
 
     componentWillMount() {
         if (
             isNullOrUndefined(this.props.questionPage) ||
-            this.props.questionPage.question.title !== this.props.match.params.title ||
+            this.props.questionPage.question._id !== this.props.match.params.id ||
             this.props.lastUpdated - Date.now() > 15000
         ) {
             this.resetStates();
-            this.props.fetchQuestionPage(this.props.match.params.title);
+            this.props.fetchQuestionPage(this.props.match.params.id);
         }
     }
 

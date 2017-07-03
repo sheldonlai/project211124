@@ -78,7 +78,7 @@ export class App extends React.Component<any, any> {
                                        </TransitionGroup>
                                    )}
                             />
-                            <Route path={Routes.question_by_title}
+                            <Route path={Routes.question_by_id}
                                    render={({match, ...rest}) => (
                                        <TransitionGroup component={firstChild}>
                                            <QuestionPageView match={match} {...rest} />
