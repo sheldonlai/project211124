@@ -2,11 +2,9 @@ import {Document, model, Schema} from "mongoose";
 import {BaseModel} from "../../models/BaseModel";
 import {BaseRepository, IBaseRepository} from "../BaseRepository";
 import {ObjectID} from "bson";
+import {TestDatabase} from "./helpers/TestDatabase";
 
 require('source-map-support').install();
-
-let mongoose = require('mongoose');
-mongoose.Promise = global.Promise;
 
 class TestModel extends BaseModel {
     age: number;
@@ -25,13 +23,14 @@ class TestRepository extends BaseRepository<TestModel, ITestModel> implements IT
 describe("BaseRepositoryTest", function () {
     
     const repo: TestRepository = new TestRepository;
+    const testDatabase = new TestDatabase();
 
     beforeAll(function(){
-        return mongoose.connect('mongodb://admin:1122312@ds143141.mlab.com:43141/askalot');
+        return testDatabase.connect()
     });
 
     afterAll(function(){
-        return mongoose.disconnect();
+        return testDatabase.disconnect();
     });
 
     /* Clean the repository before each test to ensure

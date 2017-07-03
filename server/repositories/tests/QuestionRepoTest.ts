@@ -3,21 +3,22 @@ import {Question, QuestionComment, QuestionModel} from "../../models/Question";
 import {UserModel} from "../../models/User";
 import {FakeModels} from "./helpers/FakeModels";
 import {createRawDraftContentState} from "../../utils/TestUtils";
+import {TestDatabase} from "./helpers/TestDatabase";
 
-const mongoose = require('mongoose');
-mongoose.Promise = global.Promise;
 let questionRepo :IQuestionRepository = new QuestionRepository();
 
 describe('QuestionRepoTest', function (){
 
     let fakeModels = new FakeModels();
+    const testDatabase = new TestDatabase();
+
 
     beforeAll(function(){
-        return mongoose.connect('mongodb://admin:1122312@ds143141.mlab.com:43141/askalot');
+        return testDatabase.connect();
     });
 
     afterAll(function(){
-        return mongoose.disconnect();
+        return testDatabase.disconnect();
     });
 
 

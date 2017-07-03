@@ -4,6 +4,10 @@ export const config = {
         'URI': 'mongodb://admin:1122312@ds143141.mlab.com:43141/askalot'
     },
 
+    'testDatabase': {
+        'URI': 'mongodb://admin:1122312@ds145292.mlab.com:45292/testaskalot'
+    },
+
     'jwt' : {
         'secretKey': 'KByAhnzskR'
     },
