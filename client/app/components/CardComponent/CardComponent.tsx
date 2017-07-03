@@ -7,6 +7,10 @@ import Typography from "material-ui/Typography";
 const styleSheet = createStyleSheet('SimpleCard', theme => ({
     card: {
         width: 275,
+        height: 300,
+        yOverflow: "hidden",
+        position: "relative",
+        //background:"linear-gradient(transparent 150px, white)"
     },
     title: {
         marginBottom: 16,
@@ -17,6 +21,15 @@ const styleSheet = createStyleSheet('SimpleCard', theme => ({
         marginBottom: 12,
         color: theme.palette.text.secondary,
     },
+    shader: {
+        content: '',
+        width: "100%",
+        height: "100%",
+        position: "absolute",
+        left: 0,
+        top: 0,
+        background: "linear-gradient(transparent 150px, white)",
+    }
 }));
 
 
@@ -25,7 +38,7 @@ export interface CardComponentProps {
     title: string;
     date: Date;
     content: string;
-    onClick?: ()=>void;
+    onClick?: () => void;
 }
 
 export class CardComponent extends React.Component<CardComponentProps, any> {
@@ -34,6 +47,7 @@ export class CardComponent extends React.Component<CardComponentProps, any> {
         return (
             <div>
                 <Card className={classes.card}>
+                    <div className={classes.shader}></div>
                     <CardContent>
                         <Typography type="headline" component="h2">
                             {this.props.title}
@@ -41,11 +55,12 @@ export class CardComponent extends React.Component<CardComponentProps, any> {
                         <Typography type="body1" className={classes.pos}>
                             {this.props.date.toLocaleString()}
                         </Typography>
-                        <Typography component="p">
+                        <Typography component="p"
+                                    style={{height: 150, color: "linear-gradient(transparent 150px, white)"}}>
                             {this.props.content}
                         </Typography>
                     </CardContent>
-                    <CardActions>
+                    <CardActions style={{position: "absolute", bottom: 0, right: 0}}>
                         <Button dense onClick={this.props.onClick}>Read More</Button>
                     </CardActions>
                 </Card>
