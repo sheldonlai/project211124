@@ -7,6 +7,7 @@ import {AuthActions} from "../actions/AuthActions";
 import {connect} from "react-redux";
 import {AppStoreState} from "../stores/AppStore";
 import {ReducerStateStatus} from "../constants/ReducerStateStatus";
+import {RouteProps} from "react-router";
 
 const menuButtonStyle = {
     "height": "50px"
@@ -18,7 +19,7 @@ export interface MenuClassProps {
     authStatus: ReducerStateStatus;
 }
 
-class MenuClass extends Component<MenuClassProps, any> {
+class MenuClass extends Component<MenuClassProps> {
 
     constructor(props) {
         super(props);
@@ -46,7 +47,6 @@ class MenuClass extends Component<MenuClassProps, any> {
     };
 
     render() {
-        console.log('render menu');
         return (
             <div className="menu">
                 <ul>
@@ -70,7 +70,7 @@ class MenuClass extends Component<MenuClassProps, any> {
     }
 }
 
-export const Menu = connect(
+export const Menu = connect<any, any, any>(
     (state: AppStoreState) => ({loggedIn: state.auth.loggedIn, authStatus: state.auth.status}),
     (dispatch) => ({logout: () => dispatch(AuthActions.logout())})
 )(MenuClass);
