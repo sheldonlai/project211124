@@ -10,6 +10,9 @@ export class APIUrls {
     static Register = "/auth/register";
     static Verify = "/auth/verify/:code";
 
+    /* upload */
+    static Upload = "/upload";
+
     /* Question & Answer */
     static CreateQuestion = "/create-question";
     static QuestionPreviews = "/question-previews";
