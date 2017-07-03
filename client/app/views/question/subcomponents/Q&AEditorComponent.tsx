@@ -1,8 +1,8 @@
 import * as React from "react";
 import {Component} from "react";
-import {FrontEndQuestionModels} from "../../models/QuestionModels";
+import {FrontEndQuestionModels} from "../../../models/QuestionModels";
 import {EditorState} from "draft-js";
-import {CustomEditor} from "../../components/CustomEditor/CustomEditor";
+import {CustomEditor} from "../../../components/CustomEditor/CustomEditor";
 import Button from "material-ui/Button";
 import QuestionPreview = FrontEndQuestionModels.QuestionPreview;
 

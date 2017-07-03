@@ -14,7 +14,7 @@ import {ServiceProvider} from "./Container";
 import {AppError} from "./errors/AppError";
 
 let favicon = require('serve-favicon');
-let morgan = require('morgan');
+import * as morgan from 'morgan';
 
 export class Server {
     public app: express.Application;

@@ -10,7 +10,6 @@ import {grey} from "material-ui/styles/colors";
 import Button from "material-ui/Button";
 import Divider from "material-ui/Divider";
 import Paper from "material-ui/Paper";
-import TextField from "material-ui/TextField";
 import {UserDto} from "../../../../server/dtos/auth/UserDto";
 import {CommentDto} from "../../../../server/dtos/q&a/CommentDto";
 import {Prompt, RouteComponentProps} from "react-router";
@@ -21,11 +20,12 @@ import {CircularProgress} from "material-ui/Progress";
 import AddIcon from "material-ui-icons/Add";
 import {isNullOrUndefined} from "util";
 import {EditorState} from "draft-js";
-import {ChipListComponent} from "../../components/ChipListComponent";
-import {QAEditorComponent} from "./Q&AEditorComponent";
+import {QAEditorComponent} from "./subcomponents/Q&AEditorComponent";
+import {QuestionBoxComponent} from "./subcomponents/QuestionBoxComponent";
 import QuestionPage = FrontEndQuestionModels.QuestionPage;
 import Answer = FrontEndQuestionModels.Answer;
 import cloneQuestionPage = FrontEndQuestionModels.cloneQuestionPage;
+import Question = FrontEndQuestionModels.Question;
 
 
 export interface QuestionPageProps extends QuestionPageReducerState, RouteComponentProps<{ title: string }> {
@@ -43,11 +43,6 @@ export interface QuestionPageState {
     loading: boolean;
     questionPage: QuestionPage;
 }
-
-let headerStyle = {
-    margin: "10px 0px",
-    display: "inline-block"
-};
 
 let paperStyle = {height: "100%", padding: 15, paddingBottom: 0};
 
@@ -90,10 +85,6 @@ export class QuestionPageComponent extends React.Component<QuestionPageProps, Qu
         this.setState({questionPage: this.props.questionPage});
     }
 
-    titleChange = (event: any, value: string) => {
-
-    };
-
     resetStates = () => {
         this.setState({
             editQuestion: false,
@@ -104,18 +95,12 @@ export class QuestionPageComponent extends React.Component<QuestionPageProps, Qu
             loading: false,
         })
     };
-
-
-    onQuestionTitleChange = (event: any) => {
-        let temp: QuestionPage = this.state.questionPage;
-        temp.question.title = event.target.value;
+    onQuestionChange = (question: Question) => {
+        let temp: QuestionPage = {...this.state.questionPage};
+        temp.question = question;
         this.setState({questionPage:temp});
     };
-    onQuestionContentChange = (text: any) => {
-        let temp: QuestionPage = this.state.questionPage;
-        temp.question.content = text;
-        this.setState({questionPage:temp});
-    };
+
     onAnswerChange = (editorState: EditorState) => {
         let temp: QuestionPage = this.state.questionPage;
         temp.answers = temp.answers.map((state) => {
@@ -172,46 +157,6 @@ export class QuestionPageComponent extends React.Component<QuestionPageProps, Qu
                 <Divider />
                 {this.getFooterPostedBy(new Date(ans.createdUtc).toLocaleString(), ans.author)}
             </div>
-        );
-    };
-
-    getQuestionContent = () => {
-        let question = this.state.questionPage.question;
-        let editBut = ( this.props.user && question.author.username == this.props.user.username && !this.state.editQuestion) ?
-            <div style={{float: "right"}}>
-                <Button raised onClick={this.editPost} style={{float: "right"}}>Edit</Button>
-            </div>
-            : undefined;
-        let title;
-        let content;
-        if (this.state.editQuestion) {
-            title = (
-                <TextField
-                    label="Title"
-                    value={question.title}
-                    onChange={this.onQuestionTitleChange}
-                    style={{width: "100%"}}
-                />
-            );
-            content = this.getEditor(this.state.questionPage.question.content, this.onQuestionContentChange, this.submitPost);
-        } else {
-            title = (<div><h3 style={headerStyle}>{question.title}</h3>{editBut}</div>);
-            content =
-                <div>
-                    {this.getEditor(question.content, this.onQuestionContentChange, this.submitPost, true)}
-                    <div>
-                        <ChipListComponent chips={this.state.questionPage.question.tags} keyName={"tag"} />
-                    </div>
-                    <Divider />
-                    {this.getFooterPostedBy(new Date(question.createdUtc).toLocaleString(), question.author.username)}
-                </div>
-        }
-        return (
-            <Paper style={paperStyle}>
-                {title}
-                <Divider />
-                {content}
-            </Paper>
         );
     };
 
@@ -275,7 +220,6 @@ export class QuestionPageComponent extends React.Component<QuestionPageProps, Qu
                 </div>
             )
         }
-        let postDisplay = this.getQuestionContent();
         let answers = this.getAnswersContent();
         return (
             <div style={{padding: 10}}>
@@ -285,7 +229,13 @@ export class QuestionPageComponent extends React.Component<QuestionPageProps, Qu
                         `All unsaved changes will be discarded. Are you sure you want to leave?`
                     )}
                 />
-                {postDisplay}
+                <QuestionBoxComponent onQuestionChange={this.onQuestionChange}
+                                      question={this.props.questionPage.question}
+                                      onSubmit={this.submitPost}
+                                      onEditClick={this.editPost}
+                                      editMode={this.state.editQuestion}
+                                      user={this.props.user}
+                />
                 {answers}
             </div>
         );

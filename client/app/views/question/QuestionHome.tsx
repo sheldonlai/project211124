@@ -11,7 +11,7 @@ import {Card, CardActions, CardHeader, CardMedia, CardText, CardTitle} from "mat
 import {CustomLink} from "../../components/CustomLink";
 import Button from "material-ui/Button";
 import {FrontEndQuestionModels} from "../../models/QuestionModels";
-import {QuestionPreviewCardsComponent} from "./QuestionPreviewCardsComponent";
+import {QuestionPreviewCardsComponent} from "./subcomponents/QuestionPreviewCardsComponent";
 import QuestionPreview = FrontEndQuestionModels.QuestionPreview;
 
 export interface QuestionViewProps extends QuestionHomeReducerState {
