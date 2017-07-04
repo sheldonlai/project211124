@@ -3,6 +3,7 @@ import {QuestionActionTypes} from "../constants/QuestionActionTypes";
 import {FrontEndQuestionModels} from "../models/QuestionModels";
 import QuestionPreview = FrontEndQuestionModels.QuestionPreview;
 import QuestionPreviewCollections = FrontEndQuestionModels.QuestionPreviewCollections;
+import Question = FrontEndQuestionModels.Question;
 
 export interface QuestionHomeReducerState {
     status : ReducerStateStatus;

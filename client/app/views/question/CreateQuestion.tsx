@@ -91,7 +91,7 @@ class CreateQuestion extends LoginRequiredComponent<any, QuestionCreationDto> {
 
     updateTags = (tags : string[]) => {
         this.setState({tags: tags });
-    }
+    };
 
     render() {
         const classes = this.props.classes;

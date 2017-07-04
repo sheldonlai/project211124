@@ -48,27 +48,28 @@ export class CustomEditor extends React.Component<CustomEditorProps> {
         return '';
     };
 
+    onEditorClick = () => {
+        const editor: Editor = this.refs.editor as any;
+        editor.focus();
+    }
+
     render() {
         let modifiedStyle = {...style};
         if (this.props.border === false)
             delete modifiedStyle.border;
         applyStylesToDefaultStyle(modifiedStyle, this.props.style);
 
-        modifiedStyle['height'] = this.props.height? this.props.height: undefined;
+        modifiedStyle['height'] = this.props.height ? this.props.height : undefined;
         return (
-            <div>
-                <div>
-
-                </div>
-                <div style={modifiedStyle}>
-                    <Editor
-                        editorState={this.props.value}
-                        handleKeyCommand={this.handleKeyCommand}
-                        readOnly={this.props.readOnly}
-                        onChange={this.onChange}
-                        blockStyleFn={this.myBlockStyleFn}
-                    />
-                </div>
+            <div style={modifiedStyle} onClick={this.onEditorClick}>
+                <Editor
+                    ref="editor"
+                    editorState={this.props.value}
+                    handleKeyCommand={this.handleKeyCommand}
+                    readOnly={this.props.readOnly}
+                    onChange={this.onChange}
+                    blockStyleFn={this.myBlockStyleFn}
+                />
             </div>
         );
     }

@@ -57,7 +57,7 @@ export namespace FrontEndQuestionModels {
     export class QuestionPreview {
         _id: any;
         title: string;
-        content: EditorState;
+        content: string;
         author: string;
         createdUtc: Date;
         answered: boolean;

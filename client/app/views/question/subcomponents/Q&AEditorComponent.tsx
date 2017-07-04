@@ -25,7 +25,7 @@ export class QAEditorComponent extends Component<QAEditorProps> {
                 {
                     !this.props.readOnly &&
                     <div style={{textAlign: "right"}}>
-                        <Button raised  onClick={this.props.onSubmit}>save</Button>
+                        <Button onClick={this.props.onSubmit}>save</Button>
                     </div>
                 }
             </div>

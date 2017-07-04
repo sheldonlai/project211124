@@ -51,9 +51,10 @@ export const QuestionPageReducer = (state = initialState, action) : QuestionPage
                 error : ''
             };
         case QuestionActionTypes.EditQuestionOK:
+            state.questionPage.question = action.data;
             return {
-                status : ReducerStateStatus.LOADING,
-                questionPage : undefined,
+                status : ReducerStateStatus.DONE,
+                questionPage : state.questionPage,
                 lastUpdated: Date.now(),
                 error : ''
             };

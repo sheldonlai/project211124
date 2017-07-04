@@ -14,16 +14,16 @@ import {QuestionHomePage} from "./question/QuestionHome";
 import {QuestionPageView} from "./question/QuestionPage";
 import TransitionGroup =require('react-transition-group/TransitionGroup');
 import {ErrorSnackBar} from "./ErrorView";
-
+import {lightBlue, green} from "material-ui/styles/colors";
 let muiTheme = createMuiTheme({
     palette: createPalette({
-        primary1Color: '#3f7ef8',
-        primary2Color: '#56ffdb',
-        primary3Color: '#d3ffbb',
+        primary: lightBlue,
+        accent: {
+            ...green,
+            A400: '#00e677',
+        },
     })
 });
-// a hack because @types/material-ui hasn't included this
-//(muiTheme.flatButton as any).textTransform = 'none';
 
 const firstChild = props => {
     const childrenArray = React.Children.toArray(props.children);
@@ -31,11 +31,6 @@ const firstChild = props => {
 };
 
 export class App extends React.Component<any, any> {
-
-    constructor(props) {
-        super(props);
-    }
-
     render() {
         return (
             <MuiThemeProvider muiTheme={muiTheme}>

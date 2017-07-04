@@ -12,6 +12,7 @@ import {CustomLink} from "../../components/CustomLink";
 import Button from "material-ui/Button";
 import {FrontEndQuestionModels} from "../../models/QuestionModels";
 import {QuestionPreviewCardsComponent} from "./subcomponents/QuestionPreviewCardsComponent";
+import Grid from "material-ui/Grid";
 import QuestionPreview = FrontEndQuestionModels.QuestionPreview;
 
 export interface QuestionViewProps extends QuestionHomeReducerState {
@@ -22,23 +23,22 @@ export interface QuestionViewProps extends QuestionHomeReducerState {
 
 class QuestionHomeComponent extends Component<QuestionViewProps> {
     componentWillMount() {
-        console.log(this.props);
-        if ((this.props.featuredQuestions.length === 0 || this.props.lastUpdated - Date.now() > 300000))
+        if ((this.props.featuredQuestions.length === 0 || this.props.lastUpdated - Date.now() < 1000))
             this.props.fetchQuestion()
     }
 
     createQuestionButton = () => {
         if (this.props.loggedIn)
-            return <CustomLink to={Routes.createQuestion}><Button raised color="primary">Make new question</Button></CustomLink>;
+            return <CustomLink to={Routes.createQuestion}><Button>Make new question</Button></CustomLink>;
         return undefined;
     };
 
     render() {
         return (
-            <div>
-                {this.createQuestionButton()}
+            <Grid container justify="flex-end" style={{width: "100%"}}>
+                <Grid>{this.createQuestionButton()}</Grid>
                 <QuestionPreviewCardsComponent list={this.props.featuredQuestions} />
-            </div>
+            </Grid>
         )
     }
 }

@@ -12,7 +12,7 @@ export class QuestionPreviewCardsComponent extends React.Component<QuestionPrevi
     render() {
         if (!this.props.list) return undefined;
         return (
-            <Grid container>
+            <Grid container justify="center">
                 {this.props.list.map((e: QuestionPreview) => (
                     <Grid item key={e.title}>
                         <div style={{marginTop: 16, display: "inline-block"}}>
