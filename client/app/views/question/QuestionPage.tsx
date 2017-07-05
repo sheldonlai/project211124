@@ -186,7 +186,8 @@ export class QuestionPageComponent extends React.Component<QuestionPageProps, Qu
                                    comment_vector = {this.getComments()}
                 />
 
-                <AnswerBoxesComponent onAnswersChange={this.onAnswersChange} answers={this.state.questionPage.answers}
+                <AnswerBoxesComponent onAnswersChange={this.onAnswersChange}
+                                      answers={this.state.questionPage.answers}
                                       user={this.props.user} onSubmit={this.submitAnswer}
                                       question={this.props.questionPage.question}
                                       resetAnswers={this.resetAnswers}

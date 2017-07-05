@@ -8,6 +8,7 @@ import AddIcon from "material-ui-icons/Add";
 import QuestionPreview = FrontEndQuestionModels.QuestionPreview;
 import Question = FrontEndQuestionModels.Question;
 import Answer = FrontEndQuestionModels.Answer;
+import cloneAnswers = FrontEndQuestionModels.cloneAnswers;
 export interface AnswerBoxesComponentProps {
     onAnswersChange: (answers: Answer[]) => void;
     onSubmit: (answer: Answer) => void;
@@ -30,7 +31,7 @@ export class AnswerBoxesComponent extends Component<AnswerBoxesComponentProps, A
     };
 
     onAnswerChange = (answer: Answer) => {
-        let answers = this.props.answers;
+        let answers = cloneAnswers(this.props.answers);
         answers = answers.map((ans) => {
             if (answer._id === ans._id) {
                 return answer;
@@ -41,7 +42,7 @@ export class AnswerBoxesComponent extends Component<AnswerBoxesComponentProps, A
     };
 
     addAnswer = () => {
-        let answers = this.props.answers;
+        let answers = cloneAnswers(this.props.answers);
         let answer = new Answer(this.props.question._id, this.props.user);
         answers.push(answer);
         this.setState({answerId: answer._id, editAnswer: true});

@@ -78,12 +78,22 @@ export namespace FrontEndQuestionModels {
         }
     }
 
+    export const cloneAnswer = (original: Answer) => {
+        let clone = new Answer(original.question, original.author);
+        clone = mapFieldsOnToObject(clone, original);
+        clone.content = EditorState.createWithContent(clone.content.getCurrentContent());
+        return clone;
+    }
+
+    export const cloneAnswers = (answers: Answer[]) => {
+        return answers.length > 0 ? answers.map(ans => {
+            return cloneAnswer(ans);
+        }) : []
+    }
+
     export const cloneQuestionPage = (obj: QuestionPage) => {
         let clone = new QuestionPage();
-        clone.answers = obj.answers.length > 0 ? obj.answers.map(ans => {
-            ans.content = EditorState.createWithContent(ans.content.getCurrentContent());
-            return ans;
-        }) : [];
+        clone.answers = cloneAnswers(obj.answers);
         clone.question = cloneQuestion(obj.question);
         return clone;
     };

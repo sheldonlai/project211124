@@ -10,6 +10,7 @@ import Grid from "material-ui/Grid";
 import QuestionPreview = FrontEndQuestionModels.QuestionPreview;
 import Question = FrontEndQuestionModels.Question;
 import Answer = FrontEndQuestionModels.Answer;
+import cloneAnswer = FrontEndQuestionModels.cloneAnswer;
 
 export interface AnswerBoxComponentProps {
     onAnswerChange: (answer: Answer) => void;
@@ -26,7 +27,7 @@ const paperStyle = {height: "100%", padding: 15, paddingBottom: 0};
 export class AnswerBoxComponent extends Component<AnswerBoxComponentProps> {
 
     onContentChange = (editorState) => {
-        let question = this.props.answer;
+        let question = cloneAnswer(this.props.answer);
         question.content = editorState;
         this.props.onAnswerChange(question);
     };
