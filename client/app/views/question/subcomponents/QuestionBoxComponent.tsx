@@ -10,6 +10,7 @@ import Button from "material-ui/Button";
 import Paper from "material-ui/Paper";
 import QuestionPreview = FrontEndQuestionModels.QuestionPreview;
 import Question = FrontEndQuestionModels.Question;
+import cloneQuestion = FrontEndQuestionModels.cloneQuestion;
 
 export interface QuestionBoxComponentProps {
     onQuestionChange: (question: Question) => void;
@@ -18,19 +19,20 @@ export interface QuestionBoxComponentProps {
     user: UserDto;
     question: Question;
     editMode: boolean;
+    resetQuestion? : () => void ;
 }
 
 let paperStyle = {height: "100%", padding: 15, paddingBottom: 0};
 
 export class QuestionBoxComponent extends Component<QuestionBoxComponentProps> {
     onTitleChange = (event) => {
-        let question = this.props.question;
+        let question = cloneQuestion(this.props.question);
         question.title = event.target.value;
         this.props.onQuestionChange(question);
     };
 
     onContentChange = (editorState) => {
-        let question = this.props.question;
+        let question = cloneQuestion(this.props.question);
         question.content = editorState;
         this.props.onQuestionChange(question);
     };
@@ -56,7 +58,7 @@ export class QuestionBoxComponent extends Component<QuestionBoxComponentProps> {
                 <div>
                     <QAEditorComponent value={this.props.question.content} onChange={this.onContentChange}
                                        onSubmit={this.props.onSubmit} readOnly={!this.props.editMode}
-                                        style={{fontSize: 14}}
+                                        style={{fontSize: 14}} reset={this.props.resetQuestion}
                     />
                     <div>
                         <ChipListComponent chips={question.tags} keyName={"tag"}/>

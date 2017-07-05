@@ -23,17 +23,11 @@ import Answer = FrontEndQuestionModels.Answer;
 import cloneQuestionPage = FrontEndQuestionModels.cloneQuestionPage;
 import Question = FrontEndQuestionModels.Question;
 import {CommentsComponent} from "./subcomponents/CommentsComponent"
+import {CommentDto} from "../../../../server/dtos/q&a/CommentDto";
+import cloneQuestion = FrontEndQuestionModels.cloneQuestion;
 
 
-export interface QuestionPageProps extends QuestionPageReducerState, RouteComponentProps<{ id: string }> {
-    user: UserDto
-    loggedIn: boolean;
-    fetchQuestionPage: (title: string) => any;
-    editQuestion: (question: Question) => any;
-    editAnswer: (answer: Answer) => any;
-    addAnswer: (answer: Answer) => any;
-    newError: (message: string) => any;
-}
+export interface QuestionPageProps extends StateToProps, DispatchToProps, RouteComponentProps<{ id: string }> {}
 
 export interface QuestionPageState {
     editQuestion: boolean;
@@ -81,6 +75,9 @@ export class QuestionPageComponent extends React.Component<QuestionPageProps, Qu
             this.setState({questionPage: nextProps.questionPage ? cloneQuestionPage(nextProps.questionPage) : undefined});
         } else if (JSON.stringify(nextProps.questionPage.question) !== JSON.stringify(this.props.questionPage.question)) {
             this.setState({editQuestion: false, questionPage: cloneQuestionPage(nextProps.questionPage)});
+        } else if (nextProps.questionPage.answers != this.props.questionPage.answers) {
+            this.setState({editAnswer: false, questionPage: cloneQuestionPage(nextProps.questionPage)});
+            //(this.refs.answerBoxes as any).resetAnswers();
         }
     }
 
@@ -136,13 +133,25 @@ export class QuestionPageComponent extends React.Component<QuestionPageProps, Qu
         this.setState({questionPage: temp});
     };
 
+    resetAnswers = () => {
+        let questionPage = this.state.questionPage;
+        questionPage.answers = this.props.questionPage.answers.map(ans=>ans);
+        this.setState({questionPage});
+    };
+
+    resetQuestion = () => {
+        let questionPage = this.state.questionPage;
+        console.log(this.props.questionPage.question.content.getCurrentContent().getPlainText());
+        questionPage.question = cloneQuestion(this.props.questionPage.question);
+        this.setState({questionPage, editQuestion: false});
+    };
+
     onShowMoreComments(){
 
     }
 
     getComments(){
-        let comment_vector: Array<CommentDto>
-
+        let comment_vector: Array<CommentDto>;
         return comment_vector;
     }
 
@@ -165,11 +174,12 @@ export class QuestionPageComponent extends React.Component<QuestionPageProps, Qu
                     )}
                 />
                 <QuestionBoxComponent onQuestionChange={this.onQuestionChange}
-                                      question={this.props.questionPage.question}
+                                      question={this.state.questionPage.question}
                                       onSubmit={this.submitQuestion}
                                       onEditClick={this.editPost}
                                       editMode={this.state.editQuestion}
                                       user={this.props.user}
+                                      resetQuestion={this.resetQuestion}
                 />
 
                 <CommentsComponent onShowMore = {this.onShowMoreComments}
@@ -179,13 +189,28 @@ export class QuestionPageComponent extends React.Component<QuestionPageProps, Qu
                 <AnswerBoxesComponent onAnswersChange={this.onAnswersChange} answers={this.state.questionPage.answers}
                                       user={this.props.user} onSubmit={this.submitAnswer}
                                       question={this.props.questionPage.question}
+                                      resetAnswers={this.resetAnswers}
+                                      ref="answerBoxes"
                 />
             </div>
         );
     }
 }
 
-export const QuestionPageView = AnimatedWrapper(connect(
+interface StateToProps extends QuestionPageReducerState{
+    loggedIn: boolean;
+    user: UserDto;
+}
+
+interface DispatchToProps {
+    fetchQuestionPage: (title: string) => void;
+    editQuestion: (question: Question) => void;
+    editAnswer: (answer: Answer) => void;
+    addAnswer: (answer: Answer) => void;
+    newError: (message: string) => void;
+}
+
+export const QuestionPageView = AnimatedWrapper(connect<StateToProps, DispatchToProps, RouteComponentProps<{ id: string }>>(
     (state: AppStoreState) => ({
         loggedIn: state.auth.loggedIn,
         user: state.auth.user,

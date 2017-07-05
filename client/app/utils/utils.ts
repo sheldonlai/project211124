@@ -12,3 +12,13 @@ export const applyStylesToDefaultStyle = (defaultStyle: CSSProperties, dictionar
     }
     return defaultStyle;
 };
+
+export const mapFieldsOnToObject = (object: any, fields: any) : any => {
+    if (fields) {
+        let keys = Object.keys(fields);
+        for (let key of keys) {
+            object[key] = fields[key];
+        }
+    }
+    return object;
+};

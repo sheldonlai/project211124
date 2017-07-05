@@ -13,55 +13,6 @@ import {ClientError} from "../errors/HttpStatus";
 import {ITagRepository} from "../repositories/TagRepository";
 import {ITag} from "../models/Tags";
 
-export interface IAnswerService {
-    createAnswer(user: User, answer: AnswerDto): Promise<AnswerDto>;
-    updateAnswer(user: User, answer: AnswerDto): Promise<AnswerDto>;
-}
-
-export class AnswerService extends BaseService implements IAnswerService {
-    private answerRepository: IAnswerRepository;
-
-    constructor(answerRepository: IAnswerRepository) {
-        super();
-
-        this.answerRepository = answerRepository;
-    }
-
-    createAnswer(current_user: User, new_answer: AnswerDto): Promise<AnswerDto> {
-        let answerObj = new Answer(
-            new_answer.question, new_answer.content, current_user
-        );
-
-        return this.answerRepository.create(answerObj);
-    }
-
-    updateAnswer(current_user: User, updated_answer: AnswerDto): Promise<AnswerDto> {
-        return this.answerRepository.getById(updated_answer._id).then((answer_found: Answer) => {
-            this.checkPermissionForModification(updated_answer, answer_found, current_user);
-
-            //filter out non-modifiable fields
-            delete updated_answer.author;
-            delete updated_answer.upVotes;
-            delete updated_answer.downVotes;
-            delete updated_answer.createdUtc;
-            delete updated_answer.question;
-            delete updated_answer.comments;
-
-            updated_answer.lastEditedUtc = new Date(Date.now());
-            answer_found = this.mapKeysOntoObject(answer_found, updated_answer);
-
-            return this.answerRepository.update(answer_found)
-                .then((answer)=> this.answerRepository.getById(answer._id));
-        });
-    }
-
-    private checkPermissionForModification = (answer_by_user: AnswerDto, answer_found_in_db: Answer, currentUser: User) => {
-        if (answer_by_user._id != currentUser._id) {
-            throw new AppError("You are not the owner of this answer");
-        }
-        return true;
-    }
-}
 
 export interface IQuestionService {
     getQuestionPreview(user?: User): Promise<QuestionPreviewCollectionsDto>;
@@ -146,7 +97,7 @@ export class QuestionService extends BaseService implements IQuestionService {
     }
 
     private checkPermissionForModification = (questionDto: QuestionDto, questionObj: Question, currentUser: User) => {
-        if (questionObj.author._id.toString() != currentUser._id) {
+        if (questionObj.author._id.toString() != currentUser._id.toString()) {
             throw new AppError("You are not the owner of this question!")
         }
         if (currentUser.username != questionDto.author.username) {

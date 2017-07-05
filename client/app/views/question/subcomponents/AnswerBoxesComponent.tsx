@@ -14,6 +14,7 @@ export interface AnswerBoxesComponentProps {
     user: UserDto;
     question: Question;
     answers: Answer[];
+    resetAnswers?: ()=> void;
 }
 
 export interface AnswerBoxesComponentState {
@@ -47,6 +48,11 @@ export class AnswerBoxesComponent extends Component<AnswerBoxesComponentProps, A
         this.props.onAnswersChange(answers);
     };
 
+    resetAnswers = () => {
+        this.setState({editAnswer: false, answerId: undefined});
+        this.props.resetAnswers();
+    };
+
     render() {
         return (
             <div>
@@ -58,6 +64,7 @@ export class AnswerBoxesComponent extends Component<AnswerBoxesComponentProps, A
                                             user={this.props.user} onSubmit={()=> {this.props.onSubmit(answer)}}
                                             answer={answer} onAnswerChange={this.onAnswerChange} key={key}
                                             onEditClick={()=> {this.onEditClick(answer)}}
+                                            resetAnswer={this.resetAnswers}
                         />
                     )
                 })}

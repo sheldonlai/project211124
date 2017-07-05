@@ -21,53 +21,91 @@ const initialState: QuestionPageReducerState = {
     error: ''
 };
 
+const getErrorState = (state: QuestionPageReducerState, action: any) => {
+    return {
+        status: ReducerStateStatus.ERROR,
+        questionPage: state.questionPage,
+        lastUpdated: state.lastUpdated,
+        error: action.data ? action.data : 'An unexpected error has occurred.'
+    };
+};
+
+const getOKState = (questionPage: QuestionPage) => {
+    return {
+        status: ReducerStateStatus.DONE,
+        questionPage: questionPage,
+        lastUpdated: Date.now(),
+        error: ''
+    };
+};
+
+const getLoadingState = (state: QuestionPageReducerState) => {
+    return {
+        status: ReducerStateStatus.LOADING,
+        questionPage: state.questionPage,
+        lastUpdated: state.lastUpdated,
+        error: ''
+    };
+};
+
 export const QuestionPageReducer = (state = initialState, action): QuestionPageReducerState => {
     switch (action.type) {
+
+        // Fetch Question Page
         case QuestionActionTypes.FetchQuestionPageRequest:
-            return {
-                status: ReducerStateStatus.LOADING,
-                questionPage: undefined,
-                lastUpdated: state.lastUpdated,
-                error: ''
-            };
+            return getLoadingState(state);
+
         case QuestionActionTypes.FetchQuestionPageOK:
-            return {
-                status: ReducerStateStatus.DONE,
-                questionPage: action.data,
-                lastUpdated: Date.now(),
-                error: ''
-            };
+            return getOKState(action.data);
+
         case QuestionActionTypes.FetchQuestionPageError:
-            return {
-                status: ReducerStateStatus.ERROR,
-                questionPage: state.questionPage,
-                lastUpdated: state.lastUpdated,
-                error: action.data
-            };
+            return getErrorState(state, action);
+
+
+        // Edit Question
         case QuestionActionTypes.EditQuestionRequest:
-            return {
-                status: ReducerStateStatus.LOADING,
-                questionPage: state.questionPage,
-                lastUpdated: state.lastUpdated,
-                error: ''
-            };
+            return getLoadingState(state);
+
         case QuestionActionTypes.EditQuestionOK:
             // clone question page so that changing this object wont change the current state
             let questionPage = cloneQuestionPage(state.questionPage);
             questionPage.question = action.data;
-            return {
-                status: ReducerStateStatus.DONE,
-                questionPage: questionPage,
-                lastUpdated: Date.now(),
-                error: ''
-            };
+            return getOKState(questionPage);
+
+        case QuestionActionTypes.EditQuestionError:
+            return getErrorState(state, action);
+
+
+        // Add Answer
+        case QuestionActionTypes.AddAnswerRequest:
+            return getLoadingState(state);
+
+        case QuestionActionTypes.AddAnswerOK:
+            // clone question page so that changing this object wont change the current state
+            let questionPage2 = cloneQuestionPage(state.questionPage);
+            questionPage2.answers.push(action.data);
+            return getOKState(questionPage2);
+
+        case QuestionActionTypes.AddAnswerError:
+            return getErrorState(state, action);
+
+
+        // Edit Answer
+        case QuestionActionTypes.EditAnswerRequest:
+            return getLoadingState(state);
+
+        case QuestionActionTypes.EditAnswerOK:
+            // clone question page so that changing this object wont change the current state
+            let questionPage3 = cloneQuestionPage(state.questionPage);
+            questionPage3.answers = questionPage3.answers.map((answer) =>  {
+                if (answer._id == action.data._id)
+                    return action.data;
+                return answer;
+            });
+            return getOKState(questionPage3);
+
         case QuestionActionTypes.EditAnswerError:
-            return {
-                status: ReducerStateStatus.ERROR,
-                questionPage: state.questionPage,
-                lastUpdated: state.lastUpdated,
-                error: action.data ? action.data : 'An unexpected error has occurred.'
-            };
+            return getErrorState(state, action);
 
         default:
             return state;

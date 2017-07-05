@@ -5,6 +5,7 @@ import {EditorState} from "draft-js";
 import {CustomEditor} from "../../../components/CustomEditor/CustomEditor";
 import Button from "material-ui/Button";
 import QuestionPreview = FrontEndQuestionModels.QuestionPreview;
+import {isNullOrUndefined} from "util";
 
 export interface QAEditorProps{
     value: EditorState;
@@ -12,6 +13,7 @@ export interface QAEditorProps{
     onSubmit: () => any;
     readOnly?: boolean;
     style?:any;
+    reset?: () => void;
 }
 
 export class QAEditorComponent extends Component<QAEditorProps> {
@@ -23,9 +25,12 @@ export class QAEditorComponent extends Component<QAEditorProps> {
                             border={!readOnly} style={this.props.style}
                 />
                 {
-                    !this.props.readOnly &&
+                    !readOnly &&
                     <div style={{textAlign: "right"}}>
-                        <Button onClick={this.props.onSubmit}>save</Button>
+                        <Button color="primary" onClick={this.props.onSubmit}>save</Button>
+                        {!isNullOrUndefined(this.props.reset) &&
+                            <Button onClick={this.props.reset}>cancel</Button>
+                        }
                     </div>
                 }
             </div>

@@ -16,6 +16,7 @@ import {FileUploadAPI} from "./routes/FileUploadAPI";
 
 let favicon = require('serve-favicon');
 import * as morgan from 'morgan';
+import {AnswerAPI} from "./routes/AnswerAPI";
 
 export class Server {
     public app: express.Application;
@@ -80,12 +81,14 @@ export class Server {
 
         /* Home */
         new HomeAPI(router);
-        /* QuestionHomeComponent Answer */
+        /* QuestionHomeComponent */
         new QuestionAPI(router, ServiceProvider.QuestionService);
         /* Authentication */
         new AuthenticationAPI(router, ServiceProvider.AuthenticationService);
         /* File Upload */
         new FileUploadAPI(router);
+
+        new AnswerAPI(router, ServiceProvider.AnswerService);
 
         this.app.use('/api', router);
     }

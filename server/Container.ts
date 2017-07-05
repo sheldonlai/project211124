@@ -8,6 +8,7 @@ import {EmailVerificationRepository} from "./repositories/EmailVerificationRepos
 import {IMailService, MailService} from "./services/MailService";
 import {TemplatesProvider} from "./services/TemplatesProvider";
 import {TagRepository} from "./repositories/TagRepository";
+import {AnswerService} from "./services/AnswerService";
 
 export class RepositoryProvider {
     static AnswerRepository = new AnswerRepository();
@@ -15,7 +16,6 @@ export class RepositoryProvider {
     static UserRepository = new UserRepository();
     static EmailVerificationRepository = new EmailVerificationRepository();
     static TagRepository = new TagRepository();
-
 }
 
 export class ServiceProvider {
@@ -27,6 +27,12 @@ export class ServiceProvider {
         ServiceProvider.TemplatesProvider,
         RepositoryProvider.UserRepository,
         RepositoryProvider.EmailVerificationRepository);
-    static QuestionService = new QuestionService(RepositoryProvider.QuestionRepository, RepositoryProvider.AnswerRepository, RepositoryProvider.TagRepository);
+    static QuestionService = new QuestionService(
+        RepositoryProvider.QuestionRepository,
+        RepositoryProvider.AnswerRepository,
+        RepositoryProvider.TagRepository);
+    static AnswerService = new AnswerService(
+        RepositoryProvider.AnswerRepository
+    );
 
 }

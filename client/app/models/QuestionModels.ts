@@ -4,6 +4,7 @@ import {EditorState} from "draft-js";
 import {PublicityStatus} from "../../../server/enums/PublicityStatus";
 import {QuestionComment, QuestionDifficulty} from "../../../server/models/Question";
 import {DifficultyLevel, QuestionEducationLevel} from "../../../server/enums/QuestionEducationLevel";
+import {mapFieldsOnToObject} from "../utils/utils";
 
 export namespace FrontEndQuestionModels {
     export class Question {
@@ -72,15 +73,26 @@ export namespace FrontEndQuestionModels {
         question: Question;
         answers: Answer[];
 
-        constructor(){
+        constructor() {
             this.answers = [];
         }
     }
 
-    export const cloneQuestionPage = (obj: QuestionPage) =>{
+    export const cloneQuestionPage = (obj: QuestionPage) => {
         let clone = new QuestionPage();
-        clone.answers = obj.answers.length > 0? obj.answers.map(ans=> ans): [];
-        clone.question = {...obj.question};
+        clone.answers = obj.answers.length > 0 ? obj.answers.map(ans => {
+            ans.content = EditorState.createWithContent(ans.content.getCurrentContent());
+            return ans;
+        }) : [];
+        clone.question = cloneQuestion(obj.question);
+        return clone;
+    };
+
+    export const cloneQuestion = (original: Question): Question => {
+        let clone = new Question();
+        clone = mapFieldsOnToObject(clone, original);
+        clone.title = original.title;
+        clone.content = EditorState.createWithContent(clone.content.getCurrentContent());
         return clone;
     }
 }

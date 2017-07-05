@@ -18,6 +18,7 @@ export interface AnswerBoxComponentProps {
     user: UserDto;
     answer: Answer;
     editMode: boolean;
+    resetAnswer?: () => void;
 }
 
 const paperStyle = {height: "100%", padding: 15, paddingBottom: 0};
@@ -43,7 +44,7 @@ export class AnswerBoxComponent extends Component<AnswerBoxComponentProps> {
                     </Grid>
                     <QAEditorComponent value={this.props.answer.content} onChange={this.onContentChange}
                                        onSubmit={this.props.onSubmit} readOnly={!this.props.editMode}
-                                       style={{fontSize: 14}}
+                                       style={{fontSize: 14}} reset={this.props.resetAnswer}
                     />
                     <Divider/>
                     <p style={{color: "grey", fontSize: 10, textAlign: "right"}}>

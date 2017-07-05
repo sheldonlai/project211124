@@ -1,5 +1,5 @@
 import {CSSProperties} from "react";
-import {applyStylesToDefaultStyle} from "../utils";
+import {mapFieldsOnToObject} from "../utils";
 /**
  * Created by SHELDON on 7/3/2017.
  */
@@ -13,7 +13,7 @@ test('map key onto object', () => {
         fontFamily: "calibri",
         color: "blue"
     };
-    applyStylesToDefaultStyle(obj, newStyle);
+    mapFieldsOnToObject(obj, newStyle);
 
     expect(obj.fontFamily).toBe("calibri");
     expect(obj.color).toBe("blue");
