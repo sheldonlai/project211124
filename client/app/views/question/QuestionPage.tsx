@@ -14,8 +14,6 @@ import {FrontEndQuestionModels} from "../../models/QuestionModels";
 import AnimatedWrapper from "../../components/AnimatedWrapper";
 // import {CircularProgress} from "material-ui/Progress";
 import {isNullOrUndefined} from "util";
-import {EditorState} from "draft-js";
-import {QAEditorComponent} from "./subcomponents/Q&AEditorComponent";
 import {QuestionBoxComponent} from "./subcomponents/QuestionBoxComponent";
 import {AnswerActions} from "../../actions/AnswerActions";
 import {QuestionAPIController} from "../../api.controllers/QuestionAPIController";
@@ -102,7 +100,7 @@ export class QuestionPageComponent extends React.Component<QuestionPageProps, Qu
     };
     onQuestionChange = (question: Question) => {
         let temp: QuestionPage = new QuestionPage();
-        temp.answers = this.props.questionPage.answers;
+        temp.answers = this.state.questionPage.answers;
         temp.question = question;
         this.setState({questionPage: temp});
     };
@@ -129,7 +127,7 @@ export class QuestionPageComponent extends React.Component<QuestionPageProps, Qu
             this.props.editQuestion(res.data);
             this.setState({editQuestion: false});
             this.props.editQuestion(res.data);
-        }).catch((err) => {
+        }).catch(() => {
             this.props.newError("Unable to update question.");
         })
 
@@ -172,7 +170,7 @@ export class QuestionPageComponent extends React.Component<QuestionPageProps, Qu
         let temp: QuestionPage = this.state.questionPage;
         temp.answers = answers;
         this.setState({questionPage: temp});
-    }
+    };
 
     render() {
         if (this.state.questionPage == null) {
