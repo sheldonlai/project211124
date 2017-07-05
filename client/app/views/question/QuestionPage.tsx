@@ -24,6 +24,7 @@ import QuestionPage = FrontEndQuestionModels.QuestionPage;
 import Answer = FrontEndQuestionModels.Answer;
 import cloneQuestionPage = FrontEndQuestionModels.cloneQuestionPage;
 import Question = FrontEndQuestionModels.Question;
+import {CommentsComponent} from "./subcomponents/CommentsComponent"
 
 
 export interface QuestionPageProps extends QuestionPageReducerState, RouteComponentProps<{ id: string }> {
@@ -174,6 +175,16 @@ export class QuestionPageComponent extends React.Component<QuestionPageProps, Qu
         this.setState({questionPage: temp});
     }
 
+    onShowMoreComments(){
+
+    }
+
+    getComments(){
+        let comment_vector: Array<CommentDto>
+
+        return comment_vector;
+    }
+
     render() {
         if (this.state.questionPage == null) {
             return (
@@ -199,6 +210,10 @@ export class QuestionPageComponent extends React.Component<QuestionPageProps, Qu
                                       onEditClick={this.editPost}
                                       editMode={this.state.editQuestion}
                                       user={this.props.user}
+                />
+
+                <CommentsComponent onShowMore = {this.onShowMoreComments}
+                                   comment_vector = {this.getComments()}
                 />
 
                 <AnswerBoxesComponent onAnswersChange={this.onAnswersChange} answers={this.state.questionPage.answers}
