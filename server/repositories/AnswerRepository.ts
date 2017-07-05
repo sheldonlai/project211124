@@ -1,6 +1,7 @@
 import {Answer, AnswerModel, IAnswer} from "../models/Answer";
 import {BaseRepository, IBaseRepository} from "./BaseRepository";
 import {Types} from "mongoose";
+import {QuestionComment} from "../models/Question";
 export interface IAnswerRepository extends IBaseRepository<Answer>{
     getByQuestionId(questionId: Types.ObjectId, sort? : any) : Promise<Answer[]>;
 }
@@ -25,6 +26,17 @@ export class AnswerRepository extends BaseRepository<Answer, IAnswer> implements
     update(answer: Answer): Promise<Answer>{
     	delete answer.lastEditedUtc;
     	return super.update(answer);
+    }
+
+    protected applyRestriction(answer: Answer): Answer{
+        if (answer.author) {
+            delete answer.author.local;
+        }
+        answer.comments = answer.comments.map((comment: QuestionComment) => {
+            delete comment.commentBy.local;
+            return comment;
+        });
+        return answer;
     }
 
 }

@@ -44,4 +44,13 @@ const schema = new Schema({
         lastEditedUtc:  {type: Date, default: Date.now}
     }]
 });
+
+const autoPopulateUsers = function(next) {
+    this.populate(['author', "comments.commentBy"]);
+    next();
+};
+
+schema.pre('findOne', autoPopulateUsers).pre('find', autoPopulateUsers);
+
+
 export const AnswerModel = model<IAnswer>('answer', schema);

@@ -1,16 +1,16 @@
 import {ApiController} from "./ApiController";
-import {AxiosError, AxiosPromise, AxiosResponse} from "axios";
+import {AxiosPromise, AxiosResponse} from "axios";
 import {APIUrls} from "../../../server/urls";
 import {QuestionDto} from "../../../server/dtos/q&a/QuestionDto";
 import {convertFromRaw, convertToRaw, EditorState, RawDraftContentState} from "draft-js";
 import {FrontEndQuestionModels} from "../models/QuestionModels";
 import {QuestionPreviewCollectionsDto} from "../../../server/dtos/q&a/QuestionPreviewCollectionsDto";
 import {QuestionPreviewDto} from "../../../server/dtos/q&a/QuestionPreviewDto";
+import {QuestionPageDto} from "../../../server/dtos/q&a/QuestionPageDto";
+import {AnswerDto} from "../../../server/dtos/q&a/AnswerDto";
 import Question = FrontEndQuestionModels.Question;
 import QuestionPreviewCollections = FrontEndQuestionModels.QuestionPreviewCollections;
 import QuestionPage = FrontEndQuestionModels.QuestionPage;
-import {QuestionPageDto} from "../../../server/dtos/q&a/QuestionPageDto";
-import {AnswerDto} from "../../../server/dtos/q&a/AnswerDto";
 import Answer = FrontEndQuestionModels.Answer;
 
 export class QuestionAPIController extends ApiController {
@@ -55,12 +55,18 @@ export class QuestionAPIController extends ApiController {
 
     createQuestion(question: Question): AxiosPromise {
         const questionDto = this.convertQuestionToDto(question);
-        return this.post(APIUrls.CreateQuestion, questionDto);
+        return this.post(APIUrls.CreateQuestion, questionDto).then((response: AxiosResponse) => {
+            response.data = this.convertDtoToQuestion(response.data);
+            return response;
+        });
     }
 
     updateQuestion(question: Question): AxiosPromise{
         const questionDto = this.convertQuestionToDto(question);
-        return this.put(APIUrls.UpdateQuestion, questionDto);
+        return this.put(APIUrls.UpdateQuestion, questionDto).then((response: AxiosResponse) => {
+            response.data = this.convertDtoToQuestion(response.data);
+            return response;
+        });
     }
 
     fetchQuestionByID(id: string): AxiosPromise {

@@ -7,19 +7,17 @@ import {AppStoreState} from "../../stores/AppStore";
 import {QuestionActions} from "../../actions/QuestionActions";
 import {grey} from "material-ui/styles/colors";
 import {UserDto} from "../../../../server/dtos/auth/UserDto";
-import {CommentDto} from "../../../../server/dtos/q&a/CommentDto";
 import {Prompt, RouteComponentProps} from "react-router";
 import {QuestionPageReducerState} from "../../reducers/QuestionPageReducer";
 import {FrontEndQuestionModels} from "../../models/QuestionModels";
 import AnimatedWrapper from "../../components/AnimatedWrapper";
-// import {CircularProgress} from "material-ui/Progress";
+import {CircularProgress} from "material-ui/Progress";
 import {isNullOrUndefined} from "util";
-import {EditorState} from "draft-js";
-import {QAEditorComponent} from "./subcomponents/Q&AEditorComponent";
 import {QuestionBoxComponent} from "./subcomponents/QuestionBoxComponent";
 import {AnswerActions} from "../../actions/AnswerActions";
 import {QuestionAPIController} from "../../api.controllers/QuestionAPIController";
 import {AnswerBoxesComponent} from "./subcomponents/AnswerBoxesComponent";
+import {ReducerStateStatus} from "../../constants/ReducerStateStatus";
 import QuestionPage = FrontEndQuestionModels.QuestionPage;
 import Answer = FrontEndQuestionModels.Answer;
 import cloneQuestionPage = FrontEndQuestionModels.cloneQuestionPage;
@@ -47,9 +45,6 @@ export interface QuestionPageState {
     questionPage: QuestionPage;
 }
 
-let paperStyle = {height: "100%", padding: 15, paddingBottom: 0};
-
-
 export class QuestionPageComponent extends React.Component<QuestionPageProps, QuestionPageState> {
 
     apiController: QuestionAPIController;
@@ -73,7 +68,7 @@ export class QuestionPageComponent extends React.Component<QuestionPageProps, Qu
         if (
             isNullOrUndefined(this.props.questionPage) ||
             this.props.questionPage.question._id !== this.props.match.params.id ||
-            this.props.lastUpdated - Date.now() > 15000
+            Date.now() - this.props.lastUpdated  > 5000
         ) {
             this.resetStates();
             this.props.fetchQuestionPage(this.props.match.params.id);
@@ -84,6 +79,8 @@ export class QuestionPageComponent extends React.Component<QuestionPageProps, Qu
         if (nextProps.questionPage != this.props.questionPage) {
             this.resetStates();
             this.setState({questionPage: nextProps.questionPage ? cloneQuestionPage(nextProps.questionPage) : undefined});
+        } else if (JSON.stringify(nextProps.questionPage.question) !== JSON.stringify(this.props.questionPage.question)) {
+            this.setState({editQuestion: false, questionPage: cloneQuestionPage(nextProps.questionPage)});
         }
     }
 
@@ -99,23 +96,12 @@ export class QuestionPageComponent extends React.Component<QuestionPageProps, Qu
             editComment: false,
             commentId: undefined,
             loading: false,
-        })
+        });
     };
     onQuestionChange = (question: Question) => {
         let temp: QuestionPage = new QuestionPage();
-        temp.answers = this.props.questionPage.answers;
+        temp.answers = this.state.questionPage.answers;
         temp.question = question;
-        this.setState({questionPage: temp});
-    };
-
-    onAnswerChange = (answer: Answer) => {
-        let temp: QuestionPage = this.state.questionPage;
-        temp.answers = temp.answers.map((ans) => {
-            if (answer._id === ans._id) {
-                return answer;
-            }
-            return ans
-        });
         this.setState({questionPage: temp});
     };
 
@@ -126,14 +112,7 @@ export class QuestionPageComponent extends React.Component<QuestionPageProps, Qu
 
     submitQuestion = () => {
         this.setState({loading: true});
-        this.apiController.updateQuestion(this.state.questionPage.question).then((res) => {
-            this.props.editQuestion(res.data);
-            this.setState({editQuestion: false});
-            this.props.editQuestion(res.data);
-        }).catch((err) => {
-            this.props.newError("Unable to update question.");
-        })
-
+        this.props.editQuestion(this.state.questionPage.question);
     };
 
     addAnswer = () => {
@@ -144,36 +123,18 @@ export class QuestionPageComponent extends React.Component<QuestionPageProps, Qu
 
 
     submitAnswer = (answer: Answer) => {
-        if (answer._id){
+        if (answer._id) {
             this.props.editAnswer(answer);
         } else {
             this.props.addAnswer(answer);
         }
     };
 
-    getFooterPostedBy = (date: string, name: string) => {
-        return (
-            <p style={{color: "grey", fontSize: 10, textAlign: "right"}}>
-                Posted on {date}
-                <br/>
-                by {name}
-            </p>
-        )
-    };
-
-    generateNewComment = (): CommentDto => {
-        return {
-            commentBy: this.props.user,
-            commentContent: '',
-            lastEditedUtc: undefined
-        };
-    };
-
     onAnswersChange = (answers: Answer[]) => {
         let temp: QuestionPage = this.state.questionPage;
         temp.answers = answers;
         this.setState({questionPage: temp});
-    }
+    };
 
     onShowMoreComments(){
 
@@ -186,13 +147,12 @@ export class QuestionPageComponent extends React.Component<QuestionPageProps, Qu
     }
 
     render() {
-        if (this.state.questionPage == null) {
+        if (this.state.questionPage == null || this.props.status === ReducerStateStatus.LOADING) {
             return (
                 <div style={{height: "100%", margin: 10, padding: "200px 0px", textAlign: "center"}}>
-                    {/*<CircularProgress*/}
-                    {/*size={150}*/}
-                    {/*style={{display: 'inline-block', position: 'relative'}}*/}
-                    {/*/>*/}
+                    <CircularProgress
+                        size={150}
+                    />
                 </div>
             )
         }
@@ -217,8 +177,8 @@ export class QuestionPageComponent extends React.Component<QuestionPageProps, Qu
                 />
 
                 <AnswerBoxesComponent onAnswersChange={this.onAnswersChange} answers={this.state.questionPage.answers}
-                                    user={this.props.user} onSubmit={this.submitAnswer}
-                                    question={this.props.questionPage.question}
+                                      user={this.props.user} onSubmit={this.submitAnswer}
+                                      question={this.props.questionPage.question}
                 />
             </div>
         );
