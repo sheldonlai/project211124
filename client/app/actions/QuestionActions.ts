@@ -37,20 +37,19 @@ export class QuestionActions extends BaseActions {
     }
 
     static updateQuestion(question: Question): any {
-        // return function(dispatch) {
-        //     apiController.createQuestion(questionReq).then(res => {
-        //         dispatch({
-        //             type: QuestionActionTypes.EditAnswerOK,
-        //             data: res.data
-        //         })
-        //     }).catch(err =>
-        //         QuestionActions.handleError(dispatch, err, QuestionActionTypes.EditAnswerError)
-        //     )
-        // }
-        return {
-            type: QuestionActionTypes.EditAnswerOK,
-            data: question
-        };
+        return function(dispatch) {
+            dispatch({
+                type: QuestionActionTypes.EditQuestionRequest,
+            });
+            apiController.updateQuestion(question).then(res => {
+                dispatch({
+                    type: QuestionActionTypes.EditQuestionOK,
+                    data: res.data
+                });
+            }).catch(err =>
+                QuestionActions.handleError(dispatch, err, QuestionActionTypes.EditQuestionError)
+            )
+        }
     }
 
     static fetchQuestionPage(id: string) {

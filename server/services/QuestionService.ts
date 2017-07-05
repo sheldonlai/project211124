@@ -50,7 +50,8 @@ export class AnswerService extends BaseService implements IAnswerService {
             updated_answer.lastEditedUtc = new Date(Date.now());
             answer_found = this.mapKeysOntoObject(answer_found, updated_answer);
 
-            return this.answerRepository.update(answer_found);
+            return this.answerRepository.update(answer_found)
+                .then((answer)=> this.answerRepository.getById(answer._id));
         });
     }
 
@@ -139,7 +140,8 @@ export class QuestionService extends BaseService implements IQuestionService {
             restrictedDto.lastEditedUtc = new Date(Date.now());
             questionObj = this.mapKeysOntoObject(questionObj, restrictedDto);
 
-            return this.questionRepository.update(questionObj);
+            return this.questionRepository.update(questionObj)
+                .then((question)=> this.questionRepository.getById(question._id));
         })
     }
 
