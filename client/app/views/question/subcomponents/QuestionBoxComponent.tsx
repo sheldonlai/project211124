@@ -44,7 +44,7 @@ export class QuestionBoxComponent extends Component<QuestionBoxComponentProps> {
         if (editable && !this.props.editMode){
             editButton = (
                 <div style={{float: "right"}}>
-                    <Button raised onClick={this.props.onEditClick} style={{float: "right"}}>Edit</Button>
+                    <Button color="primary" onClick={this.props.onEditClick}>Edit</Button>
                 </div>
             )
         }

@@ -40,7 +40,8 @@ export class AnswerBoxComponent extends Component<AnswerBoxComponentProps> {
                 <div>
                     <Grid container justify="flex-end">
                         <Grid item>
-                            {editable && !this.props.editMode && <Button onClick={this.props.onEditClick}>Edit</Button>}
+                            {editable && !this.props.editMode &&
+                            <Button color="primary" onClick={this.props.onEditClick}>Edit</Button>}
                         </Grid>
                     </Grid>
                     <QAEditorComponent value={this.props.answer.content} onChange={this.onContentChange}

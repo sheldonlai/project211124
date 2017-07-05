@@ -141,7 +141,6 @@ export class QuestionPageComponent extends React.Component<QuestionPageProps, Qu
 
     resetQuestion = () => {
         let questionPage = this.state.questionPage;
-        console.log(this.props.questionPage.question.content.getCurrentContent().getPlainText());
         questionPage.question = cloneQuestion(this.props.questionPage.question);
         this.setState({questionPage, editQuestion: false});
     };
