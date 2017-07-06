@@ -1,7 +1,6 @@
 import * as React from "react";
-import {match, Route} from "react-router";
-import {Link} from "react-router-dom";
 import AnimatedWrapper from "../../components/AnimatedWrapper";
+import {FileUploader} from "../../components/FileUploader/FileUploader";
 
 export class HomeComponent extends React.Component<any, any> {
 
@@ -9,6 +8,7 @@ export class HomeComponent extends React.Component<any, any> {
         return (
             <div>
                 <h4>This is home page</h4>
+                <FileUploader />
             </div>
         )
     }
