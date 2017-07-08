@@ -1,5 +1,5 @@
 import * as React from "react";
-import {createMuiTheme, MuiThemeProvider} from "material-ui/styles";
+import {MuiThemeProvider} from "material-ui/styles";
 import createPalette from "material-ui/styles/palette";
 import {Route, Router} from "react-router";
 import {Home} from "./home/home";
@@ -14,16 +14,16 @@ import {QuestionHomePage} from "./question/QuestionHome";
 import {QuestionPageView} from "./question/QuestionPage";
 import TransitionGroup =require('react-transition-group/TransitionGroup');
 import {ErrorSnackBar} from "./ErrorView";
-import {lightBlue, green} from "material-ui/styles/colors";
-let muiTheme = createMuiTheme({
-    palette: createPalette({
-        primary: lightBlue,
-        accent: {
-            ...green,
-            A400: '#00e677',
-        },
-    })
-});
+// import {lightBlue, green} from "material-ui/styles/colors";
+// let muiTheme = createMuiTheme({
+//     palette: createPalette({
+//         primary: lightBlue,
+//         accent: {
+//             ...green,
+//             A400: '#00e677',
+//         },
+//     })
+// });
 
 const firstChild = props => {
     const childrenArray = React.Children.toArray(props.children);
@@ -33,7 +33,7 @@ const firstChild = props => {
 export class App extends React.Component<any, any> {
     render() {
         return (
-            <MuiThemeProvider muiTheme={muiTheme}>
+            <MuiThemeProvider>
                 <Provider store={this.props.store}>
                     <Router history={RouterController.history}>
                         <div>

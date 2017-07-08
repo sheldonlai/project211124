@@ -5,7 +5,6 @@ import * as React from "react";
 import {connect} from "react-redux";
 import {AppStoreState} from "../../stores/AppStore";
 import {QuestionActions} from "../../actions/QuestionActions";
-import {grey} from "material-ui/styles/colors";
 import {UserDto} from "../../../../server/dtos/auth/UserDto";
 import {Prompt, RouteComponentProps} from "react-router";
 import {QuestionPageReducerState} from "../../reducers/QuestionPageReducer";
@@ -172,7 +171,8 @@ export class QuestionPageComponent extends React.Component<QuestionPageProps, Qu
                         `All unsaved changes will be discarded. Are you sure you want to leave?`
                     )}
                 />
-                <QuestionBoxComponent onQuestionChange={this.onQuestionChange}
+                <QuestionBoxComponent
+                                    onQuestionChange={this.onQuestionChange}
                                       question={this.state.questionPage.question}
                                       onSubmit={this.submitQuestion}
                                       onEditClick={this.editPost}
