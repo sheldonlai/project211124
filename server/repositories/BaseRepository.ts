@@ -30,19 +30,25 @@ export abstract class BaseRepository<T extends BaseModel, I extends Document & T
             promise = (options.sort) ? promise.sort(options.sort) : promise;
             promise = (options.limit) ? promise.limit(options.limit) : promise;
         }
-        return promise.lean().exec().then((res: T[]) => {
+        return promise.lean().exec()
+            .then((res: T[]) => res.map((model) => this.applyAdditionalFunction(model)))
+            .then((res: T[]) => {
             return this.getModels(res);
         })
     }
 
     getById(id: string | Types.ObjectId): Promise<T> {
-        return this.model.findById(id).lean().exec().then((res: T) => {
+        return this.model.findById(id).lean().exec()
+            .then((res: T) => this.applyAdditionalFunction(res))
+            .then((res: T) => {
             return this.getModel(res);
         })
     }
 
     findOne(query: any): Promise<T> { // Seems weird to throw exception if its not found
-        return this.model.findOne(query).lean().exec().then((res: T) => {
+        return this.model.findOne(query).lean().exec()
+            .then((res: T) => this.applyAdditionalFunction(res))
+            .then((res: T) => {
             return this.getModel(res);
         })
     }
@@ -55,19 +61,25 @@ export abstract class BaseRepository<T extends BaseModel, I extends Document & T
 
     create(obj: T): Promise<T> {
         delete obj._id;
-        return this.model.create(obj).then((res: I) => {
+        return this.model.create(obj)
+            .then((res: T) => this.applyAdditionalFunction(res))
+            .then((res: I) => {
             return this.getModel(res);
         })
     }
 
     update(obj: T): Promise<T> {
-        return this.model.findByIdAndUpdate(obj._id, obj, {new: true}).exec().then((res: I) => {
+        return this.model.findByIdAndUpdate(obj._id, obj, {new: true}).exec()
+            .then((res: T) => this.applyAdditionalFunction(res))
+            .then((res: I) => {
             return this.getModel(res);
         });
     }
 
     deleteById(id: string | Types.ObjectId): Promise<T> {
-        return this.model.findByIdAndRemove(id).exec().then((res: I) => {
+        return this.model.findByIdAndRemove(id).exec()
+            .then((res: T) => this.applyAdditionalFunction(res))
+            .then((res: I) => {
             return this.getModel(res);
         });
     }
@@ -91,6 +103,10 @@ export abstract class BaseRepository<T extends BaseModel, I extends Document & T
     }
 
     protected applyRestriction(obj: T): T {
+        return obj;
+    }
+
+    protected applyAdditionalFunction(obj: T) : Promise<T> | T {
         return obj;
     }
 }

@@ -61,7 +61,7 @@ export class AnswerService extends BaseService implements IAnswerService {
 
     private checkPermissionForModification = (answerByUser: AnswerDto, answerFoundInDb: Answer, currentUser: User) => {
         if (answerByUser.author._id.toString() != currentUser._id.toString()) {
-            throw new AppError("You are not the owner of this answer");
+            throw new AppError("You are not the owner of this question");
         }
         return true;
     }

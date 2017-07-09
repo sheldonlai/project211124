@@ -21,4 +21,9 @@ export class APIUrls {
     
     static CreateAnswer = "/create-answer";
     static UpdateAnswer = "/update-answer";
+
+    static UpVoteAnswer = "/up-vote-answer";
+    static upVoteQuestion = "/up-vote-question";
+    static downVoteAnswer = "/down-vote-answer";
+    static downVoteQuestion = "/down-vote-question";
 }

@@ -34,8 +34,6 @@ const schema = new Schema({
     question: {type: Schema.Types.ObjectId, ref : 'question', required: true},
     content: {type: Schema.Types.Mixed, required: true},
     author: {type: Schema.Types.ObjectId, ref: 'user', required: true},
-    upVotes: {type: Number, default: 0},
-    downVotes : {type : Number, default: 0},
     lastEditedUtc: {type: Date, default: Date.now},
     createdUtc : {type: Date, default: Date.now},
     comments: [{
@@ -53,4 +51,4 @@ const autoPopulateUsers = function(next) {
 schema.pre('findOne', autoPopulateUsers).pre('find', autoPopulateUsers);
 
 
-export const AnswerModel = model<IAnswer>('answer', schema);
+export const AnswerModel = model<IAnswer>('question', schema);

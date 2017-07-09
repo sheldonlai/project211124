@@ -6,6 +6,7 @@ import {DifficultyLevel, QuestionEducationLevel} from "../enums/QuestionEducatio
 import {listNumericalEnumValues} from "../utils/EnumsUtil";
 import {RawDraftContentState} from "draft-js";
 
+
 export class QuestionComment {
     commentBy: User;
     commentContent: string;
@@ -61,8 +62,6 @@ const schema = new Schema({
         author: {type: Schema.Types.ObjectId, ref: 'user', required: true},
         tags: [{type: Schema.Types.ObjectId, ref: 'tag'}],
         isPublished: {type: Boolean, default: false},
-        upVotes: {type: Number, default: 0},
-        downVotes: {type: Number, default: 0},
         resolved: {type: Boolean, default: false},
         lastEditedUtc: {type: Date, default: Date.now},
         createdUtc: {type: Date, default: Date.now},
