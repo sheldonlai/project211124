@@ -1,3 +1,4 @@
-/**
- * Created by Phillip on 2017-07-08.
- */
+export enum FileAccessType {
+    PUBLIC = <any> "public",
+    PRIVATE = <any> "private"
+}

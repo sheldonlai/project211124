@@ -17,4 +17,6 @@ export class FileUploadAPI extends BaseAPI {
 
     private storeFiles = multerUpload().array('files');
 
+   // private
+
 }
