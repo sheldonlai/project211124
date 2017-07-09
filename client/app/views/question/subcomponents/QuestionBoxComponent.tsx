@@ -46,10 +46,6 @@ export class QuestionBoxComponent extends Component<QuestionBoxComponentProps, a
         this.props.onQuestionChange(question);
     };
 
-    onCommentSubmit = () => {
-
-    }
-
     getComments = () => {
         return this.props.question.comments;
     }
