@@ -7,6 +7,8 @@ import Divider from "material-ui/Divider";
 import {QAEditorComponent} from "./Q&AEditorComponent";
 import {UserDto} from "../../../../../server/dtos/auth/UserDto";
 import Button from "material-ui/Button";
+import IconButton from "material-ui/IconButton";
+import Icon from 'material-ui/Icon';
 import Paper from "material-ui/Paper";
 import QuestionPreview = FrontEndQuestionModels.QuestionPreview;
 import Question = FrontEndQuestionModels.Question;
@@ -19,7 +21,7 @@ export interface QuestionBoxComponentProps {
     user: UserDto;
     question: Question;
     editMode: boolean;
-    resetQuestion? : () => void ;
+    resetQuestion?: () => void ;
 }
 
 let paperStyle = {height: "100%", padding: 15, paddingBottom: 0};
@@ -39,9 +41,9 @@ export class QuestionBoxComponent extends Component<QuestionBoxComponentProps> {
 
     render() {
         const question = {...this.props.question};
-        const editable = this.props.user.username === question.author.username;
+        const editable = this.props.user && (this.props.user.username === question.author.username);
         let editButton;
-        if (editable && !this.props.editMode){
+        if (editable && !this.props.editMode) {
             editButton = (
                 <div style={{float: "right"}}>
                     <Button color="primary" onClick={this.props.onEditClick}>Edit</Button>
@@ -49,7 +51,7 @@ export class QuestionBoxComponent extends Component<QuestionBoxComponentProps> {
             )
         }
         return (
-            <Paper style={paperStyle}>
+            <div style={paperStyle}>
                 <EditableMultiPurposeHeader value={question.title} editMode={this.props.editMode}
                                             onEditClick={this.props.onEditClick}
                                             onTitleChange={this.onTitleChange}/>
@@ -58,17 +60,33 @@ export class QuestionBoxComponent extends Component<QuestionBoxComponentProps> {
                 <div>
                     <QAEditorComponent value={this.props.question.content} onChange={this.onContentChange}
                                        onSubmit={this.props.onSubmit} readOnly={!this.props.editMode}
-                                        style={{fontSize: 14}} reset={this.props.resetQuestion}
+                                       style={{fontSize: 14}} reset={this.props.resetQuestion}
                     />
                     <div>
                         <ChipListComponent chips={question.tags} keyName={"tag"}/>
                     </div>
                     <Divider/>
-                    <p style={{color: "grey", fontSize: 10, textAlign: "right"}}>
-                        Posted on {question.createdUtc}<br/>by {question.author.username}
-                    </p>
+                    <div>
+                        <span>
+                            <IconButton>
+                                <Icon >thumb_up</Icon>
+                            </IconButton>
+                            {question.upVotes}
+                        </span>
+                        <span>
+                            <IconButton>
+                                <Icon>thumb_down</Icon>
+                            </IconButton>
+                            {question.downVotes}
+                        </span>
+                        <span>
+                            <p style={{color: "grey", fontSize: 10, textAlign: "right"}}>
+                                Posted on {question.createdUtc}<br/>by {question.author.username}
+                            </p>
+                        </span>
+                    </div>
                 </div>
-            </Paper>
+            </div>
         )
     }
 }
