@@ -13,6 +13,8 @@ import Paper from "material-ui/Paper";
 import QuestionPreview = FrontEndQuestionModels.QuestionPreview;
 import Question = FrontEndQuestionModels.Question;
 import cloneQuestion = FrontEndQuestionModels.cloneQuestion;
+import {CommentsComponent} from "./CommentsComponent";
+import cloneAnswer = FrontEndQuestionModels.cloneAnswer;
 
 export interface QuestionBoxComponentProps {
     onQuestionChange: (question: Question) => void;
@@ -21,12 +23,17 @@ export interface QuestionBoxComponentProps {
     user: UserDto;
     question: Question;
     editMode: boolean;
-    resetQuestion?: () => void ;
+    resetQuestion? : () => void ;
+}
+export interface futureState {
+    question: Question;
+    editMode: boolean;
+
 }
 
 let paperStyle = {height: "100%", padding: 15, paddingBottom: 0};
 
-export class QuestionBoxComponent extends Component<QuestionBoxComponentProps> {
+export class QuestionBoxComponent extends Component<QuestionBoxComponentProps, any> {
     onTitleChange = (event) => {
         let question = cloneQuestion(this.props.question);
         question.title = event.target.value;
@@ -38,6 +45,14 @@ export class QuestionBoxComponent extends Component<QuestionBoxComponentProps> {
         question.content = editorState;
         this.props.onQuestionChange(question);
     };
+
+    onCommentSubmit = () => {
+
+    }
+
+    getComments = () => {
+        return this.props.question.comments;
+    }
 
     render() {
         const question = {...this.props.question};
@@ -51,41 +66,53 @@ export class QuestionBoxComponent extends Component<QuestionBoxComponentProps> {
             )
         }
         return (
-            <div style={paperStyle}>
-                <EditableMultiPurposeHeader value={question.title} editMode={this.props.editMode}
-                                            onEditClick={this.props.onEditClick}
-                                            onTitleChange={this.onTitleChange}/>
-                {editButton}
-                <Divider />
-                <div>
-                    <QAEditorComponent value={this.props.question.content} onChange={this.onContentChange}
-                                       onSubmit={this.props.onSubmit} readOnly={!this.props.editMode}
-                                       style={{fontSize: 14}} reset={this.props.resetQuestion}
-                    />
+            <div>
+                <Paper style={paperStyle}>
+                    <EditableMultiPurposeHeader value={question.title} editMode={this.props.editMode}
+                                                onEditClick={this.props.onEditClick}
+                                                onTitleChange={this.onTitleChange}/>
+                    {editButton}
+                    <Divider />
                     <div>
-                        <ChipListComponent chips={question.tags} keyName={"tag"}/>
-                    </div>
-                    <Divider/>
-                    <div>
+                        <QAEditorComponent value={this.props.question.content} onChange={this.onContentChange}
+                                           onSubmit={this.props.onSubmit} readOnly={!this.props.editMode}
+                                           style={{fontSize: 14}} reset={this.props.resetQuestion}
+                        />
+                        <div>
+                            <ChipListComponent chips={question.tags} keyName={"tag"}/>
+                        </div>
+                        <Divider/>
+                        <div>
                         <span>
                             <IconButton>
                                 <Icon >thumb_up</Icon>
                             </IconButton>
                             {question.upVotes}
                         </span>
-                        <span>
+                            <span>
                             <IconButton>
                                 <Icon>thumb_down</Icon>
                             </IconButton>
-                            {question.downVotes}
+                                {question.downVotes}
                         </span>
-                        <span>
+                            <span>
                             <p style={{color: "grey", fontSize: 10, textAlign: "right"}}>
                                 Posted on {question.createdUtc}<br/>by {question.author.username}
                             </p>
                         </span>
+                        </div>
                     </div>
-                </div>
+                </Paper>
+                <CommentsComponent comments = {this.getComments()}
+                                   user={this.props.user}
+                                   onCommentsSubmit={(comments)=> {
+                                       let question = cloneQuestion(this.props.question);
+                                       question.comments = comments;
+                                       this.props.onQuestionChange(question);
+                                       this.props.onSubmit();
+                                   }}
+
+                />
             </div>
         )
     }

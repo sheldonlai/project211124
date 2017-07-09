@@ -98,7 +98,7 @@ export class QuestionPageComponent extends React.Component<QuestionPageProps, Qu
         let temp: QuestionPage = new QuestionPage();
         temp.answers = this.state.questionPage.answers;
         temp.question = question;
-        this.setState({questionPage: temp});
+        return this.setState({questionPage: temp});
     };
 
     editPost = () => {
@@ -144,13 +144,8 @@ export class QuestionPageComponent extends React.Component<QuestionPageProps, Qu
         this.setState({questionPage, editQuestion: false});
     };
 
-    onShowMoreComments(){
-
-    }
-
-    getComments(){
-        let comment_vector: Array<CommentDto>;
-        return comment_vector;
+    onCommentSubmit = (comments: CommentDto[]) => {
+        this.props.questionPage.question.comments = comments;
     }
 
     render() {
@@ -181,9 +176,7 @@ export class QuestionPageComponent extends React.Component<QuestionPageProps, Qu
                                       resetQuestion={this.resetQuestion}
                 />
 
-                <CommentsComponent onShowMore = {this.onShowMoreComments}
-                                   comment_vector = {this.getComments()}
-                />
+
 
                 <AnswerBoxesComponent onAnswersChange={this.onAnswersChange}
                                       answers={this.state.questionPage.answers}
