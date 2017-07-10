@@ -18,6 +18,7 @@ import cloneAnswer = FrontEndQuestionModels.cloneAnswer;
 import {AppStoreState} from "../../../stores/AppStore";
 import {QuestionActions} from "../../../actions/QuestionActions";
 import {connect} from "react-redux";
+import {Prompt} from "react-router";
 
 export interface QuestionBoxComponentProps {
     // onQuestionChange: (question: Question) => void;
@@ -50,6 +51,9 @@ export class QuestionBoxComponent extends Component<props, state> {
             this.setState({
                 question: this.props.question
             });
+    }
+    componentWillUnmount() {
+        this.resetQuestion();
     }
 
     onTitleChange = (event) => {
@@ -106,6 +110,12 @@ export class QuestionBoxComponent extends Component<props, state> {
         }
         return (
             <div>
+                <Prompt
+                    when={this.state.editMode}
+                    message={location => (
+                        `All unsaved changes will be discarded. Are you sure you want to leave?`
+                    )}
+                />
                 <Paper style={paperStyle}>
                     <EditableMultiPurposeHeader value={question.title} editMode={this.state.editMode}
                                                 onEditClick={this.onEditClick}

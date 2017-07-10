@@ -94,22 +94,6 @@ export class QuestionPageComponent extends React.Component<QuestionPageProps, Qu
             loading: false,
         });
     };
-    onQuestionChange = (question: Question) => {
-        let temp: QuestionPage = new QuestionPage();
-        temp.answers = this.state.questionPage.answers;
-        temp.question = question;
-        return this.setState({questionPage: temp});
-    };
-
-    editPost = () => {
-        if (!this.state.editQuestion)
-            this.setState({editQuestion: true});
-    };
-
-    submitQuestion = () => {
-        this.setState({loading: true});
-        this.props.editQuestion(this.state.questionPage.question);
-    };
 
     addAnswer = () => {
         let temp_questionPage = this.state.questionPage;
@@ -138,12 +122,6 @@ export class QuestionPageComponent extends React.Component<QuestionPageProps, Qu
         this.setState({questionPage});
     };
 
-    resetQuestion = () => {
-        let questionPage = this.state.questionPage;
-        questionPage.question = cloneQuestion(this.props.questionPage.question);
-        this.setState({questionPage, editQuestion: false});
-    };
-
     onCommentSubmit = (comments: CommentDto[]) => {
         this.props.questionPage.question.comments = comments;
     }
@@ -167,9 +145,6 @@ export class QuestionPageComponent extends React.Component<QuestionPageProps, Qu
                     )}
                 />
                 <QuestionBoxView/>
-
-
-
                 <AnswerBoxesComponent onAnswersChange={this.onAnswersChange}
                                       answers={this.state.questionPage.answers}
                                       user={this.props.user} onSubmit={this.submitAnswer}
@@ -189,7 +164,6 @@ interface StateToProps extends QuestionPageReducerState{
 
 interface DispatchToProps {
     fetchQuestionPage: (title: string) => void;
-    editQuestion: (question: Question) => void;
     editAnswer: (answer: Answer) => void;
     addAnswer: (answer: Answer) => void;
     newError: (message: string) => void;
@@ -203,7 +177,6 @@ export const QuestionPageView = AnimatedWrapper(connect<StateToProps, DispatchTo
     }),
     (dispatch) => ({
         fetchQuestionPage: (title: string) => dispatch(QuestionActions.fetchQuestionPage(title)),
-        editQuestion: (question: Question) => dispatch(QuestionActions.updateQuestion(question)),
         editAnswer: (answer: Answer) => dispatch(AnswerActions.updateAnswer(answer)),
         addAnswer: (answer: Answer) => dispatch(AnswerActions.createAnswer(answer)),
         newError: (message: string) => dispatch(QuestionActions.addError(message)),
