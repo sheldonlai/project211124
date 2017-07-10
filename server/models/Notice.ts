@@ -43,4 +43,4 @@ const schema = new Schema({
     iconUrl: {type: String}
 
 });
-export const QuestionModel = model<INotice>('question', schema);
+export const QuestionModel = model<INotice>('notice', schema);

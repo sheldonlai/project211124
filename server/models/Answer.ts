@@ -51,4 +51,4 @@ const autoPopulateUsers = function(next) {
 schema.pre('findOne', autoPopulateUsers).pre('find', autoPopulateUsers);
 
 
-export const AnswerModel = model<IAnswer>('question', schema);
+export const AnswerModel = model<IAnswer>('answer', schema);
