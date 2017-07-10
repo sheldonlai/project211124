@@ -31,7 +31,7 @@ export abstract class BaseRepository<T extends BaseModel, I extends Document & T
             promise = (options.limit) ? promise.limit(options.limit) : promise;
         }
         return promise.lean().exec()
-            .then((res: T[]) => res.map((model) => this.applyAdditionalFunction(model)))
+            .then((res: T[]) => Promise.all(res.map((model) => this.applyAdditionalFunction(model))))
             .then((res: T[]) => {
             return this.getModels(res);
         })
