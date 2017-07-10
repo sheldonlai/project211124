@@ -15,64 +15,107 @@ import Question = FrontEndQuestionModels.Question;
 import cloneQuestion = FrontEndQuestionModels.cloneQuestion;
 import {CommentsComponent} from "./CommentsComponent";
 import cloneAnswer = FrontEndQuestionModels.cloneAnswer;
+import {AppStoreState} from "../../../stores/AppStore";
+import {QuestionActions} from "../../../actions/QuestionActions";
+import {connect} from "react-redux";
 
 export interface QuestionBoxComponentProps {
-    onQuestionChange: (question: Question) => void;
-    onSubmit: () => void;
-    onEditClick?: () => void;
+    // onQuestionChange: (question: Question) => void;
+    // onSubmit: () => void;
+    // onEditClick?: () => void;
     user: UserDto;
     question: Question;
-    editMode: boolean;
-    resetQuestion? : () => void ;
+    // editMode: boolean;
+    // resetQuestion? : () => void ;
 }
-export interface futureState {
+export interface state {
     question: Question;
     editMode: boolean;
 
+}
+interface props extends QuestionBoxComponentProps, DispatchProps {
 }
 
 let paperStyle = {height: "100%", padding: 15, paddingBottom: 0};
 
-export class QuestionBoxComponent extends Component<QuestionBoxComponentProps, any> {
+export class QuestionBoxComponent extends Component<props, state> {
+
+    state = {
+        question: undefined,
+        editMode: false
+    }
+
+    componentWillMount() {
+        if (this.state.question === undefined)
+            this.setState({
+                question: this.props.question
+            });
+    }
+
     onTitleChange = (event) => {
-        let question = cloneQuestion(this.props.question);
+        let question = cloneQuestion(this.state.question);
         question.title = event.target.value;
-        this.props.onQuestionChange(question);
+        this.setState({question});
     };
 
     onContentChange = (editorState) => {
-        let question = cloneQuestion(this.props.question);
+        let question = cloneQuestion(this.state.question);
         question.content = editorState;
-        this.props.onQuestionChange(question);
+        this.setState({question});
     };
 
-    getComments = () => {
-        return this.props.question.comments;
+    onEditClick = () => {
+        this.setState({editMode: true});
     }
 
+    onCommentSubmit = (comments) => {
+        let question = cloneQuestion(this.props.question);
+        question.comments = comments;
+        this.setState({question}, () => {
+            this.onSubmit();
+        });
+    }
+
+    resetQuestion = () => {
+        let question = cloneQuestion(this.props.question);
+        this.setState({editMode: false, question});
+    }
+
+    upVote = () => {
+        this.props.upVoteQuestion(this.props.question);
+    }
+
+    downVote = () => {
+        this.props.upVoteQuestion(this.props.question);
+    }
+
+    onSubmit = () => {
+        this.props.editQuestion(this.state.question);
+    };
+
     render() {
-        const question = {...this.props.question};
+        const question = {...this.state.question};
         const editable = this.props.user && (this.props.user.username === question.author.username);
         let editButton;
-        if (editable && !this.props.editMode) {
+        if (editable && !this.state.editMode) {
             editButton = (
                 <div style={{float: "right"}}>
-                    <Button color="primary" onClick={this.props.onEditClick}>Edit</Button>
+                    <Button color="primary" onClick={this.onEditClick}>Edit</Button>
                 </div>
             )
         }
         return (
             <div>
                 <Paper style={paperStyle}>
-                    <EditableMultiPurposeHeader value={question.title} editMode={this.props.editMode}
-                                                onEditClick={this.props.onEditClick}
+                    <EditableMultiPurposeHeader value={question.title} editMode={this.state.editMode}
+                                                onEditClick={this.onEditClick}
                                                 onTitleChange={this.onTitleChange}/>
                     {editButton}
                     <Divider />
                     <div>
-                        <QAEditorComponent value={this.props.question.content} onChange={this.onContentChange}
-                                           onSubmit={this.props.onSubmit} readOnly={!this.props.editMode}
-                                           style={{fontSize: 14}} reset={this.props.resetQuestion}
+                        <QAEditorComponent value={question.content} onChange={this.onContentChange}
+                                           onSubmit={this.onSubmit} readOnly={!this.state.editMode}
+                                           style={{fontSize: 14}} reset={this.resetQuestion}
                         />
                         <div>
                             <ChipListComponent chips={question.tags} keyName={"tag"}/>
@@ -80,13 +123,13 @@ export class QuestionBoxComponent extends Component<QuestionBoxComponentProps, a
                         <Divider/>
                         <div>
                         <span>
-                            <IconButton>
+                            <IconButton onClick={this.upVote}>
                                 <Icon >thumb_up</Icon>
                             </IconButton>
                             {question.upVotes}
                         </span>
                             <span>
-                            <IconButton>
+                            <IconButton onClick={this.downVote}>
                                 <Icon>thumb_down</Icon>
                             </IconButton>
                                 {question.downVotes}
@@ -99,17 +142,31 @@ export class QuestionBoxComponent extends Component<QuestionBoxComponentProps, a
                         </div>
                     </div>
                 </Paper>
-                <CommentsComponent comments = {this.getComments()}
+                <CommentsComponent comments={this.props.question.comments}
                                    user={this.props.user}
-                                   onCommentsSubmit={(comments)=> {
-                                       let question = cloneQuestion(this.props.question);
-                                       question.comments = comments;
-                                       this.props.onQuestionChange(question);
-                                       this.props.onSubmit();
-                                   }}
+                                   onCommentsSubmit={this.onCommentSubmit}
 
                 />
             </div>
         )
     }
 }
+
+const mapStateToProps = (state: AppStoreState) => ({
+    user: state.auth.user,
+    question: state.questionPage.questionPage.question
+})
+const mapDispatchToProps = (dispatch): DispatchProps => ({
+    upVoteQuestion: (question: Question) => dispatch(QuestionActions.upVoteQuestion(question)),
+    downVoteQuestion: (question: Question) => dispatch(QuestionActions.deleteVoteQuestion(question)),
+    editQuestion: (question: Question) => dispatch(QuestionActions.updateQuestion(question)),
+});
+
+interface DispatchProps {
+    upVoteQuestion: (question: Question) => void;
+    downVoteQuestion: (question: Question) => void;
+    editQuestion: (question: Question) => void;
+}
+
+export const QuestionBoxView = connect<QuestionBoxComponentProps, DispatchProps, any>(
+    mapStateToProps, mapDispatchToProps)(QuestionBoxComponent)

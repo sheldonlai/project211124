@@ -54,11 +54,7 @@ export class QuestionAPIController extends ApiController {
     }
 
     createQuestion(question: Question): AxiosPromise {
-        const questionDto = this.convertQuestionToDto(question);
-        return this.post(APIUrls.CreateQuestion, questionDto).then((response: AxiosResponse) => {
-            response.data = this.convertDtoToQuestion(response.data);
-            return response;
-        });
+        return this.questionPostApiHelper(APIUrls.CreateQuestion, question);
     }
 
     updateQuestion(question: Question): AxiosPromise{
@@ -97,6 +93,24 @@ export class QuestionAPIController extends ApiController {
             return response;
         });
     }
+
+    upVoteQuestion(question: Question): AxiosPromise {
+        return this.questionPostApiHelper(APIUrls.upVoteQuestion, question);
+    }
+
+    downVoteQuestion(question: Question): AxiosPromise {
+        return this.questionPostApiHelper(APIUrls.downVoteQuestion, question);
+    }
+
+    private questionPostApiHelper (url, question: Question): AxiosPromise {
+        const questionDto = this.convertQuestionToDto(question);
+        return this.post(url, questionDto).then((response: AxiosResponse) => {
+            response.data = this.convertDtoToQuestion(response.data);
+            return response;
+        });
+    }
+
+
 
     private convertDtoToAnswer(questionDto: AnswerDto): any {
         let answer: Answer = <any>questionDto;

@@ -16,8 +16,8 @@ import CommentModel = FrontEndQuestionModels.CommentModel;
 
 export interface CommentsComponentProps {
     comments: CommentDto[];
-    user : UserDto;
-    onCommentsSubmit : (comments: CommentDto[]) => void;
+    user: UserDto;
+    onCommentsSubmit: (comments: CommentDto[]) => void;
 }
 
 export interface CommentsComponentState {
@@ -35,7 +35,7 @@ const styleSheet: CSSProperties = {
 
 export class CommentsComponent extends React.Component<CommentsComponentProps, CommentsComponentState> {
     constructor(props) {
-        super (props);
+        super(props);
         this.state = {
             inputMode: false,
             commentContent: "",
@@ -45,7 +45,7 @@ export class CommentsComponent extends React.Component<CommentsComponentProps, C
 
 
     addNewComment = () => {
-        if(this.state.commentContent){
+        if (this.state.commentContent) {
             this.setState({errorMsg: ""});
             let tmpComment: CommentModel = new CommentModel();
             tmpComment.commentContent = this.state.commentContent;
@@ -54,19 +54,21 @@ export class CommentsComponent extends React.Component<CommentsComponentProps, C
             this.props.onCommentsSubmit(this.props.comments);
             this.setState({commentContent: ""});
         }
-        else{
+        else {
             this.setState({errorMsg: "Cannot submit empty comment."});
         }
     }
 
-    onCommentChange = (event)  => {
+    onCommentChange = (event) => {
         this.setState({commentContent: event.target.value});
     }
 
     onErrMsg = () => {
-        if(this.state.errorMsg != ""){
-            return(
-                <p><mark>{this.state.errorMsg}</mark></p>
+        if (this.state.errorMsg != "") {
+            return (
+                <p>
+                    <mark>{this.state.errorMsg}</mark>
+                </p>
             )
         }
     }
@@ -77,7 +79,8 @@ export class CommentsComponent extends React.Component<CommentsComponentProps, C
                 <div>
                     {this.onErrMsg()}
                     <form>
-                        <textarea rows={4} cols={50} value={this.state.commentContent} onChange={this.onCommentChange}></textarea>
+                        <textarea rows={4} cols={50} value={this.state.commentContent}
+                                  onChange={this.onCommentChange}></textarea>
                     </form>
                     <Button raised color="primary" className={styleSheet.root} onClick={this.addNewComment}>
                         Submit
@@ -88,26 +91,25 @@ export class CommentsComponent extends React.Component<CommentsComponentProps, C
     }
 
     renderComments = () => {
-        let commentsoutput = [];
-        for(let i=0; i<this.props.comments.length; i++){
-            commentsoutput.push(<ListItem button>
-                                <ListItemText primary = {this.props.comments[i].commentContent}></ListItemText>
-                                </ListItem>
-                )
-        }
-        return(commentsoutput);
+        return this.props.comments.map((comment) => {
+            return (
+                <ListItem button key={comment.lastEditedUtc + comment.commentBy.username}>
+                    <ListItemText primary={comment.commentContent}></ListItemText>
+                </ListItem>
+            )
+        });
     }
 
     render() {
         return (
             <div>
                 <List className={"Comments"}>
-                        {this.renderComments()}
+                    {this.renderComments()}
                     <Divider light/>
                 </List>
                 <div className={styleSheet.root}>
                     <IconButton>
-                    <Icon onClick={() => this.setState({inputMode: !this.state.inputMode}) }>add_circle</Icon>
+                        <Icon onClick={() => this.setState({inputMode: !this.state.inputMode}) }>add_circle</Icon>
                     </IconButton>
                 </div>
                 {this.renderInputCommentBox()}

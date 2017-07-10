@@ -28,5 +28,16 @@ export enum QuestionActionTypes {
     EditAnswerError = <any> "EditAnswerError",
 
     ChangePostPage = <any> "ChangePostPage",
+
+    UpVoteQuestion = <any> "UpVoteQuestion",
+    DownVoteQuestion = <any> "DownVoteQuestion",
+
+
+    UpVoteAnswer = <any> "UpVoteAnswer",
+    DownVoteAnswer = <any> "DownVoteAnswer",
+
+
     QuestionPageError = <any> "QuestionPageError",
+
+
 }

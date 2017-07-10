@@ -68,4 +68,30 @@ export class QuestionActions extends BaseActions {
         }
     }
 
+    static upVoteQuestion(question: Question) {
+        return (dispatch) => {
+            apiController.upVoteQuestion(question).then(res => {
+                dispatch({
+                    type: QuestionActionTypes.UpVoteAnswer,
+                    data: res.data
+                });
+            }).catch(err =>
+                QuestionActions.handleError(dispatch, err, QuestionActionTypes.QuestionPageError)
+            )
+        }
+    }
+
+    static deleteVoteQuestion(question: Question) {
+        return (dispatch) => {
+            apiController.downVoteQuestion(question).then(res => {
+                dispatch({
+                    type: QuestionActionTypes.DownVoteAnswer,
+                    data: res.data
+                });
+            }).catch(err =>
+                QuestionActions.handleError(dispatch, err, QuestionActionTypes.QuestionPageError)
+            )
+        }
+    }
+
 }

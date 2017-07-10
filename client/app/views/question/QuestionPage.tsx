@@ -12,7 +12,7 @@ import {FrontEndQuestionModels} from "../../models/QuestionModels";
 import AnimatedWrapper from "../../components/AnimatedWrapper";
 import {CircularProgress} from "material-ui/Progress";
 import {isNullOrUndefined} from "util";
-import {QuestionBoxComponent} from "./subcomponents/QuestionBoxComponent";
+import {QuestionBoxComponent, QuestionBoxView} from "./subcomponents/QuestionBoxComponent";
 import {AnswerActions} from "../../actions/AnswerActions";
 import {QuestionAPIController} from "../../api.controllers/QuestionAPIController";
 import {AnswerBoxesComponent} from "./subcomponents/AnswerBoxesComponent";
@@ -149,7 +149,7 @@ export class QuestionPageComponent extends React.Component<QuestionPageProps, Qu
     }
 
     render() {
-        if (this.state.questionPage == null || this.props.status === ReducerStateStatus.LOADING) {
+        if (this.props.status === ReducerStateStatus.LOADING) {
             return (
                 <div style={{height: "100%", margin: 10, padding: "200px 0px", textAlign: "center"}}>
                     <CircularProgress
@@ -166,15 +166,7 @@ export class QuestionPageComponent extends React.Component<QuestionPageProps, Qu
                         `All unsaved changes will be discarded. Are you sure you want to leave?`
                     )}
                 />
-                <QuestionBoxComponent
-                                    onQuestionChange={this.onQuestionChange}
-                                      question={this.state.questionPage.question}
-                                      onSubmit={this.submitQuestion}
-                                      onEditClick={this.editPost}
-                                      editMode={this.state.editQuestion}
-                                      user={this.props.user}
-                                      resetQuestion={this.resetQuestion}
-                />
+                <QuestionBoxView/>
 
 
 
