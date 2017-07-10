@@ -78,6 +78,16 @@ export namespace FrontEndQuestionModels {
         }
     }
 
+    export class CommentModel{
+        commentBy: UserDto;
+        commentContent: string;
+        lastEditedUtc: Date;
+
+        constructor(){
+            this.lastEditedUtc = new Date(Date.now());
+        }
+    }
+
     export const cloneAnswer = (original: Answer) => {
         let clone = new Answer(original.question, original.author);
         clone = mapFieldsOnToObject(clone, original);

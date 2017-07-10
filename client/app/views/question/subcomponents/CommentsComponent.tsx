@@ -10,6 +10,9 @@ import TextField from 'material-ui/TextField';
 import Button from 'material-ui/Button';
 import IconButton from 'material-ui/IconButton'
 import {UserDto} from "../../../../../server/dtos/auth/UserDto";
+import {FrontEndQuestionModels} from "../../../models/QuestionModels";
+import CommentModel = FrontEndQuestionModels.CommentModel;
+
 
 export interface CommentsComponentProps {
     comments: CommentDto[];
@@ -44,7 +47,12 @@ export class CommentsComponent extends React.Component<CommentsComponentProps, C
     addNewComment = () => {
         if(this.state.commentContent){
             this.setState({errorMsg: ""});
-
+            let tmpComment: CommentModel = new CommentModel();
+            tmpComment.commentContent = this.state.commentContent;
+            tmpComment.commentBy = this.props.user;
+            this.props.comments.push(tmpComment);
+            this.props.onCommentsSubmit(this.props.comments);
+            this.setState({commentContent: ""});
         }
         else{
             this.setState({errorMsg: "Cannot submit empty comment."});
@@ -79,21 +87,23 @@ export class CommentsComponent extends React.Component<CommentsComponentProps, C
         }
     }
 
+    renderComments = () => {
+        let commentsoutput = [];
+        for(let i=0; i<this.props.comments.length; i++){
+            commentsoutput.push(<ListItem button>
+                                <ListItemText primary = {this.props.comments[i].commentContent}></ListItemText>
+                                </ListItem>
+                )
+        }
+        return(commentsoutput);
+    }
+
     render() {
         return (
             <div>
                 <List className={"Comments"}>
-                    <ListItem button>
-                        <ListItemText primary="Inbox"/>
-                    </ListItem>
+                        {this.renderComments()}
                     <Divider light/>
-                    <ListItem button>
-                        <ListItemText primary="Drafts"/>
-                    </ListItem>
-                    <Divider />
-                    <ListItem button>
-                        <ListItemText primary="Trash"/>
-                    </ListItem>
                 </List>
                 <div className={styleSheet.root}>
                     <IconButton>
