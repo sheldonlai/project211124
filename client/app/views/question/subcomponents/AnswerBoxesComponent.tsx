@@ -14,6 +14,7 @@ import {AppStoreState} from "../../../stores/AppStore";
 import {AnswerActions} from "../../../actions/AnswerActions";
 import {QuestionPageReducerState} from "../../../reducers/QuestionPageReducer";
 import cloneAnswer = FrontEndQuestionModels.cloneAnswer;
+import {Prompt} from "react-router";
 export interface AnswerBoxesComponentProps {}
 
 interface props extends AnswerBoxesComponentProps, DispatchToProps, StateToProps {}
@@ -29,6 +30,15 @@ export class AnswerBoxesComponent extends Component<props, AnswerBoxesComponentS
 
     componentWillMount() {
         this.setState({answers: cloneAnswers(this.props.answers)});
+    }
+
+    componentWillReceiveProps(nextProps: props) {
+        if (nextProps.answers != this.props.answers) {
+            this.setState({editAnswer: false, answers: cloneAnswers(nextProps.answers)});
+        }
+    }
+    componentWillUnmount() {
+        this.resetAnswers();
     }
 
     onEditClick = (answer: Answer) => {
@@ -71,6 +81,12 @@ export class AnswerBoxesComponent extends Component<props, AnswerBoxesComponentS
     render() {
         return (
             <div>
+                <Prompt
+                    when={this.state.editAnswer}
+                    message={location => (
+                        `All unsaved changes will be discarded. Are you sure you want to leave?`
+                    )}
+                />
                 {this.state.answers.map((answer) => {
                     let key = (answer._id) ? answer._id : "new question key";
                     const editMode = this.state.editAnswer && (answer._id === this.state.answerId || answer._id === undefined);

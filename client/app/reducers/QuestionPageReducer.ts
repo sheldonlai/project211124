@@ -17,7 +17,7 @@ export interface QuestionPageReducerState {
 const initialState: QuestionPageReducerState = {
     status: ReducerStateStatus.LOADING,
     questionPage: undefined,
-    lastUpdated: Date.now(),
+    lastUpdated: undefined,
     error: ''
 };
 

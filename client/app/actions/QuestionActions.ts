@@ -61,7 +61,7 @@ export class QuestionActions extends BaseActions {
                 dispatch({
                     type: QuestionActionTypes.FetchQuestionPageOK,
                     data: res.data
-                })
+                });
             }).catch(err =>
                 QuestionActions.handleError(dispatch, err, QuestionActionTypes.FetchQuestionPageError)
             )

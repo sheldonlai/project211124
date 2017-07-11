@@ -56,6 +56,12 @@ export class QuestionBoxComponent extends Component<props, state> {
         this.resetQuestion();
     }
 
+    componentWillReceiveProps(nextProps: props) {
+        if (JSON.stringify(nextProps.question) !== JSON.stringify(this.props.question)) {
+            this.setState({editMode: false, question: cloneQuestion(nextProps.question)});
+        }
+    }
+
     onTitleChange = (event) => {
         let question = cloneQuestion(this.state.question);
         question.title = event.target.value;
