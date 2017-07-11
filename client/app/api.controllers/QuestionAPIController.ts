@@ -102,6 +102,22 @@ export class QuestionAPIController extends ApiController {
         return this.questionPostApiHelper(APIUrls.downVoteQuestion, question);
     }
 
+    upVoteAnswer(answer: Answer): AxiosPromise {
+        return this.answerPostApiHelper(APIUrls.UpVoteAnswer, answer);
+    }
+
+    downVoteAnswer(answer: Answer): AxiosPromise {
+        return this.answerPostApiHelper(APIUrls.downVoteAnswer, answer);
+    }
+
+    private answerPostApiHelper (url: string, answer: Answer): AxiosPromise {
+        const answerDto = this.convertAnswerToDto(answer);
+        return this.post(url, answerDto).then((response: AxiosResponse) => {
+            response.data = this.convertDtoToAnswer(response.data);
+            return response;
+        });
+    }
+
     private questionPostApiHelper (url, question: Question): AxiosPromise {
         const questionDto = this.convertQuestionToDto(question);
         return this.post(url, questionDto).then((response: AxiosResponse) => {
@@ -109,8 +125,6 @@ export class QuestionAPIController extends ApiController {
             return response;
         });
     }
-
-
 
     private convertDtoToAnswer(questionDto: AnswerDto): any {
         let answer: Answer = <any>questionDto;

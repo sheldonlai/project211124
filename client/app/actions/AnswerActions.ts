@@ -42,5 +42,29 @@ export class AnswerActions extends BaseActions{
         }
     }
 
+    static upVoteAnswer (answer: Answer): (dispatch: any) => void {
+        return function(dispatch) {
+            apiController.updateAnswer(answer).then((response) => {
+                dispatch({
+                    type: QuestionActionTypes.UpVoteAnswer,
+                    data: response.data
+                })
+            }).catch(err =>
+                AnswerActions.handleError(dispatch, err, QuestionActionTypes.QuestionPageError)
+            )
+        }
+    }
 
+    static downVoteAnswer (answer: Answer): (dispatch: any) => void {
+        return function(dispatch) {
+            apiController.updateAnswer(answer).then((response) => {
+                dispatch({
+                    type: QuestionActionTypes.DownVoteAnswer,
+                    data: response.data
+                })
+            }).catch(err =>
+                AnswerActions.handleError(dispatch, err, QuestionActionTypes.QuestionPageError)
+            )
+        }
+    }
 }

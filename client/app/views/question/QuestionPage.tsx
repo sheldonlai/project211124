@@ -15,7 +15,7 @@ import {isNullOrUndefined} from "util";
 import {QuestionBoxComponent, QuestionBoxView} from "./subcomponents/QuestionBoxComponent";
 import {AnswerActions} from "../../actions/AnswerActions";
 import {QuestionAPIController} from "../../api.controllers/QuestionAPIController";
-import {AnswerBoxesComponent} from "./subcomponents/AnswerBoxesComponent";
+import {AnswerBoxesComponent, AnswerBoxesView} from "./subcomponents/AnswerBoxesComponent";
 import {ReducerStateStatus} from "../../constants/ReducerStateStatus";
 import QuestionPage = FrontEndQuestionModels.QuestionPage;
 import Answer = FrontEndQuestionModels.Answer;
@@ -76,7 +76,6 @@ export class QuestionPageComponent extends React.Component<QuestionPageProps, Qu
             this.setState({editQuestion: false, questionPage: cloneQuestionPage(nextProps.questionPage)});
         } else if (nextProps.questionPage.answers != this.props.questionPage.answers) {
             this.setState({editAnswer: false, questionPage: cloneQuestionPage(nextProps.questionPage)});
-            //(this.refs.answerBoxes as any).resetAnswers();
         }
     }
 
@@ -145,13 +144,7 @@ export class QuestionPageComponent extends React.Component<QuestionPageProps, Qu
                     )}
                 />
                 <QuestionBoxView/>
-                <AnswerBoxesComponent onAnswersChange={this.onAnswersChange}
-                                      answers={this.state.questionPage.answers}
-                                      user={this.props.user} onSubmit={this.submitAnswer}
-                                      question={this.props.questionPage.question}
-                                      resetAnswers={this.resetAnswers}
-                                      ref="answerBoxes"
-                />
+                <AnswerBoxesView/>
             </div>
         );
     }

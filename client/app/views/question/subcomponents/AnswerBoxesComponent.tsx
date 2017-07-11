@@ -9,62 +9,77 @@ import QuestionPreview = FrontEndQuestionModels.QuestionPreview;
 import Question = FrontEndQuestionModels.Question;
 import Answer = FrontEndQuestionModels.Answer;
 import cloneAnswers = FrontEndQuestionModels.cloneAnswers;
-export interface AnswerBoxesComponentProps {
-    onAnswersChange: (answers: Answer[]) => void;
-    onSubmit: (answer: Answer) => void;
-    user: UserDto;
-    question: Question;
-    answers: Answer[];
-    resetAnswers?: ()=> void;
-}
+import {connect} from "react-redux";
+import {AppStoreState} from "../../../stores/AppStore";
+import {AnswerActions} from "../../../actions/AnswerActions";
+import {QuestionPageReducerState} from "../../../reducers/QuestionPageReducer";
+import cloneAnswer = FrontEndQuestionModels.cloneAnswer;
+export interface AnswerBoxesComponentProps {}
+
+interface props extends AnswerBoxesComponentProps, DispatchToProps, StateToProps {}
 
 export interface AnswerBoxesComponentState {
     answerId: string;
     editAnswer: boolean;
+    answers: Answer[];
 }
 
-export class AnswerBoxesComponent extends Component<AnswerBoxesComponentProps, AnswerBoxesComponentState> {
-    state = {answerId: undefined, editAnswer: false};
+export class AnswerBoxesComponent extends Component<props, AnswerBoxesComponentState> {
+    state = {answerId: undefined, editAnswer: false, answers: []};
+
+    componentWillMount() {
+        this.setState({answers: cloneAnswers(this.props.answers)});
+    }
 
     onEditClick = (answer: Answer) => {
         this.setState({answerId: answer._id, editAnswer: true})
     };
 
     onAnswerChange = (answer: Answer) => {
-        let answers = cloneAnswers(this.props.answers);
+        let answers = this.state.answers;
         answers = answers.map((ans) => {
+            ans = cloneAnswer(ans);
             if (answer._id === ans._id) {
                 return answer;
             }
-            return ans
+            return ans;
         });
-        this.props.onAnswersChange(answers);
+        this.setState({answers});
     };
 
     addAnswer = () => {
-        let answers = cloneAnswers(this.props.answers);
+        let answers = cloneAnswers(this.state.answers);
         let answer = new Answer(this.props.question._id, this.props.user);
         answers.push(answer);
-        this.setState({answerId: answer._id, editAnswer: true});
-        this.props.onAnswersChange(answers);
+        this.setState({answerId: answer._id, editAnswer: true, answers});
     };
 
     resetAnswers = () => {
         this.setState({editAnswer: false, answerId: undefined});
-        this.props.resetAnswers();
+        let answers = cloneAnswers(this.props.answers);
+        this.setState({answers});
     };
+
+    onSubmit = (answer: Answer) => {
+        if (answer._id) {
+            this.props.editAnswer(answer);
+        } else {
+            this.props.addAnswer(answer);
+        }
+    }
 
     render() {
         return (
             <div>
-                {this.props.answers.map((answer) => {
+                {this.state.answers.map((answer) => {
                     let key = (answer._id) ? answer._id : "new question key";
                     const editMode = this.state.editAnswer && (answer._id === this.state.answerId || answer._id === undefined);
                     return (
                         <AnswerBoxComponent editMode={editMode}
-                                            user={this.props.user} onSubmit={()=> {this.props.onSubmit(answer)}}
-                                            answer={answer} onAnswerChange={this.onAnswerChange} key={key}
-                                            onEditClick={()=> {this.onEditClick(answer)}}
+                                            user={this.props.user} onSubmit={() => this.onSubmit(answer)}
+                                            answer={answer} onAnswerChange={this.onAnswerChange}
+                                            key={key}
+                                            onEditClick={() => this.onEditClick(answer)}
                                             resetAnswer={this.resetAnswers}
                         />
                     )
@@ -80,3 +95,31 @@ export class AnswerBoxesComponent extends Component<AnswerBoxesComponentProps, A
         )
     }
 }
+
+interface  StateToProps {
+    user: UserDto
+    question: Question;
+    answers: Answer[];
+}
+
+interface DispatchToProps {
+    editAnswer: (answer: Answer) => void;
+    addAnswer: (answer: Answer) => void;
+    upVoteAnswer: (answer: Answer) => void;
+    downVoteAnswer: (answer: Answer) => void;
+}
+
+const mapStateToProps = (state: AppStoreState): StateToProps => ({
+    user: state.auth.user,
+    question: state.questionPage.questionPage.question,
+    answers: state.questionPage.questionPage.answers
+});
+const mapDispatchToProps = (dispatch): DispatchToProps => ({
+    editAnswer: (answer: Answer) => dispatch(AnswerActions.updateAnswer(answer)),
+    addAnswer: (answer: Answer) => dispatch(AnswerActions.createAnswer(answer)),
+    upVoteAnswer: (answer: Answer) => dispatch(AnswerActions.createAnswer(answer)),
+    downVoteAnswer: (answer: Answer) => dispatch(AnswerActions.createAnswer(answer))
+});
+
+export const AnswerBoxesView = connect<StateToProps, DispatchToProps, any>(
+    mapStateToProps, mapDispatchToProps)(AnswerBoxesComponent);
