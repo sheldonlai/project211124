@@ -24,9 +24,11 @@ import Question = FrontEndQuestionModels.Question;
 import cloneQuestion = FrontEndQuestionModels.cloneQuestion;
 
 
-export interface QuestionPageProps extends StateToProps, DispatchToProps, RouteComponentProps<{ id: string }> {}
+export interface QuestionPageProps extends StateToProps, DispatchToProps, RouteComponentProps<{ id: string }> {
+}
 
-export interface QuestionPageState {}
+export interface QuestionPageState {
+}
 
 export class QuestionPageComponent extends React.Component<QuestionPageProps, QuestionPageState> {
 
@@ -35,8 +37,11 @@ export class QuestionPageComponent extends React.Component<QuestionPageProps, Qu
     }
 
     componentWillMount() {
-        if (!this.props.lastUpdated || Date.now() - this.props.lastUpdated  > 5000) {
-            this.props.fetchQuestionPage(this.props.match.params.id);
+        let questionId = this.props.match.params.id;
+        if (this.props.questionId != questionId ||
+            !this.props.lastUpdated ||
+            Date.now() - this.props.lastUpdated > 5000) {
+            this.props.fetchQuestionPage(questionId);
         }
     }
 
@@ -59,9 +64,10 @@ export class QuestionPageComponent extends React.Component<QuestionPageProps, Qu
     }
 }
 
-interface StateToProps{
+interface StateToProps {
     status: ReducerStateStatus;
     lastUpdated: number;
+    questionId: string;
 }
 
 interface DispatchToProps {
@@ -70,10 +76,14 @@ interface DispatchToProps {
 }
 
 export const QuestionPageView = AnimatedWrapper(connect<StateToProps, DispatchToProps, RouteComponentProps<{ id: string }>>(
-    (state: AppStoreState) => ({
-        status : state.questionPage.status,
-        lastUpdated: state.questionPage.lastUpdated
-    }),
+    (state: AppStoreState) => {
+        let questionId = state.questionPage.questionPage? state.questionPage.questionPage.question._id: undefined;
+        return {
+            status: state.questionPage.status,
+            lastUpdated: state.questionPage.lastUpdated,
+            questionId: questionId
+        }
+    },
     (dispatch) => ({
         fetchQuestionPage: (id: string) => dispatch(QuestionActions.fetchQuestionPage(id)),
         newError: (message: string) => dispatch(QuestionActions.addError(message)),
