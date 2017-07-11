@@ -21,8 +21,6 @@ import QuestionPage = FrontEndQuestionModels.QuestionPage;
 import Answer = FrontEndQuestionModels.Answer;
 import cloneQuestionPage = FrontEndQuestionModels.cloneQuestionPage;
 import Question = FrontEndQuestionModels.Question;
-import {CommentsComponent} from "./subcomponents/CommentsComponent"
-import {CommentDto} from "../../../../server/dtos/q&a/CommentDto";
 import cloneQuestion = FrontEndQuestionModels.cloneQuestion;
 
 
@@ -62,8 +60,6 @@ export class QuestionPageComponent extends React.Component<QuestionPageProps, Qu
 }
 
 interface StateToProps{
-    loggedIn: boolean;
-    user: UserDto;
     status: ReducerStateStatus;
     lastUpdated: number;
 }
@@ -75,8 +71,6 @@ interface DispatchToProps {
 
 export const QuestionPageView = AnimatedWrapper(connect<StateToProps, DispatchToProps, RouteComponentProps<{ id: string }>>(
     (state: AppStoreState) => ({
-        loggedIn: state.auth.loggedIn,
-        user: state.auth.user,
         status : state.questionPage.status,
         lastUpdated: state.questionPage.lastUpdated
     }),
