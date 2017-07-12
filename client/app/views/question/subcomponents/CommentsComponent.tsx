@@ -24,6 +24,7 @@ export interface CommentsComponentState {
     inputMode: boolean;
     commentContent: string;
     errorMsg: string;
+    EditCommentIndx: number;
 }
 
 const styleSheet: CSSProperties = {
@@ -40,9 +41,9 @@ export class CommentsComponent extends React.Component<CommentsComponentProps, C
             inputMode: false,
             commentContent: "",
             errorMsg: "",
+            EditCommentIndx: -1,
         };
     }
-
 
     addNewComment = () => {
         if (this.state.commentContent) {
@@ -90,12 +91,36 @@ export class CommentsComponent extends React.Component<CommentsComponentProps, C
         }
     }
 
+    DeleteComment = (comment: CommentDto) => {
+        this.props.comments.splice(this.props.comments.indexOf(comment), 1);
+        this.props.onCommentsSubmit(this.props.comments);
+    };
+
+    EditComment = (comment: CommentDto) => {
+        if(this.state.EditCommentIndx == -1){
+            return;
+        }
+        let indx:number = this.props.comments.indexOf(comment);
+        if(indx == this.state.EditCommentIndx){
+            return(
+                <textarea></textarea>
+            )
+        }
+    };
+
     renderComments = () => {
         return this.props.comments.map((comment) => {
             return (
-                <ListItem button key={comment.lastEditedUtc + comment.commentBy.username}>
+                <div>
+                <ListItem key={comment.lastEditedUtc + comment.commentBy.username}>
                     <ListItemText primary={comment.commentContent}></ListItemText>
+                    <IconButton>
+                    <Icon onClick = {() => this.setState({EditCommentIndx: this.props.comments.indexOf(comment)})}>mode_edit</Icon>
+                    <Icon onClick = {() => this.DeleteComment(comment)}>delete</Icon>
+                    </IconButton>
+                    {this.EditComment(comment)}
                 </ListItem>
+                </div>
             )
         });
     }
