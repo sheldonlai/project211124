@@ -58,7 +58,14 @@ export class QuestionBoxComponent extends Component<props, state> {
 
     componentWillReceiveProps(nextProps: props) {
         if (JSON.stringify(nextProps.question) !== JSON.stringify(this.props.question)) {
-            this.setState({editMode: false, question: cloneQuestion(nextProps.question)});
+            let question = cloneQuestion(nextProps.question);
+            let editMode = false;
+            if (this.state.question && JSON.stringify(question) != JSON.stringify(this.state.question)){
+                question.title = this.state.question.title;
+                question.content = this.state.question.content;
+                editMode = this.state.editMode;
+            }
+            this.setState({editMode, question});
         }
     }
 
@@ -96,7 +103,7 @@ export class QuestionBoxComponent extends Component<props, state> {
     }
 
     downVote = () => {
-        this.props.upVoteQuestion(this.props.question);
+        this.props.downVoteQuestion(this.props.question);
     }
 
     onSubmit = () => {
@@ -174,7 +181,7 @@ const mapStateToProps = (state: AppStoreState) => ({
 })
 const mapDispatchToProps = (dispatch): DispatchProps => ({
     upVoteQuestion: (question: Question) => dispatch(QuestionActions.upVoteQuestion(question)),
-    downVoteQuestion: (question: Question) => dispatch(QuestionActions.deleteVoteQuestion(question)),
+    downVoteQuestion: (question: Question) => dispatch(QuestionActions.downVoteQuestion(question)),
     editQuestion: (question: Question) => dispatch(QuestionActions.updateQuestion(question)),
 });
 

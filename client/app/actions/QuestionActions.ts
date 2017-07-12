@@ -72,7 +72,7 @@ export class QuestionActions extends BaseActions {
         return (dispatch) => {
             apiController.upVoteQuestion(question).then(res => {
                 dispatch({
-                    type: QuestionActionTypes.UpVoteAnswer,
+                    type: QuestionActionTypes.UpVoteQuestion,
                     data: res.data
                 });
             }).catch(err =>
@@ -81,11 +81,11 @@ export class QuestionActions extends BaseActions {
         }
     }
 
-    static deleteVoteQuestion(question: Question) {
+    static downVoteQuestion(question: Question) {
         return (dispatch) => {
             apiController.downVoteQuestion(question).then(res => {
                 dispatch({
-                    type: QuestionActionTypes.DownVoteAnswer,
+                    type: QuestionActionTypes.DownVoteQuestion,
                     data: res.data
                 });
             }).catch(err =>

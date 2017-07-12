@@ -12,6 +12,7 @@ import {QuestionPreviewCollectionsDto} from "../dtos/q&a/QuestionPreviewCollecti
 import {ClientError} from "../errors/HttpStatus";
 import {ITagRepository} from "../repositories/TagRepository";
 import {ITag} from "../models/Tags";
+import {UserQuestionVote} from "../models/UserQuestionVote";
 
 
 export interface IQuestionService {
@@ -20,14 +21,15 @@ export interface IQuestionService {
     getQuestionPageByID(name: string): Promise<QuestionPageDto>;
     getUserQuestions(currentUser: User): Promise<QuestionDto[]>;
     updateQuestion(question: QuestionDto, user: User): Promise<QuestionDto>;
+    upVoteQuestion(question: QuestionDto, user: User): Promise<QuestionDto>;
+    downVoteQuestion(question: QuestionDto, user: User): Promise<QuestionDto>;
 }
 
 export class QuestionService extends BaseService implements IQuestionService {
-
     private questionRepository: IQuestionRepository;
+
     private answerRepository: IAnswerRepository;
     private tagRepository: ITagRepository;
-
     constructor(questionRepository: IQuestionRepository,
                 answerRepository: IAnswerRepository,
                 tagRepository: ITagRepository) {
@@ -94,6 +96,21 @@ export class QuestionService extends BaseService implements IQuestionService {
             return this.questionRepository.update(questionObj)
                 .then((question)=> this.questionRepository.getById(question._id));
         })
+    }
+
+    upVoteQuestion(question: QuestionDto, user: User): Promise<QuestionDto> {
+        return this.voteHelper(question, user, true);
+    }
+
+    downVoteQuestion(question: QuestionDto, user: User): Promise<QuestionDto> {
+        return this.voteHelper(question, user, false);
+    }
+
+    voteHelper(question: QuestionDto, user: User, up: boolean) {
+        let vote = new UserQuestionVote(user._id, question._id, up);
+        return this.questionRepository.findOneAndUpdateVoteQuestion(vote).then((question: Question)  => {
+            return question;
+        });
     }
 
     private checkPermissionForModification = (questionDto: QuestionDto, questionObj: Question, currentUser: User) => {

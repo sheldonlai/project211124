@@ -6,8 +6,7 @@ import {UserQuestionVote, UserQuestionVoteModel} from "../models/UserQuestionVot
 export interface IQuestionRepository extends IBaseRepository<Question> {
     getQuestionsByAuthor(user: User): Promise<Question[]>;
     getQuestionByTitle(title: string): Promise<Question>;
-    createUpVoteQuestion(userQuestionVote: UserQuestionVote): Promise<Question>;
-    changeUpVoteQuestion(userQuestionVote: UserQuestionVote): Promise<Question>;
+    findOneAndUpdateVoteQuestion(userQuestionVote: UserQuestionVote): Promise<Question>;
 }
 
 export class QuestionRepository extends BaseRepository<Question, IQuestion> implements IQuestionRepository {
@@ -44,15 +43,10 @@ export class QuestionRepository extends BaseRepository<Question, IQuestion> impl
             });
     }
 
-    createUpVoteQuestion(userQuestionVote: UserQuestionVote): Promise<Question> {
-        return UserQuestionVoteModel.create(userQuestionVote).then((obj: UserQuestionVote) => {
-           return this.getById(userQuestionVote.question);
-        });
-    }
-
-    changeUpVoteQuestion(userQuestionVote: UserQuestionVote): Promise<Question> {
-        return UserQuestionVoteModel.findByIdAndUpdate(userQuestionVote._id, userQuestionVote)
-            .then((obj: UserQuestionVote) => {
+    findOneAndUpdateVoteQuestion(userQuestionVote: UserQuestionVote): Promise<Question> {
+        return UserQuestionVoteModel.findOneAndUpdate(
+            {user: userQuestionVote.user, question: userQuestionVote.question},
+            userQuestionVote, {upsert: true}).then((obj: UserQuestionVote) => {
             return this.getById(userQuestionVote.question);
         });
     }

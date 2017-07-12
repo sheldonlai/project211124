@@ -8,10 +8,10 @@ export class FakeModels {
 
     constructor() {}
 
-    localUser(): User {
+    localUser(testName?: string, num?: number): User {
         let localProfile: LocalProfile = new LocalProfile("hashedPassword", "bestSalt");
-        let random = Math.random() * 10000 / 3000;
-        return new User("sampleUser" + random + "@askalot.corp", "Chuck Norris" + random, UserTypeEnum.NORMAL, localProfile);
+        let random = num? num: Math.random() * 10000;
+        return new User("sampleUser" + testName + random + "@askalot.corp", "Chuck Norris" + random, UserTypeEnum.NORMAL, localProfile);
     }
 
 }

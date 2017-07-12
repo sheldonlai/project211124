@@ -75,6 +75,16 @@ export const QuestionPageReducer = (state = initialState, action): QuestionPageR
         case QuestionActionTypes.EditQuestionError:
             return getErrorState(state, action);
 
+        case QuestionActionTypes.UpVoteQuestion:
+            questionPage = cloneQuestionPage(state.questionPage);
+            questionPage.question = action.data;
+            return getOKState(questionPage);
+
+        case QuestionActionTypes.DownVoteQuestion:
+            questionPage = cloneQuestionPage(state.questionPage);
+            questionPage.question = action.data;
+            return getOKState(questionPage);
+
 
         // Add Answer
         case QuestionActionTypes.AddAnswerRequest:
@@ -98,9 +108,7 @@ export const QuestionPageReducer = (state = initialState, action): QuestionPageR
             // clone question page so that changing this object wont change the current state
             let questionPage3 = cloneQuestionPage(state.questionPage);
             questionPage3.answers = questionPage3.answers.map((answer) =>  {
-                if (answer._id == action.data._id)
-                    return action.data;
-                return answer;
+                return (answer._id == action.data._id)? action.data: answer;
             });
             return getOKState(questionPage3);
 

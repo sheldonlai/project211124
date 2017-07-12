@@ -58,11 +58,15 @@ export class QuestionAPIController extends ApiController {
     }
 
     updateQuestion(question: Question): AxiosPromise{
-        const questionDto = this.convertQuestionToDto(question);
-        return this.put(APIUrls.UpdateQuestion, questionDto).then((response: AxiosResponse) => {
-            response.data = this.convertDtoToQuestion(response.data);
-            return response;
-        });
+        return this.questionPutApiHelper(APIUrls.UpdateQuestion, question);
+    }
+
+    upVoteQuestion(question: Question): AxiosPromise {
+        return this.questionPutApiHelper(APIUrls.upVoteQuestion, question);
+    }
+
+    downVoteQuestion(question: Question): AxiosPromise {
+        return this.questionPutApiHelper(APIUrls.downVoteQuestion, question);
     }
 
     fetchQuestionByID(id: string): AxiosPromise {
@@ -94,14 +98,6 @@ export class QuestionAPIController extends ApiController {
         });
     }
 
-    upVoteQuestion(question: Question): AxiosPromise {
-        return this.questionPostApiHelper(APIUrls.upVoteQuestion, question);
-    }
-
-    downVoteQuestion(question: Question): AxiosPromise {
-        return this.questionPostApiHelper(APIUrls.downVoteQuestion, question);
-    }
-
     upVoteAnswer(answer: Answer): AxiosPromise {
         return this.answerPostApiHelper(APIUrls.UpVoteAnswer, answer);
     }
@@ -118,7 +114,15 @@ export class QuestionAPIController extends ApiController {
         });
     }
 
-    private questionPostApiHelper (url, question: Question): AxiosPromise {
+    private questionPutApiHelper (url: string, question: Question): AxiosPromise {
+        const questionDto = this.convertQuestionToDto(question);
+        return this.put(url, questionDto).then((response: AxiosResponse) => {
+            response.data = this.convertDtoToQuestion(response.data);
+            return response;
+        });
+    }
+
+    private questionPostApiHelper (url: string, question: Question): AxiosPromise {
         const questionDto = this.convertQuestionToDto(question);
         return this.post(url, questionDto).then((response: AxiosResponse) => {
             response.data = this.convertDtoToQuestion(response.data);

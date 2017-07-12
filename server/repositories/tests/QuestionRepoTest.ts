@@ -203,13 +203,18 @@ describe('QuestionRepoTest', function () {
             return questionRepo.create(newQuestion);
         }).then(function (question) {
             let promises = [];
-            for (let i =0; i< 142; i++){
-                promises.push(questionRepo.createUpVoteQuestion(
-                    new UserQuestionVote(new_user._id, question._id, true)
-                ));
+            for (let i = 0; i < 142; i++) {
+                promises.push(
+                    UserModel.create(fakeModels.localUser("QuestionRepoTest", i)).then((user) =>{
+                        return questionRepo.findOneAndUpdateVoteQuestion(
+                            new UserQuestionVote(user._id, question._id, true)
+                        );
+                    })
+                )
+
             }
             return Promise.all(promises);
-        }).then((questions: Question[])=> {
+        }).then((questions: Question[]) => {
             return questionRepo.getById(questions[0]._id);
         }).then(question => {
             return expect(question.upVotes).toBe(142);
