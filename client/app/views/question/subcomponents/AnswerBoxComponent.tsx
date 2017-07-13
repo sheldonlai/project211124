@@ -49,10 +49,10 @@ export class AnswerBoxComponent extends Component<AnswerBoxComponentProps> {
                                        style={{fontSize: 14}} reset={this.props.resetAnswer}
                     />
                     <Divider/>
-                    <p style={{color: "grey", fontSize: 10, textAlign: "right"}}>
+                    <div style={{color: "grey", fontSize: 10, textAlign: "right"}}>
                         {answer.createdUtc && <div>Posted on {answer.createdUtc}</div>}
                         <br/>by {answer.author.username}
-                    </p>
+                    </div>
                 </div>
             </Paper>
         )

@@ -111,7 +111,6 @@ export class CommentsComponent extends React.Component<CommentsComponentProps, C
     renderComments = () => {
         return this.props.comments.map((comment) => {
             return (
-                <div>
                 <ListItem key={comment.lastEditedUtc + comment.commentBy.username}>
                     <ListItemText primary={comment.commentContent}></ListItemText>
                     <IconButton>
@@ -120,7 +119,6 @@ export class CommentsComponent extends React.Component<CommentsComponentProps, C
                     </IconButton>
                     {this.EditComment(comment)}
                 </ListItem>
-                </div>
             )
         });
     }
