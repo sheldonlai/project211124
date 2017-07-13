@@ -11,6 +11,9 @@ import QuestionPreview = FrontEndQuestionModels.QuestionPreview;
 import Question = FrontEndQuestionModels.Question;
 import Answer = FrontEndQuestionModels.Answer;
 import cloneAnswer = FrontEndQuestionModels.cloneAnswer;
+import {FooterComponent} from "./FooterComponent";
+import {connect} from "react-redux";
+import {AnswerActions} from "../../../actions/AnswerActions";
 
 export interface AnswerBoxComponentProps {
     onAnswerChange: (answer: Answer) => void;
@@ -22,18 +25,28 @@ export interface AnswerBoxComponentProps {
     resetAnswer?: () => void;
 }
 
-const paperStyle = {height: "100%", padding: 15, paddingBottom: 0};
+interface dispatch {
+    upVote: (answer: Answer) => void
+    downVote: (answer: Answer) => void
+}
 
-export class AnswerBoxComponent extends Component<AnswerBoxComponentProps> {
+
+const paperStyle = {height: "100%", padding: 15};
+
+export class AnswerBoxComponent extends Component<AnswerBoxComponentProps & dispatch> {
 
     onContentChange = (editorState) => {
-        let question = cloneAnswer(this.props.answer);
-        question.content = editorState;
-        this.props.onAnswerChange(question);
+        let answer = cloneAnswer(this.props.answer);
+        answer.content = editorState;
+        this.props.onAnswerChange(answer);
     };
 
+    upVote  = () => this.props.upVote(this.props.answer);
+
+    downVote = () => this.props.downVote(this.props.answer);
+
     render() {
-        const answer = {...this.props.answer};
+        const answer: Answer = {...this.props.answer};
         const editable = (this.props.user && this.props.user.username === answer.author.username);
         return (
             <Paper style={paperStyle}>
@@ -49,12 +62,28 @@ export class AnswerBoxComponent extends Component<AnswerBoxComponentProps> {
                                        style={{fontSize: 14}} reset={this.props.resetAnswer}
                     />
                     <Divider/>
-                    <div style={{color: "grey", fontSize: 10, textAlign: "right"}}>
-                        {answer.createdUtc && <div>Posted on {answer.createdUtc}</div>}
-                        <br/>by {answer.author.username}
-                    </div>
+                    <FooterComponent
+                        onUpVote={this.upVote}
+                        onDownVote={this.downVote}
+                        upVotes={answer.upVotes}
+                        downVotes={answer.downVotes}
+                        author={answer.author}
+                        createdUtc={answer.createdUtc}
+                    />
                 </div>
             </Paper>
         )
     }
 }
+
+
+
+const mapDispatchToProps = (dispatch) => ({
+    upVote: (answer: Answer) => dispatch(AnswerActions.upVoteAnswer(answer)),
+    downVote: (answer: Answer) => dispatch(AnswerActions.downVoteAnswer(answer)),
+})
+
+export const AnswerBoxView = connect<void, dispatch, AnswerBoxComponentProps>(
+    undefined,
+    mapDispatchToProps
+)(AnswerBoxComponent);

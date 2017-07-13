@@ -3,7 +3,7 @@ import {Component} from "react";
 import {FrontEndQuestionModels} from "../../../models/QuestionModels";
 import {UserDto} from "../../../../../server/dtos/auth/UserDto";
 import Button from "material-ui/Button";
-import {AnswerBoxComponent} from "./AnswerBoxComponent";
+import {AnswerBoxComponent, AnswerBoxView} from "./AnswerBoxComponent";
 import AddIcon from "material-ui-icons/Add";
 import QuestionPreview = FrontEndQuestionModels.QuestionPreview;
 import Question = FrontEndQuestionModels.Question;
@@ -15,9 +15,11 @@ import {AnswerActions} from "../../../actions/AnswerActions";
 import {QuestionPageReducerState} from "../../../reducers/QuestionPageReducer";
 import cloneAnswer = FrontEndQuestionModels.cloneAnswer;
 import {Prompt} from "react-router";
-export interface AnswerBoxesComponentProps {}
+export interface AnswerBoxesComponentProps {
+}
 
-interface props extends AnswerBoxesComponentProps, DispatchToProps, StateToProps {}
+interface props extends AnswerBoxesComponentProps, DispatchToProps, StateToProps {
+}
 
 export interface AnswerBoxesComponentState {
     answerId: string;
@@ -37,6 +39,7 @@ export class AnswerBoxesComponent extends Component<props, AnswerBoxesComponentS
             this.setState({editAnswer: false, answers: cloneAnswers(nextProps.answers)});
         }
     }
+
     componentWillUnmount() {
         this.resetAnswers();
     }
@@ -91,12 +94,12 @@ export class AnswerBoxesComponent extends Component<props, AnswerBoxesComponentS
                     let key = (answer._id) ? answer._id : "new question key";
                     const editMode = this.state.editAnswer && (answer._id === this.state.answerId || answer._id === undefined);
                     return (
-                        <AnswerBoxComponent editMode={editMode}
-                                            user={this.props.user} onSubmit={() => this.onSubmit(answer)}
-                                            answer={answer} onAnswerChange={this.onAnswerChange}
-                                            key={key}
-                                            onEditClick={() => this.onEditClick(answer)}
-                                            resetAnswer={this.resetAnswers}
+                        <AnswerBoxView editMode={editMode}
+                                       user={this.props.user} onSubmit={() => this.onSubmit(answer)}
+                                       answer={answer} onAnswerChange={this.onAnswerChange}
+                                       key={key}
+                                       onEditClick={() => this.onEditClick(answer)}
+                                       resetAnswer={this.resetAnswers}
                         />
                     )
                 })}

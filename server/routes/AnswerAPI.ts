@@ -14,6 +14,8 @@ export class AnswerAPI extends BaseAPI{
 		this.service = service;
 		router.post(APIUrls.CreateAnswer, mustBeAuthenticated, this.CreateAnswer);
 		router.put(APIUrls.UpdateAnswer, mustBeAuthenticated, this.UpdateAnswer);
+		router.put(APIUrls.UpVoteAnswer, mustBeAuthenticated, this.UpVoteAnswer);
+		router.put(APIUrls.DownVoteAnswer, mustBeAuthenticated, this.DownVoteAnswer);
 	}
 
 	public CreateAnswer = (req: AuthRequest, res: Response, next: NextFunction) => {
@@ -28,6 +30,22 @@ export class AnswerAPI extends BaseAPI{
 		let answer : AnswerDto = req.body;
 		let user : User = req.user;
 		let result = this.service.updateAnswer(user, answer);
+
+		this.respondPromise(result, res, next);
+	}
+
+	public UpVoteAnswer = (req: AuthRequest, res: Response, next: NextFunction) => {
+		let answer : AnswerDto = req.body;
+		let user : User = req.user;
+		let result = this.service.upVoteAnswer(user, answer._id);
+
+		this.respondPromise(result, res, next);
+	}
+
+	public DownVoteAnswer = (req: AuthRequest, res: Response, next: NextFunction) => {
+		let answer : AnswerDto = req.body;
+		let user : User = req.user;
+		let result = this.service.downVoteAnswer(user, answer._id);
 
 		this.respondPromise(result, res, next);
 	}

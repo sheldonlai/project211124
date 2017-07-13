@@ -17,8 +17,8 @@ export class QuestionAPI extends BaseAPI {
         router.post(APIUrls.CreateQuestion, mustBeAuthenticated, this.createQuestion);
         router.get(APIUrls.GetQuestionPage, maybeAuthenticated, this.getQuestion);
         router.put(APIUrls.UpdateQuestion, mustBeAuthenticated, this.updateQuestion);
-        router.put(APIUrls.upVoteQuestion, mustBeAuthenticated, this.upVoteQuestion);
-        router.put(APIUrls.downVoteQuestion, mustBeAuthenticated, this.downVoteQuestion);
+        router.put(APIUrls.UpVoteQuestion, mustBeAuthenticated, this.upVoteQuestion);
+        router.put(APIUrls.DownVoteQuestion, mustBeAuthenticated, this.downVoteQuestion);
     }
 
     public getQuestionPreviews = (req: AuthRequest, res: Response, next: NextFunction) => {
@@ -49,14 +49,14 @@ export class QuestionAPI extends BaseAPI {
     public upVoteQuestion = (req: AuthRequest, res: Response, next: NextFunction) => {
         let question: QuestionDto = req.body;
         let user : User = req.user;
-        let result = this.service.upVoteQuestion(question, user);
+        let result = this.service.upVoteQuestion(question._id, user);
         this.respondPromise(result, res, next);
     }
 
     public downVoteQuestion = (req: AuthRequest, res: Response, next: NextFunction) => {
         let question: QuestionDto = req.body;
         let user : User = req.user;
-        let result = this.service.downVoteQuestion(question, user);
+        let result = this.service.downVoteQuestion(question._id, user);
         this.respondPromise(result, res, next);
     }
 

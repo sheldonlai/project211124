@@ -23,7 +23,7 @@ export class APIUrls {
     static UpdateAnswer = "/update-answer";
 
     static UpVoteAnswer = "/up-vote-answer";
-    static upVoteQuestion = "/up-vote-question";
-    static downVoteAnswer = "/down-vote-answer";
-    static downVoteQuestion = "/down-vote-question";
+    static UpVoteQuestion = "/up-vote-question";
+    static DownVoteAnswer = "/down-vote-answer";
+    static DownVoteQuestion = "/down-vote-question";
 }

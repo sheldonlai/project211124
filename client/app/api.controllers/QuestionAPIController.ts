@@ -62,11 +62,11 @@ export class QuestionAPIController extends ApiController {
     }
 
     upVoteQuestion(question: Question): AxiosPromise {
-        return this.questionPutApiHelper(APIUrls.upVoteQuestion, question);
+        return this.questionPutApiHelper(APIUrls.UpVoteQuestion, question);
     }
 
     downVoteQuestion(question: Question): AxiosPromise {
-        return this.questionPutApiHelper(APIUrls.downVoteQuestion, question);
+        return this.questionPutApiHelper(APIUrls.DownVoteQuestion, question);
     }
 
     fetchQuestionByID(id: string): AxiosPromise {
@@ -82,28 +82,31 @@ export class QuestionAPIController extends ApiController {
             });
     }
 
+    // Answers functions
     createAnswer(answer: Answer): AxiosPromise {
-        const answerDto = this.convertAnswerToDto(answer);
-        return this.post(APIUrls.CreateAnswer, answerDto).then((response: AxiosResponse) => {
-            response.data = this.convertDtoToAnswer(response.data);
-            return response;
-        });
+        return this.answerPostApiHelper(APIUrls.CreateQuestion, answer);
     }
 
     updateAnswer(answer: Answer): AxiosPromise {
-        const answerDto = this.convertAnswerToDto(answer);
-        return this.put(APIUrls.UpdateAnswer, answerDto).then((response: AxiosResponse) => {
-            response.data = this.convertDtoToAnswer(response.data);
-            return response;
-        });
+        return this.answerPutApiHelper(APIUrls.UpdateAnswer, answer);
     }
 
     upVoteAnswer(answer: Answer): AxiosPromise {
-        return this.answerPostApiHelper(APIUrls.UpVoteAnswer, answer);
+        return this.answerPutApiHelper(APIUrls.UpVoteAnswer, answer);
     }
 
     downVoteAnswer(answer: Answer): AxiosPromise {
-        return this.answerPostApiHelper(APIUrls.downVoteAnswer, answer);
+        return this.answerPutApiHelper(APIUrls.DownVoteAnswer, answer);
+    }
+
+    // Helpers
+
+    private answerPutApiHelper (url: string, answer: Answer): AxiosPromise {
+        const answerDto = this.convertAnswerToDto(answer);
+        return this.put(url, answerDto).then((response: AxiosResponse) => {
+            response.data = this.convertDtoToAnswer(response.data);
+            return response;
+        });
     }
 
     private answerPostApiHelper (url: string, answer: Answer): AxiosPromise {

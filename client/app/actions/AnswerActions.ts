@@ -44,7 +44,7 @@ export class AnswerActions extends BaseActions{
 
     static upVoteAnswer (answer: Answer): (dispatch: any) => void {
         return function(dispatch) {
-            apiController.updateAnswer(answer).then((response) => {
+            apiController.upVoteAnswer(answer).then((response) => {
                 dispatch({
                     type: QuestionActionTypes.UpVoteAnswer,
                     data: response.data
@@ -57,7 +57,7 @@ export class AnswerActions extends BaseActions{
 
     static downVoteAnswer (answer: Answer): (dispatch: any) => void {
         return function(dispatch) {
-            apiController.updateAnswer(answer).then((response) => {
+            apiController.downVoteAnswer(answer).then((response) => {
                 dispatch({
                     type: QuestionActionTypes.DownVoteAnswer,
                     data: response.data

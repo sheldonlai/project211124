@@ -21,8 +21,8 @@ export interface IQuestionService {
     getQuestionPageByID(name: string): Promise<QuestionPageDto>;
     getUserQuestions(currentUser: User): Promise<QuestionDto[]>;
     updateQuestion(question: QuestionDto, user: User): Promise<QuestionDto>;
-    upVoteQuestion(question: QuestionDto, user: User): Promise<QuestionDto>;
-    downVoteQuestion(question: QuestionDto, user: User): Promise<QuestionDto>;
+    upVoteQuestion(questionId: string, user: User): Promise<QuestionDto>;
+    downVoteQuestion(questionId: string, user: User): Promise<QuestionDto>;
 }
 
 export class QuestionService extends BaseService implements IQuestionService {
@@ -85,29 +85,31 @@ export class QuestionService extends BaseService implements IQuestionService {
     }
 
     updateQuestion(questionDto: QuestionDto, user: User): Promise<QuestionDto> {
-        return this.questionRepository.getById(questionDto._id).then((questionObj: Question) => {
-            this.checkPermissionForModification(questionDto, questionObj, user);
-            // do not allow user to change these
-            let restrictedDto: QuestionDto = this.applyUpdateRestrictions(questionDto, questionObj);
+        return this.questionRepository.getById(questionDto._id).then((questionFound: Question) => {
+            this.checkPermissionForModification(questionDto, questionFound, user);
+
+            // editable fields
+            questionFound.content = questionDto.content;
+            questionFound.title = questionDto.title;
+
             // update last edited utc
-            restrictedDto.lastEditedUtc = new Date(Date.now());
-            questionObj = this.mapKeysOntoObject(questionObj, restrictedDto);
+            questionFound.lastEditedUtc = new Date(Date.now());
 
-            return this.questionRepository.update(questionObj)
+            return this.questionRepository.update(questionFound)
                 .then((question)=> this.questionRepository.getById(question._id));
-        })
+        });
     }
 
-    upVoteQuestion(question: QuestionDto, user: User): Promise<QuestionDto> {
-        return this.voteHelper(question, user, true);
+    upVoteQuestion(questionId: string, user: User): Promise<QuestionDto> {
+        return this.voteHelper(questionId, user, true);
     }
 
-    downVoteQuestion(question: QuestionDto, user: User): Promise<QuestionDto> {
-        return this.voteHelper(question, user, false);
+    downVoteQuestion(questionId: string, user: User): Promise<QuestionDto> {
+        return this.voteHelper(questionId, user, false);
     }
 
-    voteHelper(question: QuestionDto, user: User, up: boolean) {
-        let vote = new UserQuestionVote(user._id, question._id, up);
+    voteHelper(questionId: string, user: User, up: boolean) {
+        let vote = new UserQuestionVote(user._id, questionId, up);
         return this.questionRepository.findOneAndUpdateVoteQuestion(vote).then((question: Question)  => {
             return question;
         });

@@ -19,6 +19,7 @@ import {AppStoreState} from "../../../stores/AppStore";
 import {QuestionActions} from "../../../actions/QuestionActions";
 import {connect} from "react-redux";
 import {Prompt} from "react-router";
+import {FooterComponent} from "./FooterComponent";
 
 export interface QuestionBoxComponentProps {
     // onQuestionChange: (question: Question) => void;
@@ -37,7 +38,7 @@ export interface state {
 interface props extends QuestionBoxComponentProps, DispatchProps {
 }
 
-let paperStyle = {height: "100%", padding: 15, paddingBottom: 0};
+let paperStyle = {height: "100%", padding: 15};
 
 export class QuestionBoxComponent extends Component<props, state> {
 
@@ -52,6 +53,7 @@ export class QuestionBoxComponent extends Component<props, state> {
                 question: this.props.question
             });
     }
+
     componentWillUnmount() {
         this.resetQuestion();
     }
@@ -60,7 +62,7 @@ export class QuestionBoxComponent extends Component<props, state> {
         if (JSON.stringify(nextProps.question) !== JSON.stringify(this.props.question)) {
             let question = cloneQuestion(nextProps.question);
             let editMode = false;
-            if (this.state.question && JSON.stringify(question) != JSON.stringify(this.state.question)){
+            if (this.state.question && JSON.stringify(question) != JSON.stringify(this.state.question)) {
                 question.title = this.state.question.title;
                 question.content = this.state.question.content;
                 editMode = this.state.editMode;
@@ -111,7 +113,7 @@ export class QuestionBoxComponent extends Component<props, state> {
     };
 
     render() {
-        const question = {...this.state.question};
+        const question: Question = {...this.state.question};
         const editable = this.props.user && (this.props.user.username === question.author.username);
         let editButton;
         if (editable && !this.state.editMode) {
@@ -144,25 +146,14 @@ export class QuestionBoxComponent extends Component<props, state> {
                             <ChipListComponent chips={question.tags} keyName={"tag"}/>
                         </div>
                         <Divider/>
-                        <div>
-                        <span>
-                            <IconButton onClick={this.upVote}>
-                                <Icon >thumb_up</Icon>
-                            </IconButton>
-                            {question.upVotes}
-                        </span>
-                            <span>
-                            <IconButton onClick={this.downVote}>
-                                <Icon>thumb_down</Icon>
-                            </IconButton>
-                                {question.downVotes}
-                        </span>
-                            <span>
-                            <p style={{color: "grey", fontSize: 10, textAlign: "right"}}>
-                                Posted on {question.createdUtc}<br/>by {question.author.username}
-                            </p>
-                        </span>
-                        </div>
+                        <FooterComponent
+                            onUpVote={this.upVote}
+                            onDownVote={this.downVote}
+                            upVotes={question.upVotes}
+                            downVotes={question.downVotes}
+                            author={question.author}
+                            createdUtc={question.createdUtc}
+                        />
                     </div>
                 </Paper>
                 <CommentsComponent comments={this.props.question.comments}
@@ -192,4 +183,4 @@ interface DispatchProps {
 }
 
 export const QuestionBoxView = connect<QuestionBoxComponentProps, DispatchProps, any>(
-    mapStateToProps, mapDispatchToProps)(QuestionBoxComponent)
+    mapStateToProps, mapDispatchToProps)(QuestionBoxComponent);

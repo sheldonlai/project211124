@@ -5,6 +5,7 @@ import {BaseService} from "./BaseService";
 import {IAnswerRepository} from "../repositories/AnswerRepository";
 import {Answer} from "../models/Answer";
 import {AppError} from "../errors/AppError";
+import {UserAnswerVote} from "../models/UserAnswerVote";
 
 export interface IAnswerService {
     createAnswer(user: User, answer: AnswerDto): Promise<AnswerDto>;
@@ -35,16 +36,8 @@ export class AnswerService extends BaseService implements IAnswerService {
         return this.answerRepository.getById(updatedAnswer._id).then((answerFound: Answer) => {
             this.checkPermissionForModification(updatedAnswer, answerFound, currentUser);
 
-            //filter out non-modifiable fields
-            delete updatedAnswer.author;
-            delete updatedAnswer.upVotes;
-            delete updatedAnswer.downVotes;
-            delete updatedAnswer.createdUtc;
-            delete updatedAnswer.question;
-            delete updatedAnswer.comments;
-
-            updatedAnswer.lastEditedUtc = new Date(Date.now());
-            answerFound = this.mapKeysOntoObject(answerFound, updatedAnswer);
+            answerFound.content = updatedAnswer.content
+            answerFound.lastEditedUtc = new Date(Date.now());
 
             return this.answerRepository.update(answerFound)
                 .then((answer)=> this.answerRepository.getById(answer._id));
@@ -52,11 +45,19 @@ export class AnswerService extends BaseService implements IAnswerService {
     }
 
     upVoteAnswer(user: User, answerId: string): Promise<AnswerDto> {
-        return undefined;
+        return this.voteHelper(answerId, user, true);
     }
 
     downVoteAnswer(user: User, answerId: string): Promise<AnswerDto> {
-        return undefined;
+        return this.voteHelper(answerId, user, false);
+    }
+
+    voteHelper(answerId: string, user: User, up: boolean) {
+        const updateVoteAnswer = new UserAnswerVote(user._id, answerId, true);
+        return this.answerRepository.findOneAndUpdateVoteAnswer(updateVoteAnswer)
+            .then((answer: Answer)  => {
+            return answer;
+        });
     }
 
     private checkPermissionForModification = (answerByUser: AnswerDto, answerFoundInDb: Answer, currentUser: User) => {

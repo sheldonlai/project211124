@@ -22,7 +22,7 @@ export interface IUserAnswerVote extends UserAnswerVote, Document {}
 
 const schema = new Schema({
     user: {type: Schema.Types.ObjectId, ref: "user" , required: true},
-    answer: {type: Schema.Types.ObjectId, ref: "question", required: true},
+    answer: {type: Schema.Types.ObjectId, ref: "answer", required: true},
     upVote: {type: Boolean, required: true}
 });
 
