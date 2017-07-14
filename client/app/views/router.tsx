@@ -14,6 +14,7 @@ import {QuestionHomePage} from "./question/QuestionHome";
 import {QuestionPageView} from "./question/QuestionPage";
 import TransitionGroup =require('react-transition-group/TransitionGroup');
 import {ErrorSnackBar} from "./ErrorView";
+import {ServiceHomeView} from "./services/ServiceHome";
 // import {lightBlue, green} from "material-ui/styles/colors";
 // let muiTheme = createMuiTheme({
 //     palette: createPalette({
@@ -77,6 +78,13 @@ export class App extends React.Component<any, any> {
                                    render={({match, ...rest}) => (
                                        <TransitionGroup component={firstChild}>
                                            <QuestionPageView match={match} {...rest} />
+                                       </TransitionGroup>
+                                   )}
+                            />
+                            <Route path={Routes.services}
+                                   render={({match, ...rest}) => (
+                                       <TransitionGroup component={firstChild}>
+                                           <ServiceHomeView match={match} {...rest} />
                                        </TransitionGroup>
                                    )}
                             />

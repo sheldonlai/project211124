@@ -8,6 +8,7 @@ import {connect} from "react-redux";
 import {AppStoreState} from "../stores/AppStore";
 import {ReducerStateStatus} from "../constants/ReducerStateStatus";
 import {RouteProps} from "react-router";
+import {CustomLink} from "../components/CustomLink";
 
 const menuButtonStyle = {
     "height": "50px"
@@ -25,23 +26,23 @@ class MenuClass extends Component<MenuClassProps> {
         super(props);
     }
 
+    button = (text: string, to: string) => (
+        <CustomLink to={to}>
+            <Button color="contrast" style={menuButtonStyle}>
+                {text}
+            </Button>
+        </CustomLink>
+    )
+
     buttons = () => {
         if (!this.props.loggedIn) {
-            return (
-                <Link to={Routes.login}>
-                    <Button color="contrast" style={menuButtonStyle}>
-                        Login
-                    </Button>
-                </Link>
-            )
+            return this.button("Login", Routes.login)
         } else {
             return (
-                <div>
-                    <Button color="contrast" style={menuButtonStyle}
-                            onClick={() => this.props.logout()}>
-                        Log Out
-                    </Button>
-                </div>
+                <Button color="contrast" style={menuButtonStyle}
+                        onClick={() => this.props.logout()}>
+                    Log Out
+                </Button>
             )
         }
     };
@@ -55,11 +56,8 @@ class MenuClass extends Component<MenuClassProps> {
                             <Button color="contrast" style={menuButtonStyle}
                             >Askalot</Button>
                         </Link>
-                        <Link to={Routes.question}>
-                            <Button color="contrast" style={menuButtonStyle}>
-                                Questions
-                            </Button>
-                        </Link>
+                        {this.button("Questions", Routes.question)}
+                        {this.button("Services", Routes.services)}
                     </li>
                 </ul>
                 <div id="login-menu">

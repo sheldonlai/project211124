@@ -6,6 +6,7 @@ import {QuestionActionTypes} from "../constants/QuestionActionTypes";
 import {FrontEndQuestionModels} from "../models/QuestionModels";
 import QuestionPage = FrontEndQuestionModels.QuestionPage;
 import cloneQuestionPage = FrontEndQuestionModels.cloneQuestionPage;
+import Answer = FrontEndQuestionModels.Answer;
 
 export interface QuestionPageReducerState {
     status: ReducerStateStatus;    // status of the state
@@ -114,6 +115,20 @@ export const QuestionPageReducer = (state = initialState, action): QuestionPageR
 
         case QuestionActionTypes.EditAnswerError:
             return getErrorState(state, action);
+
+        case QuestionActionTypes.UpVoteAnswer:
+            questionPage = cloneQuestionPage(state.questionPage);
+            let updatedAnswer = action.data;
+            questionPage.answers = questionPage.answers.map((answer: Answer) =>
+                answer._id == updatedAnswer._id? updatedAnswer: answer);
+            return getOKState(questionPage);
+
+        case QuestionActionTypes.DownVoteAnswer:
+            questionPage = cloneQuestionPage(state.questionPage);
+            updatedAnswer = action.data;
+            questionPage.answers = questionPage.answers.map((answer: Answer) =>
+                answer._id == updatedAnswer._id? updatedAnswer: answer);
+            return getOKState(questionPage);
 
         default:
             return state;

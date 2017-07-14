@@ -7,8 +7,8 @@ import "./file-uploader.css";
 
 const styles: { [key: string]: CSSProperties } = {
     input: {
-        width: "100%",
-        height: "100%",
+        width: 1,
+        height: 1,
 
         opacity: 0,
         overflow: "hidden",
@@ -67,7 +67,7 @@ export class FileUploader extends React.Component<any, FileUploaderState> {
         }
 
         return (
-            <Grid container style={{width: 400}}>
+            <div style={{width: 400, yOverflow: "hidden"}}>
                 <input ref="input" style={styles.input} type="file" onChange={this.onInputChange} multiple />
                 <div>
                     <Button color="primary" onClick={this.handleClick}>
@@ -83,7 +83,7 @@ export class FileUploader extends React.Component<any, FileUploaderState> {
                     </List>
                 </div>
 
-            </Grid>
+            </div>
         )
     }
 }

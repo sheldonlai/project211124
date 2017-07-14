@@ -95,8 +95,10 @@ export class AnswerBoxesComponent extends Component<props, AnswerBoxesComponentS
                     const editMode = this.state.editAnswer && (answer._id === this.state.answerId || answer._id === undefined);
                     return (
                         <AnswerBoxView editMode={editMode}
-                                       user={this.props.user} onSubmit={() => this.onSubmit(answer)}
-                                       answer={answer} onAnswerChange={this.onAnswerChange}
+                                       user={this.props.user}
+                                       onSubmit={() => this.onSubmit(answer)}
+                                       answer={answer}
+                                       onAnswerChange={this.onAnswerChange}
                                        key={key}
                                        onEditClick={() => this.onEditClick(answer)}
                                        resetAnswer={this.resetAnswers}
@@ -133,6 +135,7 @@ const mapStateToProps = (state: AppStoreState): StateToProps => ({
     question: state.questionPage.questionPage.question,
     answers: state.questionPage.questionPage.answers
 });
+
 const mapDispatchToProps = (dispatch): DispatchToProps => ({
     editAnswer: (answer: Answer) => dispatch(AnswerActions.updateAnswer(answer)),
     addAnswer: (answer: Answer) => dispatch(AnswerActions.createAnswer(answer)),

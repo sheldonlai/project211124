@@ -53,7 +53,7 @@ export class AnswerService extends BaseService implements IAnswerService {
     }
 
     voteHelper(answerId: string, user: User, up: boolean) {
-        const updateVoteAnswer = new UserAnswerVote(user._id, answerId, true);
+        const updateVoteAnswer = new UserAnswerVote(user._id, answerId, up);
         return this.answerRepository.findOneAndUpdateVoteAnswer(updateVoteAnswer)
             .then((answer: Answer)  => {
             return answer;
