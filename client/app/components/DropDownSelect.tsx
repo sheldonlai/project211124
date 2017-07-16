@@ -6,7 +6,9 @@ import Typography from 'material-ui/Typography';
 import {CSSProperties} from "react";
 interface props {
     data: DropDownSelectData[];
+    defaultValue?: any;
     placeholder? : string;
+    onChange? : (element: any) => void;
 }
 
 export interface DropDownSelectData {
@@ -14,16 +16,18 @@ export interface DropDownSelectData {
     value: any;
 }
 
-const defaultStyles = {
+const defaultStyles : CSSProperties= {
     width: 200,
-    height: 40
+    height: 40,
+    justifyContent: "flex-start"
 };
 
-export class DropDownSelect extends React.Component<props, any>{
+// Temporary component until Material UI finish implementing theirs
+export class DropDownSelect extends React.Component<props>{
     state = {
         anchorEl: undefined,
         open: false,
-        value: undefined
+        value: this.props.defaultValue
     };
 
     button = undefined;
@@ -38,17 +42,20 @@ export class DropDownSelect extends React.Component<props, any>{
 
     onSelectValue = (value: any) => {
         this.setState({value: value, open: false});
+        if (this.props.onChange)
+            this.props.onChange(value);
     };
 
     render() {
         const selected = this.props.data.filter((data) => data.value == this.state.value)[0];
         const placeholder = this.props.placeholder? this.props.placeholder : "";
         const style = defaultStyles;
-        const border: CSSProperties = {borderBottom: "lightgrey 1px solid", borderTop: "lightgrey 1px solid"};
+        const border: CSSProperties = {borderBottom: "lightgrey 1px solid"};
         return (
-            <div>
+            <div style={{margin: "10px 0px"}}>
+                {placeholder && <Typography type="caption" gutterBottom>{placeholder}</Typography>}
                 <div style={{height: style.height}}>
-                    <Button style={{...style, ...border, textTransform:"none"}} onClick={this.handleClick}>
+                    <Button style={{...style, ...border, textTransform:"none", paddingLeft: 0, fontWeight: 400 }} onClick={this.handleClick}>
                         {selected? selected.text: placeholder}
                     </Button>
                 </div>

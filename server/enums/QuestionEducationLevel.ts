@@ -3,7 +3,7 @@
  */
 export enum QuestionEducationLevel {
     NOT_SPECIFIED = <any> "NOT_SPECIFIED",
-    HIGH_SCHOOL = <any> "HIGH_SCHOOL",
+    SECONDARY = <any> "SECONDARY",
     UNIVERSITY = <any> "UNIVERSITY",
     WORK = <any> "WORK"
 }

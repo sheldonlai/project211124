@@ -1,6 +1,7 @@
 import {CSSProperties} from "react";
-export const listNumericalEnumValues = (enumObj : any) => {
-    Object.keys(enumObj).map(k => enumObj[k]).filter(e => typeof e === "number");
+import {DropDownSelectData} from "../components/DropDownSelect";
+export const listNumericalEnumValues = (enumObj : any): number[] => {
+    return Object.keys(enumObj).map(k => enumObj[k]).filter(e => typeof e === "number");
 };
 
 export const applyStylesToDefaultStyle = (defaultStyle: CSSProperties, dictionary: CSSProperties) : CSSProperties => {
@@ -22,3 +23,25 @@ export const mapFieldsOnToObject = (object: any, fields: any) : any => {
     }
     return object;
 };
+
+const convertEnumStringToViewString = (key: string) => {
+    let str = key.replace(/_/g, " ").toLocaleLowerCase();
+    return str.charAt(0).toUpperCase() + str.slice(1)
+};
+
+export const getDropDownDataFromStringEnum = (enumClass): DropDownSelectData[] => {
+    return Object.keys(enumClass).map(key => (
+        {value: key, text: convertEnumStringToViewString(key)}
+    ));
+};
+
+export const getDropDownDataFromNumericalEnum = (enumClass: any) => {
+    return listNumericalEnumValues(enumClass).map((key) => {
+        return {
+            value: key,
+            text: convertEnumStringToViewString(enumClass[key])
+        }
+    })
+};
+
+

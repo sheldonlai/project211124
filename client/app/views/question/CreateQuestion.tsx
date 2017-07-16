@@ -17,6 +17,9 @@ import {FrontEndQuestionModels} from "../../models/QuestionModels";
 import Grid from "material-ui/Grid";
 import {createStyleSheet, withStyles} from "material-ui/styles";
 import {TagsSelector} from "../../components/TagsComponent/TagsComponent";
+import Typography from "material-ui/Typography";
+import {DropDownSelect} from "../../components/DropDownSelect";
+import {getDropDownDataFromNumericalEnum, getDropDownDataFromStringEnum} from "../../utils/utils";
 import Question = FrontEndQuestionModels.Question;
 
 const styleSheet = createStyleSheet('CreateQuestion', theme => ({
@@ -89,16 +92,44 @@ class CreateQuestion extends LoginRequiredComponent<any, QuestionCreationDto> {
         ));
     };
 
-    updateTags = (tags : string[]) => {
-        this.setState({tags: tags });
+    updateTags = (tags: string[]) => {
+        this.setState({tags: tags});
     };
+
+    onDifficultyChange = (difficulty: QuestionDifficulty) => {
+        this.setState({difficulty});
+    }
+
+    difficultyMenu = () => {
+        return (
+            <Grid item xs={12}>
+                <DropDownSelect
+                    placeholder="Question Level"
+                    data={getDropDownDataFromStringEnum(QuestionEducationLevel)}
+                    onChange={(educationLevel) => this.onDifficultyChange({
+                        educationLevel, difficultyLevel: this.state.difficulty.difficultyLevel
+                    })}
+                    defaultValue={QuestionEducationLevel.NOT_SPECIFIED}
+                />
+                { this.state.difficulty.educationLevel != QuestionEducationLevel.NOT_SPECIFIED &&
+                <DropDownSelect
+                    placeholder="Difficulty Level"
+                    data={getDropDownDataFromNumericalEnum(DifficultyLevel)}
+                    onChange={(difficultyLevel) => this.onDifficultyChange({
+                        educationLevel: this.state.difficulty.educationLevel, difficultyLevel
+                    })}
+                    defaultValue={DifficultyLevel.NOT_SPECIFIED}
+                />}
+            </Grid>
+        )
+    }
 
     render() {
         const classes = this.props.classes;
         return (
             <Grid container justify="center" gutter={0}>
                 <Grid item xs={12}>
-                    <Grid container className={classes.inputContainer}>
+                    <Grid container className={classes.inputContainer} gutter={0}>
                         <Grid item xs={12} md={6}>
                             <TextField
                                 className={classes.input}
@@ -109,20 +140,28 @@ class CreateQuestion extends LoginRequiredComponent<any, QuestionCreationDto> {
                             />
                         </Grid>
                         <Grid item xs={12} md={12}>
-                            <TagsSelector selectedTags={this.state.tags}  onChange={this.updateTags}/>
+                            <TagsSelector selectedTags={this.state.tags} onChange={this.updateTags}/>
+                        </Grid>
+                        <Grid item xs={12}>
+                            <DropDownSelect
+                                placeholder="Publicity Status"
+                                data={getDropDownDataFromStringEnum(PublicityStatus)}
+                                onChange={(publicityStatus) => this.setState({publicityStatus})}
+                                defaultValue={PublicityStatus.PUBLIC}
+                            />
                         </Grid>
 
+                        {this.difficultyMenu()}
+
                         <Grid item xs={12} md={12}>
-                            <div style={{textAlign: "left", color: "#e3e3e3"}}>
-                                <h4>Content :</h4>
-                            </div>
+                            <Typography type="caption" gutterBottom>Content :</Typography>
                             <CustomEditor value={this.state.content}
                                           onChange={this.contentChange}
                                           height={350}
                             />
                         </Grid>
                     </Grid>
-                    <Grid container justify="flex-end" className={classes.inputContainer}>
+                    <Grid container justify="flex-end" className={classes.inputContainer} gutter={0}>
                         <Grid item>
                             <Button raised label="Make Post" onClick={this.submit}>
                                 Make Post
