@@ -14,24 +14,32 @@ const localStoragePath = './static/media';
  * Currently, only 'Disk' storage is supported.
  */
 export function multerUpload(storageType?: StorageTypeEnum) { // change this to enum
-    if (storageType === StorageTypeEnum.LOCAL) {
-        return multer({ storage: diskStorage() })
-    } else {
-        return multer({ storage: defaultStorage() })
+    let storage: multer.StorageEngine;
+    switch(storageType) {
+        case StorageTypeEnum.DISK:
+            storage = diskStorage();
+            break;
+        case StorageTypeEnum.MEMORY:
+            storage = memoryStorage();
+            break;
+        default:
+            storage = defaultStorage();
+            break;
     }
+    return multer({ storage: storage })
 }
 
 /**
  * Get the default storage
  */
 function defaultStorage() {
-    return diskStorage();
+    return memoryStorage();
 }
 
 /**
  * Saves the uploaded file on the /static/userUpload directory
  */
-function diskStorage() {
+function diskStorage(): multer.StorageEngine {
     return multer.diskStorage(
         {
             destination: function(req, file, cb) {
@@ -42,4 +50,11 @@ function diskStorage() {
             }
         }
     );
+}
+
+/**
+ *  Saves the uploaded file in memory as Buffer
+ */
+function memoryStorage(): multer.StorageEngine {
+    return multer.memoryStorage();
 }

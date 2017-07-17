@@ -1,7 +1,7 @@
 import * as React from "react";
 import AnimatedWrapper from "../../components/AnimatedWrapper";
-import {FileUploader} from "../../components/FileUploader/FileUploader";
 import {DropDownSelect} from "../../components/DropDownSelect";
+import {FileUploader} from "../../components/FileUploader/FileUploader";
 
 export class HomeComponent extends React.Component<any, any> {
 
