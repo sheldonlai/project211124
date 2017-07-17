@@ -18,6 +18,6 @@ export class PageProvider {
     }
 
     public questionPage = (req: Request, res: Response, next: NextFunction) =>{
-        res.sendFile(path.resolve(__dirname, '../client/static/question.html'));
+        res.sendFile(path.resolve(__dirname, '../client/static/questionHome.html'));
     }
 }

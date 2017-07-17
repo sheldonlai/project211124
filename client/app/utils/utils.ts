@@ -24,7 +24,7 @@ export const mapFieldsOnToObject = (object: any, fields: any) : any => {
     return object;
 };
 
-const convertEnumStringToViewString = (key: string) => {
+export const convertEnumStringToViewString = (key: string) => {
     let str = key.replace(/_/g, " ").toLocaleLowerCase();
     return str.charAt(0).toUpperCase() + str.slice(1)
 };

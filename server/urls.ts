@@ -14,16 +14,16 @@ export class APIUrls {
     static Upload = "/upload";
 
     /* Question & Answer */
-    static CreateQuestion = "/create-question";
-    static QuestionPreviews = "/question-previews";
-    static GetQuestionPage = "/question-page/:id";
-    static UpdateQuestion = "/update-question";
+    static CreateQuestion = "/create-questionHome";
+    static QuestionPreviews = "/questionHome-previews";
+    static GetQuestionPage = "/questionHome-page/:id";
+    static UpdateQuestion = "/update-questionHome";
     
     static CreateAnswer = "/create-answer";
     static UpdateAnswer = "/update-answer";
 
     static UpVoteAnswer = "/up-vote-answer";
-    static UpVoteQuestion = "/up-vote-question";
+    static UpVoteQuestion = "/up-vote-questionHome";
     static DownVoteAnswer = "/down-vote-answer";
-    static DownVoteQuestion = "/down-vote-question";
+    static DownVoteQuestion = "/down-vote-questionHome";
 }

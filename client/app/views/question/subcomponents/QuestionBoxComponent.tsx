@@ -21,16 +21,11 @@ import {connect} from "react-redux";
 import {Prompt} from "react-router";
 import {FooterComponent} from "./FooterComponent";
 
-export interface QuestionBoxComponentProps {
-    // onQuestionChange: (question: Question) => void;
-    // onSubmit: () => void;
-    // onEditClick?: () => void;
+interface QuestionBoxComponentProps {
     user: UserDto;
     question: Question;
-    // editMode: boolean;
-    // resetQuestion? : () => void ;
 }
-export interface state {
+interface state {
     question: Question;
     editMode: boolean;
 
@@ -38,7 +33,7 @@ export interface state {
 interface props extends QuestionBoxComponentProps, DispatchProps {
 }
 
-let paperStyle = {height: "100%", padding: 15};
+let paperStyle = {height: "100%"};
 
 export class QuestionBoxComponent extends Component<props, state> {
 
@@ -131,7 +126,7 @@ export class QuestionBoxComponent extends Component<props, state> {
                         `All unsaved changes will be discarded. Are you sure you want to leave?`
                     )}
                 />
-                <Paper style={paperStyle}>
+                <Paper style={paperStyle}  elevation={0}>
                     <EditableMultiPurposeHeader value={question.title} editMode={this.state.editMode}
                                                 onEditClick={this.onEditClick}
                                                 onTitleChange={this.onTitleChange}/>

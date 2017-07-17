@@ -84,11 +84,11 @@ describe('QuestionRepoTest', function () {
             );
             return questionRepo.create(newQuestion);
         }).then(function (question) {
-            // update question
+            // update questionHome
             expect(question._id).toBeDefined();
             question.isPublished = true;
             question.title = 'QuestionRepoTestNew';
-            // TODO: test question.tags
+            // TODO: test questionHome.tags
             question.comments.push(
                 new QuestionComment(new_user, 'comment')
             );
@@ -109,7 +109,7 @@ describe('QuestionRepoTest', function () {
         })
     });
 
-    it('should get new question', function () {
+    it('should get new questionHome', function () {
         let new_user;
         return UserModel.create(fakeModels.localUser()).then(function (user) {
             new_user = user;
@@ -128,7 +128,7 @@ describe('QuestionRepoTest', function () {
         })
     });
 
-    it('should get new question with string', function () {
+    it('should get new questionHome with string', function () {
         let new_user;
         return UserModel.create(fakeModels.localUser()).then(function (user) {
             new_user = user;
@@ -147,7 +147,7 @@ describe('QuestionRepoTest', function () {
         })
     });
 
-    it('should delete question', function () {
+    it('should delete questionHome', function () {
         let new_user;
         return UserModel.create(fakeModels.localUser()).then(function (user) {
             new_user = user;
@@ -168,7 +168,7 @@ describe('QuestionRepoTest', function () {
         })
     });
 
-    it('should delete question by Id', function () {
+    it('should delete questionHome by Id', function () {
         let new_user;
         return UserModel.create(fakeModels.localUser()).then(function (user) {
             new_user = user;

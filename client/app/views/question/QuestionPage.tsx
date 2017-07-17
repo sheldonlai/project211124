@@ -1,22 +1,16 @@
-/**
- * Created by SHELDON on 6/24/2017.
- */
 import * as React from "react";
 import {connect} from "react-redux";
 import {AppStoreState} from "../../stores/AppStore";
 import {QuestionActions} from "../../actions/QuestionActions";
-import {UserDto} from "../../../../server/dtos/auth/UserDto";
-import {Prompt, RouteComponentProps} from "react-router";
-import {QuestionPageReducerState} from "../../reducers/QuestionPageReducer";
+import {RouteComponentProps} from "react-router";
 import {FrontEndQuestionModels} from "../../models/QuestionModels";
 import AnimatedWrapper from "../../components/AnimatedWrapper";
 import {CircularProgress} from "material-ui/Progress";
-import {isNullOrUndefined} from "util";
-import {QuestionBoxComponent, QuestionBoxView} from "./subcomponents/QuestionBoxComponent";
-import {AnswerActions} from "../../actions/AnswerActions";
-import {QuestionAPIController} from "../../api.controllers/QuestionAPIController";
-import {AnswerBoxesComponent, AnswerBoxesView} from "./subcomponents/AnswerBoxesComponent";
+import {QuestionBoxView} from "./subcomponents/QuestionBoxComponent";
+import {AnswerBoxesView} from "./subcomponents/AnswerBoxesComponent";
 import {ReducerStateStatus} from "../../constants/ReducerStateStatus";
+import Grid from "material-ui/Grid";
+import {QuestionInfoBoxView} from "./subcomponents/QuestionInfoBox";
 import QuestionPage = FrontEndQuestionModels.QuestionPage;
 import Answer = FrontEndQuestionModels.Answer;
 import cloneQuestionPage = FrontEndQuestionModels.cloneQuestionPage;
@@ -57,8 +51,15 @@ export class QuestionPageComponent extends React.Component<QuestionPageProps, Qu
         }
         return (
             <div style={{padding: 10}}>
-                <QuestionBoxView/>
-                <AnswerBoxesView/>
+                <Grid container justify="center" direction="row-reverse">
+                    <Grid item xs={12} md={3} lg={2}>
+                        <QuestionInfoBoxView/>
+                    </Grid>
+                    <Grid item xs={12} md={8} lg={6}>
+                        <QuestionBoxView/>
+                        <AnswerBoxesView/>
+                    </Grid>
+                </Grid>
             </div>
         );
     }

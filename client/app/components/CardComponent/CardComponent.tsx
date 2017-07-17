@@ -28,7 +28,7 @@ const styleSheet = createStyleSheet('SimpleCard', theme => ({
         position: "absolute",
         left: 0,
         top: 0,
-        background: "linear-gradient(transparent 150px, white)",
+        background: "linear-gradient(transparent 200px, white 260px)",
     }
 }));
 
@@ -55,13 +55,12 @@ export class CardComponent extends React.Component<CardComponentProps, any> {
                         <Typography type="body1" className={classes.pos}>
                             {this.props.date.toLocaleString()}
                         </Typography>
-                        <Typography component="p"
-                                    style={{height: 150, color: "linear-gradient(transparent 150px, white)"}}>
+                        <Typography type="body1"  style={{height: 150}}>
                             {this.props.content}
                         </Typography>
                     </CardContent>
                     <CardActions style={{position: "absolute", bottom: 0, right: 0}}>
-                        <Button dense onClick={this.props.onClick}>Read More</Button>
+                        <Button dense color="primary" onClick={this.props.onClick}>Read More</Button>
                     </CardActions>
                 </Card>
             </div>

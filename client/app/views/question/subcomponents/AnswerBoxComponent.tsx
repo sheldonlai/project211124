@@ -49,6 +49,7 @@ export class AnswerBoxComponent extends Component<AnswerBoxComponentProps & disp
         const answer: Answer = {...this.props.answer};
         const editable = (this.props.user && this.props.user.username === answer.author.username);
         return (
+
             <Paper style={paperStyle}>
                 <div>
                     <Grid container justify="flex-end">

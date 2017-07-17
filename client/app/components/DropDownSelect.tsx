@@ -9,6 +9,7 @@ interface props {
     defaultValue?: any;
     placeholder? : string;
     onChange? : (element: any) => void;
+    disable? : boolean;
 }
 
 export interface DropDownSelectData {
@@ -55,7 +56,9 @@ export class DropDownSelect extends React.Component<props>{
             <div style={{margin: "10px 0px"}}>
                 {placeholder && <Typography type="caption" gutterBottom>{placeholder}</Typography>}
                 <div style={{height: style.height}}>
-                    <Button style={{...style, ...border, textTransform:"none", paddingLeft: 0, fontWeight: 400 }} onClick={this.handleClick}>
+                    <Button style={{...style, ...border, textTransform:"none", paddingLeft: 0, fontWeight: 400 }}
+                            disable={this.props.disable}
+                            onClick={this.handleClick}>
                         {selected? selected.text: placeholder}
                     </Button>
                 </div>

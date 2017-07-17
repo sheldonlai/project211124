@@ -68,7 +68,7 @@ export const QuestionPageReducer = (state = initialState, action): QuestionPageR
             return getLoadingState(state);
 
         case QuestionActionTypes.EditQuestionOK:
-            // clone question page so that changing this object wont change the current state
+            // clone questionHome page so that changing this object wont change the current state
             let questionPage = cloneQuestionPage(state.questionPage);
             questionPage.question = action.data;
             return getOKState(questionPage);
@@ -92,7 +92,7 @@ export const QuestionPageReducer = (state = initialState, action): QuestionPageR
             return getLoadingState(state);
 
         case QuestionActionTypes.AddAnswerOK:
-            // clone question page so that changing this object wont change the current state
+            // clone questionHome page so that changing this object wont change the current state
             let questionPage2 = cloneQuestionPage(state.questionPage);
             questionPage2.answers.push(action.data);
             return getOKState(questionPage2);
@@ -106,7 +106,7 @@ export const QuestionPageReducer = (state = initialState, action): QuestionPageR
             return getLoadingState(state);
 
         case QuestionActionTypes.EditAnswerOK:
-            // clone question page so that changing this object wont change the current state
+            // clone questionHome page so that changing this object wont change the current state
             let questionPage3 = cloneQuestionPage(state.questionPage);
             questionPage3.answers = questionPage3.answers.map((answer) =>  {
                 return (answer._id == action.data._id)? action.data: answer;

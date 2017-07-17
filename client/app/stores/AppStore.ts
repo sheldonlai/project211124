@@ -12,13 +12,13 @@ const composeEnhancers = window['__REDUX_DEVTOOLS_EXTENSION_COMPOSE__'] || compo
 // The state we receive from match state to props
 export interface AppStoreState {
     auth : AuthReducerState;
-    question: QuestionHomeReducerState;
+    questionHome: QuestionHomeReducerState;
     errors: ErrorReducerState;
     questionPage: QuestionPageReducerState;
 }
 const reducer = combineReducers({
     auth: AuthReducer,
-    question: QuestionHomeReducer,
+    questionHome: QuestionHomeReducer,
     errors: ErrorReducer,
     questionPage: QuestionPageReducer,
 });

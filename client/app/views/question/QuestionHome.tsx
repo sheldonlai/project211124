@@ -47,7 +47,7 @@ export const QuestionHomePage = AnimatedWrapper(connect(
     (state: AppStoreState) => ({
         loggedIn: state.auth.loggedIn,
         globalError: state.errors,
-        ...state.question
+        ...state.questionHome
     }),
     (dispatch) => ({
         fetchQuestion: () => dispatch(QuestionActions.getQuestionPreviews())

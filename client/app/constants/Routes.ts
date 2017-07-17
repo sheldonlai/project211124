@@ -4,8 +4,8 @@ export class Routes {
     static home = '/';
     static login = '/login';
     static registration = '/registration';
-    static question = '/question';
-    static createQuestion = '/create-question';
-    static question_by_id = '/question/:id'
+    static question = '/questionHome';
+    static createQuestion = '/create-questionHome';
+    static question_by_id = '/questionHome/:id'
     static services = '/services';
 }
