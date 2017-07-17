@@ -91,6 +91,8 @@ export class QuestionService extends BaseService implements IQuestionService {
             // editable fields
             questionFound.content = questionDto.content;
             questionFound.title = questionDto.title;
+            questionFound.publicityStatus = questionDto.publicityStatus;
+            questionFound.difficulty = questionDto.difficulty;
 
             // update last edited utc
             questionFound.lastEditedUtc = new Date(Date.now());

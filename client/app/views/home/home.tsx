@@ -10,10 +10,6 @@ export class HomeComponent extends React.Component<any, any> {
             <div>
                 <h4>This is home page</h4>
                 <FileUploader />
-                <DropDownSelect data={[
-                    {text: "test", value: 1},
-                    {text: "okay", value: 2}
-                ]} />
             </div>
         )
     }

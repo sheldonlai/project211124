@@ -132,7 +132,7 @@ class CreateQuestion extends LoginRequiredComponent<any, QuestionCreationDto> {
                                 placeholder="Publicity Status"
                                 data={getDropDownDataFromStringEnum(PublicityStatus)}
                                 onChange={(publicityStatus) => this.setState({publicityStatus})}
-                                defaultValue={PublicityStatus.PUBLIC}
+                                value={this.state.publicityStatus}
                             />
                         </Grid>
 

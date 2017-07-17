@@ -1,15 +1,14 @@
 import * as React from 'react';
-import Menu, { MenuItem } from 'material-ui/Menu';
-import List, { ListItem, ListItemText } from 'material-ui/List';
+import Menu, {MenuItem} from 'material-ui/Menu';
+import List, {ListItem, ListItemText} from 'material-ui/List';
 import Button from "material-ui/Button";
 import Typography from 'material-ui/Typography';
 import {CSSProperties} from "react";
 interface props {
     data: DropDownSelectData[];
-    defaultValue?: any;
-    placeholder? : string;
-    onChange? : (element: any) => void;
-    disable? : boolean;
+    value: any;
+    placeholder?: string;
+    onChange?: (element: any) => void;
 }
 
 export interface DropDownSelectData {
@@ -17,28 +16,32 @@ export interface DropDownSelectData {
     value: any;
 }
 
-const defaultStyles : CSSProperties= {
+const defaultStyles: CSSProperties = {
     width: 200,
     height: 40,
     justifyContent: "flex-start"
 };
 
 // Temporary component until Material UI finish implementing theirs
-export class DropDownSelect extends React.Component<props>{
+export class DropDownSelect extends React.Component<props, any> {
     state = {
         anchorEl: undefined,
-        open: false,
-        value: this.props.defaultValue
+        open: false
     };
 
     button = undefined;
 
+    componentWillReceiveProps(nextProps){
+        if (nextProps.value)
+            this.setState({value: nextProps.value});
+    }
+
     handleClick = (event) => {
-        this.setState({ open: true, anchorEl: this.refs.menuPlaceHolder });
+        this.setState({open: true, anchorEl: this.refs.menuPlaceHolder});
     };
 
     handleRequestClose = () => {
-        this.setState({ open: false });
+        this.setState({open: false});
     };
 
     onSelectValue = (value: any) => {
@@ -48,23 +51,22 @@ export class DropDownSelect extends React.Component<props>{
     };
 
     render() {
-        const selected = this.props.data.filter((data) => data.value == this.state.value)[0];
-        const placeholder = this.props.placeholder? this.props.placeholder : "";
+        const selected = this.props.data.filter((data) => data.value == this.props.value)[0];
+        const placeholder = this.props.placeholder ? this.props.placeholder : "";
         const style = defaultStyles;
         const border: CSSProperties = {borderBottom: "lightgrey 1px solid"};
         return (
             <div style={{margin: "10px 0px"}}>
                 {placeholder && <Typography type="caption" gutterBottom>{placeholder}</Typography>}
                 <div style={{height: style.height}}>
-                    <Button style={{...style, ...border, textTransform:"none", paddingLeft: 0, fontWeight: 400 }}
-                            disable={this.props.disable}
+                    <Button style={{...style, ...border, textTransform: "none", paddingLeft: 0, fontWeight: 400}}
                             onClick={this.handleClick}>
-                        {selected? selected.text: placeholder}
+                        {selected ? selected.text : placeholder}
                     </Button>
                 </div>
-                <div ref="menuPlaceHolder" style={{height:0, marginTop: 20, left: -16}}></div>
+                <div ref="menuPlaceHolder" style={{height: 0, marginTop: 20, left: -16}}></div>
                 <Menu
-                    MenuListProps={{style:{padding: 0}}}
+                    MenuListProps={{style: {padding: 0}}}
                     anchorEl={this.state.anchorEl}
                     open={this.state.open}
                     onRequestClose={this.handleRequestClose}

@@ -19,7 +19,7 @@ export class QuestionDifficultyMenu extends React.Component<props> {
                     onChange={(educationLevel) => this.props.onDifficultyChange({
                         educationLevel, difficultyLevel: this.props.difficulty.difficultyLevel
                     })}
-                    defaultValue={QuestionEducationLevel.NOT_SPECIFIED}
+                    value={this.props.difficulty.educationLevel}
                 />
                 { this.props.difficulty.educationLevel != QuestionEducationLevel.NOT_SPECIFIED &&
                 <DropDownSelect
@@ -28,7 +28,7 @@ export class QuestionDifficultyMenu extends React.Component<props> {
                     onChange={(difficultyLevel) => this.props.onDifficultyChange({
                         educationLevel: this.props.difficulty.educationLevel, difficultyLevel
                     })}
-                    defaultValue={DifficultyLevel.NOT_SPECIFIED}
+                    value={this.props.difficulty.difficultyLevel}
                 />}
             </div>
         );
