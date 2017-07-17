@@ -9,6 +9,8 @@ import {IMailService, MailService} from "./services/MailService";
 import {TemplatesProvider} from "./services/TemplatesProvider";
 import {TagRepository} from "./repositories/TagRepository";
 import {AnswerService} from "./services/AnswerService";
+import {FileSystemService} from "./services/FileSystemService";
+import {FileUploadRecordRepository} from "./repositories/FileUploadRecordRepository";
 
 export class RepositoryProvider {
     static AnswerRepository = new AnswerRepository();
@@ -16,6 +18,7 @@ export class RepositoryProvider {
     static UserRepository = new UserRepository();
     static EmailVerificationRepository = new EmailVerificationRepository();
     static TagRepository = new TagRepository();
+    static FileUploadRecordRepository = new FileUploadRecordRepository();
 }
 
 export class ServiceProvider {
@@ -33,6 +36,9 @@ export class ServiceProvider {
         RepositoryProvider.TagRepository);
     static AnswerService = new AnswerService(
         RepositoryProvider.AnswerRepository
+    );
+    static FileSystemService = new FileSystemService(
+        RepositoryProvider.FileUploadRecordRepository
     );
 
 }

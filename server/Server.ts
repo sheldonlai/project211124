@@ -86,7 +86,7 @@ export class Server {
         /* Authentication */
         new AuthenticationAPI(router, ServiceProvider.AuthenticationService);
         /* File Upload */
-        new FileUploadAPI(router);
+        new FileUploadAPI(router, ServiceProvider.FileSystemService);
 
         new AnswerAPI(router, ServiceProvider.AnswerService);
 

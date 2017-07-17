@@ -7,9 +7,9 @@ export class FileUploadRecord extends BaseModel {
     uploadedBy: User;
     accessType: FileAccessType;
     fileURL: string;
-    filename: string;
-    originalname: string;
-    mimetype: string;
+    fileName: string;
+    originalName: string;
+    mimeType: string;
     size: number; // in bytes
     uploadedAt: Date;
 
@@ -17,9 +17,9 @@ export class FileUploadRecord extends BaseModel {
         uploadedBy: User,
         accessType: FileAccessType,
         fileURL: string,
-        filename: string,
-        originalname: string,
-        mimetype: string,
+        fileName: string,
+        originalName: string,
+        mimeType: string,
         size: number,
         uploadedAt: Date
     ){
@@ -27,9 +27,9 @@ export class FileUploadRecord extends BaseModel {
         this.uploadedBy = uploadedBy;
         this.accessType = accessType;
         this.fileURL = fileURL;
-        this.filename = filename;
-        this.originalname = originalname;
-        this.mimetype = mimetype;
+        this.fileName = fileName;
+        this.originalName = originalName;
+        this.mimeType = mimeType;
         this.size = size;
         this.uploadedAt = uploadedAt;
     }
@@ -42,13 +42,13 @@ const fileUploadRecordSchema = new Schema({
     accessType:      {type: String, enum: Object.keys(FileAccessType), required: true},
     fileURL:         {type: String, required: true, unique: true, index: true},
     fileName:        {type: String, required: true, unique: true},
-    originalname:    {type: String, required: true},
+    originalName:    {type: String, required: true},
     mimeType:        {type: String, required: true},
     size:            {type: Number, required: true},
     uploadedAt:      {type: Date, default: Date.now}
 });
 
-export const FileUploadRecordModel = model<IFileUploadRecord>('fileRecordSchema', fileUploadRecordSchema);
+export const FileUploadRecordModel = model<IFileUploadRecord>('fileUploadRecord', fileUploadRecordSchema);
 
 
 
