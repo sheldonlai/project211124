@@ -20,79 +20,48 @@ import {QuestionActions} from "../../../actions/QuestionActions";
 import {connect} from "react-redux";
 import {Prompt} from "react-router";
 import {FooterComponent} from "./FooterComponent";
+import {QuestionEditorReducerState} from "../../../reducers/QuestionEditorReducer";
 
 interface QuestionBoxComponentProps {
-    user: UserDto;
-    question: Question;
-}
-interface state {
-    question: Question;
-    editMode: boolean;
-
+    user: UserDto; // current user
+    question: Question; // original question
+    questionEditorState: Question; // editor state
+    edit: boolean; // edit mode
 }
 interface props extends QuestionBoxComponentProps, DispatchProps {
 }
 
 let paperStyle = {height: "100%"};
 
-export class QuestionBoxComponent extends Component<props, state> {
-
-    state = {
-        question: undefined,
-        editMode: false
-    }
-
-    componentWillMount() {
-        if (this.state.question === undefined)
-            this.setState({
-                question: this.props.question
-            });
-    }
-
-    componentWillUnmount() {
-        this.resetQuestion();
-    }
-
-    componentWillReceiveProps(nextProps: props) {
-        if (JSON.stringify(nextProps.question) !== JSON.stringify(this.props.question)) {
-            let question = cloneQuestion(nextProps.question);
-            let editMode = false;
-            if (this.state.question && JSON.stringify(question) != JSON.stringify(this.state.question)) {
-                question.title = this.state.question.title;
-                question.content = this.state.question.content;
-                editMode = this.state.editMode;
-            }
-            this.setState({editMode, question});
-        }
-    }
+export class QuestionBoxComponent extends Component<props, {}> {
 
     onTitleChange = (event) => {
-        let question = cloneQuestion(this.state.question);
+        let question = cloneQuestion(this.props.questionEditorState);
         question.title = event.target.value;
-        this.setState({question});
+        this.props.changeQuestionEditorState({edit: this.props.edit, question});
     };
 
     onContentChange = (editorState) => {
-        let question = cloneQuestion(this.state.question);
+        let question = cloneQuestion(this.props.questionEditorState);
         question.content = editorState;
-        this.setState({question});
+        this.props.changeQuestionEditorState({edit: this.props.edit, question});
     };
 
     onEditClick = () => {
-        this.setState({editMode: true});
-    }
+        this.props.changeQuestionEditorState({edit: true, question: this.props.questionEditorState});
+    };
 
     onCommentSubmit = (comments) => {
         let question = cloneQuestion(this.props.question);
         question.comments = comments;
-        this.setState({question}, () => {
-            this.onSubmit();
-        });
+        this.props.changeQuestionEditorState({edit: this.props.edit, question});
+        // TODO : Create edit/create comment actions
+        this.onSubmit();
     }
 
     resetQuestion = () => {
         let question = cloneQuestion(this.props.question);
-        this.setState({editMode: false, question});
+        this.props.changeQuestionEditorState({edit: false, question});
     }
 
     upVote = () => {
@@ -104,14 +73,14 @@ export class QuestionBoxComponent extends Component<props, state> {
     }
 
     onSubmit = () => {
-        this.props.editQuestion(this.state.question);
+        this.props.editQuestion(this.props.questionEditorState);
     };
 
     render() {
-        const question: Question = {...this.state.question};
+        const question: Question = {...this.props.questionEditorState};
         const editable = this.props.user && (this.props.user.username === question.author.username);
         let editButton;
-        if (editable && !this.state.editMode) {
+        if (editable && !this.props.edit) {
             editButton = (
                 <div style={{float: "right"}}>
                     <Button color="primary" onClick={this.onEditClick}>Edit</Button>
@@ -121,20 +90,20 @@ export class QuestionBoxComponent extends Component<props, state> {
         return (
             <div>
                 <Prompt
-                    when={this.state.editMode}
+                    when={this.props.edit}
                     message={location => (
                         `All unsaved changes will be discarded. Are you sure you want to leave?`
                     )}
                 />
-                <Paper style={paperStyle}  elevation={0}>
-                    <EditableMultiPurposeHeader value={question.title} editMode={this.state.editMode}
+                <Paper style={paperStyle} elevation={0}>
+                    <EditableMultiPurposeHeader value={question.title} editMode={this.props.edit}
                                                 onEditClick={this.onEditClick}
                                                 onTitleChange={this.onTitleChange}/>
                     {editButton}
                     <Divider />
                     <div>
                         <QAEditorComponent value={question.content} onChange={this.onContentChange}
-                                           onSubmit={this.onSubmit} readOnly={!this.state.editMode}
+                                           onSubmit={this.onSubmit} readOnly={!this.props.edit}
                                            style={{fontSize: 14}} reset={this.resetQuestion}
                         />
                         <div>
@@ -163,18 +132,23 @@ export class QuestionBoxComponent extends Component<props, state> {
 
 const mapStateToProps = (state: AppStoreState) => ({
     user: state.auth.user,
-    question: state.questionPage.questionPage.question
+    question: state.questionPage.questionPage.question,
+    questionEditorState: state.questionEditorState.question,
+    edit: state.questionEditorState.edit
 })
 const mapDispatchToProps = (dispatch): DispatchProps => ({
     upVoteQuestion: (question: Question) => dispatch(QuestionActions.upVoteQuestion(question)),
     downVoteQuestion: (question: Question) => dispatch(QuestionActions.downVoteQuestion(question)),
     editQuestion: (question: Question) => dispatch(QuestionActions.updateQuestion(question)),
+    changeQuestionEditorState: (state: QuestionEditorReducerState) =>
+        dispatch(QuestionActions.changeQuestionEditorState(state)),
 });
 
 interface DispatchProps {
     upVoteQuestion: (question: Question) => void;
     downVoteQuestion: (question: Question) => void;
     editQuestion: (question: Question) => void;
+    changeQuestionEditorState: (state: QuestionEditorReducerState) => void;
 }
 
 export const QuestionBoxView = connect<QuestionBoxComponentProps, DispatchProps, any>(

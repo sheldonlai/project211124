@@ -37,4 +37,6 @@ export enum QuestionActionTypes {
     DownVoteAnswer = <any> "DownVoteAnswer",
 
     QuestionPageError = <any> "QuestionPageError",
+
+    QuestionEditorStateChange = <any> "QuestionEditorStateChange"
 }

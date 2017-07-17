@@ -7,6 +7,7 @@ import {FrontEndQuestionModels} from "../models/QuestionModels";
 import QuestionPage = FrontEndQuestionModels.QuestionPage;
 import cloneQuestionPage = FrontEndQuestionModels.cloneQuestionPage;
 import Answer = FrontEndQuestionModels.Answer;
+import cloneQuestion = FrontEndQuestionModels.cloneQuestion;
 
 export interface QuestionPageReducerState {
     status: ReducerStateStatus;    // status of the state
@@ -70,7 +71,7 @@ export const QuestionPageReducer = (state = initialState, action): QuestionPageR
         case QuestionActionTypes.EditQuestionOK:
             // clone questionHome page so that changing this object wont change the current state
             let questionPage = cloneQuestionPage(state.questionPage);
-            questionPage.question = action.data;
+            questionPage.question = cloneQuestion(action.data);
             return getOKState(questionPage);
 
         case QuestionActionTypes.EditQuestionError:

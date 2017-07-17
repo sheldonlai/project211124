@@ -57,7 +57,7 @@ export class DropDownSelect extends React.Component<props, any> {
         const border: CSSProperties = {borderBottom: "lightgrey 1px solid"};
         return (
             <div style={{margin: "10px 0px"}}>
-                {placeholder && <Typography type="caption" gutterBottom>{placeholder}</Typography>}
+                {placeholder && <Typography type="caption">{placeholder}</Typography>}
                 <div style={{height: style.height}}>
                     <Button style={{...style, ...border, textTransform: "none", paddingLeft: 0, fontWeight: 400}}
                             onClick={this.handleClick}>

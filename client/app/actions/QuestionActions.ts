@@ -5,6 +5,7 @@ import {AxiosResponse} from "axios";
 import {FrontEndQuestionModels} from "../models/QuestionModels";
 import Question = FrontEndQuestionModels.Question;
 import QuestionPage = FrontEndQuestionModels.QuestionPage;
+import {QuestionEditorReducerState} from "../reducers/QuestionEditorReducer";
 
 let apiController: QuestionAPIController = QuestionAPIController.getInstance();
 
@@ -92,6 +93,13 @@ export class QuestionActions extends BaseActions {
                 QuestionActions.handleError(dispatch, err, QuestionActionTypes.QuestionPageError)
             )
         }
+    }
+
+    static changeQuestionEditorState(state: QuestionEditorReducerState) {
+        return {
+            type: QuestionActionTypes.QuestionEditorStateChange,
+            data: state
+        };
     }
 
 }

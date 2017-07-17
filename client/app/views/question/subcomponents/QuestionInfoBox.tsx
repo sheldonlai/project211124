@@ -16,42 +16,39 @@ import QuestionPreview = FrontEndQuestionModels.QuestionPreview;
 import Question = FrontEndQuestionModels.Question;
 import {DropDownSelect} from "../../../components/DropDownSelect";
 import cloneQuestion = FrontEndQuestionModels.cloneQuestion;
+import {QuestionEditorReducerState} from "../../../reducers/QuestionEditorReducer";
 
 interface stateToProps {
     question: Question;
     user: UserDto;
+    questionEditorState: Question;
+    edit: boolean;
 }
 
 interface DispatchProps {
     editQuestion: (question: Question) => void;
-}
-
-interface state {
-    difficulty: QuestionDifficulty;
-    publicityStatus: PublicityStatus;
-    edit: boolean;
+    changeQuestionEditorState: (state: QuestionEditorReducerState) => void;
 }
 interface props extends stateToProps, DispatchProps{}
-export class QuestionInfoBox extends React.Component<props, state> {
-    state = {
-        difficulty: undefined,
-        edit: false,
-        publicityStatus: undefined
-    }
-    componentWillMount() {
-        this.setState({difficulty : this.props.question.difficulty, publicityStatus: this.props.question.publicityStatus});
-    }
-
-    componentWillReceiveProps(nextProps: props) {
-        if (JSON.stringify(nextProps.question.difficulty) !== JSON.stringify(this.props.question.difficulty) ||
-            JSON.stringify(nextProps.question.publicityStatus) !== JSON.stringify(this.props.question.publicityStatus)){
-            this.setState({difficulty : this.props.question.difficulty, publicityStatus: this.props.question.publicityStatus});
-        }
-    }
+export class QuestionInfoBox extends React.Component<props, {}> {
 
     onDifficultyChange = (difficulty: QuestionDifficulty) => {
-        this.setState({difficulty});
-    }
+        let question = cloneQuestion(this.props.questionEditorState);
+        question.difficulty = difficulty;
+        this.props.changeQuestionEditorState({
+            edit: this.props.edit,
+            question
+        });
+    };
+
+    opnPublicityChange = (publicityStatus: PublicityStatus) => {
+        let question = cloneQuestion(this.props.questionEditorState);
+        question.publicityStatus = publicityStatus;
+        this.props.changeQuestionEditorState({
+            edit: this.props.edit,
+            question
+        });
+    };
 
     row = (label: string, value: string) => {
         return (
@@ -67,18 +64,13 @@ export class QuestionInfoBox extends React.Component<props, state> {
     };
 
     saveChanges = () => {
-        let question = cloneQuestion(this.props.question);
-        question.publicityStatus = this.state.publicityStatus;
-        question.difficulty = this.state.difficulty;
-        this.props.editQuestion(question);
+        this.props.editQuestion(this.props.questionEditorState);
     }
 
     view = () => {
         const question = this.props.question;
-        const editable = this.props.user && this.props.user.username === this.props.question.author.username;
         return (
             <div>
-                {editable? <Button onClick={()=>this.setState({edit: true})}>Edit</Button>: undefined}
                 {this.row("type", convertEnumStringToViewString(PublicityStatus[question.publicityStatus]))}
                 {this.row("level", convertEnumStringToViewString(QuestionEducationLevel[question.difficulty.educationLevel]))}
                 {question.difficulty.educationLevel != QuestionEducationLevel.NOT_SPECIFIED &&
@@ -93,11 +85,11 @@ export class QuestionInfoBox extends React.Component<props, state> {
                 <DropDownSelect
                     placeholder="Publicity Status"
                     data={getDropDownDataFromStringEnum(PublicityStatus)}
-                    value={this.state.publicityStatus}
-                    onChange={(publicityStatus) => this.setState({publicityStatus})}
+                    value={this.props.questionEditorState.publicityStatus}
+                    onChange={this.opnPublicityChange}
                 />
-                <QuestionDifficultyMenu onDifficultyChange={this.onDifficultyChange} difficulty={this.state.difficulty} />
-                <Button onClick={this.saveChanges}>Save</Button>
+                <QuestionDifficultyMenu onDifficultyChange={this.onDifficultyChange}
+                                        difficulty={this.props.questionEditorState.difficulty} />
             </div>
         );
     }
@@ -108,7 +100,7 @@ export class QuestionInfoBox extends React.Component<props, state> {
         return (
             <div>
                 <Divider />
-                    {this.state.edit? this.editor(): this.view()}
+                    {this.props.edit? this.editor(): this.view()}
                 <Divider />
             </div>
         );
@@ -117,11 +109,15 @@ export class QuestionInfoBox extends React.Component<props, state> {
 
 const mapStateToProps = (state: AppStoreState) => ({
     question: state.questionPage.questionPage.question,
-    user: state.auth.user
+    user: state.auth.user,
+    questionEditorState: state.questionEditorState.question,
+    edit: state.questionEditorState.edit
 });
 
 const mapDispatchToProps = (dispatch): DispatchProps => ({
     editQuestion: (question: Question) => dispatch(QuestionActions.updateQuestion(question)),
+    changeQuestionEditorState: (state: QuestionEditorReducerState) =>
+        dispatch(QuestionActions.changeQuestionEditorState(state)),
 });
 
 export const QuestionInfoBoxView = connect<stateToProps, DispatchProps, any>(
