@@ -21,6 +21,7 @@ import Typography from "material-ui/Typography";
 import {DropDownSelect} from "../../components/DropDownSelect";
 import {getDropDownDataFromNumericalEnum, getDropDownDataFromStringEnum} from "../../utils/utils";
 import Question = FrontEndQuestionModels.Question;
+import {QuestionDifficultyMenu} from "./subcomponents/QuestionDifficultyMenu";
 
 const styleSheet = createStyleSheet('CreateQuestion', theme => ({
     root: {
@@ -98,31 +99,15 @@ class CreateQuestion extends LoginRequiredComponent<any, QuestionCreationDto> {
 
     onDifficultyChange = (difficulty: QuestionDifficulty) => {
         this.setState({difficulty});
-    }
+    };
 
     difficultyMenu = () => {
         return (
             <Grid item xs={12}>
-                <DropDownSelect
-                    placeholder="Question Level"
-                    data={getDropDownDataFromStringEnum(QuestionEducationLevel)}
-                    onChange={(educationLevel) => this.onDifficultyChange({
-                        educationLevel, difficultyLevel: this.state.difficulty.difficultyLevel
-                    })}
-                    defaultValue={QuestionEducationLevel.NOT_SPECIFIED}
-                />
-                { this.state.difficulty.educationLevel != QuestionEducationLevel.NOT_SPECIFIED &&
-                <DropDownSelect
-                    placeholder="Difficulty Level"
-                    data={getDropDownDataFromNumericalEnum(DifficultyLevel)}
-                    onChange={(difficultyLevel) => this.onDifficultyChange({
-                        educationLevel: this.state.difficulty.educationLevel, difficultyLevel
-                    })}
-                    defaultValue={DifficultyLevel.NOT_SPECIFIED}
-                />}
+                <QuestionDifficultyMenu difficulty={this.state.difficulty} onDifficultyChange={this.onDifficultyChange}/>
             </Grid>
         )
-    }
+    };
 
     render() {
         const classes = this.props.classes;

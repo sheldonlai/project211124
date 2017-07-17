@@ -57,7 +57,7 @@ export class QuestionService extends BaseService implements IQuestionService {
         return this.tagRepository.getTags(question.tags).then((tags: ITag[]) => {
             let questionObject = new Question(
                 question.title, question.content, currentUser, tags,
-                question.isPublished, question.publicityStatus
+                question.isPublished, question.publicityStatus, question.difficulty
             );
             return this.questionRepository.create(questionObject);
         })
