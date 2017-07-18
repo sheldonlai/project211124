@@ -1,10 +1,4 @@
 import {ITag, Tag, TagModel} from "../models/Tags";
-/**
- * Created by SHELDON on 7/2/2017.
- */
-//TagModel
-
-import {Types} from "mongoose";
 import {BaseRepository, IBaseRepository} from "./BaseRepository";
 import {getUniqueArray} from "../utils/ArrayUtils";
 export interface ITagRepository extends IBaseRepository<Tag> {

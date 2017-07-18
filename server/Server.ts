@@ -18,6 +18,7 @@ let favicon = require('serve-favicon');
 import * as morgan from 'morgan';
 import {AnswerAPI} from "./routes/AnswerAPI";
 import {loadUniversityData} from "./utils/UniversityCsvLoader";
+import {LocationAPI} from "./routes/LocationAPI";
 
 export class Server {
     public app: express.Application;
@@ -90,6 +91,8 @@ export class Server {
         new FileUploadAPI(router, ServiceProvider.FileSystemService);
 
         new AnswerAPI(router, ServiceProvider.AnswerService);
+
+        new LocationAPI(router, ServiceProvider.LocationService);
 
         this.app.use('/api', router);
     }

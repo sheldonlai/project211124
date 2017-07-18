@@ -2,6 +2,7 @@ import {model, Schema, Document} from "mongoose";
 import {UserTypeEnum} from "../enums/UserTypeEnum";
 import {BaseModel} from './BaseModel';
 import {AppError} from "../errors/AppError";
+import {University} from "./LocationModels/Universities";
 
 export class User extends BaseModel {
     email: string;
@@ -10,6 +11,9 @@ export class User extends BaseModel {
     verified: boolean;
     local?: LocalProfile;
     facebook?: FacebookProfile;
+    university: University;
+    company: string;
+    points: number;
 
     constructor(
         email: string, name: string, role: UserTypeEnum, local?: LocalProfile, facebook?: FacebookProfile
@@ -66,8 +70,10 @@ export const userSchema = new Schema({
     role:            {type: String, enum: Object.keys(UserTypeEnum), required: true, default: 'normal'},
     verified:        {type: Boolean, required: true, default: false},
     local:           {type: LocalSubSchema},
-    facebook:        {type: FacebookSubSchema}
-
+    facebook:        {type: FacebookSubSchema},
+    university:      {type: Schema.Types.ObjectId},
+    company:         {type: String},
+    points:          {type: Number, default: 0},
 }, {
     timestamps: true
 });

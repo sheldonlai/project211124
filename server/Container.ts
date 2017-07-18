@@ -1,4 +1,3 @@
-
 import {AnswerRepository} from "./repositories/AnswerRepository";
 import {QuestionRepository} from "./repositories/QuestionRepository";
 import {UserRepository} from "./repositories/UserRepository";
@@ -11,6 +10,8 @@ import {TagRepository} from "./repositories/TagRepository";
 import {AnswerService} from "./services/AnswerService";
 import {FileSystemService} from "./services/FileSystemService";
 import {FileUploadRecordRepository} from "./repositories/FileUploadRecordRepository";
+import {UniversityRepository} from "./repositories/UniversityRepository";
+import {LocationService} from "./services/LocationService";
 
 export class RepositoryProvider {
     static AnswerRepository = new AnswerRepository();
@@ -19,6 +20,7 @@ export class RepositoryProvider {
     static EmailVerificationRepository = new EmailVerificationRepository();
     static TagRepository = new TagRepository();
     static FileUploadRecordRepository = new FileUploadRecordRepository();
+    static UniversityRepository = new UniversityRepository();
 }
 
 export class ServiceProvider {
@@ -40,5 +42,6 @@ export class ServiceProvider {
     static FileSystemService = new FileSystemService(
         RepositoryProvider.FileUploadRecordRepository
     );
+    static LocationService = new LocationService(RepositoryProvider.UniversityRepository);
 
 }
