@@ -17,6 +17,7 @@ import {FileUploadAPI} from "./routes/FileUploadAPI";
 let favicon = require('serve-favicon');
 import * as morgan from 'morgan';
 import {AnswerAPI} from "./routes/AnswerAPI";
+import {loadUniversityData} from "./utils/UniversityCsvLoader";
 
 export class Server {
     public app: express.Application;
@@ -91,6 +92,11 @@ export class Server {
         new AnswerAPI(router, ServiceProvider.AnswerService);
 
         this.app.use('/api', router);
+    }
+
+    private checkAndInsertUniversityData() {
+        // helper function load static data in for the first time
+        loadUniversityData();
     }
 
     private errorHandler(err : AppError, req : Request, res : Response, next: NextFunction) {

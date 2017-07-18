@@ -30,10 +30,10 @@ export class ChatHistory extends BaseModel {
 export interface IChat_history extends ChatHistory, Document{}
 
 export const ChatSchema = new Schema({
-    User_A : {type: Schema.Types.ObjectId, ref : 'user', required: true},
-    User_B : {type : Schema.Types.ObjectId, ref : 'user', required: true},
-    Messages : [{
-        meesages : {type : String, required : true},
+    user_A : {type: Schema.Types.ObjectId, ref : 'user', required: true},
+    user_B : {type : Schema.Types.ObjectId, ref : 'user', required: true},
+    messages : [{
+        message : {type : String, required : true},
         sentAt : {type : Date, required : true, default:Date.now},
         sentBy : {type : Schema.Types.ObjectId, ref : 'user', required : true}
     }]

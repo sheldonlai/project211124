@@ -67,6 +67,7 @@ export const userSchema = new Schema({
     verified:        {type: Boolean, required: true, default: false},
     local:           {type: LocalSubSchema},
     facebook:        {type: FacebookSubSchema}
+
 }, {
     timestamps: true
 });
