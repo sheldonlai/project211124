@@ -82,9 +82,11 @@ export namespace FrontEndQuestionModels {
         commentBy: UserDto;
         commentContent: string;
         lastEditedUtc: Date;
+        commentedDate: Date;
 
         constructor(){
-            this.lastEditedUtc = new Date(Date.now());
+            //this.lastEditedUtc = new Date(Date.now());
+            this.commentedDate = new Date(Date.now());
         }
     }
 

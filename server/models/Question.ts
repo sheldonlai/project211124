@@ -11,10 +11,12 @@ export class QuestionComment {
     commentBy: User;
     commentContent: string;
     lastEditedUtc: Date;
+    commentedDate: Date;
 
     constructor(user: User, content: string) {
         this.commentBy = user;
         this.commentContent = content;
+        this.commentedDate = new Date(Date.now());
     }
 }
 

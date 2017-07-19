@@ -58,11 +58,11 @@ export class CommentsComponent extends React.Component<CommentsComponentProps, C
         else {
             this.setState({errorMsg: "Cannot submit empty comment."});
         }
-    }
+    };
 
     onCommentChange = (event) => {
         this.setState({commentContent: event.target.value});
-    }
+    };
 
     onErrMsg = () => {
         if (this.state.errorMsg != "") {
@@ -89,39 +89,88 @@ export class CommentsComponent extends React.Component<CommentsComponentProps, C
                 </div>
             )
         }
-    }
+    };
 
-    DeleteComment = (comment: CommentDto) => {
-        this.props.comments.splice(this.props.comments.indexOf(comment), 1);
+    DeleteComment = (indx: number) => {
+        this.props.comments.splice(indx, 1);
         this.props.onCommentsSubmit(this.props.comments);
     };
 
-    EditComment = (comment: CommentDto) => {
-        if(this.state.EditCommentIndx == -1){
-            return;
-        }
-        let indx:number = this.props.comments.indexOf(comment);
-        if(indx == this.state.EditCommentIndx){
+    onEditComment = (indx: number) => {
+        if(this.state.EditCommentIndx == -1 || indx != this.state.EditCommentIndx){
             return(
-                <textarea></textarea>
+                this.props.comments[indx].commentContent
+            );
+        }
+        else if(indx == this.state.EditCommentIndx){
+            return(
+            <div>
+            <p>
+                <mark>{this.state.errorMsg}</mark>
+            </p>
+                <textarea defaultValue={this.props.comments[indx].commentContent} onChange={this.onCommentChange}></textarea>
+            </div>
             )
+        }
+    };
+
+    EditAndSaveButton = (indx: number) => {
+        if(this.state.EditCommentIndx == -1 || indx != this.state.EditCommentIndx){
+            return(
+                <IconButton>
+                <Icon onClick = {() => this.setState({EditCommentIndx: indx, commentContent: this.props.comments[indx].commentContent, errorMsg: ""})}>mode_edit</Icon>
+                </IconButton>
+            );
+        }
+        else{
+            return(
+                <div  style={{textAlign: "left"}}>
+                    <Button color = "primary" onClick = {() => this.UpdateEditedComment(indx)}>save</Button>
+                </div>
+            );
+        }
+    };
+
+    UpdateEditedComment = (indx) => {
+        if(this.state.commentContent){
+            this.props.comments[indx].commentContent = this.state.commentContent;
+            this.props.comments[indx].lastEditedUtc = new Date(Date.now());
+            this.props.onCommentsSubmit(this.props.comments);
+            this.setState({EditCommentIndx: -1, commentContent: ""});
+        }
+        else{
+            this.setState({errorMsg: "Cannot submit empty comment."});
+        }
+    };
+
+    CancelAndDleteButton = (indx: number) => {
+        if(this.state.EditCommentIndx == -1 || indx != this.state.EditCommentIndx){
+            return(
+                <IconButton>
+                    <Icon onClick = {() => this.DeleteComment(indx)}>delete</Icon>
+                </IconButton>
+            );
+        }
+        else{
+            return(
+                <div  style={{textAlign: "left"}}>
+                    <Button onClick = {() => this.setState({EditCommentIndx: -1, commentContent: "", errorMsg: ""})}>cancel</Button>
+                </div>
+            );
         }
     };
 
     renderComments = () => {
-        return this.props.comments.map((comment) => {
+        return this.props.comments.map((comment, indx) => {
             return (
                 <ListItem key={comment.lastEditedUtc + comment.commentBy.username}>
-                    <ListItemText primary={comment.commentContent}></ListItemText>
-                    <IconButton>
-                    <Icon onClick = {() => this.setState({EditCommentIndx: this.props.comments.indexOf(comment)})}>mode_edit</Icon>
-                    <Icon onClick = {() => this.DeleteComment(comment)}>delete</Icon>
-                    </IconButton>
-                    {this.EditComment(comment)}
+                    <ListItemText primary={this.onEditComment(indx)}></ListItemText>
+                        {this.EditAndSaveButton(indx)}
+                        {this.CancelAndDleteButton(indx)}
                 </ListItem>
             )
         });
-    }
+    };
 
     render() {
         return (
