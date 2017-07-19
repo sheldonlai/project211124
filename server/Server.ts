@@ -32,7 +32,7 @@ export class Server {
         this.config = (custom_config)? custom_config : config;
         //create expressJS application
         this.app = express();
-        //configure application
+        //configure applicationwebpakc
         this.configure();
     }
 
