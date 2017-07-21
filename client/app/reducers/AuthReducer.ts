@@ -20,7 +20,8 @@ const getLoginStatusAndUser = (): any => {
         loggedIn: false,
         user: undefined
     }
-}
+};
+
 
 const initialState: AuthReducerState = {
     status: ReducerStateStatus.LOADING,

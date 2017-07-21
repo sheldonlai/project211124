@@ -11,6 +11,7 @@ import {AnswerBoxesView} from "./subcomponents/AnswerBoxesComponent";
 import {ReducerStateStatus} from "../../constants/ReducerStateStatus";
 import Grid from "material-ui/Grid";
 import {QuestionInfoBoxView} from "./subcomponents/QuestionInfoBox";
+import Hidden from 'material-ui/Hidden';
 import QuestionPage = FrontEndQuestionModels.QuestionPage;
 import Answer = FrontEndQuestionModels.Answer;
 import cloneQuestionPage = FrontEndQuestionModels.cloneQuestionPage;
@@ -53,6 +54,9 @@ export class QuestionPageComponent extends React.Component<QuestionPageProps, Qu
             <div style={{padding: 10}}>
                 <Grid container justify="center" direction="row-reverse">
                     <Grid item xs={12} md={3} lg={2}>
+                        <Hidden smDown>
+                        <div style={{height: 42}}/>
+                        </Hidden>
                         <QuestionInfoBoxView/>
                     </Grid>
                     <Grid item xs={12} md={8} lg={6}>

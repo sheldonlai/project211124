@@ -3,6 +3,7 @@ import {UserTypeEnum} from "../enums/UserTypeEnum";
 import {BaseModel} from './BaseModel';
 import {AppError} from "../errors/AppError";
 import {University} from "./LocationModels/Universities";
+import {Country} from "./LocationModels/Country";
 
 export class User extends BaseModel {
     email: string;
@@ -13,6 +14,7 @@ export class User extends BaseModel {
     facebook?: FacebookProfile;
     university: University;
     company: string;
+    country: Country;
     points: number;
 
     constructor(
@@ -71,7 +73,8 @@ export const userSchema = new Schema({
     verified:        {type: Boolean, required: true, default: false},
     local:           {type: LocalSubSchema},
     facebook:        {type: FacebookSubSchema},
-    university:      {type: Schema.Types.ObjectId},
+    university:      {type: Schema.Types.ObjectId, ref: 'university'},
+    country:         {type: Schema.Types.ObjectId, ref: 'country'},
     company:         {type: String},
     points:          {type: Number, default: 0},
 }, {

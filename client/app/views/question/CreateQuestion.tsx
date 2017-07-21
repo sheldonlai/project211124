@@ -22,18 +22,10 @@ import {DropDownSelect} from "../../components/DropDownSelect";
 import {getDropDownDataFromNumericalEnum, getDropDownDataFromStringEnum} from "../../utils/utils";
 import Question = FrontEndQuestionModels.Question;
 import {QuestionDifficultyMenu} from "./subcomponents/QuestionDifficultyMenu";
+import {Component} from "react";
+import {RouterProps} from "react-router";
+import {Routes} from "../../constants/Routes";
 
-const styleSheet = createStyleSheet('CreateQuestion', theme => ({
-    root: {
-        marginLeft: theme.spacing.unit,
-        marginRight: theme.spacing.unit,
-    },
-    input: {
-        width: "100%",
-    },
-    inputContainer: {paddingLeft: 20, paddingRight: 20},
-
-}));
 
 export interface CreateQuestionState {
     title: string;
@@ -44,25 +36,22 @@ export interface CreateQuestionState {
     difficulty: QuestionDifficulty;
 }
 
-class CreateQuestion extends LoginRequiredComponent<any, QuestionCreationDto> {
+interface props extends stateToProps, dispatchToProps, RouterProps{}
+
+class CreateQuestion extends Component<props, Question> {
     constructor(props) {
         super(props);
-        this.state = {
-            title: '',
-            author: '',
-            tags: [],
-            isPublished: false,
-            content: EditorState.createEmpty(),
-            publicityStatus: PublicityStatus.PUBLIC,
-            difficulty: {
-                educationLevel: QuestionEducationLevel.NOT_SPECIFIED,
-                difficultyLevel: DifficultyLevel.NOT_SPECIFIED
-            }
+        this.state = new Question();
+    }
+
+    componentWillMount(){
+        if (!this.props.loggedIn) {
+            this.props.history.push(Routes.home);
         }
     }
 
     reset = () => {
-        this.setState({title: '', content: '', tags: []})
+        this.setState({...new Question()})
     };
 
     titleChange = (event: any) => {
@@ -74,7 +63,7 @@ class CreateQuestion extends LoginRequiredComponent<any, QuestionCreationDto> {
     };
 
     submit = () => {
-        let postReq: QuestionCreationDto = this.state;
+        let postReq: Question = this.state;
         this.props.createQuestion(postReq);
         //
     };
@@ -84,13 +73,13 @@ class CreateQuestion extends LoginRequiredComponent<any, QuestionCreationDto> {
     };
 
     menuItems = () => {
-        return this.props.tags.map((tag: any) => (
-            <MenuItem
-                key={tag.name}
-                value={tag}
-                primaryText={tag.folderName}
-            />
-        ));
+        // return this.props.tags.map((tag: any) => (
+        //     <MenuItem
+        //         key={tag.name}
+        //         value={tag}
+        //         primaryText={tag.folderName}
+        //     />
+        // ));
     };
 
     updateTags = (tags: string[]) => {
@@ -110,14 +99,15 @@ class CreateQuestion extends LoginRequiredComponent<any, QuestionCreationDto> {
     };
 
     render() {
-        const classes = this.props.classes;
+        const inputContainer = {paddingLeft: 20, paddingRight: 20};
+        const input= {width: "100%"};
         return (
             <Grid container justify="center" gutter={0}>
                 <Grid item xs={12}>
-                    <Grid container className={classes.inputContainer} gutter={0}>
+                    <Grid container style={inputContainer} gutter={0}>
                         <Grid item xs={12} md={6}>
                             <TextField
-                                className={classes.input}
+                                style={input}
                                 label="Title"
                                 type="text"
                                 value={this.state.title}
@@ -146,7 +136,7 @@ class CreateQuestion extends LoginRequiredComponent<any, QuestionCreationDto> {
                             />
                         </Grid>
                     </Grid>
-                    <Grid container justify="flex-end" className={classes.inputContainer} gutter={0}>
+                    <Grid container justify="flex-end" style={inputContainer} gutter={0}>
                         <Grid item>
                             <Button raised label="Make Post" onClick={this.submit}>
                                 Make Post
@@ -161,7 +151,15 @@ class CreateQuestion extends LoginRequiredComponent<any, QuestionCreationDto> {
 
 }
 
-export const CreateQuestionPage = AnimatedWrapper(withStyles(styleSheet)(connect(
+interface stateToProps {
+    loggedIn: boolean;
+}
+
+interface dispatchToProps {
+    createQuestion : (question: Question) => void;
+}
+
+export const CreateQuestionPage = AnimatedWrapper((connect(
     (state: AppStoreState) => ({loggedIn: state.auth.loggedIn}),
     (dispatch) => ({
         createQuestion: (question: Question) => dispatch(QuestionActions.createQuestion(question))

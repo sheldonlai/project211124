@@ -1,8 +1,6 @@
 import {UserTypeEnum} from "../../enums/UserTypeEnum";
 import {UniversityDto} from "../location/UniversityDto";
-/**
- * Created by SHELDON on 6/24/2017.
- */
+import {CountryDto} from "../location/CountryDto";
 export interface UserDto {
     _id: any;
     email: string;
@@ -11,5 +9,6 @@ export interface UserDto {
     verified: boolean;
     university: UniversityDto;
     company: string;
+    country: CountryDto;
     points: number;
 }

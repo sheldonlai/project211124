@@ -22,18 +22,25 @@ const defaultStyles: CSSProperties = {
     justifyContent: "flex-start"
 };
 
+interface state {
+    anchorEl: any;
+    open: boolean;
+}
+
 // Temporary component until Material UI finish implementing theirs
-export class DropDownSelect extends React.Component<props, any> {
-    state = {
-        anchorEl: undefined,
-        open: false
-    };
+export class DropDownSelect extends React.Component<props, state> {
+
+    constructor(props) {
+        super(props);
+        this.state = {
+            anchorEl: undefined,
+            open: false
+        }
+    }
 
     button = undefined;
 
     componentWillReceiveProps(nextProps){
-        if (nextProps.value)
-            this.setState({value: nextProps.value});
     }
 
     handleClick = (event) => {
@@ -45,9 +52,9 @@ export class DropDownSelect extends React.Component<props, any> {
     };
 
     onSelectValue = (value: any) => {
-        this.setState({value: value, open: false});
         if (this.props.onChange)
             this.props.onChange(value);
+        this.setState({open: false});
     };
 
     render() {
@@ -57,14 +64,14 @@ export class DropDownSelect extends React.Component<props, any> {
         const border: CSSProperties = {borderBottom: "lightgrey 1px solid"};
         return (
             <div style={{margin: "10px 0px"}}>
-                {placeholder && <Typography type="caption">{placeholder}</Typography>}
+                {placeholder && selected && <Typography type="caption">{placeholder}</Typography>}
                 <div style={{height: style.height}}>
                     <Button style={{...style, ...border, textTransform: "none", paddingLeft: 0, fontWeight: 400}}
                             onClick={this.handleClick}>
-                        {selected ? selected.text : placeholder}
+                        {selected ? selected.text : "Select " + placeholder}
                     </Button>
                 </div>
-                <div ref="menuPlaceHolder" style={{height: 0, marginTop: 20, left: -16}}></div>
+                <div ref="menuPlaceHolder" style={{height: 0, marginTop: 20, left: -16}} />
                 <Menu
                     MenuListProps={{style: {padding: 0}}}
                     anchorEl={this.state.anchorEl}
@@ -72,7 +79,8 @@ export class DropDownSelect extends React.Component<props, any> {
                     onRequestClose={this.handleRequestClose}
                 >
                     {this.props.data.map((data) => (
-                        <MenuItem key={data.value} onClick={() => this.onSelectValue(data.value)} style={style}>
+                        <MenuItem key={typeof data.value === "object"? data.value._id : data.value}
+                                  onClick={() => this.onSelectValue(data.value)} style={style}>
                             {data.text}
                         </MenuItem>
                     ))}

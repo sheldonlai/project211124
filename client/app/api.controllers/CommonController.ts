@@ -33,4 +33,12 @@ export class CommonController extends ApiController{
     registerUser (regRequest : RegistrationRequest) : AxiosPromise {
         return this.post(APIUrls.Register, regRequest);
     }
+
+    getCountries () : AxiosPromise {
+        return this.get(APIUrls.getCountries);
+    }
+
+    getUniversities (countryId : string) : AxiosPromise {
+        return this.get(APIUrls.getUniversitiesByCountry.replace(":country", countryId));
+    }
 }

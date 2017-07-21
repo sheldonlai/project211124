@@ -6,6 +6,7 @@ import {QuestionHomeReducer, QuestionHomeReducerState} from "../reducers/Questio
 import {ErrorReducer, ErrorReducerState} from "../reducers/ErrorReducer";
 import {QuestionPageReducer, QuestionPageReducerState} from "../reducers/QuestionPageReducer";
 import {QuestionEditorReducer, QuestionEditorReducerState} from "../reducers/QuestionEditorReducer";
+import {LocationDataReducer, LocationDataReducerState} from "../reducers/LocationDataReducer";
 
 const loggerMiddleware = createLogger();
 const composeEnhancers = window['__REDUX_DEVTOOLS_EXTENSION_COMPOSE__'] || compose;
@@ -17,13 +18,15 @@ export interface AppStoreState {
     errors: ErrorReducerState;
     questionPage: QuestionPageReducerState;
     questionEditorState: QuestionEditorReducerState;
+    locationData: LocationDataReducerState;
 }
 const reducer = combineReducers({
     auth: AuthReducer,
     questionHome: QuestionHomeReducer,
     errors: ErrorReducer,
     questionPage: QuestionPageReducer,
-    questionEditorState : QuestionEditorReducer
+    questionEditorState : QuestionEditorReducer,
+    locationData: LocationDataReducer,
 });
 
 export const store = createStore(

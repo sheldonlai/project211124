@@ -8,4 +8,5 @@ export class Routes {
     static createQuestion = '/create-questionHome';
     static question_by_id = '/questionHome/:id'
     static services = '/services';
+    static my_profile = "/my-profile"
 }
