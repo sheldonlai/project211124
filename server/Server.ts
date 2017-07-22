@@ -19,6 +19,7 @@ import * as morgan from 'morgan';
 import {AnswerAPI} from "./routes/AnswerAPI";
 import {loadUniversityData} from "./utils/UniversityCsvLoader";
 import {LocationAPI} from "./routes/LocationAPI";
+import {UserAPI} from "./routes/UserAPI";
 
 export class Server {
     public app: express.Application;
@@ -34,6 +35,8 @@ export class Server {
         this.app = express();
         //configure applicationwebpakc
         this.configure();
+        if (this.config.database.initialize)
+            this.checkAndInsertUniversityData();
     }
 
     private configure(): void {
@@ -93,6 +96,8 @@ export class Server {
         new AnswerAPI(router, ServiceProvider.AnswerService);
 
         new LocationAPI(router, ServiceProvider.LocationService);
+
+        new UserAPI(router, ServiceProvider.UserService);
 
         this.app.use('/api', router);
     }

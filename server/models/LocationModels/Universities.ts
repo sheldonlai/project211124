@@ -1,6 +1,6 @@
 import {model, Schema, Document} from "mongoose";
-import {Country} from "./Country";
 import {BaseModel} from "../BaseModel";
+import {Country} from "./Country";
 
 export class University extends BaseModel {
     country: Country;
@@ -21,10 +21,10 @@ export interface IUniversity extends University, Document {
 export const schema = new Schema({
     country: {type: Schema.Types.ObjectId, required: true, ref: "country"},
     name: {type: String, required: true, unique: true},
-    website: {type: String, required: true, unique: true}
+    website: {type: String, required: true}
 });
 
-const autoPopulateCountry = (next) => {
+const autoPopulateCountry = function(next){
     this.populate("country");
     next();
 };

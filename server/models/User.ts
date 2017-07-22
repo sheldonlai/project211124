@@ -88,6 +88,13 @@ userSchema.pre('save', function(nextFunction) {
     nextFunction();
 });
 
+const autoPopulateInfo = function(next) {
+    this.populate(['country', "university"]);
+    next();
+};
+
+userSchema.pre('findOne', autoPopulateInfo).pre('find', autoPopulateInfo);
+
 
 export const UserModel = model<IUser>('user', userSchema);
 

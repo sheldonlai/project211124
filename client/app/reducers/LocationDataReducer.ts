@@ -18,7 +18,8 @@ const initialState : LocationDataReducerState = {
 };
 
 const getLoadingState = (state: LocationDataReducerState) => {
-    state.status = ReducerStateStatus.LOADING
+    state = {...state};
+    state.status = ReducerStateStatus.LOADING;
     return state;
 };
 
@@ -30,6 +31,13 @@ export const LocationDataReducer = (state = initialState, action) : LocationData
             state = {...state};
             state.status = ReducerStateStatus.DONE;
             state.countries = action.data;
+            return state;
+        case LocationActionTypes.UniversityRequest:
+            return getLoadingState(state);
+        case LocationActionTypes.UniversityOK:
+            state = {...state};
+            state.status = ReducerStateStatus.DONE;
+            state.universities = action.data;
             return state;
 
         default:

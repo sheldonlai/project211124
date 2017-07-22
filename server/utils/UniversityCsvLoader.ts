@@ -8,8 +8,23 @@ export const loadUniversityData = () => {
         if (err)
             console.error(err);
         let json = data.toString();
-        let unis = JSON.parse(json);
-        unis = unis.filter((uni) => uni.Name.toLowerCase().indexOf("university") !== -1);
+        let unis: any[] = JSON.parse(json);
+        // unis = unis.filter((uni) => uni.Name.toLowerCase().indexOf("university") !== -1);
+        let currentlySupported = {
+            "Massachusetts Institute of Technology": true,
+            "Stanford University": true,
+            "Harvard University": true,
+            "California Institute of Technology": true,
+            "University of Chicago": true,
+            "University of Toronto": true,
+            "McGill University": true,
+            "University of British Columbia": true,
+            "University of Alberta": true,
+            "University of Waterloo": true,
+        };
+        unis = unis.filter(function(item) {
+            return currentlySupported.hasOwnProperty(item.Name);
+        });
         let countries = [{name: "Canada", shortName: "CA"}, {name: "United States", shortName: "US"}];
         let promises = countries.map((country) => CountryModel.findOneAndUpdate({name: country.name},
             country, {upsert: true}).exec());
@@ -17,12 +32,10 @@ export const loadUniversityData = () => {
         Promise.all(promises).then((results: ICountry[]) => {
             let canada = results[0];
             let us = results[1];
-            promises = unis.map((uni) => {
-                return UniversityModel.findOneAndUpdate({name: uni.name},
-                    new University(uni.Country === "US"? us: canada, uni.name, uni.website),
-                    {upsert: true}).exec();
-            });
-            return Promise.all(promises);
+
+            unis = unis.map(uni => new University(uni.Country === "US"? us: canada, uni.Name, uni.Website));
+
+            return UniversityModel.remove({}).then(res => UniversityModel.insertMany(unis));
         }).then((results) => {
             if(results.length===unis.length){
                 console.log("The universities have been added.");

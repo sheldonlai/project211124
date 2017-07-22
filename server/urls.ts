@@ -30,4 +30,6 @@ export class APIUrls {
     /* Utils */
     static getCountries = "/get-countries";
     static getUniversitiesByCountry = "/university/:country"
+
+    static updateProfile="/update-profile"
 }

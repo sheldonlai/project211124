@@ -12,6 +12,7 @@ import {FileSystemService} from "./services/FileSystemService";
 import {FileUploadRecordRepository} from "./repositories/FileUploadRecordRepository";
 import {UniversityRepository} from "./repositories/UniversityRepository";
 import {LocationService} from "./services/LocationService";
+import {UserService} from "./services/UserService";
 
 export class RepositoryProvider {
     static AnswerRepository = new AnswerRepository();
@@ -43,5 +44,6 @@ export class ServiceProvider {
         RepositoryProvider.FileUploadRecordRepository
     );
     static LocationService = new LocationService(RepositoryProvider.UniversityRepository);
+    static UserService = new UserService(RepositoryProvider.UserRepository);
 
 }

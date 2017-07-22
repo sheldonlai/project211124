@@ -2,6 +2,7 @@ import {AuthActionTypes} from "../constants/AuthActionTypes";
 import {ReducerStateStatus} from "../constants/ReducerStateStatus";
 import {CommonController} from "../api.controllers/CommonController";
 import * as JwtDecode from 'jwt-decode';
+import {UserActionTypes} from "../constants/UserActionTypes";
 export interface AuthReducerState {
     status: ReducerStateStatus;
     user: any;
@@ -47,6 +48,11 @@ export const AuthReducer = (state = initialState, action): AuthReducerState => {
                 status: ReducerStateStatus.NONE,
                 user: null,
                 loggedIn: false
+            };
+        case UserActionTypes.UserUpdateOK:
+            return {
+                status: ReducerStateStatus.DONE,
+                ...getLoginStatusAndUser()
             };
         default:
             return state;

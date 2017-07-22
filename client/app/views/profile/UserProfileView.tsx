@@ -17,6 +17,7 @@ import {CountryDto} from "../../../../server/dtos/location/CountryDto";
 import {UniversityDto} from "../../../../server/dtos/location/UniversityDto";
 import {RouterProps} from "react-router";
 import {Routes} from "../../constants/Routes";
+import {UserActions} from "../../actions/UserActions";
 
 interface state {
     error: string;
@@ -39,12 +40,16 @@ export class UserProfileComponent extends React.Component<StateToProps & Dispatc
         if (this.props.countries.length == 0){
             this.props.fetchCountries();
         }
+        if (this.props.user.country){
+            this.props.getUniversities(this.props.user.country._id);
+        }
         const user = {...this.props.user};
         this.setState({user});
     }
 
     submit = () => {
-
+        if (JSON.stringify(this.state.user) !== JSON.stringify(this.props.user))
+            this.props.updateProfile(this.state.user);
     };
 
     updateUserField = (key: string, value: any) => {
@@ -53,8 +58,14 @@ export class UserProfileComponent extends React.Component<StateToProps & Dispatc
         this.setState({user});
     };
 
+    updateCountry = (value) => {
+        this.updateUserField("country", value)
+        this.props.getUniversities(value._id);
+    };
+
     render() {
-        const counties = this.props.countries.map(country => ({text: country.name, value: country}));
+        const countries = this.props.countries.map(country => ({text: country.name, value: country}));
+        const universities = this.props.universities.map(uni => ({text: uni.name, value: uni}));
         return (
             <div style={{padding: 10}}>
                 <Grid container justify="center" direction="row-reverse">
@@ -83,11 +94,20 @@ export class UserProfileComponent extends React.Component<StateToProps & Dispatc
                                         onChange={(company)=> this.updateUserField("company", company)}
                                     /><br />
                                     <DropDownSelect
-                                        data={counties}
+                                        data={countries}
                                         value={this.state.user.country}
                                         placeholder="Country"
-                                        onChange={(element)=>this.updateUserField("country", element)}
+                                        onChange={this.updateCountry}
                                     />
+                                    {
+                                        this.state.user.country &&
+                                        <DropDownSelect
+                                            data={universities}
+                                            value={this.state.user.university}
+                                            placeholder="university"
+                                            onChange={(uni)=> this.updateUserField("university", uni)}
+                                        />
+                                    }
                                     <Button raised onClick={this.submit}>Submit</Button>
                                 </Grid>
                             </Grid>
@@ -107,7 +127,8 @@ interface StateToProps {
 }
 interface DispatchToProps {
     fetchCountries : () => void
-    getUniversities : (countryId) => void
+    getUniversities : (countryId: string) => void
+    updateProfile: (user: UserDto) => void;
 }
 const mapStateToProps = (state: AppStoreState): StateToProps => ({
     loggedIn: state.auth.loggedIn,
@@ -119,7 +140,8 @@ const mapStateToProps = (state: AppStoreState): StateToProps => ({
 });
 const mapDispatchToProps = (dispatch): DispatchToProps => ({
     fetchCountries : () => dispatch(LocationActions.getCounties()),
-    getUniversities : (countryId) =>dispatch(LocationActions.getUniversities(countryId))
+    getUniversities : (countryId) =>dispatch(LocationActions.getUniversities(countryId)),
+    updateProfile: (user: UserDto) => dispatch(UserActions.updateUserProfile(user))
 });
 export const UserProfileView = AnimatedWrapper(connect<StateToProps, DispatchToProps, {}>(
     mapStateToProps,

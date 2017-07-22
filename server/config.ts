@@ -1,7 +1,8 @@
 export const config = {
 
     'database': {
-        'URI': 'mongodb://admin:1122312@ds143141.mlab.com:43141/askalot'
+        'URI': 'mongodb://admin:1122312@ds143141.mlab.com:43141/askalot',
+        'initialize' : false
     },
 
     'testDatabase': {

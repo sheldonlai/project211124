@@ -58,7 +58,7 @@ export class DropDownSelect extends React.Component<props, state> {
     };
 
     render() {
-        const selected = this.props.data.filter((data) => data.value == this.props.value)[0];
+        const selected = this.props.data.filter((data) => JSON.stringify(data.value) == JSON.stringify(this.props.value))[0];
         const placeholder = this.props.placeholder ? this.props.placeholder : "";
         const style = defaultStyles;
         const border: CSSProperties = {borderBottom: "lightgrey 1px solid"};
