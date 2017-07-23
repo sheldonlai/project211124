@@ -18,7 +18,7 @@ export interface DropDownSelectData {
 
 const defaultStyles: CSSProperties = {
     width: 200,
-    height: 40,
+    height: 35,
     justifyContent: "flex-start"
 };
 
@@ -57,21 +57,25 @@ export class DropDownSelect extends React.Component<props, state> {
         this.setState({open: false});
     };
 
+    bodyContainer = (text: string) => {
+      return <Typography type="body1">{text}</Typography>
+    };
+
     render() {
         const selected = this.props.data.filter((data) => JSON.stringify(data.value) == JSON.stringify(this.props.value))[0];
         const placeholder = this.props.placeholder ? this.props.placeholder : "";
         const style = defaultStyles;
         const border: CSSProperties = {borderBottom: "lightgrey 1px solid"};
         return (
-            <div style={{margin: "10px 0px"}}>
+            <div style={{margin: "10px 0"}}>
                 {placeholder && selected && <Typography type="caption">{placeholder}</Typography>}
                 <div style={{height: style.height}}>
                     <Button style={{...style, ...border, textTransform: "none", paddingLeft: 0, fontWeight: 400}}
                             onClick={this.handleClick}>
-                        {selected ? selected.text : "Select " + placeholder}
+                        {selected ? this.bodyContainer(selected.text) : this.bodyContainer("Select " + placeholder)}
                     </Button>
                 </div>
-                <div ref="menuPlaceHolder" style={{height: 0, marginTop: 20, left: -16}} />
+                <div ref="menuPlaceHolder" style={{height: 0, marginTop: 20, position: "fixed"}} />
                 <Menu
                     MenuListProps={{style: {padding: 0}}}
                     anchorEl={this.state.anchorEl}
@@ -81,7 +85,7 @@ export class DropDownSelect extends React.Component<props, state> {
                     {this.props.data.map((data) => (
                         <MenuItem key={typeof data.value === "object"? data.value._id : data.value}
                                   onClick={() => this.onSelectValue(data.value)} style={style}>
-                            {data.text}
+                            {this.bodyContainer(data.text)}
                         </MenuItem>
                     ))}
                 </Menu>

@@ -3,8 +3,6 @@ import {connect} from "react-redux";
 import {AppStoreState} from "../../stores/AppStore";
 import {QuestionActions} from "../../actions/QuestionActions";
 import {RouteComponentProps} from "react-router";
-import {FrontEndQuestionModels} from "../../models/QuestionModels";
-import AnimatedWrapper from "../../components/AnimatedWrapper";
 import {CircularProgress} from "material-ui/Progress";
 import {QuestionBoxView} from "./subcomponents/QuestionBoxComponent";
 import {AnswerBoxesView} from "./subcomponents/AnswerBoxesComponent";
@@ -12,20 +10,15 @@ import {ReducerStateStatus} from "../../constants/ReducerStateStatus";
 import Grid from "material-ui/Grid";
 import {QuestionInfoBoxView} from "./subcomponents/QuestionInfoBox";
 import Hidden from 'material-ui/Hidden';
-import QuestionPage = FrontEndQuestionModels.QuestionPage;
-import Answer = FrontEndQuestionModels.Answer;
-import cloneQuestionPage = FrontEndQuestionModels.cloneQuestionPage;
-import Question = FrontEndQuestionModels.Question;
-import cloneQuestion = FrontEndQuestionModels.cloneQuestion;
-
-
-export interface QuestionPageProps extends StateToProps, DispatchToProps, RouteComponentProps<{ id: string }> {
+import {LoadingScreen} from "../../components/LoadingScreen";
+import {CSSTransitionGroup} from "react-transition-group";
+interface QuestionPageProps extends StateToProps, DispatchToProps, RouteComponentProps<{ id: string }> {
 }
 
-export interface QuestionPageState {
+interface QuestionPageState {
 }
 
-export class QuestionPageComponent extends React.Component<QuestionPageProps, QuestionPageState> {
+export class QuestionPageComponent extends React.Component<QuestionPageProps> {
 
     constructor(props) {
         super(props);
@@ -42,20 +35,14 @@ export class QuestionPageComponent extends React.Component<QuestionPageProps, Qu
 
     render() {
         if (this.props.status === ReducerStateStatus.LOADING) {
-            return (
-                <div style={{height: "100%", margin: 10, padding: "200px 0px", textAlign: "center"}}>
-                    <CircularProgress
-                        size={150}
-                    />
-                </div>
-            )
+            return (<LoadingScreen/>);
         }
         return (
             <div style={{padding: 10}}>
                 <Grid container justify="center" direction="row-reverse">
                     <Grid item xs={12} md={3} lg={2}>
                         <Hidden smDown>
-                        <div style={{height: 42}}/>
+                            <div style={{height: 42}}/>
                         </Hidden>
                         <QuestionInfoBoxView/>
                     </Grid>
@@ -73,6 +60,7 @@ interface StateToProps {
     status: ReducerStateStatus;
     lastUpdated: number;
     questionId: string;
+    questionTitle: string;
 }
 
 interface DispatchToProps {
@@ -80,17 +68,18 @@ interface DispatchToProps {
     newError: (message: string) => void;
 }
 
-export const QuestionPageView = AnimatedWrapper(connect<StateToProps, DispatchToProps, RouteComponentProps<{ id: string }>>(
+export const QuestionPageView = connect<StateToProps, DispatchToProps, RouteComponentProps<{ id: string }>>(
     (state: AppStoreState) => {
-        let questionId = state.questionPage.questionPage? state.questionPage.questionPage.question._id: undefined;
+        let questionId = state.questionPage.questionPage ? state.questionPage.questionPage.question._id : undefined;
         return {
             status: state.questionPage.status,
             lastUpdated: state.questionPage.lastUpdated,
-            questionId: questionId
+            questionId: questionId,
+            questionTitle: (questionId) ? state.questionPage.questionPage.question.title : ""
         }
     },
     (dispatch) => ({
         fetchQuestionPage: (id: string) => dispatch(QuestionActions.fetchQuestionPage(id)),
         newError: (message: string) => dispatch(QuestionActions.addError(message)),
     })
-)(QuestionPageComponent));
+)(QuestionPageComponent);

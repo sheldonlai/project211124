@@ -29,4 +29,6 @@ body {
 .page {
     padding: 0 24px;
 }
-
+.example-enter {
+    opacity: 0.01;
+}

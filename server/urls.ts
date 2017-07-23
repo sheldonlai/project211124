@@ -29,7 +29,12 @@ export class APIUrls {
 
     /* Utils */
     static getCountries = "/get-countries";
-    static getUniversitiesByCountry = "/university/:country"
+    static getUniversitiesByCountry = "/university/:country";
 
-    static updateProfile="/update-profile"
+    /* Profile */
+    static updateProfile="/update-profile";
+
+    /* Rate Your Teammate */
+    static createTeammateRecord="/c"
+
 }

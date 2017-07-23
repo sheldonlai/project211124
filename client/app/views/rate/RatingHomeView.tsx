@@ -3,7 +3,7 @@ import {connect} from "react-redux";
 
 // TODO
 
-export class ServiceHomeComponent extends React.Component<any> {
+export class RatingHomeViewComponent extends React.Component<any> {
     render() {
         return (
             <div>
@@ -13,6 +13,6 @@ export class ServiceHomeComponent extends React.Component<any> {
     }
 }
 
-export const ServiceHomeView = connect<any, any, any>(
+export const RatingHomeView = connect<any, any, any>(
     () =>({})
-)(ServiceHomeComponent);
+)(RatingHomeViewComponent);

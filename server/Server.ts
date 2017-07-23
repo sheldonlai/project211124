@@ -17,7 +17,7 @@ import {FileUploadAPI} from "./routes/FileUploadAPI";
 let favicon = require('serve-favicon');
 import * as morgan from 'morgan';
 import {AnswerAPI} from "./routes/AnswerAPI";
-import {loadUniversityData} from "./utils/UniversityCsvLoader";
+import {loadUniversityData} from "./scripts/UniversityCsvLoader";
 import {LocationAPI} from "./routes/LocationAPI";
 import {UserAPI} from "./routes/UserAPI";
 

@@ -13,15 +13,14 @@ export class UserAPI extends BaseAPI {
                 service: IUserService) {
         super();
         this.service = service;
-        router.put(APIUrls.updateProfile, mustBeAuthenticated, this.updateProfile);
+        router.put(APIUrls.updateProfile, mustBeAuthenticated, this.createTeammateRecord);
 
     }
 
-    public updateProfile = (req: AuthRequest, res: Response, next: NextFunction) => {
-        const user = req.body;
+    public createTeammateRecord = (req: AuthRequest, res: Response, next: NextFunction) => {
         const currentUser = req.user;
-        const promise = this.service.updateUser(user, currentUser);
-        this.respondPromise(promise, res, next);
+        // const promise = this.service.updateUser(user, currentUser);
+        // this.respondPromise(promise, res, next);
     };
 
 }
