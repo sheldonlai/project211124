@@ -89,7 +89,7 @@ export class QuestionAPIController extends ApiController {
 
     // Answers functions
     createAnswer(answer: Answer): AxiosPromise {
-        return this.answerPostApiHelper(APIUrls.CreateQuestion, answer);
+        return this.answerPostApiHelper(APIUrls.CreateAnswer, answer);
     }
 
     updateAnswer(answer: Answer): AxiosPromise {
