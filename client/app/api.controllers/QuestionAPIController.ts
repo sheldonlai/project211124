@@ -1,4 +1,4 @@
-import {ApiController} from "./ApiController";
+ import {ApiController} from "./ApiController";
 import {AxiosPromise, AxiosResponse} from "axios";
 import {APIUrls} from "../../../server/urls";
 import {QuestionDto} from "../../../server/dtos/q&a/QuestionDto";
@@ -12,6 +12,7 @@ import Question = FrontEndQuestionModels.Question;
 import QuestionPreviewCollections = FrontEndQuestionModels.QuestionPreviewCollections;
 import QuestionPage = FrontEndQuestionModels.QuestionPage;
 import Answer = FrontEndQuestionModels.Answer;
+ import {CommentDto} from "../../../server/dtos/q&a/CommentDto";
 
 export class QuestionAPIController extends ApiController {
 
@@ -67,6 +68,10 @@ export class QuestionAPIController extends ApiController {
 
     downVoteQuestion(question: Question): AxiosPromise {
         return this.questionPutApiHelper(APIUrls.DownVoteQuestion, question);
+    }
+
+    createComment(question: Question){
+        return this.questionPutApiHelper(APIUrls.CreateComment, question);
     }
 
     fetchQuestionByID(id: string): AxiosPromise {

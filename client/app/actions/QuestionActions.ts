@@ -25,6 +25,7 @@ export class QuestionActions extends BaseActions {
     }
 
     static createQuestion(questionReq: Question): (dispatch: any) => void {
+        console.log('was here');
         return function (dispatch) {
             apiController.createQuestion(questionReq).then(res => {
                 dispatch({
@@ -65,6 +66,19 @@ export class QuestionActions extends BaseActions {
                 });
             }).catch(err =>
                 QuestionActions.handleError(dispatch, err, QuestionActionTypes.FetchQuestionPageError)
+            )
+        }
+    }
+
+    static createComment(question: Question){
+        return (dispatch) => {
+            apiController.createComment(question).then(res => {
+                dispatch({
+                    type: QuestionActionTypes.createComment,
+                    data: res.data
+                });
+            }).catch(err =>
+            QuestionActions.handleError(dispatch, err, QuestionActionTypes.QuestionPageError)
             )
         }
     }

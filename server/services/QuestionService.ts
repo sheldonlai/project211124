@@ -2,7 +2,7 @@ import {IQuestionRepository} from "../repositories/QuestionRepository";
 import {IAnswerRepository} from "../repositories/AnswerRepository";
 import {QuestionDto} from "../dtos/q&a/QuestionDto";
 import {AnswerDto} from "../dtos/q&a/AnswerDto";
-import {Question} from "../models/Question";
+import {Question, QuestionComment} from "../models/Question";
 import {User} from "../models/User";
 import {QuestionPageDto} from "../dtos/q&a/QuestionPageDto";
 import {Answer} from "../models/Answer";
@@ -13,6 +13,7 @@ import {ClientError} from "../errors/HttpStatus";
 import {ITagRepository} from "../repositories/TagRepository";
 import {ITag} from "../models/Tags";
 import {UserQuestionVote} from "../models/UserQuestionVote";
+import {CommentDto} from "../dtos/q&a/CommentDto"
 
 
 export interface IQuestionService {
@@ -23,6 +24,7 @@ export interface IQuestionService {
     updateQuestion(question: QuestionDto, user: User): Promise<QuestionDto>;
     upVoteQuestion(questionId: string, user: User): Promise<QuestionDto>;
     downVoteQuestion(questionId: string, user: User): Promise<QuestionDto>;
+    createComment(questionId: string, comment: QuestionComment[]): Promise<QuestionDto>;
 }
 
 export class QuestionService extends BaseService implements IQuestionService {
@@ -114,6 +116,14 @@ export class QuestionService extends BaseService implements IQuestionService {
         let vote = new UserQuestionVote(user._id, questionId, up);
         return this.questionRepository.findOneAndUpdateVoteQuestion(vote).then((question: Question)  => {
             return question;
+        });
+    }
+
+    createComment(questionId: string, newComments: QuestionComment[]){
+        return this.questionRepository.getById(questionId).then((questionFound: Question) => {
+            questionFound.comments = newComments;
+
+            return this.questionRepository.update(questionFound);
         });
     }
 
