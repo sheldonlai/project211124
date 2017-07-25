@@ -47,13 +47,13 @@ export class CommentsComponent extends React.Component<CommentsComponentProps, C
 
     addNewComment = () => {
         if (this.state.commentContent) {
-            this.setState({errorMsg: ""});
             let tmpComment: CommentModel = new CommentModel();
             tmpComment.commentContent = this.state.commentContent;
             tmpComment.commentBy = this.props.user;
             this.props.comments.push(tmpComment);
             this.props.onCommentsSubmit(this.props.comments);
             this.setState({commentContent: ""});
+            this.setState({errorMsg: ""});
         }
         else {
             this.setState({errorMsg: "Cannot submit empty comment."});
@@ -133,6 +133,7 @@ export class CommentsComponent extends React.Component<CommentsComponentProps, C
 
     UpdateEditedComment = (indx) => {
         if(this.state.commentContent){
+            console.log(this.state.commentContent);
             this.props.comments[indx].commentContent = this.state.commentContent;
             this.props.comments[indx].lastEditedUtc = new Date(Date.now());
             this.props.onCommentsSubmit(this.props.comments);
@@ -143,7 +144,7 @@ export class CommentsComponent extends React.Component<CommentsComponentProps, C
         }
     };
 
-    CancelAndDleteButton = (indx: number) => {
+    CancelAndDeleteButton = (indx: number) => {
         if(this.state.EditCommentIndx == -1 || indx != this.state.EditCommentIndx){
             return(
                 <IconButton>
@@ -166,7 +167,7 @@ export class CommentsComponent extends React.Component<CommentsComponentProps, C
                 <ListItem key={comment.lastEditedUtc + comment.commentBy.username}>
                     <ListItemText primary={this.onEditComment(indx)}></ListItemText>
                         {this.EditAndSaveButton(indx)}
-                        {this.CancelAndDleteButton(indx)}
+                        {this.CancelAndDeleteButton(indx)}
                 </ListItem>
             )
         });

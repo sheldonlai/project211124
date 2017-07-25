@@ -29,6 +29,7 @@ interface QuestionBoxComponentProps {
     edit: boolean; // edit mode
 }
 interface props extends QuestionBoxComponentProps, DispatchProps {
+
 }
 
 let paperStyle = {height: "100%"};
@@ -54,6 +55,7 @@ export class QuestionBoxComponent extends Component<props, {}> {
     onCommentSubmit = (comments) => {
         let question = cloneQuestion(this.props.question);
         question.comments = comments;
+        this.props.createComment(question);
         this.props.changeQuestionEditorState({edit: this.props.edit, question});
         // TODO : Create edit/create comment actions
         this.onSubmit();
@@ -140,8 +142,8 @@ const mapDispatchToProps = (dispatch): DispatchProps => ({
     upVoteQuestion: (question: Question) => dispatch(QuestionActions.upVoteQuestion(question)),
     downVoteQuestion: (question: Question) => dispatch(QuestionActions.downVoteQuestion(question)),
     editQuestion: (question: Question) => dispatch(QuestionActions.updateQuestion(question)),
-    changeQuestionEditorState: (state: QuestionEditorReducerState) =>
-        dispatch(QuestionActions.changeQuestionEditorState(state)),
+    changeQuestionEditorState: (state: QuestionEditorReducerState) => dispatch(QuestionActions.changeQuestionEditorState(state)),
+    createComment: (question: Question) => dispatch(QuestionActions.createComment(question)),
 });
 
 interface DispatchProps {
@@ -149,6 +151,7 @@ interface DispatchProps {
     downVoteQuestion: (question: Question) => void;
     editQuestion: (question: Question) => void;
     changeQuestionEditorState: (state: QuestionEditorReducerState) => void;
+    createComment: (question: Question) => void;
 }
 
 export const QuestionBoxView = connect<QuestionBoxComponentProps, DispatchProps, any>(
