@@ -6,6 +6,8 @@ import {FrontEndQuestionModels} from "../models/QuestionModels";
 import Question = FrontEndQuestionModels.Question;
 import QuestionPage = FrontEndQuestionModels.QuestionPage;
 import {QuestionEditorReducerState} from "../reducers/QuestionEditorReducer";
+import {RouterController} from "../api.controllers/RouterController";
+import {Routes} from "../constants/Routes";
 
 let apiController: QuestionAPIController = QuestionAPIController.getInstance();
 
@@ -31,6 +33,7 @@ export class QuestionActions extends BaseActions {
                     type: QuestionActionTypes.QuestionCreated,
                     data: res.data
                 })
+                RouterController.history.push(Routes.question);
             }).catch(err =>
                 QuestionActions.handleError(dispatch, err, QuestionActionTypes.CreateQuestionError)
             )

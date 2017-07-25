@@ -71,6 +71,7 @@ class MenuClass extends Component<MenuClassProps> {
                         </Link>
                         {this.button("Questions", Routes.question)}
                         {this.button("Services", Routes.services)}
+                        {this.button("RateMyTeammate", Routes.rate_my_teammate)}
                     </li>
                 </ul>
                 <div id="login-menu">

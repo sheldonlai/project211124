@@ -14,18 +14,18 @@ export class APIUrls {
     static Upload = "/upload";
 
     /* Question & Answer */
-    static CreateQuestion = "/create-questionHome";
-    static QuestionPreviews = "/questionHome-previews";
-    static GetQuestionPage = "/questionHome-page/:id";
-    static UpdateQuestion = "/update-questionHome";
+    static CreateQuestion = "/create-question";
+    static QuestionPreviews = "/question-previews";
+    static GetQuestionPage = "/question-page/:id";
+    static UpdateQuestion = "/update-question";
     
     static CreateAnswer = "/create-answer";
     static UpdateAnswer = "/update-answer";
 
     static UpVoteAnswer = "/up-vote-answer";
-    static UpVoteQuestion = "/up-vote-questionHome";
+    static UpVoteQuestion = "/up-vote-question";
     static DownVoteAnswer = "/down-vote-answer";
-    static DownVoteQuestion = "/down-vote-questionHome";
+    static DownVoteQuestion = "/down-vote-question";
 
     /* Utils */
     static getCountries = "/get-countries";
@@ -35,6 +35,11 @@ export class APIUrls {
     static updateProfile="/update-profile";
 
     /* Rate Your Teammate */
-    static createTeammateRecord="/c"
+    static createTeammateRecord="/create-teammate-record";
+    static getTeammateRecordPreview="/get-teammate-previews";
+    static getTeammateRecord="/get-teammate-record/:id";
+    static addRating="/add-teammate-rating";
+    static editRating="/edit-teammate-rating";
+
 
 }

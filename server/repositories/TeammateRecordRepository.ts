@@ -11,14 +11,12 @@ export class TeammateRecordRepository extends BaseRepository<TeammateRecord, ITe
         super(TeammateRecordModel);
     }
 
-    searchRecord (query): Promise<TeammateRecord[]>{
-        TeammateRecordModel.find({}).exec().then(() => {
-
+    searchRecord (conditions: any): Promise<TeammateRecord[]>{
+        return TeammateRecordModel.find(conditions).lean().exec()
+            .then((teammateRecords: TeammateRecord[]) => {
+            return Promise.all(teammateRecords.map((record)=>this.applyAdditionalFunction(record)));
         });
-        return undefined;
     }
-
-
 }
 
 

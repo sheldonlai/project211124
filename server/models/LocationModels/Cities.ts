@@ -3,6 +3,7 @@ import {BaseModel} from "../BaseModel";
 
 export class City extends BaseModel {
     name: string;
+    stateOrProvince: any;
 }
 
 export interface ICity extends City, Document {

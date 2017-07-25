@@ -8,6 +8,7 @@ import {config} from "./config";
 import * as support from "source-map-support";
 const cluster = require('cluster');
 const numCPUs = require('os').cpus().length;
+require("string_score");
 
 support.install();
 (<any>mongoose).Promise = global.Promise;

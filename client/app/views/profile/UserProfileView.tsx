@@ -18,6 +18,7 @@ import {UniversityDto} from "../../../../server/dtos/location/UniversityDto";
 import {RouterProps} from "react-router";
 import {Routes} from "../../constants/Routes";
 import {UserActions} from "../../actions/UserActions";
+import {CSSProperties} from "react";
 
 interface state {
     error: string;
@@ -66,11 +67,11 @@ export class UserProfileComponent extends React.Component<StateToProps & Dispatc
     render() {
         const countries = this.props.countries.map(country => ({text: country.name, value: country}));
         const universities = this.props.universities.map(uni => ({text: uni.name, value: uni}));
+        const emailInputStyles = { autoCorrect:"off", autoCapitalize:"off", spellCheck:"false"};
         return (
             <div style={{padding: 10}}>
                 <Grid container justify="center" direction="row-reverse">
                     <Grid item xs={12} md={3} lg={2}>
-
                     </Grid>
                     <Grid item xs={12} md={8} lg={6}>
                         <Paper style={{width: "100%", padding: "50px 20px"}}>
@@ -82,6 +83,7 @@ export class UserProfileComponent extends React.Component<StateToProps & Dispatc
                                         value={this.state.user.email}
                                         label="Email"
                                         fullWidth
+                                        inputProps={emailInputStyles}
                                     /><br/>
                                     <TextField
                                         value={this.state.user.username}

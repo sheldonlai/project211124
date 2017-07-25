@@ -41,7 +41,7 @@ interface props extends stateToProps, dispatchToProps, RouterProps{}
 class CreateQuestion extends Component<props, Question> {
     constructor(props) {
         super(props);
-        this.state = new Question();
+        this.state = {...new Question()};
     }
 
     componentWillMount(){

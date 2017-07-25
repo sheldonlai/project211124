@@ -59,7 +59,7 @@ describe('AnswerRepoTest', function () {
             })
     });
 
-    it('should fail when create with no questionHome', function () {
+    it('should fail when create with no question', function () {
         expect.assertions(1);
         return ansRepo.create(new Answer(null, createRawDraftContentState(), sampleUser, []))
             .catch(function (err) {

@@ -18,11 +18,9 @@ export class UserService implements IUserService{
         currentUser.university = user.university;
         currentUser.company = user.company;
         return this.userRepository.update(currentUser).then((user: User) => {
-
             return this.userRepository.getById(user._id).then((user : User) => {
                 return {token: generateToken(user)};
             });
         });
     }
-
 }
