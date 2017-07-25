@@ -80,8 +80,10 @@ export const QuestionPageReducer = (state = initialState, action): QuestionPageR
         case QuestionActionTypes.createComment:
             state.questionPage = cloneQuestionPage(state.questionPage);
             state.questionPage.question = cloneQuestion(action.data);
-            console.log(state.questionPage);
             return getOKState(state.questionPage);
+
+        case QuestionActionTypes.createCommentError:
+            return getErrorState(state, action);
 
         case QuestionActionTypes.UpVoteQuestion:
             questionPage = cloneQuestionPage(state.questionPage);

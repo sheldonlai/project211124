@@ -78,7 +78,7 @@ export class QuestionActions extends BaseActions {
                     data: res.data
                 });
             }).catch(err =>
-            QuestionActions.handleError(dispatch, err, QuestionActionTypes.QuestionPageError)
+            QuestionActions.handleError(dispatch, err, QuestionActionTypes.createCommentError)
             )
         }
     }

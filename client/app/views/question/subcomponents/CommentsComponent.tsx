@@ -54,7 +54,6 @@ export class CommentsComponent extends React.Component<CommentsComponentProps, C
             this.props.onCommentsSubmit(this.props.comments);
             this.setState({commentContent: ""});
             this.setState({errorMsg: ""});
-            console.log(this.props.comments);
         }
         else {
             this.setState({errorMsg: "Cannot submit empty comment."});
@@ -134,6 +133,7 @@ export class CommentsComponent extends React.Component<CommentsComponentProps, C
 
     UpdateEditedComment = (indx) => {
         if(this.state.commentContent){
+            console.log(this.state.commentContent);
             this.props.comments[indx].commentContent = this.state.commentContent;
             this.props.comments[indx].lastEditedUtc = new Date(Date.now());
             this.props.onCommentsSubmit(this.props.comments);
@@ -162,7 +162,6 @@ export class CommentsComponent extends React.Component<CommentsComponentProps, C
     };
 
     renderComments = () => {
-        console.log(this.props.comments.length);
         return this.props.comments.map((comment, indx) => {
             return (
                 <ListItem key={comment.lastEditedUtc + comment.commentBy.username}>

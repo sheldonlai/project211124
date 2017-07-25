@@ -24,7 +24,7 @@ export interface IQuestionService {
     updateQuestion(question: QuestionDto, user: User): Promise<QuestionDto>;
     upVoteQuestion(questionId: string, user: User): Promise<QuestionDto>;
     downVoteQuestion(questionId: string, user: User): Promise<QuestionDto>;
-    createComment(questionId: string, comment: QuestionComment[]): Promise<QuestionDto>;
+    createComment(question: Question): Promise<QuestionDto>;
 }
 
 export class QuestionService extends BaseService implements IQuestionService {
@@ -119,10 +119,9 @@ export class QuestionService extends BaseService implements IQuestionService {
         });
     }
 
-    createComment(questionId: string, newComments: QuestionComment[]){
-        return this.questionRepository.getById(questionId).then((questionFound: Question) => {
-            questionFound.comments = newComments;
-
+    createComment(question: Question){
+        return this.questionRepository.getById(question._id).then((questionFound: Question) => {
+            questionFound.comments = question.comments;
             return this.questionRepository.update(questionFound);
         });
     }

@@ -30,7 +30,7 @@ export enum QuestionActionTypes {
     ChangePostPage = <any> "ChangePostPage",
 
     createComment = <any> "createComment",
-    updateComment = <any> "updateComment",
+    createCommentError = <any> "createCommentError",
 
     UpVoteQuestion = <any> "UpVoteQuestion",
     DownVoteQuestion = <any> "DownVoteQuestion",
