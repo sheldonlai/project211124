@@ -65,6 +65,7 @@ export class QuestionAPI extends BaseAPI {
     public createComment = (req: AuthRequest, res: Response, next: NextFunction) => {
         let question: QuestionDto = req.body;
         let result = this.service.createComment(question._id, question.comments);
+        console.log(result);
         this.respondPromise(result, res, next);
     }
 }
