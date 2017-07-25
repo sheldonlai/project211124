@@ -13,7 +13,7 @@ export class TeammateRecord extends BaseModel{
         _id: any;
         rating: number;
         comment: string;
-        created: User;
+        createdBy: User;
         createdAt: Date;
         upDatedAt: Date;
     }[];
@@ -50,5 +50,12 @@ const schema = new Schema({
         }
     ]
 });
+
+const autoPopulateUsers = function(next) {
+    this.populate(["ratings.commentBy"]);
+    next();
+};
+
+schema.pre('findOne', autoPopulateUsers).pre('find', autoPopulateUsers);
 
 export const TeammateRecordModel = model<ITeammateRecord>('teammateRecord', schema);

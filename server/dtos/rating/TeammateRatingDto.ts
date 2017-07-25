@@ -4,7 +4,7 @@ export interface TeammateRatingDto {
     _id: string;
     rating: number;
     comment: string;
-    created: UserDto;
+    createdBy: UserDto;
     createdAt: Date;
     upDatedAt: Date;
 }
