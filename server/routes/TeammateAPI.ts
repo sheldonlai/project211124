@@ -3,8 +3,9 @@ import {BaseAPI} from "./BaseAPI";
 import {APIUrls} from "../urls";
 import {ILocationService} from "../services/LocationService";
 import {IUserService} from "../services/UserService";
-import {AuthRequest, mustBeAuthenticated} from "../middlewares/AuthMiddleware";
+import {AuthRequest, maybeAuthenticated, mustBeAuthenticated} from "../middlewares/AuthMiddleware";
 import {ITeammateRecordService} from "../services/TeammateRecordService";
+import {TeammateRatingDto} from "../dtos/rating/TeammateRatingDto";
 
 export class TeammateAPI extends BaseAPI {
 
@@ -14,12 +15,11 @@ export class TeammateAPI extends BaseAPI {
                 service: ITeammateRecordService) {
         super();
         this.service = service;
-        router.put(APIUrls.createTeammateRecord, mustBeAuthenticated, this.createTeammateRecord);
-        // static createTeammateRecord="/create-teammate-record";
-        // static getTeammateRecordPreview="/get-teammate-previews";
-        // static getTeammateRecord="/get-teammate-record/:id";
-        // static addRating="/add-teammate-rating";
-        // static editRating="/edit-teammate-rating";
+        router.post(APIUrls.createTeammateRecord, mustBeAuthenticated, this.createTeammateRecord);
+        router.get(APIUrls.getTeammateRecordPreview, maybeAuthenticated, this.getTeammateRecordPreview);
+        router.get(APIUrls.getTeammateRecord, this.getTeammateRecord);
+        router.post(APIUrls.addRating, mustBeAuthenticated, this.addTeammateRating);
+        router.put(APIUrls.editRating, mustBeAuthenticated, this.editTeammateRating);
 
     }
 
@@ -32,29 +32,29 @@ export class TeammateAPI extends BaseAPI {
 
     public getTeammateRecordPreview = (req: AuthRequest, res: Response, next: NextFunction) => {
         const currentUser = req.user;
-        const createDto = req.body;
-        const promise = this.service.createTeammateRecordRepo(createDto, currentUser);
+        const promise = this.service.getRecentTeammateRecordPreview(currentUser);
         this.respondPromise(promise, res, next);
     };
 
-    public getTeammateRecord = (req: AuthRequest, res: Response, next: NextFunction) => {
-        const currentUser = req.user;
-        const createDto = req.body;
-        const promise = this.service.createTeammateRecordRepo(createDto, currentUser);
+    public getTeammateRecord = (req: Request, res: Response, next: NextFunction) => {
+        const teammateRecordId = req.params.id;
+        const promise = this.service.getTeammateRecord(teammateRecordId);
         this.respondPromise(promise, res, next);
     };
 
     public addTeammateRating = (req: AuthRequest, res: Response, next: NextFunction) => {
+        const teammateRecordId = req.params.id;
         const currentUser = req.user;
         const createDto = req.body;
-        const promise = this.service.createTeammateRecordRepo(createDto, currentUser);
+        const promise = this.service.addRating(createDto, teammateRecordId, currentUser);
         this.respondPromise(promise, res, next);
     };
 
     public editTeammateRating = (req: AuthRequest, res: Response, next: NextFunction) => {
+        const teammateRecordId = req.params.id;
         const currentUser = req.user;
         const createDto = req.body;
-        const promise = this.service.createTeammateRecordRepo(createDto, currentUser);
+        const promise = this.service.editRating(createDto,teammateRecordId, currentUser);
         this.respondPromise(promise, res, next);
     };
 

@@ -14,22 +14,18 @@ export interface ITeammateRecordService {
 
     getRecentTeammateRecordPreview (currentUser?: User): Promise<TeammatePreviewDto[]>;
 
+    getTeammateRecord(teammateRecordId: string): Promise<TeammateRecordDto>;
+
     addRating(teammateRatingDto: TeammateRatingDto, teammateRatingId: string, currentUser: User): Promise<TeammateRecordDto>;
 
     editRating(teammateRatingDto: TeammateRatingDto, teammateRatingId: string, currentUser: User): Promise<TeammateRecordDto>;
 
-    // static createTeammateRecord="/create-teammate-record";
-    // static getTeammateRecordPreview="/get-teammate-previews";
-    // static getTeammateRecord="/get-teammate-record/:id";
-    // static addRating="/add-teammate-rating";
-    // static editRating="/edit-teammate-rating";
 }
 
 export class TeammateRecordService extends BaseService implements ITeammateRecordService {
     constructor(private teammateRecordRepo: ITeammateRecordRepository) {
         super();
     }
-
     createTeammateRecordRepo(teammateRecord: TeammateRecordDto): Promise<TeammateRecordDto> {
         const record = new TeammateRecord(
             teammateRecord.firstName,
@@ -90,6 +86,10 @@ export class TeammateRecordService extends BaseService implements ITeammateRecor
 
             });
         })
+    }
+
+    getTeammateRecord(teammateRecordId: string): Promise<TeammateRecordDto> {
+        return this.teammateRecordRepo.getById(teammateRecordId);
     }
 
     addRating(teammateRatingDto: TeammateRatingDto, teammateRatingId: string, currentUser: User): Promise<TeammateRecordDto> {

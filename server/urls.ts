@@ -40,8 +40,8 @@ export class APIUrls {
     static createTeammateRecord="/create-teammate-record";
     static getTeammateRecordPreview="/get-teammate-previews";
     static getTeammateRecord="/get-teammate-record/:id";
-    static addRating="/add-teammate-rating";
-    static editRating="/edit-teammate-rating";
+    static addRating="/add-teammate-rating/:id";
+    static editRating="/edit-teammate-rating/:id";
 
 
 }
