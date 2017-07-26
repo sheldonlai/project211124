@@ -20,6 +20,7 @@ import {AnswerAPI} from "./routes/AnswerAPI";
 import {loadUniversityData} from "./scripts/UniversityCsvLoader";
 import {LocationAPI} from "./routes/LocationAPI";
 import {UserAPI} from "./routes/UserAPI";
+import {TeammateRatingAPI} from "./routes/TeammateRatingAPI";
 
 export class Server {
     public app: express.Application;
@@ -98,6 +99,8 @@ export class Server {
         new LocationAPI(router, ServiceProvider.LocationService);
 
         new UserAPI(router, ServiceProvider.UserService);
+
+        new TeammateRatingAPI(router, ServiceProvider.TeammateRecordService);
 
         this.app.use('/api', router);
     }

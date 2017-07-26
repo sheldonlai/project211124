@@ -7,7 +7,7 @@ import {AuthRequest, maybeAuthenticated, mustBeAuthenticated} from "../middlewar
 import {ITeammateRecordService} from "../services/TeammateRecordService";
 import {TeammateRatingDto} from "../dtos/rating/TeammateRatingDto";
 
-export class TeammateAPI extends BaseAPI {
+export class TeammateRatingAPI extends BaseAPI {
 
     private service : ITeammateRecordService;
 

@@ -1,7 +1,6 @@
 /**
  * Created by SHELDON on 6/22/2017.
  */
-import {AxiosError} from "axios";
 import {ErrorActionTypes} from "../constants/ErrorActionTypes";
 
 export class BaseActions {
@@ -14,17 +13,23 @@ export class BaseActions {
     }
 
     static handleError(dispatch, err, otherErrorType?){
+        let errorData = undefined;
         if (err.response != null){
-            dispatch({
-                type: ErrorActionTypes.ADD_ERROR,
-                data: err.response.data.error
-            })
+            // error is coming from api controller
+            errorData = err.response.data.error;
         } else {
+            errorData = err.message;
+        }
+        // always dispatch add_error to track
+        dispatch({
+            type: ErrorActionTypes.ADD_ERROR,
+            data: errorData
+        });
+        if (otherErrorType)
             dispatch({
                 type: otherErrorType,
-                data: err.message
-            })
-        }
+                data: errorData
+            });
         console.error(err)
     }
 }

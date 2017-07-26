@@ -1,11 +1,10 @@
-import {NextFunction, Request, Response, Router} from "express";
+import {NextFunction, Response, Router} from "express";
 import {IQuestionService} from "../services/QuestionService";
 import {BaseAPI} from "./BaseAPI";
 import {APIUrls} from "../urls";
 import {AuthRequest, maybeAuthenticated, mustBeAuthenticated} from "../middlewares/AuthMiddleware";
 import {QuestionDto} from "../dtos/q&a/QuestionDto";
 import {User} from "../models/User";
-import {CommentDto} from "../dtos/q&a/CommentDto";
 
 export class QuestionAPI extends BaseAPI {
 
@@ -46,25 +45,25 @@ export class QuestionAPI extends BaseAPI {
         let user : User = req.user;
         let result = this.service.updateQuestion(question, user);
         this.respondPromise(result, res, next);
-    }
+    };
 
     public upVoteQuestion = (req: AuthRequest, res: Response, next: NextFunction) => {
         let question: QuestionDto = req.body;
         let user : User = req.user;
         let result = this.service.upVoteQuestion(question._id, user);
         this.respondPromise(result, res, next);
-    }
+    };
 
     public downVoteQuestion = (req: AuthRequest, res: Response, next: NextFunction) => {
         let question: QuestionDto = req.body;
         let user : User = req.user;
         let result = this.service.downVoteQuestion(question._id, user);
         this.respondPromise(result, res, next);
-    }
+    };
 
     public createComment = (req: AuthRequest, res: Response, next: NextFunction) => {
         let question: QuestionDto = req.body;
         let result = this.service.createComment(question);
         this.respondPromise(result, res, next);
-    }
+    };
 }

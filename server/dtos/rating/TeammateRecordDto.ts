@@ -1,5 +1,4 @@
 import {University} from "../../models/LocationModels/Universities";
-import {Country} from "../../models/LocationModels/Country";
 import {City} from "../../models/LocationModels/Cities";
 import {TeammateRatingDto} from "./TeammateRatingDto";
 

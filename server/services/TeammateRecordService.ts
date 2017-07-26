@@ -1,13 +1,13 @@
 import {BaseService} from "./BaseService";
 import {ITeammateRecordRepository} from "../repositories/TeammateRecordRepository";
-import {TeammateRecordDto} from "../dtos/rating/TeamateDto";
+import {TeammateRecordDto} from "../dtos/rating/TeammateRecordDto";
 import {TeammateRecord} from "../models/TeammateRecord";
 import {SearchTeammateDto} from "../dtos/rating/SearchTeammateDto";
 import {User} from "../models/User";
 import {TeammateRatingDto} from "../dtos/rating/TeammateRatingDto";
 import {TeammatePreviewDto} from "../dtos/rating/TeammatePreviewDto";
 import {AppError} from "../errors/AppError";
-import {ClientError, HttpStatus} from "../errors/HttpStatus";
+import {ClientError} from "../errors/HttpStatus";
 
 export interface ITeammateRecordService {
     createTeammateRecordRepo (teammateRecord: TeammateRecordDto, currentUser?: User): Promise<TeammateRecordDto>;
