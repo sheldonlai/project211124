@@ -8,14 +8,15 @@ import {IAnswerService} from "../services/AnswerService";
 
 export class AnswerAPI extends BaseAPI{
 	private service : IAnswerService;
-
-	constructor(router: Router, service: IAnswerService){
+	public router: Router;
+	constructor(service: IAnswerService){
 		super();
+		this.router = Router();
 		this.service = service;
-		router.post(APIUrls.CreateAnswer, mustBeAuthenticated, this.CreateAnswer);
-		router.put(APIUrls.UpdateAnswer, mustBeAuthenticated, this.UpdateAnswer);
-		router.put(APIUrls.UpVoteAnswer, mustBeAuthenticated, this.UpVoteAnswer);
-		router.put(APIUrls.DownVoteAnswer, mustBeAuthenticated, this.DownVoteAnswer);
+        this.router.post(APIUrls.CreateAnswer, mustBeAuthenticated, this.CreateAnswer);
+        this.router.put(APIUrls.UpdateAnswer, mustBeAuthenticated, this.UpdateAnswer);
+        this.router.put(APIUrls.UpVoteAnswer, mustBeAuthenticated, this.UpVoteAnswer);
+        this.router.put(APIUrls.DownVoteAnswer, mustBeAuthenticated, this.DownVoteAnswer);
 	}
 
 	public CreateAnswer = (req: AuthRequest, res: Response, next: NextFunction) => {

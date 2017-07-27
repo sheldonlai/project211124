@@ -8,12 +8,12 @@ import {AuthRequest, mustBeAuthenticated} from "../middlewares/AuthMiddleware";
 export class UserAPI extends BaseAPI {
 
     private service : IUserService;
-
-    constructor(router: Router,
-                service: IUserService) {
+    public router: Router;
+    constructor(service: IUserService) {
         super();
+        this.router = Router();
         this.service = service;
-        router.put(APIUrls.updateProfile, mustBeAuthenticated, this.updateProfile);
+        this.router.put(APIUrls.updateProfile, mustBeAuthenticated, this.updateProfile);
 
     }
 

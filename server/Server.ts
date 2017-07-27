@@ -21,6 +21,7 @@ import {loadUniversityData} from "./scripts/UniversityCsvLoader";
 import {LocationAPI} from "./routes/LocationAPI";
 import {UserAPI} from "./routes/UserAPI";
 import {TeammateRatingAPI} from "./routes/TeammateRatingAPI";
+import {BaseAPI} from "./routes/BaseAPI";
 
 export class Server {
     public app: express.Application;
@@ -83,26 +84,25 @@ export class Server {
 
 
     private api() {
-        let router = express.Router();
+        let routes : BaseAPI[] = [];
 
-        /* Home */
-        new HomeAPI(router);
-        /* QuestionHomeComponent */
-        new QuestionAPI(router, ServiceProvider.QuestionService);
-        /* Authentication */
-        new AuthenticationAPI(router, ServiceProvider.AuthenticationService);
-        /* File Upload */
-        new FileUploadAPI(router, ServiceProvider.FileSystemService);
+        routes.push(new HomeAPI());
 
-        new AnswerAPI(router, ServiceProvider.AnswerService);
+        routes.push(new QuestionAPI(ServiceProvider.QuestionService));
 
-        new LocationAPI(router, ServiceProvider.LocationService);
+        routes.push(new AuthenticationAPI(ServiceProvider.AuthenticationService));
 
-        new UserAPI(router, ServiceProvider.UserService);
+        routes.push(new FileUploadAPI(ServiceProvider.FileSystemService));
 
-        new TeammateRatingAPI(router, ServiceProvider.TeammateRecordService);
+        routes.push(new AnswerAPI(ServiceProvider.AnswerService));
 
-        this.app.use('/api', router);
+        routes.push(new LocationAPI(ServiceProvider.LocationService));
+
+        routes.push(new UserAPI(ServiceProvider.UserService));
+
+        routes.push(new TeammateRatingAPI(ServiceProvider.TeammateRecordService));
+
+        routes.forEach((route) => this.app.use('/api',route.router));
     }
 
     private checkAndInsertUniversityData() {

@@ -6,14 +6,13 @@ import {ILocationService} from "../services/LocationService";
 export class LocationAPI extends BaseAPI {
 
     private service : ILocationService;
-
-    constructor(router: Router,
-                service: ILocationService) {
+    public router: Router;
+    constructor(service: ILocationService) {
         super();
+        this.router = Router();
         this.service = service;
-        router.get(APIUrls.getCountries, this.getCountries)
-        router.get(APIUrls.getUniversitiesByCountry, this.getUniversitiesByCountry);
-
+        this.router.get(APIUrls.getCountries, this.getCountries)
+        this.router.get(APIUrls.getUniversitiesByCountry, this.getUniversitiesByCountry);
     }
 
     public getCountries = (req: Request, res: Response, next: NextFunction) => {

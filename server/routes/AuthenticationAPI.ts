@@ -11,14 +11,15 @@ import {LoginDto} from "../dtos/auth/LoginDto";
 export class AuthenticationAPI extends BaseAPI {
 
     private service : IAuthenticationService;
+    public router: Router;
 
-    constructor(router: Router, service: IAuthenticationService) {
+    constructor(service: IAuthenticationService) {
         super();
+        this.router = Router();
         this.service = service;
-        router.post(APIUrls.Login, this.login);
-        router.post(APIUrls.Register, this.register);
-        router.get(APIUrls.Verify, this.verify);
-
+        this.router.post(APIUrls.Login, this.login);
+        this.router.post(APIUrls.Register, this.register);
+        this.router.get(APIUrls.Verify, this.verify);
     }
 
     public register = (req: Request, res: Response, next: NextFunction) => {

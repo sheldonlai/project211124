@@ -14,12 +14,13 @@ export class FileUploadAPI extends BaseAPI {
 
     private readonly FILE_UPLOAD_NAME = "files";
     private service : IFileSystemService;
-
-    constructor(router: Router,
+    public router: Router;
+    constructor(
                 service: IFileSystemService) {
         super();
         this.service = service;
-        router.post(APIUrls.Upload, this.storeFileInMemory , this.saveFiles);
+        this.router = Router();
+        this.router.post(APIUrls.Upload, this.storeFileInMemory , this.saveFiles);
 
     }
 

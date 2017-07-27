@@ -10,16 +10,16 @@ import {TeammateRatingDto} from "../dtos/rating/TeammateRatingDto";
 export class TeammateRatingAPI extends BaseAPI {
 
     private service : ITeammateRecordService;
-
-    constructor(router: Router,
-                service: ITeammateRecordService) {
+    public router: Router;
+    constructor(service: ITeammateRecordService) {
         super();
+        this.router = Router();
         this.service = service;
-        router.post(APIUrls.createTeammateRecord, mustBeAuthenticated, this.createTeammateRecord);
-        router.get(APIUrls.getTeammateRecordPreview, maybeAuthenticated, this.getTeammateRecordPreview);
-        router.get(APIUrls.getTeammateRecord, this.getTeammateRecord);
-        router.post(APIUrls.addRating, mustBeAuthenticated, this.addTeammateRating);
-        router.put(APIUrls.editRating, mustBeAuthenticated, this.editTeammateRating);
+        this.router.post(APIUrls.createTeammateRecord, mustBeAuthenticated, this.createTeammateRecord);
+        this.router.get(APIUrls.getTeammateRecordPreview, maybeAuthenticated, this.getTeammateRecordPreview);
+        this.router.get(APIUrls.getTeammateRecord, this.getTeammateRecord);
+        this.router.post(APIUrls.addRating, mustBeAuthenticated, this.addTeammateRating);
+        this.router.put(APIUrls.editRating, mustBeAuthenticated, this.editTeammateRating);
 
     }
 

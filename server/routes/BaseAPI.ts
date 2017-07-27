@@ -1,6 +1,8 @@
-import {NextFunction, Response} from "express";
+import {NextFunction, Response, Router} from "express";
 
 export abstract class BaseAPI {
+
+    public router: Router;
 
     respondPromise(result: Promise<any>, res: Response, next: NextFunction) {
         result.then(function(object) {

@@ -39,7 +39,6 @@ const schema = new Schema({
     university: {type: Schema.Types.ObjectId, ref: "university"},
     city: {type: Schema.Types.ObjectId, ref: "city"},
     description: {type: String},
-    createdAt: {type: Date, default: Date.now()},
     ratings: [
         {
             rating: {type: Number, max: 5, min: 0},
@@ -49,6 +48,8 @@ const schema = new Schema({
             updatedAt: {type: Date, default: Date.now()}
         }
     ]
+},{
+    timestamps: true
 });
 
 const autoPopulateUsers = function(next) {

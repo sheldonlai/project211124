@@ -9,17 +9,18 @@ import {User} from "../models/User";
 export class QuestionAPI extends BaseAPI {
 
     private service : IQuestionService;
-
-    constructor(router: Router, service: IQuestionService) {
+    public router : Router;
+    constructor(service: IQuestionService) {
         super();
+        this.router = Router();
         this.service = service;
-        router.get(APIUrls.QuestionPreviews, maybeAuthenticated, this.getQuestionPreviews);
-        router.post(APIUrls.CreateQuestion, mustBeAuthenticated, this.createQuestion);
-        router.get(APIUrls.GetQuestionPage, maybeAuthenticated, this.getQuestion);
-        router.put(APIUrls.UpdateQuestion, mustBeAuthenticated, this.updateQuestion);
-        router.put(APIUrls.UpVoteQuestion, mustBeAuthenticated, this.upVoteQuestion);
-        router.put(APIUrls.DownVoteQuestion, mustBeAuthenticated, this.downVoteQuestion);
-        router.put(APIUrls.CreateComment, mustBeAuthenticated, this.createComment)
+        this.router.get(APIUrls.QuestionPreviews, maybeAuthenticated, this.getQuestionPreviews);
+        this.router.post(APIUrls.CreateQuestion, mustBeAuthenticated, this.createQuestion);
+        this.router.get(APIUrls.GetQuestionPage, maybeAuthenticated, this.getQuestion);
+        this.router.put(APIUrls.UpdateQuestion, mustBeAuthenticated, this.updateQuestion);
+        this.router.put(APIUrls.UpVoteQuestion, mustBeAuthenticated, this.upVoteQuestion);
+        this.router.put(APIUrls.DownVoteQuestion, mustBeAuthenticated, this.downVoteQuestion);
+        this.router.put(APIUrls.CreateComment, mustBeAuthenticated, this.createComment)
     }
 
     public getQuestionPreviews = (req: AuthRequest, res: Response, next: NextFunction) => {

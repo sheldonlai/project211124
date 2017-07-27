@@ -1,7 +1,7 @@
 import * as React from "react";
 import {connect} from "react-redux";
 import Grid from "material-ui/Grid";
-
+import Button from "material-ui/Button";
 // TODO
 
 export class RatingHomeViewComponent extends React.Component<any> {
@@ -13,7 +13,7 @@ export class RatingHomeViewComponent extends React.Component<any> {
                     </Grid>
                     <Grid item xs={12} md={8} lg={6}>
                         <div>
-                            
+                            <Button raised>Create A Teammate Record</Button>
                         </div>
                     </Grid>
                 </Grid>
