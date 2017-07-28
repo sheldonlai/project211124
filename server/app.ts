@@ -35,6 +35,6 @@ if (cluster.isMaster && !devMode ) {
     server.listen(port, function () {
         let host = server.address().address;
         let port = server.address().port;
-        console.log('This express app is listening on port:' + port);
+        console.log('This express app is listening on' + port);
     });
 }

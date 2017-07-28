@@ -6,11 +6,11 @@ import {createRawDraftContentState} from "../../utils/TestUtils";
 import {TestDatabase} from "./helpers/TestDatabase";
 import {UserQuestionVote, UserQuestionVoteModel} from "../../models/UserQuestionVote";
 import {TagModel} from "../../models/Tags";
+import {CountryModel} from "../../models/LocationModels/Country";
 
 let questionRepo: IQuestionRepository = new QuestionRepository();
 
 describe('QuestionRepoTest', function () {
-
     let fakeModels = new FakeModels();
     const testDatabase = new TestDatabase();
 

@@ -18,7 +18,9 @@ export class QuestionRepository extends BaseRepository<Question, IQuestion> impl
     create(question: Question): Promise<Question> {
         delete question.createdUtc;
         delete question.lastEditedUtc;
-        return super.create(question);
+        return super.create(question).then((question: Question) => {
+            return this.getById(question._id);
+        });
     }
 
     update(question: Question): Promise<Question> {

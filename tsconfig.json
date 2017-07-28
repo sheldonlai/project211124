@@ -9,7 +9,8 @@
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
     "removeComments": true,
-    "outDir": "./dist"
+    "outDir": "./dist",
+    "noImplicitReturns": true
   },
   "exclude": [
     "./node_modules",

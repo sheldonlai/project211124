@@ -23,12 +23,16 @@ export class AnswerRepository extends BaseRepository<Answer, IAnswer> implements
 
     create(answer: Answer): Promise<Answer> {
         delete answer.lastEditedUtc;
-        return super.create(answer);
+        return super.create(answer).then((answer) => {
+            return this.getById(answer._id);
+        });
     }
 
     update(answer: Answer): Promise<Answer> {
         delete answer.lastEditedUtc;
-        return super.update(answer);
+        return super.update(answer).then((answer) => {
+            return this.getById(answer._id);
+        });
     }
 
     findOneAndUpdateVoteAnswer(userAnswerVote: UserAnswerVote): Promise<Answer> {
