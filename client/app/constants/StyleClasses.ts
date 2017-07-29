@@ -1,0 +1,1 @@
+export const EmailInputStyles = { autoCorrect:"off", autoCapitalize:"off", spellCheck:"false"};

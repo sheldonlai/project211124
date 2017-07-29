@@ -72,6 +72,7 @@ export class CommentsComponent extends React.Component<CommentsComponentProps, C
                 </p>
             )
         }
+        return undefined;
     }
 
     renderInputCommentBox() {
@@ -89,6 +90,7 @@ export class CommentsComponent extends React.Component<CommentsComponentProps, C
                 </div>
             )
         }
+        return undefined;
     };
 
     DeleteComment = (indx: number) => {
@@ -101,8 +103,7 @@ export class CommentsComponent extends React.Component<CommentsComponentProps, C
             return(
                 this.props.comments[indx].commentContent
             );
-        }
-        else if(indx == this.state.EditCommentIndx){
+        } else if(indx == this.state.EditCommentIndx){
             return(
             <div>
             <p>
@@ -112,6 +113,7 @@ export class CommentsComponent extends React.Component<CommentsComponentProps, C
             </div>
             )
         }
+        return undefined;
     };
 
     EditAndSaveButton = (indx: number) => {

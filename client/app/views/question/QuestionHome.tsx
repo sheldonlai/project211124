@@ -14,6 +14,7 @@ import {FrontEndQuestionModels} from "../../models/QuestionModels";
 import {QuestionPreviewCardsComponent} from "./subcomponents/QuestionPreviewCardsComponent";
 import Grid from "material-ui/Grid";
 import QuestionPreview = FrontEndQuestionModels.QuestionPreview;
+import {LoadingScreen} from "../../components/LoadingScreen";
 
 export interface QuestionViewProps extends QuestionHomeReducerState {
     loggedIn: boolean;
@@ -34,8 +35,11 @@ class QuestionHomeComponent extends Component<QuestionViewProps> {
     };
 
     render() {
+        if (this.props.featuredQuestions.length == 0){
+            return <LoadingScreen/>
+        }
         return (
-            <Grid container justify="flex-end" style={{width: "100%"}}>
+            <Grid container justify="flex-end" style={{width: "100%"}} gutter={0}>
                 <Grid>{this.createQuestionButton()}</Grid>
                 <QuestionPreviewCardsComponent list={this.props.featuredQuestions} />
             </Grid>

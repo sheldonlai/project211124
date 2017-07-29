@@ -1,5 +1,5 @@
 import * as React from "react";
-import {MuiThemeProvider} from "material-ui/styles";
+import {MuiThemeProvider, createMuiTheme} from "material-ui/styles";
 import createPalette from "material-ui/styles/palette";
 import {Route, Router} from "react-router";
 import {Home} from "./home/home";
@@ -16,17 +16,15 @@ import TransitionGroup =require('react-transition-group/TransitionGroup');
 import {ErrorSnackBar} from "./ErrorView";
 import {ServiceHomeView} from "./services/ServiceHome";
 import {UserProfileView} from "./profile/UserProfileView";
-import {RatingHomeView} from "./rate/RatingHomeView";
-// import {lightBlue, green} from "material-ui/styles/colors";
-// let muiTheme = createMuiTheme({
-//     palette: createPalette({
-//         primary: lightBlue,
-//         accent: {
-//             ...green,
-//             A400: '#00e677',
-//         },
-//     })
-// });
+import {RatingHomeView} from "./rating/RatingHomeView";
+import {deepOrange, blueGrey} from "material-ui/colors";
+import {CreateTeammateView} from "./rating/CreateTeammateView";
+let muiTheme = createMuiTheme({
+    palette: createPalette({
+        primary: deepOrange,
+        accent: blueGrey
+    })
+});
 
 const firstChild = props => {
     const childrenArray = React.Children.toArray(props.children);
@@ -36,7 +34,7 @@ const firstChild = props => {
 export class App extends React.Component<any, any> {
     render() {
         return (
-            <MuiThemeProvider>
+            <MuiThemeProvider theme={muiTheme}>
                 <Provider store={this.props.store}>
                     <Router history={RouterController.history}>
                         <div>
@@ -104,6 +102,14 @@ export class App extends React.Component<any, any> {
                                        </TransitionGroup>
                                    )}
                             />
+                            <Route path={Routes.create_teammate_record}
+                                   render={({match, ...rest}) => (
+                                       <TransitionGroup component={firstChild}>
+                                           <CreateTeammateView match={match} {...rest} />
+                                       </TransitionGroup>
+                                   )}
+                            />
+
                         </div>
                     </Router>
                 </Provider>

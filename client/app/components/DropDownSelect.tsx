@@ -57,8 +57,9 @@ export class DropDownSelect extends React.Component<props, state> {
         this.setState({open: false});
     };
 
-    bodyContainer = (text: string) => {
-      return <Typography type="body1">{text}</Typography>
+    bodyContainer = (text: string, color?: string) => {
+        color = color? color: "default";
+      return <Typography type="body1" color={color}>{text}</Typography>
     };
 
     render() {
@@ -85,7 +86,7 @@ export class DropDownSelect extends React.Component<props, state> {
                     {this.props.data.map((data) => (
                         <MenuItem key={typeof data.value === "object"? data.value._id : data.value}
                                   onClick={() => this.onSelectValue(data.value)} style={style}>
-                            {this.bodyContainer(data.text)}
+                            {this.bodyContainer(data.text, selected.value == data.value? "accent": undefined)}
                         </MenuItem>
                     ))}
                 </Menu>

@@ -1,16 +1,17 @@
 import * as React from "react";
 import {Component, CSSProperties} from "react";
 import Button from 'material-ui/Button';
-import {Link} from "react-router-dom";
 import {Routes} from "../constants/Routes";
 import {AuthActions} from "../actions/AuthActions";
 import {connect} from "react-redux";
 import {AppStoreState} from "../stores/AppStore";
 import {ReducerStateStatus} from "../constants/ReducerStateStatus";
-import {RouteProps, RouterProps} from "react-router";
+import {RouterProps} from "react-router";
 import {CustomLink} from "../components/CustomLink";
-import {ButtonData, ButtonMenu} from "../components/ButtonMenu";
+import AppBar from 'material-ui/AppBar';
 import {UserDto} from "../../../server/dtos/auth/UserDto";
+import Typography from 'material-ui/Typography';
+import Toolbar from 'material-ui/Toolbar';
 
 const menuButtonStyle : CSSProperties= {
     height: "50px",
@@ -61,23 +62,26 @@ class MenuClass extends Component<MenuClassProps> {
 
     render() {
         return (
-            <div className="menu">
-                <ul>
-                    <li>
-                        <Link to={Routes.home}>
+            <AppBar position="static" className="menu">
+                <Toolbar>
+                    <div style={{flex: 1}}>
+                        <CustomLink to={Routes.home}>
                             <Button color="contrast" style={menuButtonStyle}>
-                                ASKALOT
+                                <Typography type="title" color="inherit">
+                                    Askalot
+                                </Typography>
                             </Button>
-                        </Link>
+                        </CustomLink>
                         {this.button("Questions", Routes.question)}
                         {this.button("Services", Routes.services)}
                         {this.button("RateMyTeammate", Routes.rate_my_teammate)}
-                    </li>
-                </ul>
-                <div id="login-menu">
-                    {this.buttons()}
-                </div>
-            </div>
+                    </div>
+                    <div style={{float: "left"}}>
+                        {this.buttons()}
+                    </div>
+
+                </Toolbar>
+            </AppBar>
         )
     }
 }

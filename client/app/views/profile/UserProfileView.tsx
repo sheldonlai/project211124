@@ -19,6 +19,7 @@ import {RouterProps} from "react-router";
 import {Routes} from "../../constants/Routes";
 import {UserActions} from "../../actions/UserActions";
 import {CSSProperties} from "react";
+import {EmailInputStyles} from "../../constants/StyleClasses";
 
 interface state {
     error: string;
@@ -67,7 +68,7 @@ export class UserProfileComponent extends React.Component<StateToProps & Dispatc
     render() {
         const countries = this.props.countries.map(country => ({text: country.name, value: country}));
         const universities = this.props.universities.map(uni => ({text: uni.name, value: uni}));
-        const emailInputStyles = { autoCorrect:"off", autoCapitalize:"off", spellCheck:"false"};
+        const emailInputStyles = EmailInputStyles;
         return (
             <div style={{padding: 10}}>
                 <Grid container justify="center" direction="row-reverse">
