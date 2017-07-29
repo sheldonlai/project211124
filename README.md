@@ -1,7 +1,7 @@
 # Project Askalot
 
 ### Objective:
-To simplify learning in universities by allow students to share different topics and guides with each other.
+To simplify learning in universities by allowing students to share different topics and guides with each other.
 ### Build:
 Make sure npm and node is installed.
 1. Go to root directory and type:\
