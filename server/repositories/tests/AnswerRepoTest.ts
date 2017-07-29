@@ -27,7 +27,8 @@ describe('AnswerRepoTest', function () {
         let tag = await TagModel.findOne({tag: "AnswerRepoTest"});
         if (!tag)
             tag = await TagModel.create({tag: "AnswerRepoTest"});
-        sampleUser = await UserModel.create(new FakeModels().localUser());
+        await UserModel.remove({username: {$regex: "AnswerRepoTest", $options: "i"}});
+        sampleUser = await UserModel.create(new FakeModels().localUser("AnswerRepoTest"));
         let newQuestion = new Question(
             'AnswerRepoTest',
             createRawDraftContentState(),
@@ -43,7 +44,9 @@ describe('AnswerRepoTest', function () {
         sampleQuestion = await QuestionModel.create(newQuestion);
     });
 
-    afterAll(function () {
+    afterAll(async function () {
+        await UserModel.remove({username: {$regex: "AnswerRepoTest", $options: "i"}});
+        await QuestionModel.remove({_id : sampleQuestion.id});
         return testDatabase.disconnect();
     });
 
