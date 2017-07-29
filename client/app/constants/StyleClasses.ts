@@ -1,1 +1,1 @@
-export const EmailInputStyles = { autoCorrect:"off", autoCapitalize:"off", spellCheck:"false"};
+export const EmailNameInputStyles = { autoCorrect:"off", autoCapitalize:"off", spellCheck:"false"};

@@ -12,7 +12,7 @@ import {AppStoreState} from "../../stores/AppStore";
 import AnimatedWrapper from "../../components/AnimatedWrapper";
 import {FrontEndAuthModels} from "../../models/AuthModels";
 import RegistrationRequest = FrontEndAuthModels.RegistrationRequest;
-import {EmailInputStyles} from "../../constants/StyleClasses";
+import {EmailNameInputStyles} from "../../constants/StyleClasses";
 
 export interface RegistrationViewState {
     error : string;
@@ -82,7 +82,7 @@ export class RegistrationView extends Component<RegistrationViewProps, Registrat
                 <TextField
                     label="Email"
                     onChange={this.updateEmail}
-                    inputProps={EmailInputStyles}
+                    inputProps={EmailNameInputStyles}
                 /><br/>
                 <TextField
                     label="Username"

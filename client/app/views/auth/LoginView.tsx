@@ -11,7 +11,7 @@ import {AppStoreState} from "../../stores/AppStore";
 import AnimatedWrapper from "../../components/AnimatedWrapper";
 import {FrontEndAuthModels} from "../../models/AuthModels";
 import LoginRequest = FrontEndAuthModels.LoginRequest;
-import {EmailInputStyles} from "../../constants/StyleClasses";
+import {EmailNameInputStyles} from "../../constants/StyleClasses";
 
 export interface LoginViewState {
     loginRequest: LoginRequest;
@@ -48,7 +48,7 @@ export class LoginView extends Component<any, any> {
                 <TextField
                     label="email"
                     onChange={this.updateEmail}
-                    inputProps={EmailInputStyles}
+                    inputProps={EmailNameInputStyles}
                 /><br/>
                 <TextField
                     label="password"
