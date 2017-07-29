@@ -5,6 +5,7 @@ import {PublicityStatus} from "../enums/PublicityStatus";
 import {DifficultyLevel, QuestionEducationLevel} from "../enums/QuestionEducationLevel";
 import {listNumericalEnumValues} from "../utils/EnumsUtil";
 import {RawDraftContentState} from "draft-js";
+import {Tag} from "./Tags";
 
 
 export class QuestionComment {
@@ -29,7 +30,7 @@ export class Question extends BaseModel {
     title: string;
     content: RawDraftContentState;
     author: User;
-    tags: any[];
+    tags: Tag[];
     upVotes: number;
     downVotes: number;
     isPublished: boolean;

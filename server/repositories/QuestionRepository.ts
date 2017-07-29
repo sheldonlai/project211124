@@ -2,6 +2,9 @@ import {IQuestion, Question, QuestionComment, QuestionModel} from "../models/Que
 import {BaseRepository, IBaseRepository} from "./BaseRepository";
 import {IUser, User} from "../models/User";
 import {UserQuestionVote, UserQuestionVoteModel} from "../models/UserQuestionVote";
+import {isNullOrUndefined} from "util";
+import {AppError} from "../errors/AppError";
+import {ClientError} from "../errors/HttpStatus";
 
 export interface IQuestionRepository extends IBaseRepository<Question> {
     getQuestionsByAuthor(user: User): Promise<Question[]>;
@@ -65,6 +68,9 @@ export class QuestionRepository extends BaseRepository<Question, IQuestion> impl
     }
 
     protected applyAdditionalFunction(question: Question): Promise<Question> {
+        if (isNullOrUndefined(question)){
+            throw new AppError("Cannot find the specified question", ClientError.BAD_REQUEST)
+        }
         return UserQuestionVoteModel.find({question: question}).lean().exec()
             .then((userVote: UserQuestionVote[]) => {
                 const upVote = userVote.filter((userVote) => userVote.upVote == true).length;

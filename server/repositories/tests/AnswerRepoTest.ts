@@ -1,3 +1,5 @@
+import {TagModel} from "../../models/Tags";
+import {CountryModel} from "../../models/LocationModels/Country"
 import {Question, QuestionComment, QuestionModel} from "../../models/Question";
 import {UserModel} from "../../models/User";
 import {AnswerRepository} from "../AnswerRepository";
@@ -5,8 +7,8 @@ import {Answer, AnswerModel} from "../../models/Answer";
 import {FakeModels} from "./helpers/FakeModels";
 import {createRawDraftContentState} from "../../utils/TestUtils";
 import {TestDatabase} from "./helpers/TestDatabase";
+import {UniversityModel} from "../../models/LocationModels/Universities";
 
-require('source-map-support').install();
 
 let ansRepo = new AnswerRepository();
 
@@ -16,36 +18,33 @@ describe('AnswerRepoTest', function () {
     let sampleQuestion;
     const testDatabase = new TestDatabase();
 
-    beforeAll(function () {
-        return testDatabase.connect()
-            .then(function () {
-                return UserModel.create(new FakeModels().localUser())
-            }).then(function (user) {
-                sampleUser = user;
-                let newQuestion = new Question(
-                    'AnswerRepoTest',
-                    createRawDraftContentState(),
-                    user,
-                    [],
-                    false
-                );
-                return QuestionModel.create(newQuestion);
-            }).then(function (question) {
-                sampleQuestion = question;
-                return;
-            });
+    beforeAll(async function () {
+        await testDatabase.connect();
+
+        // load the model such that the User model will not complain
+        let loadModels = {TagModel, CountryModel, UniversityModel};
+
+        let tag = await TagModel.findOne({tag: "AnswerRepoTest"});
+        if (!tag)
+            tag = await TagModel.create({tag: "AnswerRepoTest"});
+        sampleUser = await UserModel.create(new FakeModels().localUser());
+        let newQuestion = new Question(
+            'AnswerRepoTest',
+            createRawDraftContentState(),
+            sampleUser,
+            [tag],
+            false
+        );
+        let oldQuestion = await QuestionModel.findOne({title : newQuestion.title});
+        if (oldQuestion){
+            await AnswerModel.remove({question: oldQuestion.id});
+            await QuestionModel.remove({_id : oldQuestion.id});
+        }
+        sampleQuestion = await QuestionModel.create(newQuestion);
     });
 
     afterAll(function () {
         return testDatabase.disconnect();
-    });
-
-    beforeEach(function () {
-        return AnswerModel.remove({}).then(function () {
-            return QuestionModel.remove({title : {$ne: sampleQuestion.title}});
-        }).then(function () {
-            return UserModel.remove({name: {$ne: sampleUser.name}})
-        })
     });
 
     it('should create new Answer', function () {
@@ -90,8 +89,8 @@ describe('AnswerRepoTest', function () {
             }).then(function (answer) {
                 expect(answer.content).toBeDefined();
                 expect(answer.comments.length).toBe(1);
-                expect(answer.upVotes).toBe(200);
-                expect(answer.downVotes).toBe(100);
+                expect(answer.upVotes).not.toBe(200);
+                expect(answer.downVotes).not.toBe(100);
                 return;
             })
     })

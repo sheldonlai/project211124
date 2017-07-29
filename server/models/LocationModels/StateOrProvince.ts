@@ -18,4 +18,4 @@ export const schema = new Schema({
 });
 // name + country should be unique
 
-export const CountryModel = model<IStateOrProvince>('stateOrProvince', schema);
+export const StateOrProvinceModel = model<IStateOrProvince>('stateOrProvince', schema);

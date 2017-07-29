@@ -11,7 +11,7 @@ export class AppError extends Error{
     constructor(message: string, status?: HttpStatus) {
         super(message);
         this.name = 'AppError'; // this needs to be changed
-        this.status = ServerError.INTERNAL_SERVER_ERROR;
+        this.status = status? status: ServerError.INTERNAL_SERVER_ERROR;
     }
 
 }
