@@ -8,6 +8,7 @@ import Paper from "material-ui/Paper";
 import {EmailNameInputStyles} from "../../constants/StyleClasses";
 import TextField from "material-ui/TextField";
 import {TeammateRecordDto} from "../../../../server/dtos/rating/TeammateRecordDto";
+import {TeammateLocationEditor} from "./subcomponents/TeammateLocationEditor";
 
 interface state extends TeammateRecordDto {
     showDesHint: boolean;
@@ -30,7 +31,7 @@ export class CreateTeammateViewComponent extends React.Component<any, state> {
     }
 
     render() {
-        const textFieldMargin : CSSProperties = {
+        const textFieldMargin: CSSProperties = {
             marginBottom: 10
         };
         return (
@@ -76,6 +77,11 @@ export class CreateTeammateViewComponent extends React.Component<any, state> {
                                     onChange={(event) => this.setState({description: event.target.value})}
                                     style={textFieldMargin}
                                 /><br/>
+                                <TeammateLocationEditor
+                                    academicInfo={this.state.academicInfo}
+                                    city={this.state.city}
+                                    onAcademicChange={(academicInfo) => this.setState({academicInfo})}
+                                />
                                 <Grid container justify="flex-end">
                                     <Grid item>
                                         <Button style={{margin: "10px 0px"}}>

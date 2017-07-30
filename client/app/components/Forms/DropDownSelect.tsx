@@ -10,6 +10,7 @@ interface props {
     value: any;
     placeholder?: string;
     onChange?: (element: any) => void;
+    fullWidth? : boolean;
 }
 
 export interface DropDownSelectData {
@@ -67,13 +68,18 @@ export class DropDownSelect extends React.Component<props, state> {
         let filter = this.props.data.filter((data) => JSON.stringify(data.value) == JSON.stringify(this.props.value));
         let selected = filter.length ? filter[0] : undefined;
         const placeholder = this.props.placeholder ? this.props.placeholder : "";
-        const style = defaultStyles;
+        let menuItemStyle = defaultStyles;
+        let containerStyle: CSSProperties = {margin: "10px 0", width: 200};
+        if (this.props.fullWidth === true) {
+            menuItemStyle.width = "100%";
+            containerStyle.width = "100%";
+        }
         const border: CSSProperties = {borderBottom: "lightgrey 1px solid"};
         return (
-            <div style={{margin: "10px 0"}}>
+            <div style={containerStyle}>
                 {placeholder && selected && <Typography type="caption">{placeholder}</Typography>}
-                <div style={{height: style.height}}>
-                    <Button style={{...style, ...border, textTransform: "none", paddingLeft: 0, fontWeight: 400}}
+                <div style={{height: menuItemStyle.height}}>
+                    <Button style={{...menuItemStyle, ...border, textTransform: "none", paddingLeft: 0, fontWeight: 400}}
                             onClick={this.handleClick}>
                         {selected ? this.bodyContainer(selected.text) : this.bodyContainer("Select " + placeholder)}
                     </Button>
@@ -85,12 +91,12 @@ export class DropDownSelect extends React.Component<props, state> {
                     open={this.state.open}
                     onRequestClose={this.handleRequestClose}
                 >
-                    <MenuItem onClick={() => this.onSelectValue(undefined)} style={style}>
+                    <MenuItem onClick={() => this.onSelectValue(undefined)} style={menuItemStyle}>
                         {this.bodyContainer("Select " + placeholder)}
                     </MenuItem>
                     {this.props.data.map((data) => (
                         <MenuItem key={typeof data.value === "object" ? data.value._id : data.value}
-                                  onClick={() => this.onSelectValue(data.value)} style={style}>
+                                  onClick={() => this.onSelectValue(data.value)} style={menuItemStyle}>
                             {this.bodyContainer(data.text,
                                 selected && selected.value == data.value ? "accent" : undefined)}
                         </MenuItem>

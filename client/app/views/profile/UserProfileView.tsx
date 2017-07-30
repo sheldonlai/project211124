@@ -20,6 +20,7 @@ import {Routes} from "../../constants/Routes";
 import {UserActions} from "../../actions/UserActions";
 import {EmailNameInputStyles} from "../../constants/StyleClasses";
 import {isNullOrUndefined} from "util";
+import {UniversitiesMap} from "../../reducers/LocationDataReducer";
 
 interface state {
     error: string;
@@ -76,7 +77,15 @@ export class UserProfileComponent extends React.Component<StateToProps & Dispatc
 
     render() {
         const countries = this.props.countries.map(country => ({text: country.name, value: country}));
-        const universities = this.props.universities.map(uni => ({text: uni.name, value: uni}));
+        let universities = [];
+        if (
+            this.state.user && this.state.user.country &&
+            this.props.universitiesMap.hasOwnProperty(this.state.user.country.name)
+        ){
+            universities = this.props.universitiesMap[this.state.user.country.name]
+                .map(uni => ({text: uni.name, value: uni}));
+        }
+
         return (
             <div style={{padding: 10}}>
                 <Grid container justify="center" direction="row-reverse">
@@ -85,13 +94,12 @@ export class UserProfileComponent extends React.Component<StateToProps & Dispatc
                     <Grid item xs={12} md={8} lg={6}>
                         <Paper style={{width: "100%", padding: "50px 20px"}}>
                             <Grid container justify="center">
-                                <Grid item>
+                                <Grid item xs={10}>
                                     <Typography type="display1" gutterBottom>Profile</Typography>
                                     <ErrorView errorTxt={this.state.error}/>
                                     <TextField
                                         value={this.state.user.email}
                                         label="Email"
-                                        fullWidth
                                         inputProps={EmailNameInputStyles}
                                     /><br/>
                                     <TextField
@@ -116,6 +124,7 @@ export class UserProfileComponent extends React.Component<StateToProps & Dispatc
                                             data={universities}
                                             value={this.state.user.university}
                                             placeholder="university"
+                                            fullWidth={true}
                                             onChange={(uni)=> this.updateUserField("university", uni)}
                                         />
                                     }
@@ -133,8 +142,7 @@ interface StateToProps {
     loggedIn: boolean;
     user: UserDto;
     countries: CountryDto[];
-    universities: UniversityDto[];
-    selectedCountry: CountryDto;
+    universitiesMap: UniversitiesMap;
 }
 interface DispatchToProps {
     fetchCountries : () => void
@@ -145,8 +153,7 @@ const mapStateToProps = (state: AppStoreState): StateToProps => ({
     loggedIn: state.auth.loggedIn,
     user: state.auth.user,
     countries: state.locationData.countries,
-    universities: state.locationData.universities,
-    selectedCountry: state.locationData.selectedCountry
+    universitiesMap: state.locationData.universitiesMap,
 
 });
 const mapDispatchToProps = (dispatch): DispatchToProps => ({

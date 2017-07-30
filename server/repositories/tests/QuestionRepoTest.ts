@@ -140,7 +140,7 @@ describe('QuestionRepoTest', function () {
         );
         let question = await questionRepo.create(newQuestion);
         await questionRepo.deleteById(question._id);
-        let tryFind = await questionRepo.getById(question._id).catch((err: AppError) => {
+        await questionRepo.getById(question._id).catch((err: AppError) => {
             expect(err).toBeDefined();
             expect(err.status.code).toBe(400);
         })

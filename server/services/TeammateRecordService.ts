@@ -10,7 +10,7 @@ import {AppError} from "../errors/AppError";
 import {ClientError} from "../errors/HttpStatus";
 
 export interface ITeammateRecordService {
-    createTeammateRecordRepo (teammateRecord: TeammateRecordDto, currentUser?: User): Promise<TeammateRecordDto>;
+    createTeammateRecordRepo (teammateRecord: TeammateRecordDto, currentUser: User): Promise<TeammateRecordDto>;
 
     getRecentTeammateRecordPreview (currentUser?: User): Promise<TeammatePreviewDto[]>;
 
@@ -27,16 +27,18 @@ export class TeammateRecordService extends BaseService implements ITeammateRecor
         super();
     }
 
-    createTeammateRecordRepo(teammateRecord: TeammateRecordDto): Promise<TeammateRecordDto> {
+    createTeammateRecordRepo(teammateRecord: TeammateRecordDto, currentUser: User): Promise<TeammateRecordDto> {
         const record = new TeammateRecord(
             teammateRecord.firstName,
             teammateRecord.lastName,
             teammateRecord.description,
+            currentUser,
             teammateRecord.academicInfo,
             teammateRecord.city,
         );
         return this.teammateRecordRepo.create(record);
     }
+
 
     searchTeammateRecord(teammateSearchOption: SearchTeammateDto, currentUser?: User): Promise<TeammateRecordDto[]> {
         let searchOptions: any = {

@@ -8,8 +8,7 @@ import {listNumericalEnumValues} from "../utils/EnumsUtil";
 
 export interface AcademicInfo {
     university: University,
-    year: UniversityYearEnum,
-    _id?: string
+    year: UniversityYearEnum
 }
 
 export class TeammateRecord extends BaseModel{
@@ -27,6 +26,7 @@ export class TeammateRecord extends BaseModel{
         public firstName: string,
         public lastName: string,
         public description: string,
+        public createdBy: User,
         public academicInfo?: AcademicInfo,
         public city?: City,
     ){
@@ -48,6 +48,7 @@ const schema = new Schema({
     },
     city: {type: Schema.Types.ObjectId, ref: "city"},
     description: {type: String},
+    createdBy: {type: Schema.Types.ObjectId, ref: "user", required: true},
     ratings: [
         {
             rating: {type: Number, max: 5, min: 0},
@@ -62,7 +63,7 @@ const schema = new Schema({
 });
 
 const autoPopulateUsers = function(next) {
-    this.populate(["ratings.commentBy"]);
+    this.populate(["createdBy", "ratings.commentBy", "academicInfo.university"]);
     next();
 };
 
