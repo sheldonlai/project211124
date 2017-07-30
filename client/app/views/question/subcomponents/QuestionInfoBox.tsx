@@ -10,13 +10,11 @@ import {DifficultyLevel, QuestionEducationLevel} from "../../../../../server/enu
 import {QuestionActions} from "../../../actions/QuestionActions";
 import {QuestionDifficultyMenu} from "./QuestionDifficultyMenu";
 import {QuestionDifficulty} from "../../../../../server/models/Question";
-import Button from "material-ui/Button";
 import {UserDto} from "../../../../../server/dtos/auth/UserDto";
-import QuestionPreview = FrontEndQuestionModels.QuestionPreview;
-import Question = FrontEndQuestionModels.Question;
-import {DropDownSelect} from "../../../components/DropDownSelect";
-import cloneQuestion = FrontEndQuestionModels.cloneQuestion;
+import {DropDownSelect} from "../../../components/Forms/DropDownSelect";
 import {QuestionEditorReducerState} from "../../../reducers/QuestionEditorReducer";
+import Question = FrontEndQuestionModels.Question;
+import cloneQuestion = FrontEndQuestionModels.cloneQuestion;
 
 interface stateToProps {
     question: Question;
@@ -65,19 +63,21 @@ export class QuestionInfoBox extends React.Component<props, {}> {
 
     saveChanges = () => {
         this.props.editQuestion(this.props.questionEditorState);
-    }
+    };
 
     view = () => {
         const question = this.props.question;
         return (
             <div>
                 {this.row("type", convertEnumStringToViewString(PublicityStatus[question.publicityStatus]))}
-                {this.row("level", convertEnumStringToViewString(QuestionEducationLevel[question.difficulty.educationLevel]))}
+                {this.row("level",
+                    convertEnumStringToViewString(QuestionEducationLevel[question.difficulty.educationLevel]))}
                 {question.difficulty.educationLevel != QuestionEducationLevel.NOT_SPECIFIED &&
-                this.row("difficulty", convertEnumStringToViewString(DifficultyLevel[question.difficulty.difficultyLevel]))}
+                this.row("difficulty",
+                    convertEnumStringToViewString(DifficultyLevel[question.difficulty.difficultyLevel]))}
             </div>
         )
-    }
+    };
     editor = () => {
         const question = this.props.question;
         return (
@@ -92,7 +92,7 @@ export class QuestionInfoBox extends React.Component<props, {}> {
                                         difficulty={this.props.questionEditorState.difficulty} />
             </div>
         );
-    }
+    };
 
     render() {
 

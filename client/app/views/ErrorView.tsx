@@ -20,7 +20,7 @@ export class ErrorComponent extends React.Component<ErrorComponentProps, any>{
 
     handleRequestClose = () => {
         this.props.removeError();
-    }
+    };
 
     render () {
         if (this.props.errors.length < 1){

@@ -1,10 +1,10 @@
 import * as React from "react";
-import Button from "material-ui/Button";
-import Typography from "material-ui/Typography";
 import {CSSProperties} from "react";
+import Button from "material-ui/Button";
 import TextField from "material-ui/TextField";
 import {isNullOrUndefined} from "util";
 import Grid from "material-ui/Grid";
+
 interface props {
     label: string;
     value: string;
@@ -22,18 +22,21 @@ export class OptionalTextFieldEditor extends React.Component<props> {
         return (
             <Grid container style={containerStyle} justify="center" align="center" gutter={0} direction="row">
                 <Grid item>
-                {
-                    (isNullOrUndefined(this.props.value))?
-                        <Button style={{width:"100%", padding: "0"}} onClick={()=> this.props.onChange("")}>Add {this.props.label}</Button>
-                        :
-                        <div>
-                            <TextField
-                                value={this.props.value}
-                                label={this.props.label}
-                                onChange={this.onChange}
-                            />
-                        </div>
-                }
+                    {
+                        (
+                            isNullOrUndefined(this.props.value)) ?
+                            <Button style={{width: "100%", padding: "0"}} onClick={() => this.props.onChange("")}>
+                                Add {this.props.label}
+                            </Button>
+                            :
+                            <div>
+                                <TextField
+                                    value={this.props.value}
+                                    label={this.props.label}
+                                    onChange={this.onChange}
+                                />
+                            </div>
+                    }
                 </Grid>
             </Grid>
         );

@@ -1,9 +1,10 @@
 import * as React from 'react';
+import {CSSProperties} from 'react';
 import Menu, {MenuItem} from 'material-ui/Menu';
-import List, {ListItem, ListItemText} from 'material-ui/List';
+import {ListItem, ListItemText} from 'material-ui/List';
 import Button from "material-ui/Button";
 import Typography from 'material-ui/Typography';
-import {CSSProperties} from "react";
+
 interface props {
     data: DropDownSelectData[];
     value: any;
@@ -63,7 +64,8 @@ export class DropDownSelect extends React.Component<props, state> {
     };
 
     render() {
-        const selected = this.props.data.filter((data) => JSON.stringify(data.value) == JSON.stringify(this.props.value))[0];
+        const selected = this.props.data.filter((data) =>
+            JSON.stringify(data.value) == JSON.stringify(this.props.value))[0];
         const placeholder = this.props.placeholder ? this.props.placeholder : "";
         const style = defaultStyles;
         const border: CSSProperties = {borderBottom: "lightgrey 1px solid"};

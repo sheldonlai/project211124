@@ -59,7 +59,7 @@ describe('QuestionRepoTest', function () {
         );
         // should not be able to change last edited
         newQuestion.lastEditedUtc = dateTime;
-        let question = await questionRepo.create(newQuestion)
+        let question = await questionRepo.create(newQuestion);
         expect(question._id).toBeDefined();
         expect(question.content).toBeDefined();
         expect(question.title).toBe('QuestionRepoTest1');

@@ -3,22 +3,21 @@ import * as React from "react";
 import {connect} from "react-redux";
 import {AppStoreState} from "../../stores/AppStore";
 import {UserDto} from "../../../../server/dtos/auth/UserDto";
-import AnimatedWrapper from "../../components/AnimatedWrapper";
+import AnimatedWrapper from "../../components/Animations/AnimatedWrapper";
 import Grid from "material-ui/Grid";
 import Paper from "material-ui/Paper";
 import TextField from "material-ui/TextField";
 import {ErrorView} from "../../components/ErrorView";
 import Button from "material-ui/Button";
-import {OptionalTextFieldEditor} from "../../components/OptionalTextFieldEditor";
+import {OptionalTextFieldEditor} from "../../components/Forms/OptionalTextFieldEditor";
 import Typography from "material-ui/Typography";
 import {LocationActions} from "../../actions/LocationActions";
-import {DropDownSelect} from "../../components/DropDownSelect";
+import {DropDownSelect} from "../../components/Forms/DropDownSelect";
 import {CountryDto} from "../../../../server/dtos/location/CountryDto";
 import {UniversityDto} from "../../../../server/dtos/location/UniversityDto";
 import {RouterProps} from "react-router";
 import {Routes} from "../../constants/Routes";
 import {UserActions} from "../../actions/UserActions";
-import {CSSProperties} from "react";
 import {EmailNameInputStyles} from "../../constants/StyleClasses";
 
 interface state {
@@ -61,14 +60,13 @@ export class UserProfileComponent extends React.Component<StateToProps & Dispatc
     };
 
     updateCountry = (value) => {
-        this.updateUserField("country", value)
+        this.updateUserField("country", value);
         this.props.getUniversities(value._id);
     };
 
     render() {
         const countries = this.props.countries.map(country => ({text: country.name, value: country}));
         const universities = this.props.universities.map(uni => ({text: uni.name, value: uni}));
-        const emailInputStyles = EmailNameInputStyles;
         return (
             <div style={{padding: 10}}>
                 <Grid container justify="center" direction="row-reverse">
@@ -84,7 +82,7 @@ export class UserProfileComponent extends React.Component<StateToProps & Dispatc
                                         value={this.state.user.email}
                                         label="Email"
                                         fullWidth
-                                        inputProps={emailInputStyles}
+                                        inputProps={EmailNameInputStyles}
                                     /><br/>
                                     <TextField
                                         value={this.state.user.username}

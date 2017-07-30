@@ -6,15 +6,13 @@ import {AppStoreState} from "../../stores/AppStore";
 import {QuestionActions} from "../../actions/QuestionActions";
 import {QuestionHomeReducerState} from "../../reducers/QuestionHomeReducer";
 import {ErrorReducerState} from "../../reducers/ErrorReducer";
-import AnimatedWrapper from "../../components/AnimatedWrapper";
+import AnimatedWrapper from "../../components/Animations/AnimatedWrapper";
 import {Card, CardActions, CardHeader, CardMedia, CardText, CardTitle} from "material-ui/Card";
 import {CustomLink} from "../../components/CustomLink";
 import Button from "material-ui/Button";
-import {FrontEndQuestionModels} from "../../models/QuestionModels";
 import {QuestionPreviewCardsComponent} from "./subcomponents/QuestionPreviewCardsComponent";
 import Grid from "material-ui/Grid";
-import QuestionPreview = FrontEndQuestionModels.QuestionPreview;
-import {LoadingScreen} from "../../components/LoadingScreen";
+import {LoadingScreen} from "../../components/Animations/LoadingScreen";
 
 export interface QuestionViewProps extends QuestionHomeReducerState {
     loggedIn: boolean;

@@ -10,9 +10,9 @@ export class SocketIOController {
 
     setup(){
 
-        this.io.on('connection', this.onConnection)
+        this.io.on('connection', this.onConnection);
 
-        this.io.on('connect', this.onConnect)
+        this.io.on('connect', this.onConnect);
 
         this.io.on('load-older-messages', this.onLoadOlderMessages);
     }
@@ -22,7 +22,7 @@ export class SocketIOController {
         }).catch((err)=> {
             //error handling
         })
-    }
+    };
 
     onConnect = (socket : SocketIO.Socket)=> {
         this.checkPermission(socket.handshake.headers).then(()=>  {
@@ -30,7 +30,7 @@ export class SocketIOController {
         }).catch((err)=> {
             //error handling
         })
-    }
+    };
 
     onLoadOlderMessages = (socket : SocketIO.Socket)=> {
         this.checkPermission(socket.handshake.headers).then(()=>  {
@@ -38,7 +38,7 @@ export class SocketIOController {
         }).catch((err)=> {
             //error handling
         })
-    }
+    };
 
 
     checkPermission(headers : Headers) : Promise<User>{

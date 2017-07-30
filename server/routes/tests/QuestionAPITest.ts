@@ -19,7 +19,7 @@ describe('question api test', function () {
 
     beforeAll(async function () {
         try {
-            server = await TestApiServer.bootstrap([new QuestionAPI(ServiceProvider.QuestionService)])
+            server = await TestApiServer.bootstrap([new QuestionAPI(ServiceProvider.QuestionService)]);
             client.setBaseUrl("http://localhost:" + server.port);
             await QuestionModel.remove({title: {"$regex": "question_api_test", "$options": "i"}});
             await UserModel.remove({username: "question_api_test"});

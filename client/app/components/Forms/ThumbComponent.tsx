@@ -1,5 +1,4 @@
 import * as React from "react";
-import Button from "material-ui/Button";
 import IconButton from "material-ui/IconButton";
 import Icon from 'material-ui/Icon';
 

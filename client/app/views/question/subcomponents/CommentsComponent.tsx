@@ -73,7 +73,7 @@ export class CommentsComponent extends React.Component<CommentsComponentProps, C
             )
         }
         return undefined;
-    }
+    };
 
     renderInputCommentBox() {
         if (this.state.inputMode) {

@@ -9,7 +9,7 @@ import {CommonController} from "../../api.controllers/CommonController";
 import {Routes} from "../../constants/Routes";
 import {RouterController} from "../../api.controllers/RouterController";
 import {AppStoreState} from "../../stores/AppStore";
-import AnimatedWrapper from "../../components/AnimatedWrapper";
+import AnimatedWrapper from "../../components/Animations/AnimatedWrapper";
 import {FrontEndAuthModels} from "../../models/AuthModels";
 import RegistrationRequest = FrontEndAuthModels.RegistrationRequest;
 import {EmailNameInputStyles} from "../../constants/StyleClasses";

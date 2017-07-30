@@ -5,7 +5,7 @@ import {RepeatPatternEnum} from "../enums/RepeatPatternEnum";
 export interface RepeatPattern {
     type: RepeatPatternEnum;
     gap: number;
-};
+}
 
 export class Notice {
     recipient: any;

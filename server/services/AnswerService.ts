@@ -36,7 +36,7 @@ export class AnswerService extends BaseService implements IAnswerService {
         return this.answerRepository.getById(updatedAnswer._id).then((answerFound: Answer) => {
             this.checkPermissionForModification(updatedAnswer, answerFound, currentUser);
 
-            answerFound.content = updatedAnswer.content
+            answerFound.content = updatedAnswer.content;
             answerFound.lastEditedUtc = new Date(Date.now());
 
             return this.answerRepository.update(answerFound)

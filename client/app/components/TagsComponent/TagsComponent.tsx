@@ -1,19 +1,16 @@
 import * as React from 'react';
-import PropTypes from 'prop-types';
-import { withStyles, createStyleSheet } from 'material-ui/styles';
-import Chip from 'material-ui/Chip';
-import {Component} from "react";
+import {Component} from 'react';
+import {createStyleSheet, withStyles} from 'material-ui/styles';
 import Grid from "material-ui/Grid";
 import TextField from "material-ui/TextField";
-import {ChipListComponent} from "../ChipListComponent";
+import {ChipListComponent} from "../Forms/ChipListComponent";
 
 export interface TagsSelectorProps {
-    tags?: string[]; // used for sugguestions
+    tags?: string[]; // used for suggestion
     selectedTags: string[];
     onChange: (tags: string[]) => void;
 }
 export interface TagsSelectorState {
-     // use for sugguestions
     tag: string;
 }
 export class TagsSelector extends Component<TagsSelectorProps, TagsSelectorState> {
@@ -50,7 +47,7 @@ export class TagsSelector extends Component<TagsSelectorProps, TagsSelectorState
 
     test = (array) => {
         this.props.onChange(array)
-    }
+    };
 
     render() {
         return (

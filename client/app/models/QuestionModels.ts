@@ -95,13 +95,13 @@ export namespace FrontEndQuestionModels {
         clone = mapFieldsOnToObject(clone, original);
         clone.content = EditorState.createWithContent(clone.content.getCurrentContent());
         return clone;
-    }
+    };
 
     export const cloneAnswers = (answers: Answer[]) => {
         return answers.length > 0 ? answers.map(ans => {
             return cloneAnswer(ans);
         }) : []
-    }
+    };
 
     export const cloneQuestionPage = (obj: QuestionPage) => {
         let clone = new QuestionPage();

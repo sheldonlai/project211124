@@ -51,7 +51,7 @@ export class CustomEditor extends React.Component<CustomEditorProps> {
     onEditorClick = () => {
         const editor: Editor = this.refs.editor as any;
         editor.focus();
-    }
+    };
 
     render() {
         let modifiedStyle = {...style};

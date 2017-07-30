@@ -82,7 +82,7 @@ export class AnswerBoxComponent extends Component<AnswerBoxComponentProps & disp
 const mapDispatchToProps = (dispatch) => ({
     upVote: (answer: Answer) => dispatch(AnswerActions.upVoteAnswer(answer)),
     downVote: (answer: Answer) => dispatch(AnswerActions.downVoteAnswer(answer)),
-})
+});
 
 export const AnswerBoxView = connect<void, dispatch, AnswerBoxComponentProps>(
     undefined,

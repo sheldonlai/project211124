@@ -5,4 +5,4 @@
 
 export const Config = {
     tokenKey : 'token'
-}
+};

@@ -1,9 +1,6 @@
 import * as React from "react";
-import Button from "material-ui/Button";
-import IconButton from "material-ui/IconButton";
-import Icon from 'material-ui/Icon';
 import {UserDto} from "../../../../../server/dtos/auth/UserDto";
-import {ThumbComponent} from "../../../components/ThumbComponent";
+import {ThumbComponent} from "../../../components/Forms/ThumbComponent";
 
 interface props {
     onUpVote: () => void;
@@ -20,7 +17,7 @@ export class FooterComponent extends React.Component<props> {
     render() {
         let question = {
             upVotes: 0
-        }
+        };
         return (
             <div>
                 <ThumbComponent

@@ -25,15 +25,14 @@ export class AnswerAPI extends BaseAPI{
 		let result = this.service.createAnswer(user, answer);
 
 		this.respondPromise(result, res, next);
-	;}
-
-	public UpdateAnswer = (req: AuthRequest, res: Response, next: NextFunction) => {
+    };
+    public UpdateAnswer = (req: AuthRequest, res: Response, next: NextFunction) => {
 		let answer : AnswerDto = req.body;
 		let user : User = req.user;
 		let result = this.service.updateAnswer(user, answer);
 
 		this.respondPromise(result, res, next);
-	}
+	};
 
 	public UpVoteAnswer = (req: AuthRequest, res: Response, next: NextFunction) => {
 		let answer : AnswerDto = req.body;
@@ -41,7 +40,7 @@ export class AnswerAPI extends BaseAPI{
 		let result = this.service.upVoteAnswer(user, answer._id);
 
 		this.respondPromise(result, res, next);
-	}
+	};
 
 	public DownVoteAnswer = (req: AuthRequest, res: Response, next: NextFunction) => {
 		let answer : AnswerDto = req.body;

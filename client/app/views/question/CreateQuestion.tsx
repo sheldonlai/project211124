@@ -1,16 +1,14 @@
 import * as React from "react";
+import {Component} from "react";
 import {MenuItem} from "material-ui/Menu";
 import TextField from "material-ui/TextField";
 import Button from "material-ui/Button";
 import {connect} from "react-redux";
 import {QuestionActions} from "../../actions/QuestionActions";
-import {LoginRequiredComponent} from "../../components/LoginRequiredComponent";
 import {PublicityStatus} from "../../../../server/enums/PublicityStatus";
 import {QuestionDifficulty} from "../../../../server/models/Question";
 import {AppStoreState} from "../../stores/AppStore";
-import {QuestionCreationDto} from "../../../../server/dtos/q&a/QuestionCreationDto";
-import {DifficultyLevel, QuestionEducationLevel} from "../../../../server/enums/QuestionEducationLevel";
-import AnimatedWrapper from "../../components/AnimatedWrapper";
+import AnimatedWrapper from "../../components/Animations/AnimatedWrapper";
 import {CustomEditor} from "../../components/CustomEditor/CustomEditor";
 import {EditorState} from "draft-js";
 import {FrontEndQuestionModels} from "../../models/QuestionModels";
@@ -18,13 +16,12 @@ import Grid from "material-ui/Grid";
 import {createStyleSheet, withStyles} from "material-ui/styles";
 import {TagsSelector} from "../../components/TagsComponent/TagsComponent";
 import Typography from "material-ui/Typography";
-import {DropDownSelect} from "../../components/DropDownSelect";
-import {getDropDownDataFromNumericalEnum, getDropDownDataFromStringEnum} from "../../utils/utils";
-import Question = FrontEndQuestionModels.Question;
+import {DropDownSelect} from "../../components/Forms/DropDownSelect";
+import {getDropDownDataFromStringEnum} from "../../utils/utils";
 import {QuestionDifficultyMenu} from "./subcomponents/QuestionDifficultyMenu";
-import {Component} from "react";
 import {RouterProps} from "react-router";
 import {Routes} from "../../constants/Routes";
+import Question = FrontEndQuestionModels.Question;
 
 
 export interface CreateQuestionState {
@@ -93,7 +90,8 @@ class CreateQuestion extends Component<props, Question> {
     difficultyMenu = () => {
         return (
             <Grid item xs={12}>
-                <QuestionDifficultyMenu difficulty={this.state.difficulty} onDifficultyChange={this.onDifficultyChange}/>
+                <QuestionDifficultyMenu difficulty={this.state.difficulty}
+                                        onDifficultyChange={this.onDifficultyChange}/>
             </Grid>
         )
     };

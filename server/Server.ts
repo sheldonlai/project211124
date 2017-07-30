@@ -35,10 +35,10 @@ export class Server {
         this.config = (custom_config)? custom_config : config;
         //create expressJS application
         this.app = express();
-        //configure applicationwebpakc
+        //configure application
         this.configure();
         if (this.config.database.initialize)
-            this.checkAndInsertUniversityData();
+            this.checkAndInsertUniversityData().then();
     }
 
     private configure(): void {
@@ -107,7 +107,7 @@ export class Server {
 
     private checkAndInsertUniversityData() {
         // helper function load static data in for the first time
-        loadUniversityData();
+        return loadUniversityData();
     }
 
     private errorHandler(err : AppError, req : Request, res : Response, next: NextFunction) {

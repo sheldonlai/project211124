@@ -1,5 +1,5 @@
 import * as React from "react";
-import {DropDownSelect} from "../../../components/DropDownSelect";
+import {DropDownSelect} from "../../../components/Forms/DropDownSelect";
 import {DifficultyLevel, QuestionEducationLevel} from "../../../../../server/enums/QuestionEducationLevel";
 import {getDropDownDataFromNumericalEnum, getDropDownDataFromStringEnum} from "../../../utils/utils";
 import {QuestionDifficulty} from "../../../../../server/models/Question";

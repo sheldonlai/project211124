@@ -11,7 +11,7 @@ export class LocationAPI extends BaseAPI {
         super();
         this.router = Router();
         this.service = service;
-        this.router.get(APIUrls.getCountries, this.getCountries)
+        this.router.get(APIUrls.getCountries, this.getCountries);
         this.router.get(APIUrls.getUniversitiesByCountry, this.getUniversitiesByCountry);
     }
 

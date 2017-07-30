@@ -28,7 +28,7 @@ export class TestApiServer {
                 fulfill(server);
                 console.log("server has started");
             })
-        })
+        });
         return new TestApiServer(server, testDatabase);
     };
 

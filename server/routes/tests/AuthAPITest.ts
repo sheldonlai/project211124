@@ -32,7 +32,7 @@ describe('login api test', function () {
                 username: 'login_api_test',
                 password: 'okay',
             };
-            let res: UserDto = await client.post(APIUrls.Register, user)
+            let res: UserDto = await client.post(APIUrls.Register, user);
             expect(res.username).toBe(user.username);
             expect(res.email).toBe(user.email);
             expect((<any>res).password).toBeUndefined();

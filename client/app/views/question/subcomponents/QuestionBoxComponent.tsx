@@ -2,7 +2,7 @@ import * as React from "react";
 import {Component} from "react";
 import {FrontEndQuestionModels} from "../../../models/QuestionModels";
 import {EditableMultiPurposeHeader} from "../../../components/Headers/EditableMultiPurposeHeader";
-import {ChipListComponent} from "../../../components/ChipListComponent";
+import {ChipListComponent} from "../../../components/Forms/ChipListComponent";
 import Divider from "material-ui/Divider";
 import {QAEditorComponent} from "./Q&AEditorComponent";
 import {UserDto} from "../../../../../server/dtos/auth/UserDto";
@@ -59,20 +59,20 @@ export class QuestionBoxComponent extends Component<props, {}> {
         this.props.changeQuestionEditorState({edit: this.props.edit, question});
         // TODO : Create edit/create comment actions
         this.onSubmit();
-    }
+    };
 
     resetQuestion = () => {
         let question = cloneQuestion(this.props.question);
         this.props.changeQuestionEditorState({edit: false, question});
-    }
+    };
 
     upVote = () => {
         this.props.upVoteQuestion(this.props.question);
-    }
+    };
 
     downVote = () => {
         this.props.downVoteQuestion(this.props.question);
-    }
+    };
 
     onSubmit = () => {
         this.props.editQuestion(this.props.questionEditorState);
@@ -137,7 +137,7 @@ const mapStateToProps = (state: AppStoreState) => ({
     question: state.questionPage.questionPage.question,
     questionEditorState: state.questionEditorState.question,
     edit: state.questionEditorState.edit
-})
+});
 const mapDispatchToProps = (dispatch): DispatchProps => ({
     upVoteQuestion: (question: Question) => dispatch(QuestionActions.upVoteQuestion(question)),
     downVoteQuestion: (question: Question) => dispatch(QuestionActions.downVoteQuestion(question)),

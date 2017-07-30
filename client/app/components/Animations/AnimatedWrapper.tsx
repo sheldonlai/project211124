@@ -1,7 +1,6 @@
 import * as React from "react";
-import * as Animated from "animated/lib/targets/react-dom";
-import TransitionGroup from "react-transition-group/TransitionGroup";
 import {Component} from "react";
+import * as Animated from "animated/lib/targets/react-dom";
 
 const AnimatedWrapper = WrappedComponent => class AnimatedWrapper extends Component<any, any> {
     constructor(props) {

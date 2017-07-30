@@ -23,7 +23,7 @@ export const mustBeAuthenticated = function (req: Request, res: Response, next: 
     } catch (err) {
         next(new AppError(err.message, ClientError.UNAUTHORIZED));
     }
-}
+};
 
 export const maybeAuthenticated = function (req: Request, res: Response, next: NextFunction) {
     try {
@@ -36,4 +36,4 @@ export const maybeAuthenticated = function (req: Request, res: Response, next: N
     } catch (err) {
         next();
     }
-}
+};

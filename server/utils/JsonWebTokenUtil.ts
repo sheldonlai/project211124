@@ -5,7 +5,7 @@ import {AppError} from "../errors/AppError";
 
 export const generateToken = (payload: User) => {
     return sign(payload, config.jwt.secretKey);
-}
+};
 
 export const verifyToken = (token: string) : User => {
     try {
@@ -13,4 +13,4 @@ export const verifyToken = (token: string) : User => {
     } catch (err){
         throw new AppError('Invalid token')
     }
-}
+};

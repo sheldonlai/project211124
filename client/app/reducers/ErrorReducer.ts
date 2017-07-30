@@ -18,7 +18,7 @@ const initialState : ErrorReducerState = {
 export const ErrorReducer = (state = initialState, action) : ErrorReducerState => {
     switch (action.type) {
         case ErrorActionTypes.ADD_ERROR:
-            state.errors.push({message: action.data, time: Date.now()})
+            state.errors.push({message: action.data, time: Date.now()});
             return {
                 errors : state.errors
             };

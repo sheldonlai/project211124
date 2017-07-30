@@ -8,7 +8,7 @@ import {Routes} from "../../constants/Routes";
 import {FormWrapper} from "../../components/FormWrapper";
 import {connect} from "react-redux";
 import {AppStoreState} from "../../stores/AppStore";
-import AnimatedWrapper from "../../components/AnimatedWrapper";
+import AnimatedWrapper from "../../components/Animations/AnimatedWrapper";
 import {FrontEndAuthModels} from "../../models/AuthModels";
 import LoginRequest = FrontEndAuthModels.LoginRequest;
 import {EmailNameInputStyles} from "../../constants/StyleClasses";

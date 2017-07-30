@@ -79,7 +79,7 @@ export class AnswerBoxesComponent extends Component<props, AnswerBoxesComponentS
         } else {
             this.props.addAnswer(answer);
         }
-    }
+    };
 
     render() {
         return (

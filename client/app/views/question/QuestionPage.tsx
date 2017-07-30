@@ -10,7 +10,7 @@ import {ReducerStateStatus} from "../../constants/ReducerStateStatus";
 import Grid from "material-ui/Grid";
 import {QuestionInfoBoxView} from "./subcomponents/QuestionInfoBox";
 import Hidden from 'material-ui/Hidden';
-import {LoadingScreen} from "../../components/LoadingScreen";
+import {LoadingScreen} from "../../components/Animations/LoadingScreen";
 import {CSSTransitionGroup} from "react-transition-group";
 interface QuestionPageProps extends StateToProps, DispatchToProps, RouteComponentProps<{ id: string }> {
 }

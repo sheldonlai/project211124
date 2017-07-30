@@ -23,7 +23,7 @@ describe('BaseServiceTest', function () {
         };
         testService.mapKeysOntoObject(obj, dict);
         expect(obj).toEqual(dict);
-    })
+    });
 
     test('should not map extra field into object', function () {
         let obj = {
@@ -45,7 +45,7 @@ describe('BaseServiceTest', function () {
             b: 200,
             c: 300,
             d: 400,
-        }
+        };
         expect(obj).toEqual(expected);
     })
 });

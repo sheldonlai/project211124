@@ -33,7 +33,7 @@ export class QuestionActions extends BaseActions {
                 dispatch({
                     type: QuestionActionTypes.QuestionCreated,
                     data: res.data
-                })
+                });
                 RouterController.history.push(Routes.question);
             }).catch(err =>
                 QuestionActions.handleError(dispatch, err, QuestionActionTypes.CreateQuestionError)

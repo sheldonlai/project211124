@@ -1,9 +1,8 @@
 import * as React from 'react';
+import {CSSProperties} from 'react';
 import Menu, {MenuItem} from 'material-ui/Menu';
-import List, {ListItem, ListItemText} from 'material-ui/List';
+import {ListItem, ListItemText} from 'material-ui/List';
 import Button from "material-ui/Button";
-import Typography from 'material-ui/Typography';
-import {CSSProperties} from "react";
 
 interface props {
     buttons: ButtonData[];
@@ -59,7 +58,7 @@ export class ButtonMenu extends React.Component<props, any> {
                         style={style}>
                     {defaultButton.text}
                 </Button>
-                <div ref="menuPlaceHolder" style={{height: 0, marginTop: 20, left: -16}}></div>
+                <div ref="menuPlaceHolder" style={{height: 0, marginTop: 20, left: -16}}/>
                 <Menu
                     MenuListProps={{style: {padding: 0}}}
                     anchorEl={this.state.anchorEl}
