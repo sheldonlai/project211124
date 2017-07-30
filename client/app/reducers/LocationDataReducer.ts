@@ -6,7 +6,6 @@ import {LocationActionTypes} from "../constants/LocationActionTypes";
 export interface LocationDataReducerState {
     status : ReducerStateStatus;
     countries: CountryDto[];
-    universities: UniversityDto[];
     universitiesMap : UniversitiesMap;
 }
 
@@ -17,7 +16,6 @@ export interface UniversitiesMap {
 const initialState : LocationDataReducerState = {
     status : ReducerStateStatus.NONE,
     countries: [],
-    universities: [],
     universitiesMap: {}
 };
 
@@ -42,7 +40,6 @@ export const LocationDataReducer = (state = initialState, action) : LocationData
             let unis : UniversityDto[] = action.data;
             state = {...state};
             state.status = ReducerStateStatus.DONE;
-            state.universities = unis;
             if (unis.length > 0){
                 state.universitiesMap = {...state.universitiesMap};
                 state.universitiesMap[unis[0].country.name] = unis;

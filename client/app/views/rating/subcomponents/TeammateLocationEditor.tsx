@@ -9,6 +9,8 @@ import {CountryDto} from "../../../../../server/dtos/location/CountryDto";
 import {UniversityYearEnum} from "../../../../../server/enums/UniversityYearEnum";
 import {LocationActions} from "../../../actions/LocationActions";
 import {isNullOrUndefined} from "util";
+import {convertEnumStringToViewString, listNumericalEnumValues} from "../../../utils/utils";
+import {UniversitiesMap} from "../../../reducers/LocationDataReducer";
 
 
 interface props {
@@ -54,24 +56,42 @@ class TeammateLocationEditorComponent extends React.Component<combinedProps, sta
 
     };
 
+    updateCountry = (country) => {
+
+        if (isNullOrUndefined(country)){
+            this.props.onAcademicChange(undefined);
+            this.setState({country});
+            return;
+        }
+        this.setState({country});
+        if (!this.props.universitiesMap.hasOwnProperty(country.name)){
+            this.props.fetchUniversities(country._id);
+        }
+
+    };
+
     render() {
         const countries = this.props.countries.map(country => ({text: country.name, value: country}));
-        const universities = this.props.universities.map(uni => ({text: uni.name, value: uni}));
-        const years = Object.keys(UniversityYearEnum).filter((e) => typeof e ==="number")
+        const years = listNumericalEnumValues(UniversityYearEnum)
             .map((e): DropDownSelectData => {
                 return {
-                    text: UniversityYearEnum[e],
+                    text: convertEnumStringToViewString(UniversityYearEnum[e]),
                     value: e
                 };
             });
         const academicInfo = this.props.academicInfo;
+        let universities = [];
+        if (this.state.country && this.props.universitiesMap.hasOwnProperty(this.state.country.name)){
+            universities = this.props.universitiesMap[this.state.country.name]
+                .map(uni => ({text: uni.name, value: uni}));
+        }
         return (
             <div>
                 <DropDownSelect
                     data={countries}
                     value={this.state.country}
                     placeholder="Country"
-                    onChange={(country) => this.setState({country})}
+                    onChange={this.updateCountry}
                 />
                 {
                     this.state.country &&
@@ -94,22 +114,25 @@ class TeammateLocationEditorComponent extends React.Component<combinedProps, sta
         )
     }
 }
+
 interface stateToProps {
     countries: CountryDto[];
-    universities: UniversityDto[];
+    universitiesMap: UniversitiesMap;
 }
+
 const mapStateToProps = (state: AppStoreState): stateToProps => ({
     countries: state.locationData.countries,
-    universities : state.locationData.universities
+    universitiesMap : state.locationData.universitiesMap
 });
+
 interface DispatchToProps {
     fetchCountries : () => void;
-    getUniversities : (countryId: string) => void;
+    fetchUniversities : (countryId: string) => void;
 }
 
 const mapDispatchToProps = (dispatch): DispatchToProps => ({
     fetchCountries : () => dispatch(LocationActions.getCounties()),
-    getUniversities : (countryId) =>dispatch(LocationActions.getUniversities(countryId))
+    fetchUniversities : (countryId) =>dispatch(LocationActions.getUniversities(countryId))
 });
 export const TeammateLocationEditor = connect<stateToProps, DispatchToProps, props>(
     mapStateToProps,
