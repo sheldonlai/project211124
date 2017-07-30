@@ -58,7 +58,6 @@ interface stateToProps {
 }
 const mapStateToProps = (state: AppStoreState): stateToProps => ({
     countries: state.locationData.countries,
-    country: state.locationData.selectedCountry,
     universities : state.locationData.universities
 });
 export const TeammateLocationEditor = connect<stateToProps, {}, props>(
