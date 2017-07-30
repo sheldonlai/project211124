@@ -19,6 +19,7 @@ import {RouterProps} from "react-router";
 import {Routes} from "../../constants/Routes";
 import {UserActions} from "../../actions/UserActions";
 import {EmailNameInputStyles} from "../../constants/StyleClasses";
+import {isNullOrUndefined} from "util";
 
 interface state {
     error: string;
@@ -60,8 +61,17 @@ export class UserProfileComponent extends React.Component<StateToProps & Dispatc
     };
 
     updateCountry = (value) => {
-        this.updateUserField("country", value);
-        this.props.getUniversities(value._id);
+        if (JSON.stringify(this.state.user.country) != JSON.stringify(value)) {
+            let user = {...this.state.user};
+            user.country = value;
+            user.university = undefined;
+            this.setState({user});
+            if (!isNullOrUndefined(value)){
+                // TODO: should optimize keep a uni map with all loaded data
+                this.props.getUniversities(value._id);
+            }
+
+        }
     };
 
     render() {

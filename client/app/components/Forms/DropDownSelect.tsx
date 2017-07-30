@@ -41,7 +41,7 @@ export class DropDownSelect extends React.Component<props, state> {
 
     button = undefined;
 
-    componentWillReceiveProps(nextProps){
+    componentWillReceiveProps(nextProps) {
     }
 
     handleClick = (event) => {
@@ -59,13 +59,13 @@ export class DropDownSelect extends React.Component<props, state> {
     };
 
     bodyContainer = (text: string, color?: string) => {
-        color = color? color: "default";
-      return <Typography type="body1" color={color}>{text}</Typography>
+        color = color ? color : "default";
+        return <Typography type="body1" color={color}>{text}</Typography>
     };
 
     render() {
-        const selected = this.props.data.filter((data) =>
-            JSON.stringify(data.value) == JSON.stringify(this.props.value))[0];
+        let filter = this.props.data.filter((data) => JSON.stringify(data.value) == JSON.stringify(this.props.value));
+        let selected = filter.length ? filter[0] : undefined;
         const placeholder = this.props.placeholder ? this.props.placeholder : "";
         const style = defaultStyles;
         const border: CSSProperties = {borderBottom: "lightgrey 1px solid"};
@@ -78,17 +78,21 @@ export class DropDownSelect extends React.Component<props, state> {
                         {selected ? this.bodyContainer(selected.text) : this.bodyContainer("Select " + placeholder)}
                     </Button>
                 </div>
-                <div ref="menuPlaceHolder" style={{height: 0, marginTop: 20, position: "fixed"}} />
+                <div ref="menuPlaceHolder" style={{height: 0, marginTop: 20, position: "fixed"}}/>
                 <Menu
                     MenuListProps={{style: {padding: 0}}}
                     anchorEl={this.state.anchorEl}
                     open={this.state.open}
                     onRequestClose={this.handleRequestClose}
                 >
+                    <MenuItem onClick={() => this.onSelectValue(undefined)} style={style}>
+                        {this.bodyContainer("Select " + placeholder)}
+                    </MenuItem>
                     {this.props.data.map((data) => (
-                        <MenuItem key={typeof data.value === "object"? data.value._id : data.value}
+                        <MenuItem key={typeof data.value === "object" ? data.value._id : data.value}
                                   onClick={() => this.onSelectValue(data.value)} style={style}>
-                            {this.bodyContainer(data.text, selected.value == data.value? "accent": undefined)}
+                            {this.bodyContainer(data.text,
+                                selected && selected.value == data.value ? "accent" : undefined)}
                         </MenuItem>
                     ))}
                 </Menu>

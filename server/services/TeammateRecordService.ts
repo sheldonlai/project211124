@@ -26,14 +26,14 @@ export class TeammateRecordService extends BaseService implements ITeammateRecor
     constructor(private teammateRecordRepo: ITeammateRecordRepository) {
         super();
     }
+
     createTeammateRecordRepo(teammateRecord: TeammateRecordDto): Promise<TeammateRecordDto> {
         const record = new TeammateRecord(
             teammateRecord.firstName,
             teammateRecord.lastName,
             teammateRecord.description,
+            teammateRecord.academicInfo,
             teammateRecord.city,
-            teammateRecord.university,
-            teammateRecord.year
         );
         return this.teammateRecordRepo.create(record);
     }
@@ -80,7 +80,7 @@ export class TeammateRecordService extends BaseService implements ITeammateRecor
                     firstName: teammate.firstName,
                     lastName: teammate.lastName,
                     averageRating: avgRating,
-                    university: teammate.university,
+                    academicInfo: teammate.academicInfo,
                     city: teammate.city
                 }
 
@@ -92,7 +92,9 @@ export class TeammateRecordService extends BaseService implements ITeammateRecor
         return this.teammateRecordRepo.getById(teammateRecordId);
     }
 
-    addRating(teammateRatingDto: TeammateRatingDto, teammateRatingId: string, currentUser: User): Promise<TeammateRecordDto> {
+    addRating(teammateRatingDto: TeammateRatingDto,
+              teammateRatingId: string,
+              currentUser: User): Promise<TeammateRecordDto> {
         return this.teammateRecordRepo.getById(teammateRatingId).then((teammate: TeammateRecord) => {
             const now = new Date(Date.now());
             teammateRatingDto.createdAt = now;
@@ -103,22 +105,24 @@ export class TeammateRecordService extends BaseService implements ITeammateRecor
         });
     }
 
-    editRating(teammateRatingDto: TeammateRatingDto, teammateRatingId: string, currentUser: User): Promise<TeammateRecordDto> {
+    editRating(teammateRatingDto: TeammateRatingDto,
+               teammateRatingId: string,
+               currentUser: User): Promise<TeammateRecordDto> {
         return this.teammateRecordRepo.getById(teammateRatingId).then((teammate: TeammateRecord) => {
             const now = new Date(Date.now());
             teammateRatingDto.createdAt = now;
             teammateRatingDto.upDatedAt = now;
             teammateRatingDto.createdBy = currentUser;
             let found = false;
-            for (let rating of teammate.ratings){
+            for (let rating of teammate.ratings) {
                 if (rating._id.toString() === teammateRatingDto._id &&
                     rating.createdBy._id.toString() === currentUser._id.toString()) {
-                    rating =  teammateRatingDto;
+                    rating = teammateRatingDto;
                     found = true;
                     break;
                 }
             }
-            if (!found){
+            if (!found) {
                 throw new AppError("The specified rating does not exist.", ClientError.BAD_REQUEST);
             }
             return this.teammateRecordRepo.update(teammate);

@@ -23,8 +23,7 @@ export class CreateTeammateViewComponent extends React.Component<any, state> {
             lastName: '',
             description: '',
             city: undefined,
-            university: undefined,
-            year: undefined,
+            academicInfo: undefined,
             ratings: [],
             showDesHint: false
         }
@@ -41,9 +40,9 @@ export class CreateTeammateViewComponent extends React.Component<any, state> {
                     </Grid>
                     <Grid item xs={12} md={8} lg={6}>
                         <div>
-                            <Paper style={{width: "100%", padding: "20px"}}>
+                            <Paper style={{padding: "20px"}}>
                                 <Typography type="display1">
-                                    Create teammate
+                                    Describe your teammate
                                 </Typography>
                                 <TextField
                                     label="First name"
@@ -62,14 +61,14 @@ export class CreateTeammateViewComponent extends React.Component<any, state> {
                                 {
                                     this.state.showDesHint &&
                                     <Typography type="caption">
-                                        This will allow people to recognize your teammate. A simple description would be
-                                        sufficient
+                                        This will allow people to recognize your teammate. A simple non-sensitive
+                                        description would be sufficient
                                     </Typography>
                                 }
                                 <TextField
                                     onFocus={() => this.setState({showDesHint: true})}
                                     onBlur={() => this.setState({showDesHint: false})}
-                                    label="Appearance Description"
+                                    label="Description"
                                     value={this.state.description}
                                     multiline
                                     rows={3}

@@ -1,11 +1,16 @@
-import {model, Schema, Document} from "mongoose";
-import {NoticeType} from "../enums/NoticeType";
-import {RepeatPatternEnum} from "../enums/RepeatPatternEnum";
+import {Document, model, Schema} from "mongoose";
 import {University} from "./LocationModels/Universities";
 import {City} from "./LocationModels/Cities";
-import {Country} from "./LocationModels/Country";
 import {BaseModel} from "./BaseModel";
 import {User} from "./User";
+import {UniversityYearEnum} from "../enums/UniversityYearEnum";
+import {listNumericalEnumValues} from "../utils/EnumsUtil";
+
+export interface AcademicInfo {
+    university: University,
+    year: UniversityYearEnum,
+    _id?: string
+}
 
 export class TeammateRecord extends BaseModel{
 
@@ -22,9 +27,8 @@ export class TeammateRecord extends BaseModel{
         public firstName: string,
         public lastName: string,
         public description: string,
+        public academicInfo?: AcademicInfo,
         public city?: City,
-        public university?: University,
-        public year?: number
     ){
         super();
     }
@@ -35,8 +39,13 @@ export interface ITeammateRecord extends TeammateRecord, Document {}
 const schema = new Schema({
     firstName: {type: String},
     lastName: {type: String},
-    year: {type: Number},
-    university: {type: Schema.Types.ObjectId, ref: "university"},
+    academicInfo: {
+        university: {type: Schema.Types.ObjectId, ref: "university"},
+        year: {
+            type: Number,
+            enum: listNumericalEnumValues(UniversityYearEnum)
+        }
+    },
     city: {type: Schema.Types.ObjectId, ref: "city"},
     description: {type: String},
     ratings: [
