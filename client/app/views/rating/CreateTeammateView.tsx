@@ -9,12 +9,16 @@ import {EmailNameInputStyles} from "../../constants/StyleClasses";
 import TextField from "material-ui/TextField";
 import {TeammateRecordDto} from "../../../../server/dtos/rating/TeammateRecordDto";
 import {TeammateLocationEditor} from "./subcomponents/TeammateLocationEditor";
+import {AppStoreState} from "../../stores/AppStore";
+import {RatingActions} from "../../actions/RatingActions";
 
 interface state extends TeammateRecordDto {
     showDesHint: boolean;
 }
 
-export class CreateTeammateViewComponent extends React.Component<any, state> {
+interface props extends DispatchToProps {}
+
+export class CreateTeammateViewComponent extends React.Component<props, state> {
 
     constructor(props) {
         super(props);
@@ -29,6 +33,13 @@ export class CreateTeammateViewComponent extends React.Component<any, state> {
             showDesHint: false
         }
     }
+
+    onSubmit = () => {
+        let teammate = {...this.state};
+        delete teammate.showDesHint;
+        const dto : TeammateRecordDto = teammate as TeammateRecordDto;
+        this.props.createTeammate(dto);
+    };
 
     render() {
         const textFieldMargin: CSSProperties = {
@@ -84,7 +95,7 @@ export class CreateTeammateViewComponent extends React.Component<any, state> {
                                 />
                                 <Grid container justify="flex-end">
                                     <Grid item>
-                                        <Button style={{margin: "10px 0px"}}>
+                                        <Button style={{margin: "10px 0px"}} onClick={this.onSubmit}>
                                             Submit
                                         </Button>
                                     </Grid>
@@ -98,6 +109,23 @@ export class CreateTeammateViewComponent extends React.Component<any, state> {
     }
 }
 
-export const CreateTeammateView = connect<any, any, any>(
-    () => ({})
+interface DispatchToProps {
+    createTeammate: (teammate: TeammateRecordDto) => void
+}
+
+const mapDispatchToProps = (dispatch): DispatchToProps => ({
+    createTeammate: (teammate: TeammateRecordDto) => dispatch(RatingActions.createTeammateRecord(teammate))
+});
+
+interface StateToProps {
+
+}
+
+const mapStateToProps = (dispatch): StateToProps => ({
+
+});
+
+export const CreateTeammateView = connect<any, DispatchToProps, any>(
+    undefined,
+    mapDispatchToProps
 )(CreateTeammateViewComponent);

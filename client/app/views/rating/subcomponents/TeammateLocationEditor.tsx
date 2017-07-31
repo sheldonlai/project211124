@@ -44,8 +44,6 @@ class TeammateLocationEditorComponent extends React.Component<combinedProps, sta
         }
     }
 
-
-
     updateAcademicInfo = (key: string, value : any) => {
         let academicInfo = {...this.props.academicInfo};
         academicInfo[key] = value;
@@ -57,7 +55,6 @@ class TeammateLocationEditorComponent extends React.Component<combinedProps, sta
     };
 
     updateCountry = (country) => {
-
         if (isNullOrUndefined(country)){
             this.props.onAcademicChange(undefined);
             this.setState({country});
@@ -67,7 +64,6 @@ class TeammateLocationEditorComponent extends React.Component<combinedProps, sta
         if (!this.props.universitiesMap.hasOwnProperty(country.name)){
             this.props.fetchUniversities(country._id);
         }
-
     };
 
     render() {
