@@ -1,3 +1,10 @@
-.app-file-uploader:hover {
-    background-color: #3d7dee;
+.upload-container {
+    padding: 20px;
+}
+
+.upload-inner-container {
+    border-radius: 2px;
+    border-width: 4px;
+    border-color: grey;
+    border-style: dashed;
 }

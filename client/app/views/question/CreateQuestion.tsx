@@ -22,15 +22,20 @@ import {QuestionDifficultyMenu} from "./subcomponents/QuestionDifficultyMenu";
 import {RouterProps} from "react-router";
 import {Routes} from "../../constants/Routes";
 import Question = FrontEndQuestionModels.Question;
+import {isNullOrUndefined} from "util";
+import {FileUploader} from "../../components/FileUpload/FileUploader";
+import {EditorStateUtil} from "../../components/CustomEditor/EditorStateUtil";
 
 
 export interface CreateQuestionState {
     title: string;
-    tags: string[]
+    tags: string[];
     isPublished: boolean;
     content: string;
     publicityStatus: PublicityStatus;
     difficulty: QuestionDifficulty;
+    showFileUploadDialog: boolean;
+    filesUploaded: any[];
 }
 
 interface props extends stateToProps, dispatchToProps, RouterProps{}
@@ -96,6 +101,21 @@ class CreateQuestion extends Component<props, Question> {
         )
     };
 
+    /* File Upload related methods */
+    insert = () => {
+        this.setState({showFileUploadDialog: true});
+    };
+
+    onFileUploadSelect = (filesSelected, filesUploaded) => {
+        let imageSrcs = filesSelected.map((f) => { return f.fileURL; });
+        let newEditorState = EditorStateUtil.insertImages(this.state.content, imageSrcs);
+        this.setState({showFileUploadDialog: false, content: newEditorState, filesUploaded: filesUploaded});
+    };
+
+    onFileUploadCancel = (files) => {
+        this.setState({showFileUploadDialog: false, filesUploaded: files});
+    };
+
     render() {
         const inputContainer = {paddingLeft: 20, paddingRight: 20};
         const input= {width: "100%"};
@@ -126,11 +146,20 @@ class CreateQuestion extends Component<props, Question> {
 
                         {this.difficultyMenu()}
 
+                        <Button raised onClick={this.insert}>
+                            Insert
+                        </Button>
+                        {this.state.showFileUploadDialog &&
+                            <FileUploader initialFiles={this.state.filesUploaded}
+                                          onSelect={this.onFileUploadSelect}
+                                          onCancel={this.onFileUploadCancel} />
+                        }
+
+
                         <Grid item xs={12} md={12}>
                             <Typography type="caption" gutterBottom>Content :</Typography>
                             <CustomEditor value={this.state.content}
                                           onChange={this.contentChange}
-                                          height={350}
                             />
                         </Grid>
                     </Grid>

@@ -1,8 +1,9 @@
-import {ContentBlock, Editor, EditorState, RichUtils} from "draft-js";
+import {ContentBlock, Editor,EditorState, RichUtils} from "draft-js";
 import * as React from "react";
 import "draft-js/dist/Draft.css";
 import {CSSProperties} from "react";
 import {applyStylesToDefaultStyle} from "../../utils/utils";
+import {EditorFactory} from "./EditorFactory";
 
 export interface CustomEditorProps {
     value: EditorState;
@@ -18,6 +19,11 @@ const style = {
     marginTop: "10px",
     marginBottom: "10px",
     minHeight: 150,
+    boxSizing: 'border-box',
+    padding: 16,
+    borderRadius: 2,
+    boxShadow: 'inset 0px 1px 8px -3px #ABABAB',
+    background: '#fefefe'
 };
 
 export class CustomEditor extends React.Component<CustomEditorProps> {
@@ -27,25 +33,6 @@ export class CustomEditor extends React.Component<CustomEditorProps> {
 
     onChange = (editorState: EditorState) => {
         this.props.onChange(editorState);
-    };
-
-    onBoldClick = () => {
-        this.onChange(RichUtils.toggleInlineStyle(this.props.value, 'BOLD'));
-    };
-
-    handleKeyCommand = (command) => {
-        const newState = RichUtils.handleKeyCommand(this.props.value, command);
-        if (newState) {
-            this.onChange(newState);
-            return 'handled';
-        }
-        return 'not-handled';
-    };
-
-
-    myBlockStyleFn = (contentBlock: ContentBlock) => {
-        // const type = contentBlock.getType();
-        return '';
     };
 
     onEditorClick = () => {
@@ -58,19 +45,17 @@ export class CustomEditor extends React.Component<CustomEditorProps> {
         if (this.props.border === false)
             delete modifiedStyle.border;
         applyStylesToDefaultStyle(modifiedStyle, this.props.style);
+        //modifiedStyle['height'] = this.props.height ? this.props.height : undefined;
 
-        modifiedStyle['height'] = this.props.height ? this.props.height : undefined;
-        return (
-            <div style={modifiedStyle} onClick={this.onEditorClick}>
-                <Editor
-                    ref="editor"
-                    editorState={this.props.value}
-                    handleKeyCommand={this.handleKeyCommand}
-                    readOnly={this.props.readOnly}
-                    onChange={this.onChange}
-                    blockStyleFn={this.myBlockStyleFn}
-                />
-            </div>
+        const editorFactory = new EditorFactory();
+        return editorFactory.createRichEditor(
+            this.onEditorClick,
+            this.onChange,
+            "editor",
+            this.props.value,
+            this.props.readOnly,
+            modifiedStyle
         );
+
     }
 }

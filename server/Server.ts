@@ -76,6 +76,7 @@ export class Server {
     private staticFiles() {
         this.app.use(favicon(path.join(__dirname, '../client/static/favicon.ico')));
         this.app.use('/', express.static(path.resolve(__dirname, '../client/static/')));
+        this.app.use('/media', express.static(path.resolve(__dirname, '../static/media/')));
         this.app.use('/node_modules', express.static(path.resolve(__dirname, '../node_modules')));
         let router = express.Router();
         new PageProvider(router);

@@ -21,6 +21,8 @@ export namespace FrontEndQuestionModels {
         comments: QuestionComment[];
         publicityStatus: PublicityStatus;
         difficulty: QuestionDifficulty;
+        showFileUploadDialog?: boolean;
+        filesUploaded?: any[];
 
         constructor() {
             this.title = '';
@@ -32,7 +34,9 @@ export namespace FrontEndQuestionModels {
             this.difficulty = {
                 educationLevel: QuestionEducationLevel.NOT_SPECIFIED,
                 difficultyLevel: DifficultyLevel.NOT_SPECIFIED
-            }
+            };
+            this.showFileUploadDialog = false;
+            this.filesUploaded = [];
         }
     }
 

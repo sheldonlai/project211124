@@ -60,6 +60,7 @@ export class FileSystemService extends BaseService implements IFileSystemService
         let uploadedTime: Date = new Date();
         let newFileName: string = StringUtils.genRandomString(10) + '_' + uploadedTime.getTime() + '.' + mime.extension(file.mimetype);
         let filePath: string = path.join(__dirname, '..', '..', 'static', 'media', newFileName);
+        let fileURL: string = 'http://localhost:3000/media/' + newFileName;
         return new Promise(function(resolve, reject) {
             fs.writeFile(filePath, file.buffer, function (err) {
                 if (err) reject(err);
@@ -71,7 +72,7 @@ export class FileSystemService extends BaseService implements IFileSystemService
             let fileUploadRecord: FileUploadRecord = new FileUploadRecord(
                 someUser, // TODO
                 FileAccessType.PUBLIC,
-                filePath, // Build a correct URL
+                fileURL, // Build a correct URL
                 newFileName,
                 file.originalname,
                 fileTypeInfo.mime,
