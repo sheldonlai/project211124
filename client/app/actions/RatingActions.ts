@@ -21,7 +21,7 @@ export class RatingActions extends BaseActions {
         }
     }
 
-    static getTeammateRecordPreview(teammateRecordDto: TeammateRecordDto) {
+    static getTeammateRecordPreview() {
         return function (dispatch) {
             dispatch({
                 type: RatingActionTypes.GetTeammateRecordPreviewRequest,

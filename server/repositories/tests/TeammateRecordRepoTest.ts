@@ -6,7 +6,7 @@ import {TagModel} from "../../models/Tags";
 import {CountryModel} from "../../models/LocationModels/Country";
 import {UniversityModel} from "../../models/LocationModels/Universities";
 import {ITeammateRecordRepository, TeammateRecordRepository} from "../TeammateRecordRepository";
-import {TeammateRecord} from "../../models/TeammateRecord";
+import {TeammateRating, TeammateRecord} from "../../models/TeammateRecord";
 
 let teammateRecordRepo: ITeammateRecordRepository = new TeammateRecordRepository();
 const testName = 'TeammateRecordRepoTest';
@@ -31,7 +31,7 @@ describe(testName, function () {
         await testDatabase.disconnect();
     });
 
-    it('should fail with no author', async function () {
+    it('create teammate', async function () {
         let newTeammate = new TeammateRecord(
             "guy",
             "test",
@@ -41,8 +41,30 @@ describe(testName, function () {
         let result = await teammateRecordRepo.create(newTeammate);
 
         expect(result.createdBy._id).toEqual(user._id);
+        expect(result.createdBy.local).toBeUndefined();
         expect(result.firstName).toBe(newTeammate.firstName);
         expect(result.lastName).toBe(newTeammate.lastName);
         expect(result.description).toBe(newTeammate.description);
+    });
+
+    it('update teammate', async function () {
+        let newTeammate = new TeammateRecord(
+            "guy",
+            "test",
+            "description",
+            user
+        );
+        let result = await teammateRecordRepo.create(newTeammate);
+
+        result.ratings.push(new TeammateRating(5, "gr8 guy", user));
+        result = await teammateRecordRepo.addRating(result._id, new TeammateRating(5, "gr8 guy", user));
+
+        expect(result.createdBy._id).toEqual(user._id);
+        expect(result.createdBy.local).toBeUndefined();
+        expect(result.firstName).toBe(newTeammate.firstName);
+        expect(result.lastName).toBe(newTeammate.lastName);
+        expect(result.description).toBe(newTeammate.description);
+        expect(result.ratings.length).toBe(1);
+        expect(result.ratings[0].createdBy.local).toBeUndefined();
     });
 });

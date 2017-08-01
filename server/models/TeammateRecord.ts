@@ -5,22 +5,31 @@ import {BaseModel} from "./BaseModel";
 import {User} from "./User";
 import {UniversityYearEnum} from "../enums/UniversityYearEnum";
 import {listNumericalEnumValues} from "../utils/EnumsUtil";
+import {create} from "domain";
 
 export interface AcademicInfo {
     university: University,
     year: UniversityYearEnum
 }
 
+export class TeammateRating{
+    _id: any;
+    rating: number;
+    comment: string;
+    createdBy: User;
+    createdAt: Date;
+    upDatedAt: Date;
+    constructor(score: number, comment:string, createdBy: User){
+        this.rating = score;
+        this.comment = comment;
+
+        this.createdBy = <any>createdBy._id;
+    }
+}
+
 export class TeammateRecord extends BaseModel{
 
-    ratings: {
-        _id: any;
-        rating: number;
-        comment: string;
-        createdBy: User;
-        createdAt: Date;
-        upDatedAt: Date;
-    }[];
+    ratings: TeammateRating[];
 
     constructor(
         public firstName: string,
@@ -63,7 +72,7 @@ const schema = new Schema({
 });
 
 const autoPopulateUsers = function(next) {
-    this.populate(["createdBy", "ratings.commentBy", "academicInfo.university"]);
+    this.populate(["createdBy", "ratings.createdBy", "academicInfo.university"]);
     next();
 };
 
