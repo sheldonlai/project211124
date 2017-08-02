@@ -18,12 +18,11 @@ export class TeammateRating{
     comment: string;
     createdBy: User;
     createdAt: Date;
-    upDatedAt: Date;
+    updatedAt: Date;
     constructor(score: number, comment:string, createdBy: User){
         this.rating = score;
         this.comment = comment;
-
-        this.createdBy = <any>createdBy._id;
+        this.createdBy = createdBy;
     }
 }
 
@@ -40,6 +39,7 @@ export class TeammateRecord extends BaseModel{
         public city?: City,
     ){
         super();
+        this.ratings = [];
     }
 }
 

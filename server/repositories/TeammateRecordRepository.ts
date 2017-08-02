@@ -5,6 +5,7 @@ import {isNullOrUndefined} from "util";
 export interface ITeammateRecordRepository extends IBaseRepository<TeammateRecord> {
     searchRecord (query): Promise<TeammateRecord[]>;
     addRating(recordId: string, rating: TeammateRating): Promise<TeammateRecord>;
+    editRating(recordId: string, rating: TeammateRating): Promise<TeammateRecord>;
 }
 
 export class TeammateRecordRepository extends BaseRepository<TeammateRecord, ITeammateRecord> implements ITeammateRecordRepository {
@@ -21,6 +22,7 @@ export class TeammateRecordRepository extends BaseRepository<TeammateRecord, ITe
     }
 
     create(record: TeammateRecord): Promise<TeammateRecord> {
+        this.changeRatingCreatorToId(record);
         return super.create(record).then((teammate: TeammateRecord) => {
             // make sure the rating users are populated
             return this.getById(teammate._id);
@@ -28,7 +30,9 @@ export class TeammateRecordRepository extends BaseRepository<TeammateRecord, ITe
     }
 
     update(record: TeammateRecord): Promise<TeammateRecord> {
-        return super.update(record).then((teammate: TeammateRecord) => {
+        this.changeRatingCreatorToId(record);
+        return TeammateRecordModel.findByIdAndUpdate(record._id, record, {new: true})
+            .then((teammate: TeammateRecord) => {
             // make sure the rating users are populated
             return this.getById(teammate._id);
         })
@@ -39,6 +43,25 @@ export class TeammateRecordRepository extends BaseRepository<TeammateRecord, ITe
             record.ratings.push(rating);
             return this.update(record);
         });
+    }
+
+    editRating(recordId: string, rating: TeammateRating): Promise<TeammateRecord> {
+        return this.getById(recordId).then((record) => {
+            for (let r of record.ratings){
+                if (r._id.toString() === rating._id.toString()){
+                    r.rating = rating.rating;
+                    r.comment = rating.comment;
+                    r.updatedAt = new Date(Date.now());
+                }
+            }
+            return this.update(record);
+        });
+    }
+
+    changeRatingCreatorToId (record: TeammateRecord) {
+        for (let r of record.ratings){
+            r.createdBy = r.createdBy._id;
+        }
     }
 
     protected applyRestriction(record: TeammateRecord): TeammateRecord {

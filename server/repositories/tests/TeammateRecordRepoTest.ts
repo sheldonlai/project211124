@@ -1,4 +1,3 @@
-import {QuestionModel} from "../../models/Question";
 import {User, UserModel} from "../../models/User";
 import {FakeModels} from "./helpers/FakeModels";
 import {TestDatabase} from "./helpers/TestDatabase";
@@ -6,7 +5,7 @@ import {TagModel} from "../../models/Tags";
 import {CountryModel} from "../../models/LocationModels/Country";
 import {UniversityModel} from "../../models/LocationModels/Universities";
 import {ITeammateRecordRepository, TeammateRecordRepository} from "../TeammateRecordRepository";
-import {TeammateRating, TeammateRecord} from "../../models/TeammateRecord";
+import {TeammateRating, TeammateRecord, TeammateRecordModel} from "../../models/TeammateRecord";
 
 let teammateRecordRepo: ITeammateRecordRepository = new TeammateRecordRepository();
 const testName = 'TeammateRecordRepoTest';
@@ -26,8 +25,10 @@ describe(testName, function () {
     });
 
     afterAll(async function () {
-        await QuestionModel.remove({"title": {"$regex": testName, "$options": "i"}});
-        await UserModel.remove({email: {$regex: testName, $options: "i"}});
+        await Promise.all([
+            TeammateRecordModel.remove({"comment": {"$regex": testName, "$options": "i"}}),
+            UserModel.remove({email: {$regex: testName, $options: "i"}})
+        ]);
         await testDatabase.disconnect();
     });
 
@@ -57,7 +58,7 @@ describe(testName, function () {
         let result = await teammateRecordRepo.create(newTeammate);
 
         result.ratings.push(new TeammateRating(5, "gr8 guy", user));
-        result = await teammateRecordRepo.addRating(result._id, new TeammateRating(5, "gr8 guy", user));
+        result = await teammateRecordRepo.addRating(result._id, new TeammateRating(5, testName + " gr8 guy", user));
 
         expect(result.createdBy._id).toEqual(user._id);
         expect(result.createdBy.local).toBeUndefined();
@@ -66,5 +67,21 @@ describe(testName, function () {
         expect(result.description).toBe(newTeammate.description);
         expect(result.ratings.length).toBe(1);
         expect(result.ratings[0].createdBy.local).toBeUndefined();
+
+        let rating = result.ratings[0];
+        rating.rating = 4;
+        rating.comment = testName + " not that great anymore";
+        rating.createdAt = new Date(Date.now());
+
+        result = await teammateRecordRepo.editRating(result._id, rating);
+
+        expect(result.createdBy.local).toBeUndefined();
+        expect(result.firstName).toBe(newTeammate.firstName);
+        expect(result.lastName).toBe(newTeammate.lastName);
+        expect(result.description).toBe(newTeammate.description);
+        expect(result.ratings.length).toBe(1);
+        expect(result.ratings[0].createdBy.local).toBeUndefined();
+        expect(result.ratings[0].comment).toBe(rating.comment);
+        expect(result.ratings[0].createdAt).not.toBe(rating.createdAt);
     });
 });
