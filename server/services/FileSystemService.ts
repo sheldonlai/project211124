@@ -16,7 +16,7 @@ import {FileAccessType} from "../enums/FileAccessType";
 import {IFileUploadRecordRepository} from "../repositories/FileUploadRecordRepository";
 import {BaseService} from "./BaseService";
 import {User} from "../models/User";
-import {UserRepository} from "../repositories/UserRepository";
+
 const fileType = require('file-type');
 
 export interface IFileSystemService {
@@ -27,7 +27,6 @@ export class FileSystemService extends BaseService implements IFileSystemService
     private readonly validImageMimeTypes = [MimeType.PNG, MimeType.JPG];
     private readonly validTextDocMimeTypes = [];
     private fileUploadRecordRepository: IFileUploadRecordRepository;
-    private userRepo: UserRepository = new UserRepository(); // TODO remove
 
     constructor(fileUploadRecordRepository: IFileUploadRecordRepository) {
         super();
@@ -50,7 +49,7 @@ export class FileSystemService extends BaseService implements IFileSystemService
            https://en.wikipedia.org/wiki/File_format#Magic_number
          */
         let magicNumberChunk: Buffer = new Buffer(4100);
-        file.buffer.copy(magicNumberChunk,0, 0, 4100);
+        file.buffer.copy(magicNumberChunk, 0, 0, 4100);
         let fileTypeInfo: any = fileType(magicNumberChunk);
         if (!this.isValidMimeType(fileTypeInfo.mime)) {
             throw new AppError("Invalid file type.", ClientError.BAD_REQUEST);
@@ -60,17 +59,19 @@ export class FileSystemService extends BaseService implements IFileSystemService
         let uploadedTime: Date = new Date();
         let newFileName: string = StringUtils.genRandomString(10) + '_' + uploadedTime.getTime() + '.' + mime.extension(file.mimetype);
         let filePath: string = path.join(__dirname, '..', '..', 'static', 'media', newFileName);
-        let fileURL: string = 'http://localhost:3000/media/' + newFileName;
-        return new Promise(function(resolve, reject) {
-            fs.writeFile(filePath, file.buffer, function (err) {
-                if (err) reject(err);
-                else resolve(err);
-            });
-        }).then(()=> {
-            return this.userRepo.getByEmail("jieyifei@hotmail.com"); // TODO hook up client
-        }).then((someUser) => { // TODO
+        let folderPath = path.dirname(filePath);
+        let fileURL: string = '/media/' + newFileName;
+
+        return this.checkPath(folderPath).then(() => {
+            return;
+        }).catch((err) => {
+            // make the media folder
+            return this.mkDir(folderPath);
+        }).then(() => {
+            return this.writeFileAsync(filePath, file.buffer);
+        }).then(() => {
             let fileUploadRecord: FileUploadRecord = new FileUploadRecord(
-                someUser, // TODO
+                user,
                 FileAccessType.PUBLIC,
                 fileURL, // Build a correct URL
                 newFileName,
@@ -82,13 +83,37 @@ export class FileSystemService extends BaseService implements IFileSystemService
         })
     }
 
+    checkPath(path): Promise<any> {
+        return new Promise((resolve, reject) => {
+            fs.access(path, fs.constants.R_OK | fs.constants.W_OK, (err) => {
+                (err) ? reject(err) : resolve(1);
+            });
+        });
+    }
+
+    mkDir(path): Promise<any> {
+        return new Promise((resolve, reject) => {
+            fs.mkdir(path, fs.constants.R_OK | fs.constants.W_OK, (err) => {
+                (err) ? reject(err) : resolve(1);
+            });
+        });
+    }
+
+    writeFileAsync(filePath, buffer): Promise<any> {
+        return new Promise(function (resolve, reject) {
+            fs.writeFile(filePath, buffer, function (err) {
+                (err) ? reject(err) : resolve(1);
+            });
+        })
+    }
+
     private isValidMimeType(mimeType: string): boolean {
-         let found: MimeType = this.validImageMimeTypes
-             .concat(this.validTextDocMimeTypes)
-             .find((validMimeType: MimeType) => {
+        let found: MimeType = this.validImageMimeTypes
+            .concat(this.validTextDocMimeTypes)
+            .find((validMimeType: MimeType) => {
                 return validMimeType.toString().toLowerCase() === mimeType.toLowerCase();
-         });
-         return !isNullOrUndefined(found)
+            });
+        return !isNullOrUndefined(found)
     }
 
 }

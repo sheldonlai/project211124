@@ -12,6 +12,7 @@ import Grid from "material-ui/Grid";
 import Card, {CardActions, CardContent, CardHeader, CardMedia} from "material-ui/Card";
 
 import {CircularProgress} from "material-ui/Progress";
+import {Config} from "../../constants/configs";
 
 export interface FileUploaderProps {
     initialFiles: any[];
@@ -200,8 +201,10 @@ export class FileUploader extends React.Component<FileUploaderProps, FileUploade
                 this.setState({uploadProgress: 100, index: 1, filesInGallery: xhr.response.concat(this.state.filesInGallery)});
             }
         };
+
         xhr.responseType = "json";
         xhr.open('post', '/api/upload', true);
+        xhr.setRequestHeader("Authorization", "Token " + localStorage.getItem(Config.tokenKey));
         xhr.send(data);
     };
 

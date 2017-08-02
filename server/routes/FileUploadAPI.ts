@@ -8,7 +8,7 @@ import {multerUpload} from "../middlewares/multer";
 import {StorageTypeEnum} from "../enums/StorageType";
 import {User} from "../models/User";
 import {IFileSystemService} from "../services/FileSystemService";
-import {mustBeAuthenticated} from "../middlewares/AuthMiddleware";
+import {AuthRequest, mustBeAuthenticated} from "../middlewares/AuthMiddleware";
 
 export class FileUploadAPI extends BaseAPI {
 
@@ -20,18 +20,18 @@ export class FileUploadAPI extends BaseAPI {
         super();
         this.service = service;
         this.router = Router();
-        this.router.post(APIUrls.Upload, this.storeFileInMemory , this.saveFiles);
+        this.router.post(APIUrls.Upload, mustBeAuthenticated,this.storeFileInMemory , this.saveFiles);
 
     }
 
     public storeFileInMemory = multerUpload(StorageTypeEnum.MEMORY).array(this.FILE_UPLOAD_NAME);
 
-    public saveFiles = (req: Request, res: Response, next: NextFunction) => {
+    public saveFiles = (req: AuthRequest, res: Response, next: NextFunction) => {
        // let user: User = req.user;
         let files = <Express.Multer.File[]> req.files;
         let result: Promise<any> = Promise.all(
             files.map((file: Express.Multer.File) => {
-                return this.service.saveUploadedFile(file, undefined);
+                return this.service.saveUploadedFile(file, req.user);
             })
         );
         this.respondPromise(result, res, next);
