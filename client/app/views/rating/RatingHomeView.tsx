@@ -6,12 +6,40 @@ import {CustomLink} from "../../components/CustomLink";
 import {Routes} from "../../constants/Routes";
 import {RatingActions} from "../../actions/RatingActions";
 import {AppStoreState} from "../../stores/AppStore";
-// TODO
+import {TeammatePreviewDto} from "../../../../server/dtos/rating/TeammatePreviewDto";
+import Divider from "material-ui/Divider";
+import Typography from "material-ui/Typography";
+import ReactStars from 'react-stars';
+import Card, {CardActions, CardContent} from 'material-ui/Card';
+import {ReducerStateStatus} from "../../constants/ReducerStateStatus";
+import {LoadingScreen} from "../../components/Animations/LoadingScreen";
 
-export class RatingHomeViewComponent extends React.Component<any> {
+export class RatingHomeViewComponent extends React.Component<StateToProps & DispatchToProps, any> {
     componentWillMount() {
         this.props.fetchRatingPreviews();
     }
+
+    recordRow = (preview: TeammatePreviewDto, index: number) => {
+        const grey = {color: "grey"};
+        return (
+            <Card key={index} style={{padding: 10, marginTop: 20}}>
+                <CardContent>
+                    <Typography type="headline" style={{textTransform: "capitalize"}}>
+                        {preview.firstName + " " + preview.lastName}
+                    </Typography>
+                    <ReactStars size={34} value={preview.averageRating? preview.averageRating: 5} edit={false}/>
+                    {
+                        preview.academicInfo &&
+                        <div >
+                            <Typography style={grey} type="body1">{preview.academicInfo.university.name}</Typography>
+                            <Typography style={grey} type="body1">{"Year " + preview.academicInfo.year}</Typography>
+                        </div>
+                    }
+                </CardContent>
+            </Card>
+        );
+    };
+
     render() {
         console.log(this.props.ratingPreviews);
         return (
@@ -24,6 +52,11 @@ export class RatingHomeViewComponent extends React.Component<any> {
                             <CustomLink to={Routes.create_teammate_record}>
                                 <Button raised>Create A Teammate Record</Button>
                             </CustomLink>
+                            {
+                                this.props.ratingPreviewStatus === ReducerStateStatus.LOADING ?
+                                    <LoadingScreen/>
+                                    : this.props.ratingPreviews.map((e, i) => this.recordRow(e, i))
+                            }
                         </div>
                     </Grid>
                 </Grid>
@@ -32,15 +65,25 @@ export class RatingHomeViewComponent extends React.Component<any> {
     }
 }
 
-const mapDispatchToProps = (dispatch) => ({
-   fetchRatingPreviews : () => dispatch(RatingActions.getTeammateRecordPreview())
+interface DispatchToProps {
+    fetchRatingPreviews: () => void;
+}
+
+const mapDispatchToProps = (dispatch): DispatchToProps => ({
+    fetchRatingPreviews: () => dispatch(RatingActions.getTeammateRecordPreview())
 });
 
-const mapStateToProps = (state: AppStoreState) => ({
-   ratingPreviews: state.teammateRating.previews
+interface StateToProps {
+    ratingPreviewStatus: ReducerStateStatus;
+    ratingPreviews: TeammatePreviewDto[]
+}
+
+const mapStateToProps = (state: AppStoreState): StateToProps => ({
+    ratingPreviewStatus: state.teammateRating.status,
+    ratingPreviews: state.teammateRating.previews
 });
 
-export const RatingHomeView = connect<any, any, any>(
+export const RatingHomeView = connect<StateToProps, DispatchToProps, any>(
     mapStateToProps,
     mapDispatchToProps
 )(RatingHomeViewComponent);

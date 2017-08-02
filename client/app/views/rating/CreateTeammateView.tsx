@@ -9,7 +9,6 @@ import {EmailNameInputStyles} from "../../constants/StyleClasses";
 import TextField from "material-ui/TextField";
 import {TeammateRecordDto} from "../../../../server/dtos/rating/TeammateRecordDto";
 import {TeammateLocationEditor} from "./subcomponents/TeammateLocationEditor";
-import {AppStoreState} from "../../stores/AppStore";
 import {RatingActions} from "../../actions/RatingActions";
 
 interface state extends TeammateRecordDto {

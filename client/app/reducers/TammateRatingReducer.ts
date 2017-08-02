@@ -24,7 +24,9 @@ export const TeammateRatingReducer = (state = initialState, action) : TeammateRa
     switch (action.type) {
         case RatingActionTypes.GetTeammateRecordPreviewRequest:
             return getLoadingState(state);
-        case RatingActionTypes.GetTeammateRecordRequest:
+        case RatingActionTypes.GetTeammateRecordPreviewOK:
+            state = {...state};
+            state.status = ReducerStateStatus.DONE;
             state.previews = action.data;
             return state;
         default:
