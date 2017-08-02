@@ -6,5 +6,5 @@ export interface TeammateRatingDto {
     comment: string;
     createdBy: UserDto;
     createdAt: Date;
-    upDatedAt: Date;
+    updatedAt: Date;
 }

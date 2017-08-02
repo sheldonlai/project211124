@@ -100,7 +100,7 @@ export class TeammateRecordService extends BaseService implements ITeammateRecor
         return this.teammateRecordRepo.getById(teammateRatingId).then((teammate: TeammateRecord) => {
             const now = new Date(Date.now());
             teammateRatingDto.createdAt = now;
-            teammateRatingDto.upDatedAt = now;
+            teammateRatingDto.updatedAt = now;
             teammateRatingDto.createdBy = currentUser;
             teammate.ratings.push(teammateRatingDto);
             return this.teammateRecordRepo.update(teammate);
@@ -113,7 +113,7 @@ export class TeammateRecordService extends BaseService implements ITeammateRecor
         return this.teammateRecordRepo.getById(teammateRatingId).then((teammate: TeammateRecord) => {
             const now = new Date(Date.now());
             teammateRatingDto.createdAt = now;
-            teammateRatingDto.upDatedAt = now;
+            teammateRatingDto.updatedAt = now;
             teammateRatingDto.createdBy = currentUser;
             let found = false;
             for (let rating of teammate.ratings) {
