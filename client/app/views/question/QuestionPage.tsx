@@ -42,14 +42,14 @@ export class QuestionPageComponent extends React.Component<QuestionPageProps> {
             <div style={{padding: 10}}>
                 <SplitVIewTemplate>
                     <div>
+                        <QuestionBoxView/>
+                        <AnswerBoxesView/>
+                    </div>
+                    <div>
                         <Hidden smDown>
                             <div style={{height: 42}}/>
                         </Hidden>
                         <QuestionInfoBoxView/>
-                    </div>
-                    <div>
-                        <QuestionBoxView/>
-                        <AnswerBoxesView/>
                     </div>
                 </SplitVIewTemplate>
             </div>

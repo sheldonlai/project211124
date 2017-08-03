@@ -87,12 +87,12 @@ export class UserProfileComponent extends React.Component<StateToProps & Dispatc
         }
 
         return (
-            <div style={{padding: 10}}>
-                <Grid container justify="center" direction="row-reverse">
+            <div style={{padding: "20px 0"}}>
+                <Grid container justify="center" direction="row-reverse" gutter={0}>
                     <Grid item xs={12} md={3} lg={2}>
                     </Grid>
                     <Grid item xs={12} md={8} lg={6}>
-                        <Paper style={{width: "100%", padding: "50px 20px"}}>
+                        <Paper style={{padding: "50px 20px"}}>
                             <Grid container justify="center">
                                 <Grid item xs={10}>
                                     <Typography type="display1" gutterBottom>Profile</Typography>
