@@ -13,6 +13,8 @@ import ReactStars from 'react-stars';
 import Card, {CardActions, CardContent} from 'material-ui/Card';
 import {ReducerStateStatus} from "../../constants/ReducerStateStatus";
 import {LoadingScreen} from "../../components/Animations/LoadingScreen";
+import {UniversityYearEnum} from "../../../../server/enums/UniversityYearEnum";
+import {convertEnumStringToViewString} from "../../utils/utils";
 
 export class RatingHomeViewComponent extends React.Component<StateToProps & DispatchToProps, any> {
     componentWillMount() {
@@ -22,26 +24,30 @@ export class RatingHomeViewComponent extends React.Component<StateToProps & Disp
     recordRow = (preview: TeammatePreviewDto, index: number) => {
         const grey = {color: "grey"};
         return (
-            <Card key={index} style={{padding: 10, marginTop: 20}}>
-                <CardContent>
-                    <Typography type="headline" style={{textTransform: "capitalize"}}>
-                        {preview.firstName + " " + preview.lastName}
-                    </Typography>
-                    <ReactStars size={34} value={preview.averageRating? preview.averageRating: 5} edit={false}/>
-                    {
-                        preview.academicInfo &&
-                        <div >
-                            <Typography style={grey} type="body1">{preview.academicInfo.university.name}</Typography>
-                            <Typography style={grey} type="body1">{"Year " + preview.academicInfo.year}</Typography>
-                        </div>
-                    }
-                </CardContent>
-            </Card>
+            <CustomLink key={index} to={Routes.rating.replace(":id", preview._id)}>
+                <Card style={{padding: 10, marginTop: 20}}>
+                    <CardContent>
+                        <Typography type="headline" style={{textTransform: "capitalize"}}>
+                            {preview.firstName + " " + preview.lastName}
+                        </Typography>
+                        <ReactStars size={34} value={preview.averageRating ? preview.averageRating : 5} edit={false}/>
+                        {
+                            preview.academicInfo &&
+                            <div>
+                                <Typography style={grey}
+                                            type="body1">{preview.academicInfo.university.name}</Typography>
+                                <Typography style={grey} type="body1">
+                                    {convertEnumStringToViewString(UniversityYearEnum[preview.academicInfo.year])}
+                                </Typography>
+                            </div>
+                        }
+                    </CardContent>
+                </Card>
+            </CustomLink>
         );
     };
 
     render() {
-        console.log(this.props.ratingPreviews);
         return (
             <div style={{padding: 10}}>
                 <Grid container justify="center" direction="row-reverse">
@@ -79,8 +85,8 @@ interface StateToProps {
 }
 
 const mapStateToProps = (state: AppStoreState): StateToProps => ({
-    ratingPreviewStatus: state.teammateRating.status,
-    ratingPreviews: state.teammateRating.previews
+    ratingPreviewStatus: state.ratingHome.status,
+    ratingPreviews: state.ratingHome.previews
 });
 
 export const RatingHomeView = connect<StateToProps, DispatchToProps, any>(

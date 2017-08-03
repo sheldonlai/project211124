@@ -1,26 +1,25 @@
-import {AuthActionTypes} from "../constants/AuthActionTypes";
 import {ReducerStateStatus} from "../constants/ReducerStateStatus";
 import {RatingActionTypes} from "../constants/RatingActionTypes";
 import {TeammatePreviewDto} from "../../../server/dtos/rating/TeammatePreviewDto";
 
-export interface TeammateRatingReducerState {
+export interface RatingHomeReducerState {
     status : ReducerStateStatus;
     previews: TeammatePreviewDto[];
 }
 
-const initialState : TeammateRatingReducerState = {
+const initialState : RatingHomeReducerState = {
     status : ReducerStateStatus.LOADING,
     previews : [],
 
 };
 
-const getLoadingState = (state):TeammateRatingReducerState  => {
+const getLoadingState = (state):RatingHomeReducerState  => {
     let newState = {...state};
     newState.status = ReducerStateStatus.LOADING;
     return newState;
 };
 
-export const TeammateRatingReducer = (state = initialState, action) : TeammateRatingReducerState => {
+export const RatingHomeReducer = (state = initialState, action) : RatingHomeReducerState => {
     switch (action.type) {
         case RatingActionTypes.GetTeammateRecordPreviewRequest:
             return getLoadingState(state);

@@ -79,12 +79,14 @@ export class TeammateRecordService extends BaseService implements ITeammateRecor
                 }
                 let avgRating = sum / teammate.ratings.length;
                 return {
+                    _id: teammate._id,
                     firstName: teammate.firstName,
                     lastName: teammate.lastName,
                     averageRating: avgRating,
                     academicInfo: teammate.academicInfo,
                     city: teammate.city
                 }
+
 
             });
         })

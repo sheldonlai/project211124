@@ -7,29 +7,33 @@ import {ErrorReducer, ErrorReducerState} from "../reducers/ErrorReducer";
 import {QuestionPageReducer, QuestionPageReducerState} from "../reducers/QuestionPageReducer";
 import {QuestionEditorReducer, QuestionEditorReducerState} from "../reducers/QuestionEditorReducer";
 import {LocationDataReducer, LocationDataReducerState} from "../reducers/LocationDataReducer";
-import {TeammateRatingReducer, TeammateRatingReducerState} from "../reducers/TammateRatingReducer";
+import {RatingHomeReducer, RatingHomeReducerState} from "../reducers/TammateRatingHomeReducer";
+import {RatingPageReducer, RatingPageReducerState} from "../reducers/RatingPageReducer";
 
 const loggerMiddleware = createLogger();
 const composeEnhancers = window['__REDUX_DEVTOOLS_EXTENSION_COMPOSE__'] || compose;
 
 // The state we receive from match state to props
 export interface AppStoreState {
-    auth : AuthReducerState;
+    auth: AuthReducerState;
     questionHome: QuestionHomeReducerState;
     errors: ErrorReducerState;
     questionPage: QuestionPageReducerState;
     questionEditorState: QuestionEditorReducerState;
     locationData: LocationDataReducerState;
-    teammateRating: TeammateRatingReducerState;
+    ratingHome: RatingHomeReducerState;
+    ratingPage: RatingPageReducerState;
 }
+
 const reducer = combineReducers({
     auth: AuthReducer,
     questionHome: QuestionHomeReducer,
     errors: ErrorReducer,
     questionPage: QuestionPageReducer,
-    questionEditorState : QuestionEditorReducer,
+    questionEditorState: QuestionEditorReducer,
     locationData: LocationDataReducer,
-    teammateRating :TeammateRatingReducer,
+    ratingHome: RatingHomeReducer,
+    ratingPage: RatingPageReducer
 });
 
 export const store = createStore(
@@ -37,4 +41,4 @@ export const store = createStore(
     composeEnhancers(
         process.env.NODE_ENV === 'production' ? f => f : applyMiddleware(loggerMiddleware),
         applyMiddleware(thunkMiddleware)
-));
+    ));

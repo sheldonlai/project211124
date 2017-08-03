@@ -12,6 +12,7 @@ import {QuestionInfoBoxView} from "./subcomponents/QuestionInfoBox";
 import Hidden from 'material-ui/Hidden';
 import {LoadingScreen} from "../../components/Animations/LoadingScreen";
 import {CSSTransitionGroup} from "react-transition-group";
+import {SplitVIewTemplate} from "../../components/Templates/SplitVIewTemplate";
 interface QuestionPageProps extends StateToProps, DispatchToProps, RouteComponentProps<{ id: string }> {
 }
 
@@ -39,18 +40,18 @@ export class QuestionPageComponent extends React.Component<QuestionPageProps> {
         }
         return (
             <div style={{padding: 10}}>
-                <Grid container justify="center" direction="row-reverse">
-                    <Grid item xs={12} md={3} lg={2}>
+                <SplitVIewTemplate>
+                    <div>
                         <Hidden smDown>
                             <div style={{height: 42}}/>
                         </Hidden>
                         <QuestionInfoBoxView/>
-                    </Grid>
-                    <Grid item xs={12} md={8} lg={6}>
+                    </div>
+                    <div>
                         <QuestionBoxView/>
                         <AnswerBoxesView/>
-                    </Grid>
-                </Grid>
+                    </div>
+                </SplitVIewTemplate>
             </div>
         );
     }

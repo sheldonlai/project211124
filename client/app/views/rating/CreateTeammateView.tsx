@@ -10,12 +10,14 @@ import TextField from "material-ui/TextField";
 import {TeammateRecordDto} from "../../../../server/dtos/rating/TeammateRecordDto";
 import {TeammateLocationEditor} from "./subcomponents/TeammateLocationEditor";
 import {RatingActions} from "../../actions/RatingActions";
+import {SplitVIewTemplate} from "../../components/Templates/SplitVIewTemplate";
 
 interface state extends TeammateRecordDto {
     showDesHint: boolean;
 }
 
-interface props extends DispatchToProps {}
+interface props extends DispatchToProps {
+}
 
 export class CreateTeammateViewComponent extends React.Component<props, state> {
 
@@ -36,7 +38,7 @@ export class CreateTeammateViewComponent extends React.Component<props, state> {
     onSubmit = () => {
         let teammate = {...this.state};
         delete teammate.showDesHint;
-        const dto : TeammateRecordDto = teammate as TeammateRecordDto;
+        const dto: TeammateRecordDto = teammate as TeammateRecordDto;
         this.props.createTeammate(dto);
     };
 
@@ -46,63 +48,60 @@ export class CreateTeammateViewComponent extends React.Component<props, state> {
         };
         return (
             <div style={{padding: 10, marginTop: 20}}>
-                <Grid container justify="center" direction="row-reverse">
-                    <Grid item xs={12} md={3} lg={2}>
-                    </Grid>
-                    <Grid item xs={12} md={8} lg={6}>
-                        <div>
-                            <Paper style={{padding: "20px"}}>
-                                <Typography type="display1">
-                                    Describe your teammate
+                <SplitVIewTemplate>
+                    <div>
+                        <Paper style={{padding: "20px"}}>
+                            <Typography type="display1">
+                                Describe your teammate
+                            </Typography>
+                            <TextField
+                                label="First name"
+                                value={this.state.firstName}
+                                onChange={(event) => this.setState({firstName: event.target.value})}
+                                inputProps={EmailNameInputStyles}
+                                style={textFieldMargin}
+                            /><br/>
+                            <TextField
+                                label="Last name"
+                                value={this.state.lastName}
+                                onChange={(event) => this.setState({lastName: event.target.value})}
+                                inputProps={EmailNameInputStyles}
+                                style={textFieldMargin}
+                            /><br/>
+                            {
+                                this.state.showDesHint &&
+                                <Typography type="caption">
+                                    This will allow people to recognize your teammate. A simple non-sensitive
+                                    description would be sufficient
                                 </Typography>
-                                <TextField
-                                    label="First name"
-                                    value={this.state.firstName}
-                                    onChange={(event) => this.setState({firstName: event.target.value})}
-                                    inputProps={EmailNameInputStyles}
-                                    style={textFieldMargin}
-                                /><br/>
-                                <TextField
-                                    label="Last name"
-                                    value={this.state.lastName}
-                                    onChange={(event) => this.setState({lastName: event.target.value})}
-                                    inputProps={EmailNameInputStyles}
-                                    style={textFieldMargin}
-                                /><br/>
-                                {
-                                    this.state.showDesHint &&
-                                    <Typography type="caption">
-                                        This will allow people to recognize your teammate. A simple non-sensitive
-                                        description would be sufficient
-                                    </Typography>
-                                }
-                                <TextField
-                                    onFocus={() => this.setState({showDesHint: true})}
-                                    onBlur={() => this.setState({showDesHint: false})}
-                                    label="Description"
-                                    value={this.state.description}
-                                    multiline
-                                    rows={3}
-                                    fullWidth
-                                    onChange={(event) => this.setState({description: event.target.value})}
-                                    style={textFieldMargin}
-                                /><br/>
-                                <TeammateLocationEditor
-                                    academicInfo={this.state.academicInfo}
-                                    city={this.state.city}
-                                    onAcademicChange={(academicInfo) => this.setState({academicInfo})}
-                                />
-                                <Grid container justify="flex-end">
-                                    <Grid item>
-                                        <Button style={{margin: "10px 0px"}} onClick={this.onSubmit}>
-                                            Submit
-                                        </Button>
-                                    </Grid>
+                            }
+                            <TextField
+                                onFocus={() => this.setState({showDesHint: true})}
+                                onBlur={() => this.setState({showDesHint: false})}
+                                label="Description"
+                                value={this.state.description}
+                                multiline
+                                rows={3}
+                                fullWidth
+                                onChange={(event) => this.setState({description: event.target.value})}
+                                style={textFieldMargin}
+                            /><br/>
+                            <TeammateLocationEditor
+                                academicInfo={this.state.academicInfo}
+                                city={this.state.city}
+                                onAcademicChange={(academicInfo) => this.setState({academicInfo})}
+                            />
+                            <Grid container justify="flex-end">
+                                <Grid item>
+                                    <Button style={{margin: "10px 0px"}} onClick={this.onSubmit}>
+                                        Submit
+                                    </Button>
                                 </Grid>
-                            </Paper>
-                        </div>
-                    </Grid>
-                </Grid>
+                            </Grid>
+                        </Paper>
+                    </div>
+                    <div/>
+                </SplitVIewTemplate>
             </div>
         )
     }
@@ -120,9 +119,7 @@ interface StateToProps {
 
 }
 
-const mapStateToProps = (dispatch): StateToProps => ({
-
-});
+const mapStateToProps = (dispatch): StateToProps => ({});
 
 export const CreateTeammateView = connect<any, DispatchToProps, any>(
     undefined,

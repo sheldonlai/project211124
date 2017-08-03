@@ -19,6 +19,7 @@ import {UserProfileView} from "./profile/UserProfileView";
 import {RatingHomeView} from "./rating/RatingHomeView";
 import {deepOrange, blueGrey} from "material-ui/colors";
 import {CreateTeammateView} from "./rating/CreateTeammateView";
+import {RatingPageView} from "./rating/RatingPageView";
 let muiTheme = createMuiTheme({
     palette: createPalette({
         primary: deepOrange,
@@ -106,6 +107,13 @@ export class App extends React.Component<any, any> {
                                    render={({match, ...rest}) => (
                                        <TransitionGroup component={firstChild}>
                                            <CreateTeammateView match={match} {...rest} />
+                                       </TransitionGroup>
+                                   )}
+                            />
+                            <Route path={Routes.rating}
+                                   render={({match, ...rest}) => (
+                                       <TransitionGroup component={firstChild}>
+                                           <RatingPageView match={match} {...rest} />
                                        </TransitionGroup>
                                    )}
                             />
