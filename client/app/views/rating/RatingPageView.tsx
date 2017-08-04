@@ -16,6 +16,8 @@ import {TeammateLocationEditor} from "./subcomponents/TeammateLocationEditor";
 import Paper from "material-ui/Paper";
 import Button from "material-ui/Button";
 import AddIcon from "material-ui-icons/Add";
+import Divider from "material-ui/Divider";
+import {UserDto} from "../../../../server/dtos/auth/UserDto";
 
 interface props extends StateToProps, DispatchToProps, RouteComponentProps<{ id: string }> {
 }
@@ -29,6 +31,10 @@ export class RatingViewComponent extends React.Component<props, any> {
             this.props.fetchTeammateRecord(id)
     }
 
+    componentWillReceiveProps(){
+
+    }
+
     getAverageRating() {
         let sum = 0;
         for (let rating of this.props.ratingPage.ratings) {
@@ -36,6 +42,7 @@ export class RatingViewComponent extends React.Component<props, any> {
         }
         let avgRating = sum / this.props.ratingPage.ratings.length;
     }
+
 
     render() {
         const record = this.props.ratingPage;
@@ -49,25 +56,25 @@ export class RatingViewComponent extends React.Component<props, any> {
                                 <Grid container justify="flex-end">
                                     <Grid item xs={12}>
                                         <Paper style={{padding: 20}}>
-                                        <Typography type="display3" style={{textTransform: "capitalize"}}>
-                                            {record.firstName + " " + record.lastName}
-                                        </Typography>
-                                        <Typography type="caption">
-                                            Average Rating
-                                        </Typography>
-                                        <ReactStars size={34} value={this.getAverageRating()} edit={false}/>
-                                        <TeammateLocationEditor
-                                            academicInfo={record.academicInfo}
-                                            city={record.city}
-                                            onAcademicChange={undefined}
-                                            editable={false}
-                                        />
-                                        <Typography type="caption">
-                                            Description
-                                        </Typography>
-                                        <Typography type="body1">
-                                            {record.description}
-                                        </Typography>
+                                            <Typography type="display3" style={{textTransform: "capitalize"}}>
+                                                {record.firstName + " " + record.lastName}
+                                            </Typography>
+                                            <Typography type="caption">
+                                                Average Rating
+                                            </Typography>
+                                            <ReactStars size={34} value={this.getAverageRating()} edit={false}/>
+                                            <TeammateLocationEditor
+                                                academicInfo={record.academicInfo}
+                                                city={record.city}
+                                                onAcademicChange={undefined}
+                                                editable={false}
+                                            />
+                                            <Typography type="caption">
+                                                Description
+                                            </Typography>
+                                            <Typography type="body1">
+                                                {record.description}
+                                            </Typography>
                                         </Paper>
                                     </Grid>
                                     <div key="edit-answer-button" style={{float: 'right', marginTop: 5}}>
@@ -95,18 +102,20 @@ interface DispatchToProps {
 const mapDispatchToProps = (dispatch): DispatchToProps => ({
     fetchTeammateRecord: (id) => dispatch(RatingActions.getTeammateRecord(id)),
     addRating: (rating: TeammateRatingDto, id: string) => dispatch(RatingActions.addRating(rating, id)),
-    editRating: (rating: TeammateRatingDto, id: string) => dispatch(RatingActions.editRating(rating, id)),
+    editRating: (rating: TeammateRatingDto, id: string) => dispatch(RatingActions.updateRating(rating, id)),
 
 });
 
 interface StateToProps {
     ratingPageStatus: ReducerStateStatus;
     ratingPage: TeammateRecordDto;
+    user: UserDto;
 }
 
 const mapStateToProps = (state: AppStoreState): StateToProps => ({
     ratingPageStatus: state.ratingPage.status,
-    ratingPage: state.ratingPage.record
+    ratingPage: state.ratingPage.record,
+    user: state.auth.user
 });
 
 export const RatingPageView = connect<StateToProps, DispatchToProps, RouteComponentProps<{ id: string }>>(

@@ -131,7 +131,7 @@ class TeammateLocationEditorComponent extends React.Component<combinedProps, sta
             const academicInfo = this.props.academicInfo;
             return <div>
                 <DisplayField label={"university"} value={academicInfo.university.name}/>
-                <DisplayField label={"university"}
+                <DisplayField label={"Year"}
                               value={convertEnumStringToViewString(UniversityYearEnum[academicInfo.year])}/>
             </div>
         }
