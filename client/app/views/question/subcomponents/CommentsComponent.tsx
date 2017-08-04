@@ -135,7 +135,6 @@ export class CommentsComponent extends React.Component<CommentsComponentProps, C
 
     UpdateEditedComment = (indx) => {
         if(this.state.commentContent){
-            console.log(this.state.commentContent);
             this.props.comments[indx].commentContent = this.state.commentContent;
             this.props.comments[indx].lastEditedUtc = new Date(Date.now());
             this.props.onCommentsSubmit(this.props.comments);
@@ -168,6 +167,11 @@ export class CommentsComponent extends React.Component<CommentsComponentProps, C
             return (
                 <ListItem key={comment.lastEditedUtc + comment.commentBy.username}>
                     <ListItemText primary={this.onEditComment(indx)}></ListItemText>
+                    <div style={{color: "grey", fontSize: 10, textAlign: "right"}}>
+                        {comment.commentedDate && <div>Posted on {comment.commentedDate}</div>}
+                        <br/>
+                        by {comment.commentBy.username}
+                    </div>
                         {this.EditAndSaveButton(indx)}
                         {this.CancelAndDeleteButton(indx)}
                 </ListItem>

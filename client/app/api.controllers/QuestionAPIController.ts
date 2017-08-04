@@ -72,6 +72,7 @@ export class QuestionAPIController extends ApiController {
 
     createComment(question: Question){
         return this.questionPutApiHelper(APIUrls.CreateComment, question);
+        //return this.questionPutApiHelper(APIUrls.CreateComment + '/' + question._id, question);
     }
 
     fetchQuestionByID(id: string): AxiosPromise {
