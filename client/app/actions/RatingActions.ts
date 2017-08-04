@@ -63,17 +63,17 @@ export class RatingActions extends BaseActions {
         }
     }
 
-    static editRating(teammateRecordDto: TeammateRatingDto, teammateRecordId: string) {
+    static updateRating(teammateRecordDto: TeammateRatingDto, teammateRecordId: string) {
         return function (dispatch) {
             dispatch({
-                type: RatingActionTypes.EditRatingRequest,
+                type: RatingActionTypes.UpdateRatingRequest,
             });
-            apiController.editRating(teammateRecordDto, teammateRecordId).then((res) => {
+            apiController.updateRating(teammateRecordDto, teammateRecordId).then((res) => {
                 dispatch({
-                    type: RatingActionTypes.EditRatingOK,
+                    type: RatingActionTypes.UpdateRatingOK,
                     data: res.data
                 })
-            }).catch((err) => RatingActions.handleError(dispatch, err, RatingActionTypes.EditRatingError));
+            }).catch((err) => RatingActions.handleError(dispatch, err, RatingActionTypes.UpdateRatingError));
         }
     }
 

@@ -1,24 +1,23 @@
 import * as React from "react";
 import {connect} from "react-redux";
 import Grid from "material-ui/Grid";
-import Button from "material-ui/Button";
-import {CustomLink} from "../../components/CustomLink";
-import {Routes} from "../../constants/Routes";
 import {RatingActions} from "../../actions/RatingActions";
 import {AppStoreState} from "../../stores/AppStore";
-import {TeammatePreviewDto} from "../../../../server/dtos/rating/TeammatePreviewDto";
-import Divider from "material-ui/Divider";
 import Typography from "material-ui/Typography";
 import ReactStars from 'react-stars';
-import Card, {CardActions, CardContent} from 'material-ui/Card';
+import {CardActions, CardContent} from 'material-ui/Card';
 import {ReducerStateStatus} from "../../constants/ReducerStateStatus";
 import {LoadingScreen} from "../../components/Animations/LoadingScreen";
-import {UniversityYearEnum} from "../../../../server/enums/UniversityYearEnum";
-import {convertEnumStringToViewString} from "../../utils/utils";
 import {SplitVIewTemplate} from "../../components/Templates/SplitVIewTemplate";
 import {TeammateRatingDto} from "../../../../server/dtos/rating/TeammateRatingDto";
 import {TeammateRecordDto} from "../../../../server/dtos/rating/TeammateRecordDto";
-import {RouteComponentProps, RouterProps} from "react-router";
+import {RouteComponentProps} from "react-router";
+import {TeammateLocationEditor} from "./subcomponents/TeammateLocationEditor";
+import Paper from "material-ui/Paper";
+import Button from "material-ui/Button";
+import AddIcon from "material-ui-icons/Add";
+import Divider from "material-ui/Divider";
+import {UserDto} from "../../../../server/dtos/auth/UserDto";
 
 interface props extends StateToProps, DispatchToProps, RouteComponentProps<{ id: string }> {
 }
@@ -28,8 +27,12 @@ export class RatingViewComponent extends React.Component<props, any> {
         const id = this.props.match.params.id;
         if (!id)
             console.error("No id is specified");
-        if ( !this.props.ratingPage ||  this.props.ratingPage._id != id)
+        if (!this.props.ratingPage || this.props.ratingPage._id != id)
             this.props.fetchTeammateRecord(id)
+    }
+
+    componentWillReceiveProps(){
+
     }
 
     getAverageRating() {
@@ -47,12 +50,39 @@ export class RatingViewComponent extends React.Component<props, any> {
             <div style={{padding: 10}}>
                 <SplitVIewTemplate>
                     {
-                        this.props.ratingPageStatus == ReducerStateStatus.LOADING?
-                            <LoadingScreen />:
+                        this.props.ratingPageStatus == ReducerStateStatus.LOADING ?
+                            <LoadingScreen/> :
                             <div>
-                                Name: {record.firstName + " " + record.lastName}
-                                <br />
-                                Avg Rating: {this.getAverageRating()}
+                                <Grid container justify="flex-end">
+                                    <Grid item xs={12}>
+                                        <Paper style={{padding: 20}}>
+                                            <Typography type="display3" style={{textTransform: "capitalize"}}>
+                                                {record.firstName + " " + record.lastName}
+                                            </Typography>
+                                            <Typography type="caption">
+                                                Average Rating
+                                            </Typography>
+                                            <ReactStars size={34} value={this.getAverageRating()} edit={false}/>
+                                            <TeammateLocationEditor
+                                                academicInfo={record.academicInfo}
+                                                city={record.city}
+                                                onAcademicChange={undefined}
+                                                editable={false}
+                                            />
+                                            <Typography type="caption">
+                                                Description
+                                            </Typography>
+                                            <Typography type="body1">
+                                                {record.description}
+                                            </Typography>
+                                        </Paper>
+                                    </Grid>
+                                    <div key="edit-answer-button" style={{float: 'right', marginTop: 5}}>
+                                        <Button fab color="primary">
+                                            <AddIcon/>
+                                        </Button>
+                                    </div>
+                                </Grid>
                             </div>
                     }
                     <div/>
@@ -72,18 +102,20 @@ interface DispatchToProps {
 const mapDispatchToProps = (dispatch): DispatchToProps => ({
     fetchTeammateRecord: (id) => dispatch(RatingActions.getTeammateRecord(id)),
     addRating: (rating: TeammateRatingDto, id: string) => dispatch(RatingActions.addRating(rating, id)),
-    editRating: (rating: TeammateRatingDto, id: string) => dispatch(RatingActions.editRating(rating, id)),
+    editRating: (rating: TeammateRatingDto, id: string) => dispatch(RatingActions.updateRating(rating, id)),
 
 });
 
 interface StateToProps {
     ratingPageStatus: ReducerStateStatus;
     ratingPage: TeammateRecordDto;
+    user: UserDto;
 }
 
 const mapStateToProps = (state: AppStoreState): StateToProps => ({
     ratingPageStatus: state.ratingPage.status,
-    ratingPage: state.ratingPage.record
+    ratingPage: state.ratingPage.record,
+    user: state.auth.user
 });
 
 export const RatingPageView = connect<StateToProps, DispatchToProps, RouteComponentProps<{ id: string }>>(

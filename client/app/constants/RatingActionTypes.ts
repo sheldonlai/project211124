@@ -15,7 +15,7 @@ export enum RatingActionTypes {
     AddRatingOK = <any> "AddRatingOK",
     AddRatingError = <any> "AddRatingError",
 
-    EditRatingRequest = <any> "EditRatingRequest",
-    EditRatingOK = <any> "EditRatingOK",
-    EditRatingError = <any> "EditRatingError",
+    UpdateRatingRequest = <any> "UpdateRatingRequest",
+    UpdateRatingOK = <any> "UpdateRatingOK",
+    UpdateRatingError = <any> "UpdateRatingError",
 }
