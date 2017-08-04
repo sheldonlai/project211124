@@ -11,12 +11,15 @@ import {LocationActions} from "../../../actions/LocationActions";
 import {isNullOrUndefined} from "util";
 import {convertEnumStringToViewString, listNumericalEnumValues} from "../../../utils/utils";
 import {UniversitiesMap} from "../../../reducers/LocationDataReducer";
-
+import Typography from "material-ui/Typography";
+import {DisplayField} from "../../../components/Forms/DisplayField";
 
 interface props {
     onAcademicChange: (academicInfo: AcademicInfo) => void;
     academicInfo: AcademicInfo;
-    city: City
+    city: City;
+    editable?: boolean;
+
 }
 
 interface state {
@@ -35,12 +38,17 @@ class TeammateLocationEditorComponent extends React.Component<combinedProps, sta
     }
 
     componentWillMount() {
-
         if (this.props.countries === undefined || this.props.countries.length === 0){
             this.props.fetchCountries();
         }
         if (!isNullOrUndefined(this.props.academicInfo)&& !isNullOrUndefined(this.props.academicInfo.university)) {
             const country = this.props.academicInfo.university
+        }
+    }
+
+    componentWillReceiveProps(nextProps: props){
+        if (!isNullOrUndefined(nextProps.academicInfo)){
+            this.setState({country: nextProps.academicInfo.university.country});
         }
     }
 
@@ -66,7 +74,15 @@ class TeammateLocationEditorComponent extends React.Component<combinedProps, sta
         }
     };
 
-    render() {
+    view = () => {
+        return (
+            <div>
+                <Typography></Typography>
+            </div>
+        )
+    };
+
+    editor = () => {
         const countries = this.props.countries.map(country => ({text: country.name, value: country}));
         const years = listNumericalEnumValues(UniversityYearEnum)
             .map((e): DropDownSelectData => {
@@ -108,6 +124,20 @@ class TeammateLocationEditorComponent extends React.Component<combinedProps, sta
                 }
             </div>
         )
+    };
+
+    render() {
+        if (this.props.editable === false) {
+            const academicInfo = this.props.academicInfo;
+            return <div>
+                <DisplayField label={"university"} value={academicInfo.university.name}/>
+                <DisplayField label={"university"}
+                              value={convertEnumStringToViewString(UniversityYearEnum[academicInfo.year])}/>
+            </div>
+        }
+        else {
+            return this.editor();
+        }
     }
 }
 

@@ -1,4 +1,3 @@
-
 import * as React from "react";
 import {connect} from "react-redux";
 import {AppStoreState} from "../../stores/AppStore";
@@ -21,14 +20,16 @@ import {UserActions} from "../../actions/UserActions";
 import {EmailNameInputStyles} from "../../constants/StyleClasses";
 import {isNullOrUndefined} from "util";
 import {UniversitiesMap} from "../../reducers/LocationDataReducer";
+import {SplitVIewTemplate} from "../../components/Templates/SplitVIewTemplate";
 
 interface state {
     error: string;
     user: UserDto;
 }
-export class UserProfileComponent extends React.Component<StateToProps & DispatchToProps& RouterProps, state>{
 
-    constructor(props){
+export class UserProfileComponent extends React.Component<StateToProps & DispatchToProps & RouterProps, state> {
+
+    constructor(props) {
         super(props);
         this.state = {
             error: undefined,
@@ -40,10 +41,10 @@ export class UserProfileComponent extends React.Component<StateToProps & Dispatc
         if (!this.props.loggedIn) {
             this.props.history.push(Routes.home);
         }
-        if (this.props.countries.length == 0){
+        if (this.props.countries.length == 0) {
             this.props.fetchCountries();
         }
-        if (this.props.user.country){
+        if (this.props.user.country) {
             this.props.getUniversities(this.props.user.country._id);
         }
         const user = {...this.props.user};
@@ -67,7 +68,7 @@ export class UserProfileComponent extends React.Component<StateToProps & Dispatc
             user.country = value;
             user.university = undefined;
             this.setState({user});
-            if (!isNullOrUndefined(value)){
+            if (!isNullOrUndefined(value)) {
                 // TODO: should optimize keep a uni map with all loaded data
                 this.props.getUniversities(value._id);
             }
@@ -81,74 +82,76 @@ export class UserProfileComponent extends React.Component<StateToProps & Dispatc
         if (
             this.state.user && this.state.user.country &&
             this.props.universitiesMap.hasOwnProperty(this.state.user.country.name)
-        ){
+        ) {
             universities = this.props.universitiesMap[this.state.user.country.name]
                 .map(uni => ({text: uni.name, value: uni}));
         }
 
         return (
             <div style={{padding: "20px 0"}}>
-                <Grid container justify="center" direction="row-reverse" gutter={0}>
-                    <Grid item xs={12} md={3} lg={2}>
-                    </Grid>
-                    <Grid item xs={12} md={8} lg={6}>
-                        <Paper style={{padding: "50px 20px"}}>
-                            <Grid container justify="center">
-                                <Grid item xs={10}>
-                                    <Typography type="display1" gutterBottom>Profile</Typography>
-                                    <ErrorView errorTxt={this.state.error}/>
-                                    <TextField
-                                        value={this.state.user.email}
-                                        label="Email"
-                                        inputProps={EmailNameInputStyles}
-                                    /><br/>
-                                    <TextField
-                                        value={this.state.user.username}
-                                        label="Username"
-                                        fullWidth
-                                    /><br />
-                                    <OptionalTextFieldEditor
-                                        value={this.state.user.company}
-                                        label="Company"
-                                        onChange={(company)=> this.updateUserField("company", company)}
-                                    /><br />
+                <SplitVIewTemplate>
+                    <Paper style={{padding: "50px 20px"}}>
+                        <Grid container justify="center">
+                            <Grid item xs={10}>
+                                <Typography type="display1" gutterBottom>Profile</Typography>
+                                <ErrorView errorTxt={this.state.error}/>
+                                <TextField
+                                    value={this.state.user.email}
+                                    label="Email"
+                                    inputProps={EmailNameInputStyles}
+                                /><br/>
+                                <TextField
+                                    value={this.state.user.username}
+                                    label="Username"
+                                    fullWidth
+                                /><br/>
+                                <OptionalTextFieldEditor
+                                    value={this.state.user.company}
+                                    label="Company"
+                                    onChange={(company) => this.updateUserField("company", company)}
+                                /><br/>
+                                <DropDownSelect
+                                    data={countries}
+                                    value={this.state.user.country}
+                                    placeholder="Country"
+                                    onChange={this.updateCountry}
+                                />
+                                {
+                                    this.state.user.country &&
                                     <DropDownSelect
-                                        data={countries}
-                                        value={this.state.user.country}
-                                        placeholder="Country"
-                                        onChange={this.updateCountry}
+                                        data={universities}
+                                        value={this.state.user.university}
+                                        placeholder="university"
+                                        fullWidth={true}
+                                        onChange={(uni) => this.updateUserField("university", uni)}
                                     />
-                                    {
-                                        this.state.user.country &&
-                                        <DropDownSelect
-                                            data={universities}
-                                            value={this.state.user.university}
-                                            placeholder="university"
-                                            fullWidth={true}
-                                            onChange={(uni)=> this.updateUserField("university", uni)}
-                                        />
-                                    }
-                                    <Button raised onClick={this.submit}>Submit</Button>
-                                </Grid>
+                                }
+                                <Button raised onClick={this.submit}>Submit</Button>
                             </Grid>
-                        </Paper>
-                    </Grid>
-                </Grid>
+                        </Grid>
+                    </Paper>
+                    <div>
+                        {/*TODO: add side view */}
+                    </div>
+                </SplitVIewTemplate>
             </div>
         );
     }
 }
+
 interface StateToProps {
     loggedIn: boolean;
     user: UserDto;
     countries: CountryDto[];
     universitiesMap: UniversitiesMap;
 }
+
 interface DispatchToProps {
-    fetchCountries : () => void
-    getUniversities : (countryId: string) => void
+    fetchCountries: () => void
+    getUniversities: (countryId: string) => void
     updateProfile: (user: UserDto) => void;
 }
+
 const mapStateToProps = (state: AppStoreState): StateToProps => ({
     loggedIn: state.auth.loggedIn,
     user: state.auth.user,
@@ -157,8 +160,8 @@ const mapStateToProps = (state: AppStoreState): StateToProps => ({
 
 });
 const mapDispatchToProps = (dispatch): DispatchToProps => ({
-    fetchCountries : () => dispatch(LocationActions.getCounties()),
-    getUniversities : (countryId) =>dispatch(LocationActions.getUniversities(countryId)),
+    fetchCountries: () => dispatch(LocationActions.getCounties()),
+    getUniversities: (countryId) => dispatch(LocationActions.getUniversities(countryId)),
     updateProfile: (user: UserDto) => dispatch(UserActions.updateUserProfile(user))
 });
 export const UserProfileView = AnimatedWrapper(connect<StateToProps, DispatchToProps, {}>(

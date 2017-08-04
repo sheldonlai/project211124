@@ -15,6 +15,7 @@ import {DropDownSelect} from "../../../components/Forms/DropDownSelect";
 import {QuestionEditorReducerState} from "../../../reducers/QuestionEditorReducer";
 import Question = FrontEndQuestionModels.Question;
 import cloneQuestion = FrontEndQuestionModels.cloneQuestion;
+import {DisplayField} from "../../../components/Forms/DisplayField";
 
 interface stateToProps {
     question: Question;
@@ -49,16 +50,7 @@ export class QuestionInfoBox extends React.Component<props, {}> {
     };
 
     row = (label: string, value: string) => {
-        return (
-            <div style={{marginTop: 20}}>
-                <Typography type="caption" gutterBottom>
-                    {label}
-                </Typography>
-                <Typography type="body1" gutterBottom>
-                    {value}
-                </Typography>
-            </div>
-        )
+        return <DisplayField label={label} value={value}/>
     };
 
     saveChanges = () => {
@@ -79,7 +71,6 @@ export class QuestionInfoBox extends React.Component<props, {}> {
         )
     };
     editor = () => {
-        const question = this.props.question;
         return (
             <div>
                 <DropDownSelect

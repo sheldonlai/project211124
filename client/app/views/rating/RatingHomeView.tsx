@@ -7,7 +7,6 @@ import {Routes} from "../../constants/Routes";
 import {RatingActions} from "../../actions/RatingActions";
 import {AppStoreState} from "../../stores/AppStore";
 import {TeammatePreviewDto} from "../../../../server/dtos/rating/TeammatePreviewDto";
-import Divider from "material-ui/Divider";
 import Typography from "material-ui/Typography";
 import ReactStars from 'react-stars';
 import Card, {CardActions, CardContent} from 'material-ui/Card';
@@ -30,7 +29,7 @@ export class RatingHomeViewComponent extends React.Component<StateToProps & Disp
                         <Typography type="headline" style={{textTransform: "capitalize"}}>
                             {preview.firstName + " " + preview.lastName}
                         </Typography>
-                        <ReactStars size={34} value={preview.averageRating ? preview.averageRating : 5} edit={false}/>
+                        <ReactStars size={34} value={preview.averageRating} edit={false}/>
                         {
                             preview.academicInfo &&
                             <div>
@@ -60,8 +59,8 @@ export class RatingHomeViewComponent extends React.Component<StateToProps & Disp
                             </CustomLink>
                             {
                                 this.props.ratingPreviewStatus === ReducerStateStatus.LOADING ?
-                                    <LoadingScreen/>
-                                    : this.props.ratingPreviews.map((e, i) => this.recordRow(e, i))
+                                    <LoadingScreen/>:
+                                    this.props.ratingPreviews.map((e, i) => this.recordRow(e, i))
                             }
                         </div>
                     </Grid>
