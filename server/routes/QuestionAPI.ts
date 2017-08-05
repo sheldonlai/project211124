@@ -5,6 +5,7 @@ import {APIUrls} from "../urls";
 import {AuthRequest, maybeAuthenticated, mustBeAuthenticated} from "../middlewares/AuthMiddleware";
 import {QuestionDto} from "../dtos/q&a/QuestionDto";
 import {User} from "../models/User";
+import {CommentDto} from "../dtos/q&a/CommentDto";
 
 export class QuestionAPI extends BaseAPI {
 
@@ -20,7 +21,8 @@ export class QuestionAPI extends BaseAPI {
         this.router.put(APIUrls.UpdateQuestion, mustBeAuthenticated, this.updateQuestion);
         this.router.put(APIUrls.UpVoteQuestion, mustBeAuthenticated, this.upVoteQuestion);
         this.router.put(APIUrls.DownVoteQuestion, mustBeAuthenticated, this.downVoteQuestion);
-        this.router.put(APIUrls.CreateComment, mustBeAuthenticated, this.createComment)
+        this.router.put(APIUrls.CreateComment, mustBeAuthenticated, this.createComment);
+        this.router.put(APIUrls.UpdateComment, mustBeAuthenticated, this.UpdateComment);
     }
 
     public getQuestionPreviews = (req: AuthRequest, res: Response, next: NextFunction) => {
@@ -67,4 +69,13 @@ export class QuestionAPI extends BaseAPI {
         let result = this.service.createComment(question);
         this.respondPromise(result, res, next);
     };
+
+    public UpdateComment = (req: AuthRequest, res: Response, next: NextFunction) => {
+        let commentIndx: number = req.body.commentIndx;
+        let updatedComment: CommentDto = req.body.updatedComment;
+        let questionId: string = req.params.questionId;
+        let user: User = req.user;
+        let result = this.service.UpdateComment(commentIndx, questionId, user, updatedComment);
+        this.respondPromise(result, res, next);
+    }
 }

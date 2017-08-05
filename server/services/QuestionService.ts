@@ -25,6 +25,7 @@ export interface IQuestionService {
     upVoteQuestion(questionId: string, user: User): Promise<QuestionDto>;
     downVoteQuestion(questionId: string, user: User): Promise<QuestionDto>;
     createComment(question: Question): Promise<QuestionDto>;
+    UpdateComment(commentIndx: number, questionId: string, user: User, updatedComment: CommentDto): Promise<QuestionDto>;
 }
 
 export class QuestionService extends BaseService implements IQuestionService {
@@ -124,6 +125,19 @@ export class QuestionService extends BaseService implements IQuestionService {
             questionFound.comments = question.comments;
             return this.questionRepository.update(questionFound);
         });
+    }
+
+    UpdateComment(commentIndx: number, questionId: string, user: User, updatedComment: CommentDto){
+        return this.questionRepository.getById(questionId).then((questionFound: Question) => {
+            if(questionFound.comments[commentIndx].commentBy.username != user.username ||
+            questionFound.comments[commentIndx].commentBy._id != user._id){
+                throw new AppError("You are not the owner of this question!");
+            }
+            else{
+                questionFound.comments[commentIndx] = updatedComment;
+                return this.questionRepository.update(questionFound);
+            }
+        })
     }
 
     private checkPermissionForModification = (questionDto: QuestionDto, questionObj: Question, currentUser: User) => {
