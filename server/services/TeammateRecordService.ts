@@ -114,14 +114,14 @@ export class TeammateRecordService extends BaseService implements ITeammateRecor
                currentUser: User): Promise<TeammateRecordDto> {
         return this.teammateRecordRepo.getById(teammateRatingId).then((teammate: TeammateRecord) => {
             const now = new Date(Date.now());
-            teammateRatingDto.createdAt = now;
-            teammateRatingDto.updatedAt = now;
-            teammateRatingDto.createdBy = currentUser;
             let found = false;
             for (let rating of teammate.ratings) {
                 if (rating._id.toString() === teammateRatingDto._id &&
                     rating.createdBy._id.toString() === currentUser._id.toString()) {
-                    rating = teammateRatingDto;
+                    rating.createdBy = teammateRatingDto.createdBy;
+                    rating.rating = teammateRatingDto.rating;
+                    rating.comment= teammateRatingDto.comment;
+                    rating.updatedAt = now;
                     found = true;
                     break;
                 }

@@ -19,7 +19,6 @@ interface props {
     academicInfo: AcademicInfo;
     city: City;
     editable?: boolean;
-
 }
 
 interface state {

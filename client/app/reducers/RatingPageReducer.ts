@@ -5,12 +5,13 @@ import {TeammateRecordDto} from "../../../server/dtos/rating/TeammateRecordDto";
 export interface RatingPageReducerState {
     status : ReducerStateStatus;
     record: TeammateRecordDto;
+    lastUpdated: number;
 }
 
 const initialState : RatingPageReducerState = {
     status : ReducerStateStatus.LOADING,
     record : undefined,
-
+    lastUpdated: 0
 };
 
 const getLoadingState = (state):RatingPageReducerState  => {
@@ -27,6 +28,7 @@ export const RatingPageReducer = (state = initialState, action) : RatingPageRedu
             state = {...state};
             state.status = ReducerStateStatus.DONE;
             state.record = action.data;
+            state.lastUpdated = Date.now();
             return state;
         default:
             return state;
