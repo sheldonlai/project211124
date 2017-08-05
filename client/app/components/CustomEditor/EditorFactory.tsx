@@ -19,8 +19,8 @@ const { AlignmentTool } = alignmentPlugin;
 
 const decorator = composeDecorators(
     resizeablePlugin.decorator,
-    alignmentPlugin.decorator,
-    focusPlugin.decorator,
+    // alignmentPlugin.decorator,
+    // focusPlugin.decorator,
     blockDndPlugin.decorator
 );
 
@@ -49,7 +49,7 @@ export class EditorFactory {
                             readOnly={readOnly}
                             ref="editor"
                     />
-                    <AlignmentTool />
+                    {/*<AlignmentTool />*/}
                  </div>;
     }
 
