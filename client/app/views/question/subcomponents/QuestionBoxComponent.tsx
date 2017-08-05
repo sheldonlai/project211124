@@ -21,6 +21,7 @@ import {connect} from "react-redux";
 import {Prompt} from "react-router";
 import {FooterComponent} from "./FooterComponent";
 import {QuestionEditorReducerState} from "../../../reducers/QuestionEditorReducer";
+import {CommentDto} from "../../../../../server/dtos/q&a/CommentDto";
 
 interface QuestionBoxComponentProps {
     user: UserDto; // current user
@@ -58,7 +59,13 @@ export class QuestionBoxComponent extends Component<props, {}> {
         this.props.createComment(question);
         this.props.changeQuestionEditorState({edit: this.props.edit, question});
         // TODO : Create edit/create comment actions
-        this.onSubmit();
+        //this.onSubmit();
+    };
+
+    onCommentUpdate = (commentIndx, updatedComment) => {
+      let question = cloneQuestion(this.props.question);
+      this.props.UpdateComment(question, commentIndx, updatedComment);
+      this.props.changeQuestionEditorState({edit: this.props.edit, question});
     };
 
     resetQuestion = () => {
@@ -125,6 +132,7 @@ export class QuestionBoxComponent extends Component<props, {}> {
                 <CommentsComponent comments={this.props.question.comments}
                                    user={this.props.user}
                                    onCommentsSubmit={this.onCommentSubmit}
+                                   onCommentUpdate={this.onCommentUpdate}
 
                 />
             </div>
@@ -144,6 +152,7 @@ const mapDispatchToProps = (dispatch): DispatchProps => ({
     editQuestion: (question: Question) => dispatch(QuestionActions.updateQuestion(question)),
     changeQuestionEditorState: (state: QuestionEditorReducerState) => dispatch(QuestionActions.changeQuestionEditorState(state)),
     createComment: (question: Question) => dispatch(QuestionActions.createComment(question)),
+    UpdateComment: (question: Question, commentIndx: number, updatedComment: CommentDto) => dispatch(QuestionActions.updateComment(question, commentIndx, updatedComment)),
 });
 
 interface DispatchProps {
@@ -152,6 +161,7 @@ interface DispatchProps {
     editQuestion: (question: Question) => void;
     changeQuestionEditorState: (state: QuestionEditorReducerState) => void;
     createComment: (question: Question) => void;
+    UpdateComment: (question: Question, commentIndx: number, updatedComment: CommentDto) => void;
 }
 
 export const QuestionBoxView = connect<QuestionBoxComponentProps, DispatchProps, any>(

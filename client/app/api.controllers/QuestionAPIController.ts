@@ -74,6 +74,19 @@ export class QuestionAPIController extends ApiController {
         return this.questionPutApiHelper(APIUrls.CreateComment, question);
     }
 
+    UpdateComment(question: Question, commentIndx: number, updatedComment: CommentDto){
+        const questionDto = this.convertQuestionToDto(question);
+        const reqBody = {
+            questionDto: questionDto,
+            commentIndx: commentIndx,
+            updatedComment: updatedComment,
+        };
+        return this.put(APIUrls.UpdateCommentNoQuestionID + '/' + questionDto._id, reqBody).then((response: AxiosResponse) => {
+            response.data = this.convertDtoToQuestion(response.data);
+            return response;
+        });
+    }
+
     fetchQuestionByID(id: string): AxiosPromise {
         return this.get(APIUrls.GetQuestionPage.replace(":id", id))
             .then((response: AxiosResponse) => {

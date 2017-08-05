@@ -8,6 +8,7 @@ import QuestionPage = FrontEndQuestionModels.QuestionPage;
 import {QuestionEditorReducerState} from "../reducers/QuestionEditorReducer";
 import {RouterController} from "../api.controllers/RouterController";
 import {Routes} from "../constants/Routes";
+import {CommentDto} from "../../../server/dtos/q&a/CommentDto";
 
 let apiController: QuestionAPIController = QuestionAPIController.getInstance();
 
@@ -82,6 +83,19 @@ export class QuestionActions extends BaseActions {
                 });
             }).catch(err =>
             QuestionActions.handleError(dispatch, err, QuestionActionTypes.createCommentError)
+            )
+        }
+    }
+
+    static updateComment(question: Question, commentIndx: number, updatedComment: CommentDto){
+        return (dispatch) => {
+            apiController.UpdateComment(question, commentIndx, updatedComment).then(res => {
+                dispatch({
+                    type: QuestionActionTypes.UpdateComment,
+                    data: res.data,
+                });
+            }).catch(err =>
+            QuestionActions.handleError(dispatch, err, QuestionActionTypes.UpdateCommentError)
             )
         }
     }
