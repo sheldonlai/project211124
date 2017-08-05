@@ -11,12 +11,18 @@ import TextField from "material-ui/TextField";
 import {connect} from "react-redux";
 import {RatingActions} from "../../../actions/RatingActions";
 import Grid from "material-ui/Grid";
+import {AppStoreState} from "../../../stores/AppStore";
 
 interface props {
     user: UserDto,
     rating: TeammateRatingDto;
     recordId: string;
     onRatingChange: (rating: TeammateRatingDto) => void;
+    onCancel: () => void;
+}
+
+interface StateToProps {
+    ratings: TeammateRatingDto[]
 }
 
 interface DispatchToProps {
@@ -29,7 +35,7 @@ interface state {
 }
 
 
-export class RatingBox extends React.Component<props & DispatchToProps, state> {
+export class RatingBox extends React.Component<props & DispatchToProps& StateToProps, state> {
 
     constructor(props) {
         super(props);
@@ -48,11 +54,17 @@ export class RatingBox extends React.Component<props & DispatchToProps, state> {
     };
 
     submit = () => {
-        if (this.props.rating._id){
+        let filter = this.props.ratings.filter((r) => r._id === this.props.rating._id);
+        if (this.props.rating._id) {
             this.props.updateRating(this.props.rating);
         } else {
             this.props.addRating(this.props.rating);
         }
+    };
+
+    cancelChange = () => {
+        this.setState({edit: false});
+        this.props.onCancel();
     };
 
     render() {
@@ -62,53 +74,61 @@ export class RatingBox extends React.Component<props & DispatchToProps, state> {
         const edit = this.state.edit;
         return (
             <Grid item xs={12}>
-            <Paper style={{padding: 10}}>
-                {!edit && editable &&
-                <Button style={{float: "right"}} color="primary" onClick={() => this.setState({edit: true})}>
-                    Edit
-                </Button>
-                }
-                {edit &&
-                <Button style={{float: "right"}} color="primary" onClick={this.submit}>
-                    save
-                </Button>
-                }
-                <Typography type="caption">
-                    Rating
-                </Typography>
-                <ReactStars size={24} value={rating.rating}
-                            onChange={(num) => this.onRatingChange("rating", num)}/>
-                <Divider/>
-                {
-                    edit ?
-                        <TextField
-                            label="Comment"
-                            value={rating.comment}
-                            multiline
-                            rows={3}
-                            fullWidth
-                            onChange={(event) => this.onRatingChange("comment", event.target.value)}
-                        /> :
-                        <Typography type="body1" style={{minHeight: 60}}>
-                            {rating.comment}
-                        </Typography>
-                }
+                <Paper style={{padding: 10}}>
+                    {!edit && editable &&
+                    <Button style={{float: "right"}} color="primary" onClick={() => this.setState({edit: true})}>
+                        Edit
+                    </Button>
+                    }
+                    {edit &&
+                    <div>
+                        <Button style={{float: "right"}} color="primary" onClick={this.submit}>
+                            save
+                        </Button>
+                        <Button style={{float: "right"}} color="primary" onClick={this.cancelChange}>
+                            Cancel
+                        </Button>
+                    </div>
 
-                <Divider/>
-                <div style={{color: "grey", fontSize: 10, textAlign: "right"}}>
-                    {rating.createdAt && <div>Posted on {rating.createdAt.toLocaleString()}</div>}
-                    <br/>
-                    by {rating.createdBy.username}
-                </div>
-            </Paper>
+                    }
+                    <Typography type="caption">
+                        Rating
+                    </Typography>
+                    <ReactStars size={24} value={rating.rating}
+                                onChange={(num) => this.onRatingChange("rating", num)}/>
+                    <Divider/>
+                    {
+                        edit ?
+                            <TextField
+                                label="Comment"
+                                value={rating.comment}
+                                multiline
+                                rows={3}
+                                fullWidth
+                                onChange={(event) => this.onRatingChange("comment", event.target.value)}
+                            /> :
+                            <Typography type="body1" style={{minHeight: 60}}>
+                                {rating.comment}
+                            </Typography>
+                    }
+
+                    <Divider/>
+                    <div style={{color: "grey", fontSize: 10, textAlign: "right"}}>
+                        {rating.createdAt && <div>Posted on {rating.createdAt.toLocaleString()}</div>}
+                        <br/>
+                        by {rating.createdBy.username}
+                    </div>
+                </Paper>
             </Grid>
         )
     }
 }
 
 
-export const RatingBoxView = connect<{}, DispatchToProps, props>(
-    undefined,
+export const RatingBoxView = connect<StateToProps, DispatchToProps, props>(
+    (state: AppStoreState) => ({
+        ratings: state.ratingPage.record.ratings
+    }),
     (dispatch, props: props): DispatchToProps => ({
         addRating: (rating: TeammateRatingDto) => dispatch(RatingActions.addRating(rating, props.recordId)),
         updateRating: (rating: TeammateRatingDto) => dispatch(RatingActions.updateRating(rating, props.recordId)),

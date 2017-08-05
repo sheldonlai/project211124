@@ -100,6 +100,12 @@ export class RatingViewComponent extends React.Component<props, state> {
         return sum / this.props.ratingPage.ratings.length;
     }
 
+    CancelRatingsEdit = () => {
+        let record = {...this.state.record};
+        record.ratings = [...this.props.ratingPage.ratings];
+        this.setState({record});
+    };
+
 
     render() {
         const record = this.state.record;
@@ -142,6 +148,7 @@ export class RatingViewComponent extends React.Component<props, state> {
                                                 rating={e}
                                                 onRatingChange={this.updateRating}
                                                 recordId={record._id}
+                                                onCancel={this.CancelRatingsEdit}
                                             />
                                         })
                                     }
