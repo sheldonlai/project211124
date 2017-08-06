@@ -40,7 +40,7 @@ export class TeammateRecordService extends BaseService implements ITeammateRecor
     }
 
 
-    searchTeammateRecord(teammateSearchOption: SearchTeammateDto, currentUser?: User): Promise<TeammateRecordDto[]> {
+    searchTeammateRecord(teammateSearchOption: SearchTeammateDto): Promise<TeammateRecordDto[]> {
         let searchOptions: any = {
             $and: [
                 {firstName: {$regex: teammateSearchOption.firstName, options: "i"}}
