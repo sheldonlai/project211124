@@ -1,5 +1,5 @@
 import {Document, Model, Types} from "mongoose";
-import {BaseModel} from "../models/BaseModel";
+import {BaseModel} from "../models/Base/BaseModel";
 import {AppError} from "../errors/AppError";
 
 export interface IBaseRepository<T> {

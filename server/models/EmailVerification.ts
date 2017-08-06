@@ -4,7 +4,7 @@
 /* grab the things we need */
 import {model, Schema, Document} from "mongoose";
 import {User} from "./User";
-import {BaseModel} from "./BaseModel";
+import {BaseModel} from "./Base/BaseModel";
 
 export class EmailVerification extends BaseModel{
     user: string;

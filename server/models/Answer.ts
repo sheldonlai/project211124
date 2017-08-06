@@ -1,5 +1,5 @@
 import {model, Schema, Document} from 'mongoose';
-import {BaseModel} from './BaseModel';
+import {BaseModel} from './Base/BaseModel';
 import {Question, QuestionComment} from './Question';
 import {User} from './User';
 import {RawDraftContentState} from "draft-js";

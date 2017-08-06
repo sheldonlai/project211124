@@ -1,5 +1,5 @@
 import {model, Schema, Document} from "mongoose";
-import {BaseModel} from './BaseModel';
+import {BaseModel} from './Base/BaseModel';
 import {User, UserModel} from './User';
 import {PublicityStatus} from "../enums/PublicityStatus";
 import {DifficultyLevel, QuestionEducationLevel} from "../enums/QuestionEducationLevel";

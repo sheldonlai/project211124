@@ -1,5 +1,5 @@
 import {model, Schema, Document} from "mongoose";
-import {BaseModel} from "./BaseModel";
+import {BaseModel} from "./Base/BaseModel";
 
 export class Tag extends BaseModel{
     tag: string;

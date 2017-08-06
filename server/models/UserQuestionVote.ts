@@ -1,4 +1,4 @@
-import {BaseModel} from "./BaseModel";
+import {BaseModel} from "./Base/BaseModel";
 import {User} from "./User";
 import {Answer} from "./Answer";
 import {model, Schema, Document} from "mongoose";

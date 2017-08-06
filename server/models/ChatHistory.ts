@@ -1,6 +1,6 @@
 import {User} from './User';
 import {model, Schema, Document} from "mongoose";
-import {BaseModel} from './BaseModel';
+import {BaseModel} from './Base/BaseModel';
 
 export class ChatMessage {
   message: String;

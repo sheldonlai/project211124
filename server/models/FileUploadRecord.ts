@@ -1,5 +1,5 @@
 import {Document, model, Schema} from "mongoose";
-import {BaseModel} from "./BaseModel";
+import {BaseModel} from "./Base/BaseModel";
 import {User} from "./User";
 import {FileAccessType} from "../enums/FileAccessType";
 

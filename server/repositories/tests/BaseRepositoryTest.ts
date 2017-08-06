@@ -1,5 +1,5 @@
 import {Document, model, Schema} from "mongoose";
-import {BaseModel} from "../../models/BaseModel";
+import {BaseModel} from "../../models/Base/BaseModel";
 import {BaseRepository, IBaseRepository} from "../BaseRepository";
 import {ObjectID} from "bson";
 import {TestDatabase} from "./helpers/TestDatabase";

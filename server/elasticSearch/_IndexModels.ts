@@ -1,25 +1,28 @@
 
 import * as mongoose from "mongoose";
-import {QuestionModel} from "./Question";
+import {QuestionModel} from "../models/Question";
 import {config} from "../config";
-import {UniversityModel} from "./LocationModels/Universities";
-import {CountryModel} from "./LocationModels/Country";
-import {TagModel} from "./Tags";
-import {UserModel} from "./User";
+import {UniversityModel} from "../models/LocationModels/Universities";
+import {CountryModel} from "../models/LocationModels/Country";
+import {TagModel} from "../models/Tags";
+import {UserModel} from "../models/User";
+import {TeammateRecordModel} from "../models/TeammateRecord";
 
 let loadModels = {TagModel, CountryModel, UniversityModel, UserModel};
 
 export const synchronizeIndex = async (indexModels=undefined) => {
-    let count = 0;
+
     if (indexModels === undefined){
         indexModels = [
-            QuestionModel, UserModel
+            //QuestionModel, // question takes too long to index
+
+            UserModel , TeammateRecordModel
         ];
     }
-    indexModels = indexModels.map((model) => {
+    let promises = indexModels.map((model) => {
         return new Promise((resolve, reject) => {
             let stream = model.synchronize();
-
+            let count = 0;
             stream.on('data', function (err, doc) {
                 count++;
             });
@@ -32,7 +35,7 @@ export const synchronizeIndex = async (indexModels=undefined) => {
                 reject(err);
             });
         });
-    })
-    await Promise.all(indexModels);
+    });
+    return Promise.all(promises);
 };
 

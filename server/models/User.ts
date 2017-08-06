@@ -1,6 +1,6 @@
 import {model, Schema, Document} from "mongoose";
 import {UserTypeEnum} from "../enums/UserTypeEnum";
-import {BaseModel} from './BaseModel';
+import {BaseModel} from './Base/BaseModel';
 import {AppError} from "../errors/AppError";
 import {University, UniversityModel} from "./LocationModels/Universities";
 import {Country, CountryModel} from "./LocationModels/Country";

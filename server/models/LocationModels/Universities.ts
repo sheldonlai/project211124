@@ -1,5 +1,5 @@
 import {model, Schema, Document} from "mongoose";
-import {BaseModel} from "../BaseModel";
+import {BaseModel} from "../Base/BaseModel";
 import {Country} from "./Country";
 
 export class University extends BaseModel {
