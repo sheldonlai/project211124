@@ -1,12 +1,13 @@
 import {model, Schema, Document} from "mongoose";
 import {BaseModel} from './BaseModel';
-import {User} from './User';
+import {User, UserModel} from './User';
 import {PublicityStatus} from "../enums/PublicityStatus";
 import {DifficultyLevel, QuestionEducationLevel} from "../enums/QuestionEducationLevel";
 import {listNumericalEnumValues} from "../utils/EnumsUtil";
 import {RawDraftContentState} from "draft-js";
 import {Tag} from "./Tags";
 
+let mongoosastic = require("mongoosastic");
 
 export class QuestionComment {
     commentBy: User;
@@ -60,46 +61,59 @@ export interface IQuestion extends Question, Document {
 }
 
 const schema = new Schema({
-        title: {type: String, required: true, unique: true},
-        content: {type: Schema.Types.Mixed, required: true},
-        author: {type: Schema.Types.ObjectId, ref: 'user', required: true},
-        tags: [{type: Schema.Types.ObjectId, ref: 'tag'}],
-        isPublished: {type: Boolean, default: false},
-        resolved: {type: Boolean, default: false},
-        lastEditedUtc: {type: Date, default: Date.now},
-        createdUtc: {type: Date, default: Date.now},
-        publicityStatus: {
+    title: {type: String, required: true, unique: true, es_indexed: true},
+    content: {type: Schema.Types.Mixed, required: true, es_indexed: true},
+    author: {
+        type: Schema.Types.ObjectId, ref: 'user', required: true,
+        es_indexed: true, es_schema: UserModel, es_select: 'username'
+    },
+    tags: [
+        {
+            type: Schema.Types.ObjectId, ref: 'tag',
+            es_indexed: true, es_schema: UserModel, es_select: 'username'
+        }
+    ],
+    isPublished: {type: Boolean, default: true},
+    resolved: {type: Boolean, default: false},
+    lastEditedUtc: {type: Date, default: Date.now},
+    createdUtc: {type: Date, default: Date.now},
+    publicityStatus: {
+        type: String,
+        enum: Object.keys(PublicityStatus),
+        es_indexed: true
+    },
+    difficulty: {
+        educationLevel: {
             type: String,
-            enum: Object.keys(PublicityStatus)
+            enum: Object.keys(QuestionEducationLevel),
+            default: QuestionEducationLevel.NOT_SPECIFIED,
+            es_indexed: true
         },
-        difficulty: {
-            educationLevel: {
-                type: String,
-                enum: Object.keys(QuestionEducationLevel),
-                default: QuestionEducationLevel.NOT_SPECIFIED
-            },
-            difficultyLevel: {
-                type: Number,
-                enum: listNumericalEnumValues(DifficultyLevel),
-                default: DifficultyLevel.NOT_SPECIFIED
-            }
-        },
-        uploads: [
-            {fileUrl: String}
-        ],
-        comments: [{
-            commentBy: {type: Schema.Types.ObjectId, ref: 'user'},
-            commentContent: {type: String, required: true},
-            lastEditedUtc: {type: Date, default: Date.now}
-        }]
-    });
+        difficultyLevel: {
+            type: Number,
+            enum: listNumericalEnumValues(DifficultyLevel),
+            default: DifficultyLevel.NOT_SPECIFIED,
+            es_indexed: true
+        }
+    },
+    uploads: [
+        {fileUrl: String}
+    ],
+    comments: [{
+        commentBy: {type: Schema.Types.ObjectId, ref: 'user'},
+        commentContent: {type: String, required: true},
+        lastEditedUtc: {type: Date, default: Date.now}
+    }]
+});
 
 
-const autoPopulateUsers = function(next) {
+const autoPopulateUsers = function (next) {
     this.populate(['author', "comments.commentBy", "tags"]);
     next();
 };
 
 schema.pre('findOne', autoPopulateUsers).pre('find', autoPopulateUsers);
+schema.plugin(mongoosastic);
 
 export const QuestionModel = model<IQuestion>('question', schema);
+

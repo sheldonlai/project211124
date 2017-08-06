@@ -54,7 +54,6 @@ export class RatingBox extends React.Component<props & DispatchToProps& StateToP
     };
 
     submit = () => {
-        let filter = this.props.ratings.filter((r) => r._id === this.props.rating._id);
         if (this.props.rating._id) {
             this.props.updateRating(this.props.rating);
         } else {

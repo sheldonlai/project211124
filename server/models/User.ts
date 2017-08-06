@@ -2,8 +2,9 @@ import {model, Schema, Document} from "mongoose";
 import {UserTypeEnum} from "../enums/UserTypeEnum";
 import {BaseModel} from './BaseModel';
 import {AppError} from "../errors/AppError";
-import {University} from "./LocationModels/Universities";
-import {Country} from "./LocationModels/Country";
+import {University, UniversityModel} from "./LocationModels/Universities";
+import {Country, CountryModel} from "./LocationModels/Country";
+import * as mogoosastic from "mongoosastic";
 
 export class User extends BaseModel {
     email: string;
@@ -68,13 +69,19 @@ const FacebookSubSchema = new Schema({
 
 export const userSchema = new Schema({
     email:           {type: String, required: true, unique: true},
-    username:        {type: String, required: true, unique: true},
-    role:            {type: String, enum: Object.keys(UserTypeEnum), required: true, default: 'normal'},
+    username:        {type: String, required: true, unique: true, es_indexed: true},
+    role:            {type: String, enum: Object.keys(UserTypeEnum), required: true, default: 'normal', es_indexed: true},
     verified:        {type: Boolean, required: true, default: false},
     local:           {type: LocalSubSchema},
     facebook:        {type: FacebookSubSchema},
-    university:      {type: Schema.Types.ObjectId, ref: 'university'},
-    country:         {type: Schema.Types.ObjectId, ref: 'country'},
+    university:      {
+                        type: Schema.Types.ObjectId, ref: 'university',
+                        es_indexed: true, es_schema: UniversityModel, es_select: 'name'
+    },
+    country:         {
+                        type: Schema.Types.ObjectId, ref: 'country',
+                        es_indexed: true, es_schema: CountryModel, es_select: 'name'
+    },
     company:         {type: String},
     points:          {type: Number, default: 0},
 }, {
@@ -94,7 +101,7 @@ const autoPopulateInfo = function(next) {
 };
 
 userSchema.pre('findOne', autoPopulateInfo).pre('find', autoPopulateInfo);
-
+userSchema.plugin(mogoosastic);
 
 export const UserModel = model<IUser>('user', userSchema);
 
