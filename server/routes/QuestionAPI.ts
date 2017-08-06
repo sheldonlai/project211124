@@ -71,6 +71,7 @@ export class QuestionAPI extends BaseAPI {
     };
 
     public UpdateComment = (req: AuthRequest, res: Response, next: NextFunction) => {
+        console.log(req.body);
         let commentIndx: number = req.body.commentIndx;
         let updatedComment: CommentDto = req.body.updatedComment;
         let questionId: string = req.params.questionId;

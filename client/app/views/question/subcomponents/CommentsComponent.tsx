@@ -18,6 +18,7 @@ export interface CommentsComponentProps {
     comments: CommentDto[];
     user: UserDto;
     onCommentsSubmit: (comments: CommentDto[]) => void;
+    onCommentUpdate: (commentIndx: number, updatedComment: CommentDto) => void;
 }
 
 export interface CommentsComponentState {
@@ -50,6 +51,7 @@ export class CommentsComponent extends React.Component<CommentsComponentProps, C
             let tmpComment: CommentModel = new CommentModel();
             tmpComment.commentContent = this.state.commentContent;
             tmpComment.commentBy = this.props.user;
+            tmpComment.commentedDate = new Date(Date.now());
             this.props.comments.push(tmpComment);
             this.props.onCommentsSubmit(this.props.comments);
             this.setState({commentContent: ""});
@@ -137,7 +139,9 @@ export class CommentsComponent extends React.Component<CommentsComponentProps, C
         if(this.state.commentContent){
             this.props.comments[indx].commentContent = this.state.commentContent;
             this.props.comments[indx].lastEditedUtc = new Date(Date.now());
-            this.props.onCommentsSubmit(this.props.comments);
+            let updatedComment: CommentDto = this.props.comments[indx];
+            this.props.onCommentUpdate(indx, updatedComment);
+            //this.props.onCommentsSubmit(this.props.comments);
             this.setState({EditCommentIndx: -1, commentContent: ""});
         }
         else{
