@@ -1,13 +1,11 @@
-import {Document, model, Model, Schema} from "mongoose";
-import {University, UniversityModel} from "./LocationModels/Universities";
+import {Document, model, Schema} from "mongoose";
+import {University, universitySchema} from "./LocationModels/Universities";
 import {City} from "./LocationModels/Cities";
 import {BaseModel} from "./Base/BaseModel";
-import {User, UserModel} from "./User";
+import {User, userSchema} from "./User";
 import {UniversityYearEnum} from "../enums/UniversityYearEnum";
 import {listNumericalEnumValues} from "../utils/EnumsUtil";
-
 import * as mongoosastic from "mongoosastic";
-import {GetMongoosasticOption} from "../elasticSearch/GetPlugin";
 
 export interface AcademicInfo {
     university: University,
@@ -37,7 +35,8 @@ export class TeammateRecord extends BaseModel{
         public lastName: string,
         public description: string,
         public createdBy: User,
-        public academicInfo?: AcademicInfo,
+        public university?: University,
+        public year?: UniversityYearEnum,
         public city?: City,
     ){
         super();
@@ -50,21 +49,20 @@ export interface ITeammateRecord extends TeammateRecord, Document {}
 const schema = new Schema({
     firstName: {type: String, es_indexed: true},
     lastName: {type: String, es_indexed: true},
-    academicInfo: {
-        university: {type: Schema.Types.ObjectId, ref: "university",
-            es_indexed: true, es_schema: UniversityModel, es_select: 'name'
-        },
-        year: {
-            type: Number,
-            enum: listNumericalEnumValues(UniversityYearEnum),
-            es_indexed: true
-        }
+    university: {
+        type: Schema.Types.ObjectId, ref: "university",
+        es_schema: universitySchema, es_indexed: true, es_select: 'name'
+    },
+    year: {
+        type: Number,
+        enum: listNumericalEnumValues(UniversityYearEnum),
+        es_indexed: true
     },
     city: {type: Schema.Types.ObjectId, ref: "city"},
     description: {type: String, es_indexed: true},
     createdBy: {
         type: Schema.Types.ObjectId, ref: "user", required: true,
-        es_indexed: true, es_schema: UserModel, es_select: 'username'
+        es_schema: userSchema, es_indexed: true, es_select: 'username'
     },
     ratings: [
         {
@@ -81,11 +79,16 @@ const schema = new Schema({
 });
 
 const autoPopulateUsers = function(next) {
-    this.populate(["createdBy", "ratings.createdBy", "academicInfo.university"]);
+    this.populate(["createdBy", "ratings.createdBy", "university"]);
     next();
 };
 
 schema.pre('findOne', autoPopulateUsers).pre('find', autoPopulateUsers);
-schema.plugin(mongoosastic);
+schema.plugin(mongoosastic, {
+    populate: [
+        {path: 'university', select: 'name'},
+        {path: 'createdBy', select: 'username'}
+    ]
+});
 
 export const TeammateRecordModel = model<ITeammateRecord>('teammateRecord', schema);

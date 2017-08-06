@@ -18,7 +18,7 @@ export class University extends BaseModel {
 export interface IUniversity extends University, Document {
 }
 
-export const schema = new Schema({
+export const universitySchema = new Schema({
     country: {type: Schema.Types.ObjectId, required: true, ref: "country"},
     name: {type: String, required: true, unique: true},
     website: {type: String, required: true}
@@ -28,6 +28,6 @@ const autoPopulateCountry = function(next){
     this.populate("country");
     next();
 };
-schema.pre('findOne', autoPopulateCountry).pre('find', autoPopulateCountry);
+universitySchema.pre('findOne', autoPopulateCountry).pre('find', autoPopulateCountry);
 
-export const UniversityModel = model<IUniversity>('university', schema);
+export const UniversityModel = model<IUniversity>('university', universitySchema);

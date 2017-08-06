@@ -14,9 +14,15 @@ import {UniversitiesMap} from "../../../reducers/LocationDataReducer";
 import Typography from "material-ui/Typography";
 import {DisplayField} from "../../../components/Forms/DisplayField";
 
+interface updateObject {
+    university: UniversityDto;
+    year: number;
+    city: City;
+}
 interface props {
-    onAcademicChange: (academicInfo: AcademicInfo) => void;
-    academicInfo: AcademicInfo;
+    onAcademicChange: (obj: updateObject) => void;
+    university: UniversityDto;
+    year: number;
     city: City;
     editable?: boolean;
 }
@@ -40,25 +46,25 @@ class TeammateLocationEditorComponent extends React.Component<combinedProps, sta
         if (this.props.countries === undefined || this.props.countries.length === 0){
             this.props.fetchCountries();
         }
-        if (!isNullOrUndefined(this.props.academicInfo)&& !isNullOrUndefined(this.props.academicInfo.university)) {
-            const country = this.props.academicInfo.university
+        if (!isNullOrUndefined(this.props.university)) {
+            const country = this.props.university
         }
     }
 
     componentWillReceiveProps(nextProps: props){
-        if (!isNullOrUndefined(nextProps.academicInfo)){
-            this.setState({country: nextProps.academicInfo.university.country});
+        if (!isNullOrUndefined(nextProps.university)){
+            this.setState({country: nextProps.university.country});
         }
     }
 
     updateAcademicInfo = (key: string, value : any) => {
-        let academicInfo = {...this.props.academicInfo};
-        academicInfo[key] = value;
-        this.props.onAcademicChange(academicInfo);
-    };
-
-    updateCity = () => {
-
+        let updateObj: updateObject = {
+            university: this.props.university,
+            year: this.props.year,
+            city : this.props.city
+        };
+        updateObj[key] = value;
+        this.props.onAcademicChange(updateObj);
     };
 
     updateCountry = (country) => {
@@ -90,7 +96,6 @@ class TeammateLocationEditorComponent extends React.Component<combinedProps, sta
                     value: e
                 };
             });
-        const academicInfo = this.props.academicInfo;
         let universities = [];
         if (this.state.country && this.props.universitiesMap.hasOwnProperty(this.state.country.name)){
             universities = this.props.universitiesMap[this.state.country.name]
@@ -109,13 +114,13 @@ class TeammateLocationEditorComponent extends React.Component<combinedProps, sta
                     <div>
                         <DropDownSelect
                             data={universities}
-                            value={academicInfo? academicInfo.university: undefined}
+                            value={this.props.university}
                             placeholder="university"
                             onChange={(uni)=> this.updateAcademicInfo("university", uni)}
                         />
                         <DropDownSelect
                             data={years}
-                            value={academicInfo? academicInfo.year: undefined}
+                            value={this.props.year}
                             placeholder="Year"
                             onChange={(uni) => this.updateAcademicInfo("year", uni)}
                         />
@@ -127,11 +132,10 @@ class TeammateLocationEditorComponent extends React.Component<combinedProps, sta
 
     render() {
         if (this.props.editable === false) {
-            const academicInfo = this.props.academicInfo;
             return <div>
-                <DisplayField label={"university"} value={academicInfo.university.name}/>
+                <DisplayField label={"university"} value={this.props.university.name}/>
                 <DisplayField label={"Year"}
-                              value={convertEnumStringToViewString(UniversityYearEnum[academicInfo.year])}/>
+                              value={convertEnumStringToViewString(UniversityYearEnum[this.props.year])}/>
             </div>
         }
         else {

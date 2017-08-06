@@ -4,9 +4,9 @@
 
 import * as mongoose from "mongoose";
 import {config} from "../../config";
-import {synchronizeIndex} from "../../elasticSearch/_IndexModels";
-import {UserModel} from "../User";
-import {elasticSearchModel} from "../../elasticSearch/ElasticSearchUtils";
+import {synchronizeIndex} from "../_IndexModels";
+import {UserModel} from "../../models/User";
+import {elasticSearchModel} from "../ElasticSearchUtils";
 
 let dbURI = config.database.URI;
 

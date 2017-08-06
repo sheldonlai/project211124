@@ -15,7 +15,8 @@ export interface TeammateRecordDto {
     firstName: string;
     lastName: string;
     description: string;
-    academicInfo?: AcademicInfoDto,
+    university?: UniversityDto; // university id
+    year?: UniversityYearEnum;
     city?: City;
     ratings: TeammateRatingDto[];
 }

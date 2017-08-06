@@ -31,12 +31,12 @@ export class RatingHomeViewComponent extends React.Component<StateToProps & Disp
                         </Typography>
                         <ReactStars size={34} value={preview.averageRating} edit={false}/>
                         {
-                            preview.academicInfo &&
+                            preview.university &&
                             <div>
                                 <Typography style={grey}
-                                            type="body1">{preview.academicInfo.university.name}</Typography>
+                                            type="body1">{preview.university.name}</Typography>
                                 <Typography style={grey} type="body1">
-                                    {convertEnumStringToViewString(UniversityYearEnum[preview.academicInfo.year])}
+                                    {convertEnumStringToViewString(UniversityYearEnum[preview.year])}
                                 </Typography>
                             </div>
                         }

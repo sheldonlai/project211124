@@ -33,7 +33,8 @@ export class TeammateRecordService extends BaseService implements ITeammateRecor
             teammateRecord.lastName,
             teammateRecord.description,
             currentUser,
-            teammateRecord.academicInfo,
+            teammateRecord.university,
+            teammateRecord.year,
             teammateRecord.city,
         );
         return this.teammateRecordRepo.create(record);
@@ -83,11 +84,10 @@ export class TeammateRecordService extends BaseService implements ITeammateRecor
                     firstName: teammate.firstName,
                     lastName: teammate.lastName,
                     averageRating: avgRating,
-                    academicInfo: teammate.academicInfo,
+                    university: teammate.university,
+                    year: teammate.year,
                     city: teammate.city
                 }
-
-
             });
         })
     }

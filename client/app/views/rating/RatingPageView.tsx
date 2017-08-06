@@ -127,7 +127,8 @@ export class RatingViewComponent extends React.Component<props, state> {
                                             </Typography>
                                             <ReactStars size={34} value={this.getAverageRating()} edit={false}/>
                                             <TeammateLocationEditor
-                                                academicInfo={record.academicInfo}
+                                                university={record.university}
+                                                year={record.year}
                                                 city={record.city}
                                                 onAcademicChange={undefined}
                                                 editable={false}

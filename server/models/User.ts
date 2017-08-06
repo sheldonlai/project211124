@@ -2,9 +2,9 @@ import {model, Schema, Document} from "mongoose";
 import {UserTypeEnum} from "../enums/UserTypeEnum";
 import {BaseModel} from './Base/BaseModel';
 import {AppError} from "../errors/AppError";
-import {University, UniversityModel} from "./LocationModels/Universities";
-import {Country, CountryModel} from "./LocationModels/Country";
-import * as mogoosastic from "mongoosastic";
+import {University, UniversityModel, universitySchema} from "./LocationModels/Universities";
+import {Country, CountryModel, CountrySchema} from "./LocationModels/Country";
+import * as mongoosastic from "mongoosastic";
 
 export class User extends BaseModel {
     email: string;
@@ -68,19 +68,19 @@ const FacebookSubSchema = new Schema({
 });
 
 export const userSchema = new Schema({
-    email:           {type: String, required: true, unique: true},
+    email:           {type: String, required: true, unique: true, es_indexed: true},
     username:        {type: String, required: true, unique: true, es_indexed: true},
     role:            {type: String, enum: Object.keys(UserTypeEnum), required: true, default: 'normal', es_indexed: true},
     verified:        {type: Boolean, required: true, default: false},
-    local:           {type: LocalSubSchema},
+    local:           {type: LocalSubSchema, es_indexed: false},
     facebook:        {type: FacebookSubSchema},
     university:      {
                         type: Schema.Types.ObjectId, ref: 'university',
-                        es_indexed: true, es_schema: UniversityModel, es_select: 'name'
+                        es_schema: universitySchema, es_indexed: true,  es_select: 'name'
     },
     country:         {
                         type: Schema.Types.ObjectId, ref: 'country',
-                        es_indexed: true, es_schema: CountryModel, es_select: 'name'
+                        es_schema: CountrySchema, es_indexed: true,  es_select: 'name'
     },
     company:         {type: String},
     points:          {type: Number, default: 0},
@@ -101,7 +101,12 @@ const autoPopulateInfo = function(next) {
 };
 
 userSchema.pre('findOne', autoPopulateInfo).pre('find', autoPopulateInfo);
-userSchema.plugin(mogoosastic);
+userSchema.plugin(mongoosastic, {
+    populate: [
+        {path: "university", select: "name"},
+        {path: "country", select: "name"},
+    ]
+});
 
 export const UserModel = model<IUser>('user', userSchema);
 

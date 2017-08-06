@@ -1,7 +1,4 @@
 
-import * as mongoose from "mongoose";
-import {QuestionModel} from "../models/Question";
-import {config} from "../config";
 import {UniversityModel} from "../models/LocationModels/Universities";
 import {CountryModel} from "../models/LocationModels/Country";
 import {TagModel} from "../models/Tags";

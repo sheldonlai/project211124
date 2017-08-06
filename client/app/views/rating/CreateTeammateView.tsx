@@ -29,7 +29,8 @@ export class CreateTeammateViewComponent extends React.Component<props, state> {
             lastName: '',
             description: '',
             city: undefined,
-            academicInfo: undefined,
+            university: undefined,
+            year: undefined,
             ratings: [],
             showDesHint: false
         }
@@ -87,9 +88,10 @@ export class CreateTeammateViewComponent extends React.Component<props, state> {
                                 style={textFieldMargin}
                             /><br/>
                             <TeammateLocationEditor
-                                academicInfo={this.state.academicInfo}
+                                university={this.state.university}
+                                year={this.state.year}
                                 city={this.state.city}
-                                onAcademicChange={(academicInfo) => this.setState({academicInfo})}
+                                onAcademicChange={(academicInfo) => this.setState({...academicInfo})}
                             />
                             <Grid container justify="flex-end">
                                 <Grid item>

@@ -7,7 +7,10 @@ import {FrontEndQuestionModels} from "../../../models/QuestionModels";
 import Question = FrontEndQuestionModels.Question;
 import {Route, Router, withRouter} from "react-router";
 import {RouterController} from "../../../api.controllers/RouterController";
-import {MuiThemeProvider} from "material-ui/styles";
+import {MuiThemeProvider, createMuiTheme} from "material-ui/styles";
+
+jest.mock('draft-js/lib/generateRandomKey', () => () => '123');
+let muiTheme = createMuiTheme();
 test('render question', () => {
     let user: UserDto = {
         _id: "something",
@@ -38,7 +41,7 @@ test('render question', () => {
     };
 
     const component = renderer.create(
-        <MuiThemeProvider>
+        <MuiThemeProvider theme={muiTheme}>
         <Router history={RouterController.history}>
             <Route render={(props) => {
                 return <QuestionBoxComponent {...propsStub} {...props} />

@@ -7,7 +7,8 @@ export interface TeammatePreviewDto{
     firstName: string;
     lastName: string;
     averageRating: number;
-    academicInfo?: AcademicInfo;
+    university?: UniversityDto;
+    year?: number;
     description?: string;
     city?: CityDto;
 }

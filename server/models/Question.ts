@@ -6,6 +6,7 @@ import {DifficultyLevel, QuestionEducationLevel} from "../enums/QuestionEducatio
 import {listNumericalEnumValues} from "../utils/EnumsUtil";
 import {RawDraftContentState} from "draft-js";
 import {Tag} from "./Tags";
+import {GetMongoosasticOption} from "../elasticSearch/GetPlugin";
 
 let mongoosastic = require("mongoosastic");
 
@@ -113,7 +114,7 @@ const autoPopulateUsers = function (next) {
 };
 
 schema.pre('findOne', autoPopulateUsers).pre('find', autoPopulateUsers);
-schema.plugin(mongoosastic);
+schema.plugin(mongoosastic, GetMongoosasticOption());
 
 export const QuestionModel = model<IQuestion>('question', schema);
 
