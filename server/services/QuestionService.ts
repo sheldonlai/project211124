@@ -130,7 +130,7 @@ export class QuestionService extends BaseService implements IQuestionService {
     UpdateComment(commentIndx: number, questionId: string, user: User, updatedComment: CommentDto){
         return this.questionRepository.getById(questionId).then((questionFound: Question) => {
             if(questionFound.comments[commentIndx].commentBy.username != user.username ||
-            questionFound.comments[commentIndx].commentBy._id != user._id){
+            !questionFound.comments[commentIndx].commentBy._id.equals(user._id)){
                 throw new AppError("You are not the owner of this question!");
             }
             else{
