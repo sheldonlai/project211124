@@ -36,8 +36,10 @@
     "@types/socket.io": "^1.4.29",
     "@types/source-map-support": "^0.4.0",
     "awesome-typescript-loader": "^3.2.1",
+    "identity-obj-proxy": "^3.0.0",
     "jest": "^20.0.4",
     "mustache": "^2.3.0",
+    "react-test-renderer": "^15.6.1",
     "ts-jest": "^20.0.6",
     "webpack": "^2.7.0"
   },
@@ -116,6 +118,9 @@
       "ts",
       "tsx",
       "js"
-    ]
+    ],
+    "moduleNameMapper": {
+      "\\.(css|less)$": "identity-obj-proxy"
+    }
   }
 }

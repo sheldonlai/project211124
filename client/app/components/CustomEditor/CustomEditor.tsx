@@ -1,7 +1,7 @@
-import {ContentBlock, Editor,EditorState, RichUtils} from "draft-js";
+import {Editor, EditorState} from "draft-js";
 import * as React from "react";
-import "draft-js/dist/Draft.css";
 import {CSSProperties} from "react";
+import "draft-js/dist/Draft.css";
 import {applyStylesToDefaultStyle} from "../../utils/utils";
 import {EditorFactory} from "./EditorFactory";
 

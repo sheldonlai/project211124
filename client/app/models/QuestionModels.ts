@@ -35,6 +35,7 @@ export namespace FrontEndQuestionModels {
                 educationLevel: QuestionEducationLevel.NOT_SPECIFIED,
                 difficultyLevel: DifficultyLevel.NOT_SPECIFIED
             };
+            this.comments = [];
             this.showFileUploadDialog = false;
             this.filesUploaded = [];
         }
