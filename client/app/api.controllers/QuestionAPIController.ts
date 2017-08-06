@@ -80,8 +80,9 @@ export class QuestionAPIController extends ApiController {
             questionDto: questionDto,
             commentIndx: commentIndx,
             updatedComment: updatedComment,
+            questionID: questionDto._id,
         };
-        return this.put(APIUrls.UpdateCommentNoQuestionID + '/' + questionDto._id, reqBody).then((response: AxiosResponse) => {
+        return this.put(APIUrls.UpdateComment, reqBody).then((response: AxiosResponse) => {
             response.data = this.convertDtoToQuestion(response.data);
             return response;
         });

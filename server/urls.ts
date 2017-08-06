@@ -28,8 +28,7 @@ export class APIUrls {
     static DownVoteQuestion = "/down-vote-question";
 
     static CreateComment = "/create-comment";
-    static UpdateCommentNoQuestionID = "/update-comment";
-    static UpdateComment = "/update-comment/:questionID";
+    static UpdateComment = "/update-comment";
 
     /* Utils */
     static getCountries = "/get-countries";

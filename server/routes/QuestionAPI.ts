@@ -71,10 +71,9 @@ export class QuestionAPI extends BaseAPI {
     };
 
     public UpdateComment = (req: AuthRequest, res: Response, next: NextFunction) => {
-        console.log(req.body);
         let commentIndx: number = req.body.commentIndx;
         let updatedComment: CommentDto = req.body.updatedComment;
-        let questionId: string = req.params.questionId;
+        let questionId: string = req.body.questionID;
         let user: User = req.user;
         let result = this.service.UpdateComment(commentIndx, questionId, user, updatedComment);
         this.respondPromise(result, res, next);
