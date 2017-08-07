@@ -62,9 +62,8 @@ export class RatingViewComponent extends React.Component<props, state> {
     }
 
     componentWillReceiveProps(nextProps: props) {
-        this.setState({record: {...nextProps.ratingPage}});
-        if (this.props.ratingPageStatus === ReducerStateStatus.LOADING) {
-
+        if (JSON.stringify(this.props.ratingPage) !== JSON.stringify(nextProps.ratingPage)) {
+            this.setState({record: {...nextProps.ratingPage}, edit: false});
         }
     }
 
@@ -130,7 +129,6 @@ export class RatingViewComponent extends React.Component<props, state> {
                                                 university={record.university}
                                                 year={record.year}
                                                 city={record.city}
-                                                onAcademicChange={undefined}
                                                 editable={false}
                                             />
                                             <Typography type="caption">

@@ -12,6 +12,7 @@ import {connect} from "react-redux";
 import {RatingActions} from "../../../actions/RatingActions";
 import Grid from "material-ui/Grid";
 import {AppStoreState} from "../../../stores/AppStore";
+import {ReducerStateStatus} from "../../../constants/ReducerStateStatus";
 
 interface props {
     user: UserDto,
@@ -22,7 +23,8 @@ interface props {
 }
 
 interface StateToProps {
-    ratings: TeammateRatingDto[]
+    ratings: TeammateRatingDto[];
+    status: ReducerStateStatus;
 }
 
 interface DispatchToProps {
@@ -45,6 +47,13 @@ export class RatingBox extends React.Component<props & DispatchToProps& StateToP
     }
 
     componentWillMount() {
+    }
+
+    componentWillReceiveProps(nextProps) {
+        let filter = this.props.ratings.filter((e)=> e._id === this.props.rating._id);
+        if (this.props.status === ReducerStateStatus.LOADING && nextProps.status === ReducerStateStatus.DONE) {
+            this.setState({ edit: this.props.rating._id === undefined});
+        }
     }
 
     onRatingChange = (field: string, value: any) => {
@@ -126,6 +135,7 @@ export class RatingBox extends React.Component<props & DispatchToProps& StateToP
 
 export const RatingBoxView = connect<StateToProps, DispatchToProps, props>(
     (state: AppStoreState) => ({
+        status: state.ratingPage.status,
         ratings: state.ratingPage.record.ratings
     }),
     (dispatch, props: props): DispatchToProps => ({

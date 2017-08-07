@@ -13,12 +13,3 @@ export const elasticSearchModel = (model: any, query: any): Promise<any> => {
         })
     })
 };
-
-export const teammateSerachQuery = (firstName: string, lastName: string, universityName: string) => ({
-    "bool" : {
-        "must" : [
-            {"match" : { "firstName" : "Sheldon" }},
-            {"match" : { "lastName" : "Lai" }}
-        ],
-    }
-});

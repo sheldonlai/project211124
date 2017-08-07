@@ -45,5 +45,5 @@ export class APIUrls {
     static addRating="/add-teammate-rating/:id";
     static editRating="/edit-teammate-rating/:id";
 
-
+    static searchForTeammate ="/search-teammate";
 }

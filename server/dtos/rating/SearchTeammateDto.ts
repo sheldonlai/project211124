@@ -5,5 +5,6 @@ export interface SearchTeammateDto{
     firstName: string;
     lastName?: string;
     university?: UniversityDto;
+    year?: number;
     city?: CityDto;
 }

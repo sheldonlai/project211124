@@ -20,11 +20,12 @@ interface updateObject {
     city: City;
 }
 interface props {
-    onAcademicChange: (obj: updateObject) => void;
+
     university: UniversityDto;
     year: number;
     city: City;
     editable?: boolean;
+    onChange?: (key:string, value: any) => void;
 }
 
 interface state {
@@ -58,18 +59,13 @@ class TeammateLocationEditorComponent extends React.Component<combinedProps, sta
     }
 
     updateAcademicInfo = (key: string, value : any) => {
-        let updateObj: updateObject = {
-            university: this.props.university,
-            year: this.props.year,
-            city : this.props.city
-        };
-        updateObj[key] = value;
-        this.props.onAcademicChange(updateObj);
+        this.props.onChange(key, value);
     };
 
     updateCountry = (country) => {
         if (isNullOrUndefined(country)){
-            this.props.onAcademicChange(undefined);
+            this.props.onChange("university", undefined);
+            this.props.onChange("year", undefined);
             this.setState({country});
             return;
         }

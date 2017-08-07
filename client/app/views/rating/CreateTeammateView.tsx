@@ -5,25 +5,33 @@ import Grid from "material-ui/Grid";
 import Button from "material-ui/Button";
 import Typography from "material-ui/Typography";
 import Paper from "material-ui/Paper";
-import {EmailNameInputStyles} from "../../constants/StyleClasses";
+import {EmailNameInputStyles, NamesInputStyles} from "../../constants/StyleClasses";
 import TextField from "material-ui/TextField";
 import {TeammateRecordDto} from "../../../../server/dtos/rating/TeammateRecordDto";
 import {TeammateLocationEditor} from "./subcomponents/TeammateLocationEditor";
 import {RatingActions} from "../../actions/RatingActions";
 import {SplitVIewTemplate} from "../../components/Templates/SplitVIewTemplate";
+import {RatingApiController} from "../../api.controllers/RatingApiController";
+import {TeammatePreviewDto} from "../../../../server/dtos/rating/TeammatePreviewDto";
+import {RatingPreviewCard} from "./subcomponents/RatingPreviewCard";
 
-interface state extends TeammateRecordDto {
+interface state {
+    teammateObj: TeammateRecordDto;
     showDesHint: boolean;
+    similarPreviews: TeammatePreviewDto[];
+    lastSearched: number;
 }
 
 interface props extends DispatchToProps {
+
 }
 
 export class CreateTeammateViewComponent extends React.Component<props, state> {
+    private apiController: RatingApiController;
 
     constructor(props) {
         super(props);
-        this.state = {
+        let obj = {
             _id: undefined,
             firstName: '',
             lastName: '',
@@ -31,22 +39,48 @@ export class CreateTeammateViewComponent extends React.Component<props, state> {
             city: undefined,
             university: undefined,
             year: undefined,
-            ratings: [],
-            showDesHint: false
+            ratings: []
         }
+        this.state = {
+            teammateObj: obj,
+            showDesHint: false,
+            similarPreviews: [],
+            lastSearched: 0
+        };
+        this.apiController = RatingApiController.getInstance();
     }
 
+    searchForSimilarTeammate = (teammateRecordDto: TeammateRecordDto) => {
+        this.setState({lastSearched: Date.now()})
+        this.apiController.searchForTeammate(teammateRecordDto).then((res) => {
+            this.setState({similarPreviews: res.data});
+        }).catch((err) => {
+            console.error(err)
+        });
+    };
+
+    updateObj = (key, value) => {
+        let obj = {...this.state.teammateObj};
+        if (typeof  value === "string" && key !== "description")
+            value = value.toLocaleLowerCase();
+        obj[key] = value;
+        this.setState({teammateObj: obj});
+        if (Date.now() - this.state.lastSearched > 100) // debounce of 600ms
+            this.searchForSimilarTeammate(this.state.teammateObj);
+    };
+
     onSubmit = () => {
-        let teammate = {...this.state};
-        delete teammate.showDesHint;
-        const dto: TeammateRecordDto = teammate as TeammateRecordDto;
-        this.props.createTeammate(dto);
+        let teammate = this.state.teammateObj;
+        this.props.createTeammate(teammate);
     };
 
     render() {
         const textFieldMargin: CSSProperties = {
             marginBottom: 10
         };
+        const teammate = this.state.teammateObj;
+        const nameStyle: CSSProperties = {...textFieldMargin, textTransform: "capitalize"};
+
         return (
             <div style={{padding: 10, marginTop: 20}}>
                 <SplitVIewTemplate>
@@ -57,17 +91,17 @@ export class CreateTeammateViewComponent extends React.Component<props, state> {
                             </Typography>
                             <TextField
                                 label="First name"
-                                value={this.state.firstName}
-                                onChange={(event) => this.setState({firstName: event.target.value})}
-                                inputProps={EmailNameInputStyles}
-                                style={textFieldMargin}
+                                value={teammate.firstName}
+                                onChange={(event) => this.updateObj("firstName", event.target.value)}
+                                inputProps={NamesInputStyles}
+                                style={nameStyle}
                             /><br/>
                             <TextField
                                 label="Last name"
-                                value={this.state.lastName}
-                                onChange={(event) => this.setState({lastName: event.target.value})}
-                                inputProps={EmailNameInputStyles}
-                                style={textFieldMargin}
+                                value={teammate.lastName}
+                                onChange={(event) => this.updateObj("lastName", event.target.value)}
+                                inputProps={NamesInputStyles}
+                                style={nameStyle}
                             /><br/>
                             {
                                 this.state.showDesHint &&
@@ -80,18 +114,18 @@ export class CreateTeammateViewComponent extends React.Component<props, state> {
                                 onFocus={() => this.setState({showDesHint: true})}
                                 onBlur={() => this.setState({showDesHint: false})}
                                 label="Description"
-                                value={this.state.description}
+                                value={teammate.description}
                                 multiline
                                 rows={3}
                                 fullWidth
-                                onChange={(event) => this.setState({description: event.target.value})}
+                                onChange={(event) => this.updateObj("description", event.target.value)}
                                 style={textFieldMargin}
                             /><br/>
                             <TeammateLocationEditor
-                                university={this.state.university}
-                                year={this.state.year}
-                                city={this.state.city}
-                                onAcademicChange={(academicInfo) => this.setState({...academicInfo})}
+                                university={teammate.university}
+                                year={teammate.year}
+                                city={teammate.city}
+                                onChange={this.updateObj}
                             />
                             <Grid container justify="flex-end">
                                 <Grid item>
@@ -102,10 +136,17 @@ export class CreateTeammateViewComponent extends React.Component<props, state> {
                             </Grid>
                         </Paper>
                     </div>
-                    <div/>
+                    <div>
+                        {
+                            this.state.similarPreviews.length > 0 &&
+                            <Typography type="display1">Similar postings:</Typography>
+                        }
+                        {this.state.similarPreviews.map(
+                            (preview, index) => <RatingPreviewCard preview={preview} key={index}/>)}
+                    </div>
                 </SplitVIewTemplate>
             </div>
-        )
+        );
     }
 }
 

@@ -3,6 +3,8 @@ import {TeammateRecordDto} from "../../../server/dtos/rating/TeammateRecordDto";
 import {RatingApiController} from "../api.controllers/RatingApiController";
 import {TeammateRatingDto} from "../../../server/dtos/rating/TeammateRatingDto";
 import {RatingActionTypes} from "../constants/RatingActionTypes";
+import {RouterController} from "../api.controllers/RouterController";
+import {Routes} from "../constants/Routes";
 
 const apiController = RatingApiController.getInstance();
 
@@ -16,7 +18,8 @@ export class RatingActions extends BaseActions {
                 dispatch({
                     type: RatingActionTypes.CreateTeammateRecordOK,
                     data: res.data
-                })
+                });
+                RouterController.history.push(Routes.rating.replace(":id", res.data._id));
             }).catch((err) => RatingActions.handleError(dispatch, err, RatingActionTypes.CreateTeammateRecordError));
         }
     }
@@ -76,6 +79,16 @@ export class RatingActions extends BaseActions {
             }).catch((err) => RatingActions.handleError(dispatch, err, RatingActionTypes.UpdateRatingError));
         }
     }
+
+    static searchForTeammate(teammateRecordDto: TeammateRecordDto) {
+        return function (dispatch) {
+            apiController.searchForTeammate(teammateRecordDto).then((res) => {
+                // TODO
+            }).catch((err) => RatingActions.handleError(dispatch, err, RatingActionTypes.UpdateRatingError));
+        }
+    }
+
+
 
 
 }

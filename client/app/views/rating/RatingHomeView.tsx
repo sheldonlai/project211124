@@ -7,13 +7,10 @@ import {Routes} from "../../constants/Routes";
 import {RatingActions} from "../../actions/RatingActions";
 import {AppStoreState} from "../../stores/AppStore";
 import {TeammatePreviewDto} from "../../../../server/dtos/rating/TeammatePreviewDto";
-import Typography from "material-ui/Typography";
-import ReactStars from 'react-stars';
-import Card, {CardActions, CardContent} from 'material-ui/Card';
+import {CardActions, CardContent} from 'material-ui/Card';
 import {ReducerStateStatus} from "../../constants/ReducerStateStatus";
 import {LoadingScreen} from "../../components/Animations/LoadingScreen";
-import {UniversityYearEnum} from "../../../../server/enums/UniversityYearEnum";
-import {convertEnumStringToViewString} from "../../utils/utils";
+import {RatingPreviewCard} from "./subcomponents/RatingPreviewCard";
 
 export class RatingHomeViewComponent extends React.Component<StateToProps & DispatchToProps, any> {
     componentWillMount() {
@@ -21,29 +18,7 @@ export class RatingHomeViewComponent extends React.Component<StateToProps & Disp
     }
 
     recordRow = (preview: TeammatePreviewDto, index: number) => {
-        const grey = {color: "grey"};
-        return (
-            <CustomLink key={index} to={Routes.rating.replace(":id", preview._id)}>
-                <Card style={{padding: 10, marginTop: 20}}>
-                    <CardContent>
-                        <Typography type="headline" style={{textTransform: "capitalize"}}>
-                            {preview.firstName + " " + preview.lastName}
-                        </Typography>
-                        <ReactStars size={34} value={preview.averageRating} edit={false}/>
-                        {
-                            preview.university &&
-                            <div>
-                                <Typography style={grey}
-                                            type="body1">{preview.university.name}</Typography>
-                                <Typography style={grey} type="body1">
-                                    {convertEnumStringToViewString(UniversityYearEnum[preview.year])}
-                                </Typography>
-                            </div>
-                        }
-                    </CardContent>
-                </Card>
-            </CustomLink>
-        );
+        return (<RatingPreviewCard preview={preview} key={index}/>);
     };
 
     render() {

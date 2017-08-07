@@ -1,6 +1,8 @@
 import {BaseRepository, IBaseRepository} from "./BaseRepository";
 import {ITeammateRecord, TeammateRating, TeammateRecord, TeammateRecordModel} from "../models/TeammateRecord";
 import {isNullOrUndefined} from "util";
+import {elasticSearchModel} from "../elasticSearch/ElasticSearchUtils";
+import * as mongoose from "mongoose";
 
 export interface ITeammateRecordRepository extends IBaseRepository<TeammateRecord> {
     searchRecord (query): Promise<TeammateRecord[]>;
@@ -14,9 +16,15 @@ export class TeammateRecordRepository extends BaseRepository<TeammateRecord, ITe
         super(TeammateRecordModel);
     }
 
-    searchRecord (conditions: any): Promise<TeammateRecord[]>{
-        return TeammateRecordModel.find(conditions).lean().exec()
-            .then((teammateRecords: TeammateRecord[]) => {
+    searchRecord (query: any): Promise<TeammateRecord[]>{
+
+        return elasticSearchModel(TeammateRecordModel, query).then((results) => {
+            console.log(results);
+            let ids = results.hits.hits.map((obj) => mongoose.Types.ObjectId(obj._id));
+            return TeammateRecordModel.find({
+                '_id': { $in: ids}
+            }).lean().exec();
+        }).then((teammateRecords: TeammateRecord[]) => {
             return Promise.all(teammateRecords.map((record)=>this.applyAdditionalFunction(record)));
         });
     }
