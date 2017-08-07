@@ -8,9 +8,14 @@ import {TeammateRatingDto} from "../dtos/rating/TeammateRatingDto";
 import {TeammatePreviewDto} from "../dtos/rating/TeammatePreviewDto";
 import {AppError} from "../errors/AppError";
 import {ClientError} from "../errors/HttpStatus";
+import {SearchByNameAndUniversityQuery} from "../elasticSearch/TeammateRecordQueries";
+import {elasticSearchModel} from "../elasticSearch/ElasticSearchUtils";
+import {universitySchema} from "../models/LocationModels/Universities";
 
 export interface ITeammateRecordService {
     createTeammateRecordRepo (teammateRecord: TeammateRecordDto, currentUser: User): Promise<TeammateRecordDto>;
+
+    searchForSimilarTeammateRecord (t: SearchTeammateDto): Promise<TeammatePreviewDto[]>;
 
     getRecentTeammateRecordPreview (currentUser?: User): Promise<TeammatePreviewDto[]>;
 
@@ -29,8 +34,8 @@ export class TeammateRecordService extends BaseService implements ITeammateRecor
 
     createTeammateRecordRepo(teammateRecord: TeammateRecordDto, currentUser: User): Promise<TeammateRecordDto> {
         const record = new TeammateRecord(
-            teammateRecord.firstName,
-            teammateRecord.lastName,
+            teammateRecord.firstName.toLowerCase(),
+            teammateRecord.lastName.toLowerCase(),
             teammateRecord.description,
             currentUser,
             teammateRecord.university,
@@ -40,31 +45,10 @@ export class TeammateRecordService extends BaseService implements ITeammateRecor
         return this.teammateRecordRepo.create(record);
     }
 
-
-    searchTeammateRecord(teammateSearchOption: SearchTeammateDto): Promise<TeammateRecordDto[]> {
-        let searchOptions: any = {
-            $and: [
-                {firstName: {$regex: teammateSearchOption.firstName, options: "i"}}
-            ]
-        };
-        if (teammateSearchOption.lastName) {
-            searchOptions.$and.push(
-                {lastName: {$regex: teammateSearchOption.lastName, options: "i"}}
-            );
-        }
-        if (teammateSearchOption.university) {
-            searchOptions.$and.push(
-                {university: teammateSearchOption.university._id}
-            );
-        }
-        if (teammateSearchOption.city) {
-            searchOptions.$and.push(
-                {city: teammateSearchOption.city}
-            );
-        }
-        return this.teammateRecordRepo.searchRecord(searchOptions).then((list: TeammateRecord[]) => {
-            return this.sortRecordByRelevency(list);
-        });
+    searchForSimilarTeammateRecord (t: SearchTeammateDto): Promise<TeammatePreviewDto[]> {
+        let query = SearchByNameAndUniversityQuery(t.firstName, t.lastName, t.university, t.year);
+        return this.teammateRecordRepo.searchRecord(query).then((teammates) =>
+            teammates.map((teammate) => this.convertTeammateToPreview(teammate)));
     }
 
     getRecentTeammateRecordPreview(currentUser?: User): Promise<TeammatePreviewDto[]> {
@@ -72,23 +56,7 @@ export class TeammateRecordService extends BaseService implements ITeammateRecor
             // TODO sort by user preference
         }
         return this.teammateRecordRepo.getAll({sort: "-createdAt"}).then((teammates: TeammateRecord[]) => {
-
-            return teammates.map((teammate) => {
-                let sum = 0;
-                for (let rating of teammate.ratings) {
-                    sum += rating.rating;
-                }
-                let avgRating = sum / teammate.ratings.length;
-                return {
-                    _id: teammate._id,
-                    firstName: teammate.firstName,
-                    lastName: teammate.lastName,
-                    averageRating: avgRating,
-                    university: teammate.university,
-                    year: teammate.year,
-                    city: teammate.city
-                }
-            });
+            return teammates.map((teammate) => this.convertTeammateToPreview(teammate));
         })
     }
 
@@ -133,9 +101,25 @@ export class TeammateRecordService extends BaseService implements ITeammateRecor
         });
     }
 
-
     sortRecordByRelevency(list: TeammateRecord[]): TeammateRecord[] {
         return list;
+    }
+
+    convertTeammateToPreview(teammate : TeammateRecord): TeammatePreviewDto {
+        let sum = 0;
+        for (let rating of teammate.ratings) {
+            sum += rating.rating;
+        }
+        let avgRating = sum / teammate.ratings.length;
+        return {
+            _id: teammate._id,
+            firstName: teammate.firstName,
+            lastName: teammate.lastName,
+            averageRating: avgRating,
+            university: teammate.university,
+            year: teammate.year,
+            city: teammate.city
+        }
     }
 
 }

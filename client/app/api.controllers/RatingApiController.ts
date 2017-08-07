@@ -39,4 +39,8 @@ export class RatingApiController extends ApiController{
         return this.put(APIUrls.editRating.replace(":id", teammateRecordId), teammateRatingDto);
     }
 
+    public searchForTeammate(teammateRecordDto: TeammateRecordDto): AxiosPromise{
+        return this.post(APIUrls.searchForTeammate, teammateRecordDto);
+    }
+
 }

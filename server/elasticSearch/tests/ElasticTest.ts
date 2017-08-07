@@ -30,7 +30,7 @@ describe("Elasticsearch test", () => {
         );
         console.log(result);
         expect(result).toBeDefined();
-        // just need results to be defined, we trust that es is a robust program
+        // just need results to be defined to know that it's connected, we trust that es is a robust program
     });
 
 });

@@ -37,10 +37,14 @@ class QuestionHomeComponent extends Component<QuestionViewProps> {
             return <LoadingScreen/>
         }
         return (
-            <Grid container justify="flex-end" style={{width: "100%"}} gutter={0}>
-                <Grid>{this.createQuestionButton()}</Grid>
+            <div>
+                <Grid container justify="flex-end" style={{width: "100%"}}>
+                    <Grid item>
+                        {this.createQuestionButton()}
+                    </Grid>
+                </Grid>
                 <QuestionPreviewCardsComponent list={this.props.featuredQuestions} />
-            </Grid>
+            </div>
         )
     }
 }

@@ -22,6 +22,7 @@ import {LocationAPI} from "./routes/LocationAPI";
 import {UserAPI} from "./routes/UserAPI";
 import {TeammateRatingAPI} from "./routes/TeammateRatingAPI";
 import {BaseAPI} from "./routes/BaseAPI";
+import {synchronizeIndex} from "./elasticSearch/_IndexModels";
 
 export class Server {
     public app: express.Application;
@@ -39,6 +40,7 @@ export class Server {
         this.configure();
         if (this.config.database.initialize)
             this.checkAndInsertUniversityData().then();
+        synchronizeIndex(true);
     }
 
     private configure(): void {

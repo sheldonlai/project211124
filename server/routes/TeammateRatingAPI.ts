@@ -1,11 +1,9 @@
 import {NextFunction, Request, Response, Router} from "express";
 import {BaseAPI} from "./BaseAPI";
 import {APIUrls} from "../urls";
-import {ILocationService} from "../services/LocationService";
-import {IUserService} from "../services/UserService";
 import {AuthRequest, maybeAuthenticated, mustBeAuthenticated} from "../middlewares/AuthMiddleware";
 import {ITeammateRecordService} from "../services/TeammateRecordService";
-import {TeammateRatingDto} from "../dtos/rating/TeammateRatingDto";
+import {TeammateRecordDto} from "../dtos/rating/TeammateRecordDto";
 
 export class TeammateRatingAPI extends BaseAPI {
 
@@ -20,6 +18,7 @@ export class TeammateRatingAPI extends BaseAPI {
         this.router.get(APIUrls.getTeammateRecord, this.getTeammateRecord);
         this.router.post(APIUrls.addRating, mustBeAuthenticated, this.addTeammateRating);
         this.router.put(APIUrls.editRating, mustBeAuthenticated, this.editTeammateRating);
+        this.router.post(APIUrls.searchForTeammate, this.searchForSimilarRecord);
 
     }
 
@@ -55,6 +54,13 @@ export class TeammateRatingAPI extends BaseAPI {
         const currentUser = req.user;
         const createDto = req.body;
         const promise = this.service.editRating(createDto,teammateRecordId, currentUser);
+        this.respondPromise(promise, res, next);
+    };
+
+    public searchForSimilarRecord = (req: AuthRequest, res: Response, next: NextFunction) => {
+        const currentUser = req.user;
+        const dto: TeammateRecordDto = req.body;
+        const promise = this.service.searchForSimilarTeammateRecord(dto);
         this.respondPromise(promise, res, next);
     };
 

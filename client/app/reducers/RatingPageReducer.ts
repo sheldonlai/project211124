@@ -20,16 +20,30 @@ const getLoadingState = (state):RatingPageReducerState  => {
     return newState;
 };
 
+const getOKState = (state, data):RatingPageReducerState  => {
+    let newState = {...state};
+    newState.status = ReducerStateStatus.DONE;
+    newState.record = data;
+    newState.lastUpdated = Date.now();
+    return newState;
+};
+
 export const RatingPageReducer = (state = initialState, action) : RatingPageReducerState => {
     switch (action.type) {
         case RatingActionTypes.GetTeammateRecordRequest:
             return getLoadingState(state);
+        case RatingActionTypes.AddRatingRequest:
+            return getLoadingState(state);
+        case RatingActionTypes.UpdateRatingRequest:
+            return getLoadingState(state);
         case RatingActionTypes.GetTeammateRecordOK:
-            state = {...state};
-            state.status = ReducerStateStatus.DONE;
-            state.record = action.data;
-            state.lastUpdated = Date.now();
-            return state;
+            return getOKState(state, action.data);
+        case RatingActionTypes.AddRatingOK:
+            return getOKState(state, action.data);
+        case RatingActionTypes.UpdateRatingOK:
+            return getOKState(state, action.data);
+
+
         default:
             return state;
     }
