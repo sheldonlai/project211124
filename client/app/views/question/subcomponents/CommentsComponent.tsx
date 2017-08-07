@@ -47,16 +47,26 @@ export class CommentsComponent extends React.Component<CommentsComponentProps, C
         };
     }
 
+    cloneCommentVector = () => {
+        let comments:CommentDto[] = [];
+        this.props.comments.map(comment => {
+            comments.push(comment);
+        });
+        return comments;
+    }
+
     addNewComment = () => {
         if (this.state.commentContent) {
-            let tmpComment: CommentModel = new CommentModel();
-            tmpComment.commentContent = this.state.commentContent;
-            tmpComment.commentBy = this.props.user;
-            tmpComment.commentedDate = new Date(Date.now());
-            this.props.comments.push(tmpComment);
-            this.props.onCommentsSubmit(this.props.comments);
-            this.setState({commentContent: ""});
-            this.setState({errorMsg: "", inputMode: false});
+            let tmpComment: CommentDto = {
+                commentContent: this.state.commentContent,
+                commentedDate: new Date(Date.now()),
+                commentBy: this.props.user,
+                lastEditedUtc: new Date(Date.now()),
+            }
+            let comments = [...this.props.comments];
+            comments.push(tmpComment);
+            this.props.onCommentsSubmit(comments);
+            this.setState({commentContent: "", errorMsg: "", inputMode: false});
         }
         else {
             this.setState({errorMsg: "Cannot submit empty comment."});
@@ -167,6 +177,18 @@ export class CommentsComponent extends React.Component<CommentsComponentProps, C
         }
     };
 
+    renderCommentActions = (commentBy: UserDto, commentIndx: number) => {
+        if(this.props.user.username == commentBy.username && commentBy._id == this.props.user._id){
+            return(
+                <div>
+                    {this.EditAndSaveButton(commentIndx)}
+                    {this.CancelAndDeleteButton(commentIndx)}
+                </div>
+            )
+        }
+        return undefined;
+    }
+
     renderComments = () => {
         return this.props.comments.map((comment, indx) => {
             return (
@@ -177,14 +199,14 @@ export class CommentsComponent extends React.Component<CommentsComponentProps, C
                         <br/>
                         by {comment.commentBy.username}
                     </div>
-                        {this.EditAndSaveButton(indx)}
-                        {this.CancelAndDeleteButton(indx)}
+                    {this.renderCommentActions(comment.commentBy, indx)}
                 </ListItem>
             )
         });
     };
 
     render() {
+        console.log(this.props.comments)
         return (
             <div>
                 <List className={"Comments"}>
