@@ -88,6 +88,19 @@ export class QuestionAPIController extends ApiController {
         });
     }
 
+    DelteComment(question: Question, commentIndx: number){
+        const questionDto = this.convertQuestionToDto(question);
+        const reqBody = {
+            questionDto: questionDto,
+            commentIndx: commentIndx,
+            questionID: questionDto._id,
+        };
+        return this.put(APIUrls.DeleteComment, reqBody).then((response: AxiosResponse) => {
+            response.data = this.convertDtoToQuestion(response.data);
+            return response;
+        });
+    }
+
     fetchQuestionByID(id: string): AxiosPromise {
         return this.get(APIUrls.GetQuestionPage.replace(":id", id))
             .then((response: AxiosResponse) => {

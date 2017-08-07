@@ -29,6 +29,7 @@ export class APIUrls {
 
     static CreateComment = "/create-comment";
     static UpdateComment = "/update-comment";
+    static DeleteComment = "/delete-comment";
 
     /* Utils */
     static getCountries = "/get-countries";

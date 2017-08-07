@@ -100,6 +100,19 @@ export class QuestionActions extends BaseActions {
         }
     }
 
+    static deleteComment(question: Question, commentIndx: number){
+        return (dispatch) => {
+            apiController.DelteComment(question, commentIndx).then(res => {
+                dispatch({
+                    type: QuestionActionTypes.DeleteComment,
+                    data: res.data,
+                })
+            }).catch(err =>
+                QuestionActions.handleError(dispatch, err, QuestionActionTypes.DeleteCommentError)
+            )
+        }
+    }
+
     static upVoteQuestion(question: Question) {
         return (dispatch) => {
             apiController.upVoteQuestion(question).then(res => {

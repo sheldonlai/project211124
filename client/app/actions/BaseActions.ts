@@ -2,6 +2,7 @@
  * Created by SHELDON on 6/22/2017.
  */
 import {ErrorActionTypes} from "../constants/ErrorActionTypes";
+import {ClientError, HttpStatus} from "../../../server/errors/HttpStatus";
 
 export class BaseActions {
 
@@ -30,6 +31,9 @@ export class BaseActions {
                 type: otherErrorType,
                 data: errorData
             });
+        if(err == 'Error: Request failed with status code 401'){
+            alert('You are not authorized for this action!');
+        }
         console.error(err)
     }
 }

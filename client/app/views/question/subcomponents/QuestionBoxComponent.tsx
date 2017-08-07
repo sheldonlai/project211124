@@ -68,6 +68,12 @@ export class QuestionBoxComponent extends Component<props, {}> {
       this.props.changeQuestionEditorState({edit: this.props.edit, question});
     };
 
+    onCommentDelete = (commentIndx) => {
+      let question = cloneQuestion(this.props.question);
+      this.props.DeleteComment(question, commentIndx);
+      this.props.changeQuestionEditorState({edit: this.props.edit, question});
+    };
+
     resetQuestion = () => {
         let question = cloneQuestion(this.props.question);
         this.props.changeQuestionEditorState({edit: false, question});
@@ -133,7 +139,7 @@ export class QuestionBoxComponent extends Component<props, {}> {
                                    user={this.props.user}
                                    onCommentsSubmit={this.onCommentSubmit}
                                    onCommentUpdate={this.onCommentUpdate}
-
+                                   onCommentDelete={this.onCommentDelete}
                 />
             </div>
         )
@@ -153,6 +159,7 @@ const mapDispatchToProps = (dispatch): DispatchProps => ({
     changeQuestionEditorState: (state: QuestionEditorReducerState) => dispatch(QuestionActions.changeQuestionEditorState(state)),
     createComment: (question: Question) => dispatch(QuestionActions.createComment(question)),
     UpdateComment: (question: Question, commentIndx: number, updatedComment: CommentDto) => dispatch(QuestionActions.updateComment(question, commentIndx, updatedComment)),
+    DeleteComment: (question: Question, commentIndx: number) => dispatch(QuestionActions.deleteComment(question, commentIndx)),
 });
 
 interface DispatchProps {
@@ -162,6 +169,7 @@ interface DispatchProps {
     changeQuestionEditorState: (state: QuestionEditorReducerState) => void;
     createComment: (question: Question) => void;
     UpdateComment: (question: Question, commentIndx: number, updatedComment: CommentDto) => void;
+    DeleteComment: (question: Question, commentIndx: number) => void;
 }
 
 export const QuestionBoxView = connect<QuestionBoxComponentProps, DispatchProps, any>(
