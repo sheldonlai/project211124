@@ -67,10 +67,11 @@ export class CreateTeammateViewComponent extends React.Component<props, state> {
         if (typeof  value === "string" && key !== "description")
             value = value.toLocaleLowerCase();
         obj[key] = value;
-        this.setState({teammateObj: obj});
-        if (typeof  value !== "string")
-            if (Date.now() - this.state.lastSearched > 100) // debounce of 600ms
-                this.searchForSimilarTeammate(this.state.teammateObj);
+        this.setState({teammateObj: obj},  () => {
+            if (typeof  value !== "string")
+                if (Date.now() - this.state.lastSearched > 100) // debounce of 600ms
+                    this.searchForSimilarTeammate(this.state.teammateObj);
+        });
     };
 
     onSubmit = () => {

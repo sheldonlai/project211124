@@ -17,14 +17,19 @@ export class TeammateRecordRepository extends BaseRepository<TeammateRecord, ITe
     }
 
     searchRecord (query: any): Promise<TeammateRecord[]>{
-
+        let ids: any[];
         return elasticSearchModel(TeammateRecordModel, query).then((results) => {
-            console.log(results);
-            let ids = results.hits.hits.map((obj) => mongoose.Types.ObjectId(obj._id));
+            ids = results.hits.hits.map((obj) => mongoose.Types.ObjectId(obj._id));
             return TeammateRecordModel.find({
                 '_id': { $in: ids}
             }).lean().exec();
         }).then((teammateRecords: TeammateRecord[]) => {
+            // re order the list
+            teammateRecords = ids.map((id) => {
+                return teammateRecords.find((record) => {
+                    return record._id.toString() === id.toString();
+                });
+            });
             return Promise.all(teammateRecords.map((record)=>this.applyAdditionalFunction(record)));
         });
     }
