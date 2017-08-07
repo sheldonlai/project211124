@@ -19,6 +19,7 @@ export interface CommentsComponentProps {
     user: UserDto;
     onCommentsSubmit: (comments: CommentDto[]) => void;
     onCommentUpdate: (commentIndx: number, updatedComment: CommentDto) => void;
+    onCommentDelete: (commentIndx: number) => void;
 }
 
 export interface CommentsComponentState {
@@ -55,7 +56,7 @@ export class CommentsComponent extends React.Component<CommentsComponentProps, C
             this.props.comments.push(tmpComment);
             this.props.onCommentsSubmit(this.props.comments);
             this.setState({commentContent: ""});
-            this.setState({errorMsg: ""});
+            this.setState({errorMsg: "", inputMode: false});
         }
         else {
             this.setState({errorMsg: "Cannot submit empty comment."});
@@ -97,7 +98,7 @@ export class CommentsComponent extends React.Component<CommentsComponentProps, C
 
     DeleteComment = (indx: number) => {
         this.props.comments.splice(indx, 1);
-        this.props.onCommentsSubmit(this.props.comments);
+        this.props.onCommentDelete(indx);
     };
 
     onEditComment = (indx: number) => {

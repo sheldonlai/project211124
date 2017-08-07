@@ -23,6 +23,7 @@ export class QuestionAPI extends BaseAPI {
         this.router.put(APIUrls.DownVoteQuestion, mustBeAuthenticated, this.downVoteQuestion);
         this.router.put(APIUrls.CreateComment, mustBeAuthenticated, this.createComment);
         this.router.put(APIUrls.UpdateComment, mustBeAuthenticated, this.UpdateComment);
+        this.router.put(APIUrls.DeleteComment, mustBeAuthenticated, this.DeleteComment);
     }
 
     public getQuestionPreviews = (req: AuthRequest, res: Response, next: NextFunction) => {
@@ -76,6 +77,14 @@ export class QuestionAPI extends BaseAPI {
         let questionId: string = req.body.questionID;
         let user: User = req.user;
         let result = this.service.UpdateComment(commentIndx, questionId, user, updatedComment);
+        this.respondPromise(result, res, next);
+    }
+
+    public DeleteComment = (req: AuthRequest, res: Response, next: NextFunction) => {
+        let commentIndx: number = req.body.commentIndx;
+        let questionId: string = req.body.questionID;
+        let user: User = req.user;
+        let result = this.service.DeleteComment(commentIndx, questionId, user);
         this.respondPromise(result, res, next);
     }
 }

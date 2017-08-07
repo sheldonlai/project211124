@@ -9,7 +9,7 @@ import {Answer} from "../models/Answer";
 import {AppError} from "../errors/AppError";
 import {BaseService} from "./BaseService";
 import {QuestionPreviewCollectionsDto} from "../dtos/q&a/QuestionPreviewCollectionsDto";
-import {ClientError} from "../errors/HttpStatus";
+import {ClientError, HttpStatus} from "../errors/HttpStatus";
 import {ITagRepository} from "../repositories/TagRepository";
 import {ITag} from "../models/Tags";
 import {UserQuestionVote} from "../models/UserQuestionVote";
@@ -26,6 +26,7 @@ export interface IQuestionService {
     downVoteQuestion(questionId: string, user: User): Promise<QuestionDto>;
     createComment(question: Question): Promise<QuestionDto>;
     UpdateComment(commentIndx: number, questionId: string, user: User, updatedComment: CommentDto): Promise<QuestionDto>;
+    DeleteComment(commentIndx: number, questionId: string, user: User): Promise<QuestionDto>;
 }
 
 export class QuestionService extends BaseService implements IQuestionService {
@@ -131,10 +132,23 @@ export class QuestionService extends BaseService implements IQuestionService {
         return this.questionRepository.getById(questionId).then((questionFound: Question) => {
             if(questionFound.comments[commentIndx].commentBy.username != user.username ||
             !questionFound.comments[commentIndx].commentBy._id.equals(user._id)){
-                throw new AppError("You are not the owner of this question!");
+                throw new AppError("You are not the owner of this question!", ClientError.UNAUTHORIZED);
             }
             else{
                 questionFound.comments[commentIndx] = updatedComment;
+                return this.questionRepository.update(questionFound);
+            }
+        })
+    }
+
+    DeleteComment(commentIndx: number, questionId: string, user: User){
+        return this.questionRepository.getById(questionId).then((questionFound: Question) => {
+            if(questionFound.comments[commentIndx].commentBy.username != user.username ||
+                !questionFound.comments[commentIndx].commentBy._id.equals(user._id)){
+                throw new AppError("You are not the owner of this question!", ClientError.UNAUTHORIZED);
+            }
+            else{
+                questionFound.comments.splice(commentIndx, 1);
                 return this.questionRepository.update(questionFound);
             }
         })
