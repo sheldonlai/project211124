@@ -14,12 +14,14 @@ import {SplitVIewTemplate} from "../../components/Templates/SplitVIewTemplate";
 import {RatingApiController} from "../../api.controllers/RatingApiController";
 import {TeammatePreviewDto} from "../../../../server/dtos/rating/TeammatePreviewDto";
 import {RatingPreviewCard} from "./subcomponents/RatingPreviewCard";
+import {LoadingScreen} from "../../components/Animations/LoadingScreen";
 
 interface state {
     teammateObj: TeammateRecordDto;
     showDesHint: boolean;
     similarPreviews: TeammatePreviewDto[];
     lastSearched: number;
+    loading: boolean
 }
 
 interface props extends DispatchToProps {
@@ -45,15 +47,16 @@ export class CreateTeammateViewComponent extends React.Component<props, state> {
             teammateObj: obj,
             showDesHint: false,
             similarPreviews: [],
-            lastSearched: 0
+            lastSearched: 0,
+            loading: false
         };
         this.apiController = RatingApiController.getInstance();
     }
 
     searchForSimilarTeammate = (teammateRecordDto: TeammateRecordDto) => {
-        this.setState({lastSearched: Date.now()})
+        this.setState({lastSearched: Date.now(), loading: true});
         this.apiController.searchForTeammate(teammateRecordDto).then((res) => {
-            this.setState({similarPreviews: res.data});
+            this.setState({similarPreviews: res.data, loading: false});
         }).catch((err) => {
             console.error(err)
         });
@@ -65,8 +68,9 @@ export class CreateTeammateViewComponent extends React.Component<props, state> {
             value = value.toLocaleLowerCase();
         obj[key] = value;
         this.setState({teammateObj: obj});
-        if (Date.now() - this.state.lastSearched > 100) // debounce of 600ms
-            this.searchForSimilarTeammate(this.state.teammateObj);
+        if (typeof  value !== "string")
+            if (Date.now() - this.state.lastSearched > 100) // debounce of 600ms
+                this.searchForSimilarTeammate(this.state.teammateObj);
     };
 
     onSubmit = () => {
@@ -93,6 +97,7 @@ export class CreateTeammateViewComponent extends React.Component<props, state> {
                                 label="First name"
                                 value={teammate.firstName}
                                 onChange={(event) => this.updateObj("firstName", event.target.value)}
+                                onBlur={() => this.searchForSimilarTeammate(this.state.teammateObj)}
                                 inputProps={NamesInputStyles}
                                 style={nameStyle}
                             /><br/>
@@ -100,6 +105,7 @@ export class CreateTeammateViewComponent extends React.Component<props, state> {
                                 label="Last name"
                                 value={teammate.lastName}
                                 onChange={(event) => this.updateObj("lastName", event.target.value)}
+                                onBlur={() => this.searchForSimilarTeammate(this.state.teammateObj)}
                                 inputProps={NamesInputStyles}
                                 style={nameStyle}
                             /><br/>
@@ -137,12 +143,18 @@ export class CreateTeammateViewComponent extends React.Component<props, state> {
                         </Paper>
                     </div>
                     <div>
-                        {
-                            this.state.similarPreviews.length > 0 &&
-                            <Typography type="display1">Similar postings:</Typography>
+                        {this.state.loading?
+                            <LoadingScreen/>:
+                            <div>
+                                {
+                                    this.state.similarPreviews.length > 0 &&
+                                    <Typography type="headline">Similar postings:</Typography>
+                                }
+                                {this.state.similarPreviews.map(
+                                    (preview, index) => <RatingPreviewCard preview={preview} key={index}/>)}
+                            </div>
                         }
-                        {this.state.similarPreviews.map(
-                            (preview, index) => <RatingPreviewCard preview={preview} key={index}/>)}
+
                     </div>
                 </SplitVIewTemplate>
             </div>

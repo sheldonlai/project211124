@@ -112,6 +112,7 @@ class TeammateLocationEditorComponent extends React.Component<combinedProps, sta
                             data={universities}
                             value={this.props.university}
                             placeholder="university"
+                            fullWidth
                             onChange={(uni)=> this.updateAcademicInfo("university", uni)}
                         />
                         <DropDownSelect
