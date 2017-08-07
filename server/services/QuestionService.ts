@@ -124,7 +124,9 @@ export class QuestionService extends BaseService implements IQuestionService {
     createComment(question: Question){
         return this.questionRepository.getById(question._id).then((questionFound: Question) => {
             questionFound.comments = question.comments;
-            return this.questionRepository.update(questionFound);
+            return this.questionRepository.update(questionFound).then((questionFound: Question) => {
+                return this.questionRepository.getById(questionFound._id);
+            });
         });
     }
 
