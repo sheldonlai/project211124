@@ -82,9 +82,16 @@ export class RatingActions extends BaseActions {
 
     static searchForTeammate(teammateRecordDto: TeammateRecordDto) {
         return function (dispatch) {
+            dispatch({
+                type: RatingActionTypes.SearchTeammatePreviewRequest,
+            });
             apiController.searchForTeammate(teammateRecordDto).then((res) => {
-                // TODO
-            }).catch((err) => RatingActions.handleError(dispatch, err, RatingActionTypes.UpdateRatingError));
+                dispatch({
+                    type: RatingActionTypes.SearchTeammatePreviewOK,
+                    data: res.data
+                });
+            }).catch((err) =>
+                RatingActions.handleError(dispatch, err, RatingActionTypes.SearchTeammatePreviewError));
         }
     }
 
