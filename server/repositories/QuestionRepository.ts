@@ -10,6 +10,7 @@ export interface IQuestionRepository extends IBaseRepository<Question> {
     getQuestionsByAuthor(user: User): Promise<Question[]>;
     getQuestionByTitle(title: string): Promise<Question>;
     findOneAndUpdateVoteQuestion(userQuestionVote: UserQuestionVote): Promise<Question>;
+    increaseViewCount(questionId: any) :Promise<any>
 }
 
 export class QuestionRepository extends BaseRepository<Question, IQuestion> implements IQuestionRepository {
@@ -54,6 +55,10 @@ export class QuestionRepository extends BaseRepository<Question, IQuestion> impl
             userQuestionVote, {upsert: true}).then((obj: UserQuestionVote) => {
             return this.getById(userQuestionVote.question);
         });
+    }
+
+    increaseViewCount(questionId: any) :Promise<any> {
+        return QuestionModel.findByIdAndUpdate(questionId,{$inc: {views:1}}).then(() => undefined);
     }
 
     protected applyRestriction(question: Question): Question {

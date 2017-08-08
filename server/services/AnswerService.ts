@@ -25,10 +25,7 @@ export class AnswerService extends BaseService implements IAnswerService {
     }
 
     createAnswer(currentUser: User, newAnswer: AnswerDto): Promise<AnswerDto> {
-        let answerObj = new Answer(
-            newAnswer.question, newAnswer.content, currentUser
-        );
-
+        let answerObj = new Answer(newAnswer.question, newAnswer.content, currentUser);
         return this.answerRepository.create(answerObj);
     }
 

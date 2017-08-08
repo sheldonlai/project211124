@@ -12,6 +12,7 @@ export interface QuestionDto{
     lastEditedUtc : Date;
     upVotes: number;
     downVotes: number;
+    views: number;
     tags : any[];
     comments : QuestionComment[];
     publicityStatus:  PublicityStatus;

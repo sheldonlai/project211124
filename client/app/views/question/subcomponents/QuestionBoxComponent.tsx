@@ -132,6 +132,7 @@ export class QuestionBoxComponent extends Component<props, {}> {
                             downVotes={question.downVotes}
                             author={question.author}
                             createdUtc={question.createdUtc}
+                            views={question.views}
                         />
                     </div>
                 </Paper>
@@ -156,10 +157,13 @@ const mapDispatchToProps = (dispatch): DispatchProps => ({
     upVoteQuestion: (question: Question) => dispatch(QuestionActions.upVoteQuestion(question)),
     downVoteQuestion: (question: Question) => dispatch(QuestionActions.downVoteQuestion(question)),
     editQuestion: (question: Question) => dispatch(QuestionActions.updateQuestion(question)),
-    changeQuestionEditorState: (state: QuestionEditorReducerState) => dispatch(QuestionActions.changeQuestionEditorState(state)),
+    changeQuestionEditorState: (state: QuestionEditorReducerState) =>
+        dispatch(QuestionActions.changeQuestionEditorState(state)),
     createComment: (question: Question) => dispatch(QuestionActions.createComment(question)),
-    UpdateComment: (question: Question, commentIndx: number, updatedComment: CommentDto) => dispatch(QuestionActions.updateComment(question, commentIndx, updatedComment)),
-    DeleteComment: (question: Question, commentIndx: number) => dispatch(QuestionActions.deleteComment(question, commentIndx)),
+    UpdateComment: (question: Question, commentIndex: number, updatedComment: CommentDto) =>
+        dispatch(QuestionActions.updateComment(question, commentIndex, updatedComment)),
+    DeleteComment: (question: Question, commentIndex: number) =>
+        dispatch(QuestionActions.deleteComment(question, commentIndex)),
 });
 
 interface DispatchProps {
@@ -168,8 +172,8 @@ interface DispatchProps {
     editQuestion: (question: Question) => void;
     changeQuestionEditorState: (state: QuestionEditorReducerState) => void;
     createComment: (question: Question) => void;
-    UpdateComment: (question: Question, commentIndx: number, updatedComment: CommentDto) => void;
-    DeleteComment: (question: Question, commentIndx: number) => void;
+    UpdateComment: (question: Question, commentIndex: number, updatedComment: CommentDto) => void;
+    DeleteComment: (question: Question, commentIndex: number) => void;
 }
 
 export const QuestionBoxView = connect<QuestionBoxComponentProps, DispatchProps, any>(

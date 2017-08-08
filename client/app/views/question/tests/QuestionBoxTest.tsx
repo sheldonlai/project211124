@@ -43,7 +43,7 @@ test('render question', () => {
     const component = renderer.create(
         <MuiThemeProvider theme={muiTheme}>
         <Router history={RouterController.history}>
-            <Route render={(props) => {
+            <Route render={(props: any) => {
                 return <QuestionBoxComponent {...propsStub} {...props} />
             }} />
         </Router>

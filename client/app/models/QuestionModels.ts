@@ -23,6 +23,7 @@ export namespace FrontEndQuestionModels {
         difficulty: QuestionDifficulty;
         showFileUploadDialog?: boolean;
         filesUploaded?: any[];
+        views: number;
 
         constructor() {
             this.title = '';
@@ -38,6 +39,7 @@ export namespace FrontEndQuestionModels {
             this.comments = [];
             this.showFileUploadDialog = false;
             this.filesUploaded = [];
+            this.views = 0;
         }
     }
 

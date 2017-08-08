@@ -35,6 +35,7 @@ export class Question extends BaseModel {
     tags: Tag[];
     upVotes: number;
     downVotes: number;
+    views: number;
     isPublished: boolean;
     lastEditedUtc: Date;
     createdUtc: Date;
@@ -53,6 +54,7 @@ export class Question extends BaseModel {
         this.isPublished = isPublished ? isPublished : false;
         this.publicityStatus = publicityStatus ? publicityStatus : PublicityStatus.PUBLIC;
         this.difficulty = difficulty;
+        this.views = 0;
     }
 }
 
@@ -74,10 +76,10 @@ const schema = new Schema({
             es_indexed: true, es_schema: UserModel, es_select: 'username'
         }
     ],
-    isPublished: {type: Boolean, default: true},
-    resolved: {type: Boolean, default: false},
-    lastEditedUtc: {type: Date, default: Date.now},
-    createdUtc: {type: Date, default: Date.now},
+    isPublished: {type: Boolean, default: true, es_indexed: true},
+    resolved: {type: Boolean, default: false, es_indexed: true},
+    lastEditedUtc: {type: Date, default: Date.now, es_indexed: true},
+    createdUtc: {type: Date, default: Date.now, es_indexed: true},
     publicityStatus: {
         type: String,
         enum: Object.keys(PublicityStatus),
@@ -102,9 +104,10 @@ const schema = new Schema({
     ],
     comments: [{
         commentBy: {type: Schema.Types.ObjectId, ref: 'user'},
-        commentContent: {type: String, required: true},
+        commentContent: {type: String, required: true, es_indexed: true},
         lastEditedUtc: {type: Date, default: Date.now}
-    }]
+    }],
+    views: {type: Number, default: 0, es_indexed: true}
 });
 
 
@@ -114,7 +117,12 @@ const autoPopulateUsers = function (next) {
 };
 
 schema.pre('findOne', autoPopulateUsers).pre('find', autoPopulateUsers);
-schema.plugin(mongoosastic, GetMongoosasticOption());
+schema.plugin(mongoosastic, {
+    populate: [
+        {path: 'university', select: 'name'},
+        {path: 'createdBy', select: 'username'}
+    ]
+});
 
 export const QuestionModel = model<IQuestion>('question', schema);
 

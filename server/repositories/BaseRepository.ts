@@ -1,6 +1,8 @@
+import * as mongoose from "mongoose";
 import {Document, Model, Types} from "mongoose";
 import {BaseModel} from "../models/Base/BaseModel";
 import {AppError} from "../errors/AppError";
+import {elasticSearchModel} from "../elasticSearch/ElasticSearchUtils";
 
 export interface IBaseRepository<T> {
     getAll(options?: SortLimitOptions): Promise<T[]>
@@ -10,6 +12,7 @@ export interface IBaseRepository<T> {
     create(obj: T): Promise<T>;
     update(obj: T): Promise<T>;
     deleteById(id: string | Types.ObjectId): Promise<T>;
+    search(query: any): Promise<T[]>
 }
 
 export interface SortLimitOptions {
@@ -81,6 +84,24 @@ export abstract class BaseRepository<T extends BaseModel, I extends Document & T
             .then((res: T) => this.applyAdditionalFunction(res))
             .then((res: I) => {
             return this.getModel(res);
+        });
+    }
+
+    search(query): Promise<T[]> {
+        let ids: any[];
+        return elasticSearchModel(this.model, query).then((results) => {
+            ids = results.hits.hits.map((obj) => mongoose.Types.ObjectId(obj._id));
+            return this.model.find({
+                '_id': { $in: ids}
+            }).lean().exec();
+        }).then((elements: T[]) => {
+            // re order the list
+            elements = ids.map((id) => {
+                return elements.find((record) => {
+                    return record._id.toString() === id.toString();
+                });
+            });
+            return Promise.all(elements.map((record)=>this.applyAdditionalFunction(record)));
         });
     }
 

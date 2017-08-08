@@ -1,7 +1,7 @@
 import * as React from "react";
 import {UserDto} from "../../../../../server/dtos/auth/UserDto";
 import {ThumbComponent} from "../../../components/Forms/ThumbComponent";
-
+import Grid from "material-ui/Grid";
 interface props {
     onUpVote: () => void;
     onDownVote: () => void;
@@ -9,6 +9,7 @@ interface props {
     downVotes: number;
     author: UserDto;
     createdUtc: Date;
+    views?: number;
 }
 
 export class FooterComponent extends React.Component<props> {
@@ -20,19 +21,29 @@ export class FooterComponent extends React.Component<props> {
         };
         return (
             <div>
-                <ThumbComponent
-                    value={this.props.upVotes}
-                    thumbUp={true}
-                    onClick={this.props.onUpVote} />
-                <ThumbComponent
-                    value={this.props.downVotes}
-                    thumbUp={false}
-                    onClick={this.props.onDownVote} />
-                <div style={{color: "grey", fontSize: 10, textAlign: "right"}}>
-                    {this.props.createdUtc && <div>Posted on {this.props.createdUtc}</div>}
-                    <br/>
-                    by {this.props.author.username}
-                </div>
+                <Grid container xs={12}>
+                    <Grid item xs={6}>
+                        <ThumbComponent
+                            value={this.props.upVotes}
+                            thumbUp={true}
+                            onClick={this.props.onUpVote} />
+                        <ThumbComponent
+                            value={this.props.downVotes}
+                            thumbUp={false}
+                            onClick={this.props.onDownVote} />
+                    </Grid>
+                    <Grid item xs={6}>
+                        <div style={{color: "grey", fontSize: 10, textAlign: "right"}}>
+                            <br/>
+                            {this.props.createdUtc && <div>Posted on {this.props.createdUtc}</div>}
+                            <br/>
+                            <div>by {this.props.author.username}</div>
+                            <br/>
+                            {this.props.views && <div>views : {this.props.views}</div>}
+                        </div>
+
+                    </Grid>
+                </Grid>
             </div>
         );
     }

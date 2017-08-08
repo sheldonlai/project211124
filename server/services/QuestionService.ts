@@ -77,6 +77,10 @@ export class QuestionService extends BaseService implements IQuestionService {
             return this.answerRepository.getByQuestionId(question._id);
         }).then((answers: Answer[]) => {
             questionPage.answers = answers ? answers : [];
+            this.questionRepository.increaseViewCount(questionPage.question._id).then(() => {
+                // TODO: some kind of logging
+                console.log("increased view");
+            });
             return questionPage;
         });
     }
