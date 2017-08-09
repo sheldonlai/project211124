@@ -5,6 +5,7 @@ import {PublicityStatus} from "../../../server/enums/PublicityStatus";
 import {QuestionComment, QuestionDifficulty} from "../../../server/models/Question";
 import {DifficultyLevel, QuestionEducationLevel} from "../../../server/enums/QuestionEducationLevel";
 import {mapFieldsOnToObject} from "../utils/utils";
+import {CategoryTypeEnum} from "../../../server/enums/CategoryTypeEnum";
 
 export namespace FrontEndQuestionModels {
     export class Question {
@@ -24,6 +25,7 @@ export namespace FrontEndQuestionModels {
         showFileUploadDialog?: boolean;
         filesUploaded?: any[];
         views: number;
+        category: CategoryTypeEnum;
 
         constructor() {
             this.title = '';
@@ -36,6 +38,7 @@ export namespace FrontEndQuestionModels {
                 educationLevel: QuestionEducationLevel.NOT_SPECIFIED,
                 difficultyLevel: DifficultyLevel.NOT_SPECIFIED
             };
+            this.category = CategoryTypeEnum.NOT_SPECIFIED;
             this.comments = [];
             this.showFileUploadDialog = false;
             this.filesUploaded = [];

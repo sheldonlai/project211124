@@ -2,6 +2,7 @@ import {PublicityStatus} from "../../enums/PublicityStatus";
 import {QuestionComment, QuestionDifficulty} from "../../models/Question";
 import {UserDto} from "../auth/UserDto";
 import {RawDraftContentState} from "draft-js";
+import {CategoryTypeEnum} from "../../enums/CategoryTypeEnum";
 export interface QuestionDto{
     _id : string;
     title : string;
@@ -17,4 +18,5 @@ export interface QuestionDto{
     comments : QuestionComment[];
     publicityStatus:  PublicityStatus;
     difficulty: QuestionDifficulty;
+    category: CategoryTypeEnum;
 }

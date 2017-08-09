@@ -1,4 +1,4 @@
-import {model, Schema, Document} from "mongoose";
+import {Document, model, Schema} from "mongoose";
 import {BaseModel} from './Base/BaseModel';
 import {User, UserModel} from './User';
 import {PublicityStatus} from "../enums/PublicityStatus";
@@ -6,7 +6,7 @@ import {DifficultyLevel, QuestionEducationLevel} from "../enums/QuestionEducatio
 import {listNumericalEnumValues} from "../utils/EnumsUtil";
 import {RawDraftContentState} from "draft-js";
 import {Tag} from "./Tags";
-import {GetMongoosasticOption} from "../elasticSearch/GetPlugin";
+import {CategoryTypeEnum} from "../enums/CategoryTypeEnum";
 
 let mongoosastic = require("mongoosastic");
 
@@ -42,15 +42,17 @@ export class Question extends BaseModel {
     comments: QuestionComment[];
     publicityStatus: PublicityStatus;
     difficulty: QuestionDifficulty;
+    category: CategoryTypeEnum;
 
     constructor(title: string, content: RawDraftContentState, author: User, tags: any[],
                 isPublished?: boolean, publicityStatus?: PublicityStatus,
-                difficulty?: QuestionDifficulty) {
+                difficulty?: QuestionDifficulty, category?: CategoryTypeEnum,) {
         super();
         this.title = title;
         this.content = content;
         this.author = author;
         this.tags = tags;
+        this.category = category? category: CategoryTypeEnum.NOT_SPECIFIED;
         this.isPublished = isPublished ? isPublished : false;
         this.publicityStatus = publicityStatus ? publicityStatus : PublicityStatus.PUBLIC;
         this.difficulty = difficulty;
@@ -70,6 +72,7 @@ const schema = new Schema({
         type: Schema.Types.ObjectId, ref: 'user', required: true,
         es_indexed: true, es_schema: UserModel, es_select: 'username'
     },
+    category: {type: String, enum: Object.keys(CategoryTypeEnum), default: CategoryTypeEnum.NOT_SPECIFIED},
     tags: [
         {
             type: Schema.Types.ObjectId, ref: 'tag',
@@ -107,7 +110,8 @@ const schema = new Schema({
         commentContent: {type: String, required: true, es_indexed: true},
         lastEditedUtc: {type: Date, default: Date.now}
     }],
-    views: {type: Number, default: 0, es_indexed: true}
+    views: {type: Number, default: 0, es_indexed: true},
+
 });
 
 

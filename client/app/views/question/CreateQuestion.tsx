@@ -21,10 +21,10 @@ import {getDropDownDataFromStringEnum} from "../../utils/utils";
 import {QuestionDifficultyMenu} from "./subcomponents/QuestionDifficultyMenu";
 import {RouterProps} from "react-router";
 import {Routes} from "../../constants/Routes";
-import Question = FrontEndQuestionModels.Question;
-import {isNullOrUndefined} from "util";
 import {FileUploader} from "../../components/FileUpload/FileUploader";
 import {EditorStateUtil} from "../../components/CustomEditor/EditorStateUtil";
+import {CategoryTypeEnum} from "../../../../server/enums/CategoryTypeEnum";
+import Question = FrontEndQuestionModels.Question;
 
 
 export interface CreateQuestionState {
@@ -129,7 +129,7 @@ class CreateQuestion extends Component<props, Question> {
                                 label="Title"
                                 type="text"
                                 value={this.state.title}
-                                onChange={this.titleChange}
+                                onChange={this.titleChange}Q
                             />
                         </Grid>
                         <Grid item xs={12} md={12}>
@@ -141,6 +141,12 @@ class CreateQuestion extends Component<props, Question> {
                                 data={getDropDownDataFromStringEnum(PublicityStatus)}
                                 onChange={(publicityStatus) => this.setState({publicityStatus})}
                                 value={this.state.publicityStatus}
+                            />
+                            <DropDownSelect
+                                placeholder="Category"
+                                data={getDropDownDataFromStringEnum(CategoryTypeEnum)}
+                                onChange={(category) => this.setState({category})}
+                                value={this.state.category}
                             />
                         </Grid>
 

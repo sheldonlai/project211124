@@ -61,7 +61,7 @@ export class QuestionService extends BaseService implements IQuestionService {
         return this.tagRepository.getTags(question.tags).then((tags: ITag[]) => {
             let questionObject = new Question(
                 question.title, question.content, currentUser, tags,
-                question.isPublished, question.publicityStatus, question.difficulty
+                question.isPublished, question.publicityStatus, question.difficulty, question.category
             );
             return this.questionRepository.create(questionObject);
         })
@@ -101,6 +101,7 @@ export class QuestionService extends BaseService implements IQuestionService {
             questionFound.title = questionDto.title;
             questionFound.publicityStatus = questionDto.publicityStatus;
             questionFound.difficulty = questionDto.difficulty;
+            questionFound.category = questionDto.category;
 
             // update last edited utc
             questionFound.lastEditedUtc = new Date(Date.now());

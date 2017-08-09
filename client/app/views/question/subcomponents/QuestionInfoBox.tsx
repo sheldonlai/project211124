@@ -16,6 +16,7 @@ import {QuestionEditorReducerState} from "../../../reducers/QuestionEditorReduce
 import Question = FrontEndQuestionModels.Question;
 import cloneQuestion = FrontEndQuestionModels.cloneQuestion;
 import {DisplayField} from "../../../components/Forms/DisplayField";
+import {CategoryTypeEnum} from "../../../../../server/enums/CategoryTypeEnum";
 
 interface stateToProps {
     question: Question;
@@ -49,6 +50,15 @@ export class QuestionInfoBox extends React.Component<props, {}> {
         });
     };
 
+    onCategoryChange = (cat: CategoryTypeEnum) => {
+        let question = cloneQuestion(this.props.questionEditorState);
+        question.category = cat;
+        this.props.changeQuestionEditorState({
+            edit: this.props.edit,
+            question
+        });
+    };
+
     row = (label: string, value: string) => {
         return <DisplayField label={label} value={value}/>
     };
@@ -61,11 +71,12 @@ export class QuestionInfoBox extends React.Component<props, {}> {
         const question = this.props.question;
         return (
             <div>
-                {this.row("type", convertEnumStringToViewString(PublicityStatus[question.publicityStatus]))}
-                {this.row("level",
+                {this.row("Type", convertEnumStringToViewString(PublicityStatus[question.publicityStatus]))}
+                {this.row("Category", convertEnumStringToViewString(CategoryTypeEnum[question.category]))}
+                {this.row("Level",
                     convertEnumStringToViewString(QuestionEducationLevel[question.difficulty.educationLevel]))}
                 {question.difficulty.educationLevel != QuestionEducationLevel.NOT_SPECIFIED &&
-                this.row("difficulty",
+                this.row("Difficulty",
                     convertEnumStringToViewString(DifficultyLevel[question.difficulty.difficultyLevel]))}
             </div>
         )
@@ -78,6 +89,12 @@ export class QuestionInfoBox extends React.Component<props, {}> {
                     data={getDropDownDataFromStringEnum(PublicityStatus)}
                     value={this.props.questionEditorState.publicityStatus}
                     onChange={this.opnPublicityChange}
+                />
+                <DropDownSelect
+                    placeholder="Category"
+                    data={getDropDownDataFromStringEnum(CategoryTypeEnum)}
+                    onChange={this.onCategoryChange}
+                    value={this.props.questionEditorState.category}
                 />
                 <QuestionDifficultyMenu onDifficultyChange={this.onDifficultyChange}
                                         difficulty={this.props.questionEditorState.difficulty} />
