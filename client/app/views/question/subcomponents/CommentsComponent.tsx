@@ -27,6 +27,7 @@ export interface CommentsComponentState {
     commentContent: string;
     errorMsg: string;
     EditCommentIndx: number;
+    showMaxComments: number;
 }
 
 const styleSheet: CSSProperties = {
@@ -44,15 +45,8 @@ export class CommentsComponent extends React.Component<CommentsComponentProps, C
             commentContent: "",
             errorMsg: "",
             EditCommentIndx: -1,
+            showMaxComments: 5,
         };
-    }
-
-    cloneCommentVector = () => {
-        let comments:CommentDto[] = [];
-        this.props.comments.map(comment => {
-            comments.push(comment);
-        });
-        return comments;
     }
 
     addNewComment = () => {
@@ -190,7 +184,8 @@ export class CommentsComponent extends React.Component<CommentsComponentProps, C
     }
 
     renderComments = () => {
-        return this.props.comments.map((comment, indx) => {
+        let comments:CommentDto[] = this.props.comments.slice(0, this.state.showMaxComments);
+        return comments.map((comment, indx) => {
             return (
                 <ListItem key={comment.lastEditedUtc + comment.commentBy.username}>
                     <ListItemText primary={this.onEditComment(indx)}></ListItemText>
@@ -204,6 +199,10 @@ export class CommentsComponent extends React.Component<CommentsComponentProps, C
             )
         });
     };
+
+    onShowMore = () => {
+        console.log('hi')
+    }
 
     render() {
         console.log(this.props.comments)
@@ -219,6 +218,7 @@ export class CommentsComponent extends React.Component<CommentsComponentProps, C
                     </IconButton>
                 </div>
                 {this.renderInputCommentBox()}
+                <a onClick={this.onShowMore}>Show more comments</a>
             </div>
         );
     }
