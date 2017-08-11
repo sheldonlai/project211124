@@ -21,7 +21,7 @@ export class FooterComponent extends React.Component<props> {
         };
         return (
             <div>
-                <Grid container xs={12}>
+                <Grid container>
                     <Grid item xs={6}>
                         <ThumbComponent
                             value={this.props.upVotes}
@@ -41,7 +41,6 @@ export class FooterComponent extends React.Component<props> {
                             <br/>
                             {this.props.views && <div>views : {this.props.views}</div>}
                         </div>
-
                     </Grid>
                 </Grid>
             </div>
