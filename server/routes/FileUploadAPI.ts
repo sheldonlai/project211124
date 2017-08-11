@@ -4,7 +4,7 @@
 import {NextFunction, Request, Response, Router} from "express";
 import {BaseAPI} from "./BaseAPI";
 import {APIUrls} from "../urls";
-import {multerUpload} from "../middlewares/multer";
+import {multerUpload} from "../middlewares/Multer";
 import {StorageTypeEnum} from "../enums/StorageType";
 import {User} from "../models/User";
 import {IFileSystemService} from "../services/FileSystemService";

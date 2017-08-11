@@ -14,10 +14,10 @@ export interface ITag extends Tag, Document {
 
 }
 
-const schema = new Schema({
+export const tagSchema = new Schema({
     tag: {type:String, required: true, unique: true}
 });
 
-schema.plugin(mongoosastic, GetMongoosasticOption());
+tagSchema.plugin(mongoosastic, GetMongoosasticOption());
 
-export const TagModel = model<ITag>('tag', schema);
+export const TagModel = model<ITag>('tag', tagSchema);
