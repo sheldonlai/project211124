@@ -39,7 +39,8 @@ export class ServiceProvider {
     static QuestionService = new QuestionService(
         RepositoryProvider.QuestionRepository,
         RepositoryProvider.AnswerRepository,
-        RepositoryProvider.TagRepository);
+        RepositoryProvider.TagRepository,
+        RepositoryProvider.UserRepository);
     static AnswerService = new AnswerService(
         RepositoryProvider.AnswerRepository
     );

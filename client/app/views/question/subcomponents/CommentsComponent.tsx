@@ -165,14 +165,16 @@ export class CommentsComponent extends React.Component<CommentsComponentProps, C
         else{
             return(
                 <div  style={{textAlign: "left"}}>
-                    <Button onClick = {() => this.setState({EditCommentIndx: -1, commentContent: "", errorMsg: ""})}>cancel</Button>
+                    <Button onClick={() => this.setState({EditCommentIndx: -1, commentContent: "", errorMsg: ""})}>
+                        cancel
+                    </Button>
                 </div>
             );
         }
     };
 
     renderCommentActions = (commentBy: UserDto, commentIndx: number) => {
-        if(this.props.user.username == commentBy.username && commentBy._id == this.props.user._id){
+        if(this.props.user && this.props.user.username == commentBy.username && commentBy._id == this.props.user._id){
             return(
                 <div>
                     {this.EditAndSaveButton(commentIndx)}
@@ -201,11 +203,9 @@ export class CommentsComponent extends React.Component<CommentsComponentProps, C
     };
 
     onShowMore = () => {
-        console.log('hi')
     }
 
     render() {
-        console.log(this.props.comments)
         return (
             <div>
                 <List className={"Comments"}>

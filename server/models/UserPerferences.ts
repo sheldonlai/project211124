@@ -5,7 +5,6 @@ import {BaseModel} from './Base/BaseModel';
 
 export class UserPreferences extends BaseModel {
     user: mongoose.Types.ObjectId;
-
     question_pref:  {
       tags_vec: {[name: string]: number},
       cat_vec: {[name: string]: number}
@@ -13,6 +12,10 @@ export class UserPreferences extends BaseModel {
 
     constructor() {
         super();
+        this.question_pref = {
+            tags_vec: {},
+            cat_vec: {}
+        }
     }
 }
 

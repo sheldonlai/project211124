@@ -14,14 +14,13 @@ export interface IQuestionRepository extends IBaseRepository<Question> {
 }
 
 export class QuestionRepository extends BaseRepository<Question, IQuestion> implements IQuestionRepository {
-
     constructor() {
         super(QuestionModel);
     }
 
     create(question: Question): Promise<Question> {
-        delete question.createdUtc;
-        delete question.lastEditedUtc;
+        question.createdUtc = undefined;
+        question.lastEditedUtc = undefined;
         return super.create(question).then((question: Question) => {
             return this.getById(question._id);
         });

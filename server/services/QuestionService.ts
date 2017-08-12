@@ -14,6 +14,9 @@ import {ITagRepository} from "../repositories/TagRepository";
 import {ITag} from "../models/Tags";
 import {UserQuestionVote} from "../models/UserQuestionVote";
 import {CommentDto} from "../dtos/q&a/CommentDto"
+import {IUserRepository} from "../repositories/UserRepository";
+import {getQuestionsQueryByPreference} from "../elasticSearch/QuestionQueries";
+import {UserPreferences} from "../models/UserPerferences";
 
 
 export interface IQuestionService {
@@ -30,25 +33,28 @@ export interface IQuestionService {
 }
 
 export class QuestionService extends BaseService implements IQuestionService {
-    private questionRepository: IQuestionRepository;
-
-    private answerRepository: IAnswerRepository;
-    private tagRepository: ITagRepository;
-    constructor(questionRepository: IQuestionRepository,
-                answerRepository: IAnswerRepository,
-                tagRepository: ITagRepository) {
+    constructor(
+        private questionRepository: IQuestionRepository,
+        private answerRepository: IAnswerRepository,
+        private tagRepository: ITagRepository,
+        private userRepository: IUserRepository,
+        ) {
         super();
-        this.questionRepository = questionRepository;
-        this.answerRepository = answerRepository;
-        this.tagRepository = tagRepository;
     }
 
-    getQuestionPreview(user?: User): Promise<QuestionPreviewCollectionsDto> {
+    async getQuestionPreview(user?: User): Promise<QuestionPreviewCollectionsDto> {
         let promises = [];
-        promises.push(this.questionRepository.getAll({sort: "-createdUtc", limit: 25}));
         if (user) {
+            let preferences = await this.userRepository.getUserPreference(user);
+            preferences = preferences.question_pref?  preferences: new UserPreferences();
+            promises.push(this.questionRepository.search(getQuestionsQueryByPreference(preferences)));
             promises.push((this.questionRepository.getQuestionsByAuthor(user)));
+        } else {
+            let preferences = new UserPreferences();
+            promises.push(this.questionRepository.search(getQuestionsQueryByPreference(preferences)));
         }
+        promises.push(this.questionRepository.getAll({sort: "-createdUtc", limit: 25}));
+
         return Promise.all(promises).then((result) => {
             return {
                 featuredQuestions: result[0] ? result[0] : [],

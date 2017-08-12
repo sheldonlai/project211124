@@ -1,6 +1,6 @@
 import {UserPreferences} from "../models/UserPerferences";
 
-export const SearchByNameAndUniversityQuery = (userPreference: UserPreferences) => {
+export const getQuestionsQueryByPreference = (userPreference: UserPreferences) => {
 
   let tagPref = userPreference.question_pref.tags_vec;
   let catPref = userPreference.question_pref.cat_vec;
