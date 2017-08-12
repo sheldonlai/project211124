@@ -72,8 +72,8 @@ class MenuClass extends Component<MenuClassProps> {
                                 </Typography>
                             </Button>
                         </CustomLink>
-                        {this.button("Questions", Routes.question)}
-                        {this.button("Services", Routes.services)}
+                        {this.button("Questions", Routes.questionHome)}
+                        {this.button("Services", Routes.story)}
                         {this.button("RateMyTeammate", Routes.rate_my_teammate)}
                     </div>
                     <div style={{float: "left"}}>

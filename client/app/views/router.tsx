@@ -1,25 +1,25 @@
 import * as React from "react";
-import {MuiThemeProvider, createMuiTheme} from "material-ui/styles";
+import {createMuiTheme, MuiThemeProvider} from "material-ui/styles";
 import createPalette from "material-ui/styles/palette";
 import {Route, Router} from "react-router";
 import {Home} from "./home/home";
 import {LoginPage} from "./auth/LoginView";
 import {Routes} from "../constants/Routes";
 import {RegistrationPage} from "./auth/RegistrationView";
-import {CreateQuestionPage} from "./question/CreateQuestion";
 import {RouterController} from "../api.controllers/RouterController";
 import {Provider} from "react-redux";
 import {Menu} from "./Menu";
-import {QuestionHomePage} from "./question/QuestionHome";
-import {QuestionPageView} from "./question/QuestionPage";
-import TransitionGroup =require('react-transition-group/TransitionGroup');
 import {ErrorSnackBar} from "./ErrorView";
 import {ServiceHomeView} from "./services/ServiceHome";
 import {UserProfileView} from "./profile/UserProfileView";
 import {RatingHomeView} from "./rating/RatingHomeView";
-import {deepOrange, blueGrey} from "material-ui/colors";
+import {blueGrey, deepOrange} from "material-ui/colors";
 import {CreateTeammateView} from "./rating/CreateTeammateView";
 import {RatingPageView} from "./rating/RatingPageView";
+import TransitionGroup =require('react-transition-group/TransitionGroup');
+import {Bundle} from "../components/Bundle";
+import {LoadingScreen} from "../components/Animations/LoadingScreen";
+let questionLoader = require("bundle-loader?lazy&name=question!./QuestionRouter");
 let muiTheme = createMuiTheme({
     palette: createPalette({
         primary: deepOrange,
@@ -31,6 +31,14 @@ const firstChild = props => {
     const childrenArray = React.Children.toArray(props.children);
     return childrenArray[0] || null;
 };
+
+const QuestionModule = () => (
+    <Bundle load={questionLoader}>
+        {(mod) => (
+            mod ? mod() : <LoadingScreen/>
+        )}
+    </Bundle>
+);
 
 export class App extends React.Component<any, any> {
     render() {
@@ -61,28 +69,10 @@ export class App extends React.Component<any, any> {
                                        </TransitionGroup>
                                    )}
                             />
-                            <Route exact path={Routes.question}
-                                   render={({match, ...rest}) => (
-                                       <TransitionGroup component={firstChild}>
-                                           <QuestionHomePage match={match} {...rest} />
-                                       </TransitionGroup>
-                                   )}
+                            <Route path={Routes.question}
+                                   component={QuestionModule}
                             />
-                            <Route exact path={Routes.createQuestion}
-                                   render={({match, ...rest}) => (
-                                       <TransitionGroup component={firstChild}>
-                                           <CreateQuestionPage match={match} {...rest} />
-                                       </TransitionGroup>
-                                   )}
-                            />
-                            <Route path={Routes.question_by_id}
-                                   render={({match, ...rest}) => (
-                                       <TransitionGroup component={firstChild}>
-                                           <QuestionPageView match={match} {...rest} />
-                                       </TransitionGroup>
-                                   )}
-                            />
-                            <Route path={Routes.services}
+                            <Route path={Routes.story}
                                    render={({match, ...rest}) => (
                                        <TransitionGroup component={firstChild}>
                                            <ServiceHomeView match={match} {...rest} />
@@ -117,7 +107,6 @@ export class App extends React.Component<any, any> {
                                        </TransitionGroup>
                                    )}
                             />
-
                         </div>
                     </Router>
                 </Provider>

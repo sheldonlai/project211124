@@ -1,13 +1,22 @@
 const path = require('path');
+const webpack = require('webpack');
+
 module.exports = {
   entry: {
-    app: './client/app/main.tsx'
+    app: './client/app/main.tsx',
+    // question: './client/app/views/question/QuestionRouter.tsx'
   },
   devtool: 'source-maps',
   cache: true,
+  plugins: [
+    new webpack.optimize.CommonsChunkPlugin({
+      name: 'common'
+    })
+  ],
   output: {
     path: path.join(__dirname, './client/static/'),
-    filename: '[name].bundle.js'
+    filename: '[name].bundle.js',
+    chunkFilename : '[name].js', // or whatever other format you want.
   },
   resolve: {
     // Add '.ts' and '.tsx' as resolvable extensions.
