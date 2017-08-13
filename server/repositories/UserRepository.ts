@@ -5,11 +5,12 @@ import {IUserPreferences, UserPreferences, UserPreferencesModel} from "../models
 import {AppError} from "../errors/AppError";
 import {isNullOrUndefined} from "util";
 import {CategoryTypeEnum} from "../enums/CategoryTypeEnum";
+import {Story} from "../models/Story";
 
 export interface IUserRepository extends IBaseRepository<User> {
     getByEmail(email: string): Promise<User>;
     getUserPreference(user: User): Promise<UserPreferences>;
-    updateQuestionVector(user: User, question: Question): Promise<any>;
+    updateQuestionVector(user: User, question: Question | Story): Promise<any>;
 }
 
 export class UserRepository extends BaseRepository<User, IUser> implements IUserRepository {
@@ -49,10 +50,7 @@ export class UserRepository extends BaseRepository<User, IUser> implements IUser
                     }
                 }
 
-                let length = 0;
-                for (let key in prevValues) {
-                    length += Math.abs(prevValues[key]);
-                }
+                let length = this.getMapLength(prevValues);
                 for (let key in prevValues) {
                     prevValues[key] /= length;
                 }
@@ -63,10 +61,24 @@ export class UserRepository extends BaseRepository<User, IUser> implements IUser
                     let cat = p.question_pref.cat_vec[question.category];
                     p.question_pref.cat_vec[question.category] = !isNullOrUndefined(cat) ?
                         cat + this.getAdditionAmount(cat) : this.getAdditionAmount(cat);
+                    let catLength = this.getMapLength(p.question_pref.cat_vec);
+                    // if the length is larger than one then normalize it
+                    if (catLength > 1){
+                        for (let key in p.question_pref.cat_vec) {
+                            prevValues[key] /= length;
+                        }
+                    }
                 }
                 return UserPreferencesModel.findByIdAndUpdate(p._id, p);
             });
+    }
 
+    private getMapLength(map){
+        let length = 0;
+        for (let key in map) {
+            length += Math.abs(map[key]);
+        }
+        return length;
     }
 
     private getAdditionAmount(prev: number): number {

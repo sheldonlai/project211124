@@ -21,9 +21,9 @@ export class QuestionAPI extends BaseAPI {
         this.router.put(APIUrls.UpdateQuestion, mustBeAuthenticated, this.updateQuestion);
         this.router.put(APIUrls.UpVoteQuestion, mustBeAuthenticated, this.upVoteQuestion);
         this.router.put(APIUrls.DownVoteQuestion, mustBeAuthenticated, this.downVoteQuestion);
-        this.router.put(APIUrls.CreateComment, mustBeAuthenticated, this.createComment);
-        this.router.put(APIUrls.UpdateComment, mustBeAuthenticated, this.UpdateComment);
-        this.router.put(APIUrls.DeleteComment, mustBeAuthenticated, this.DeleteComment);
+        this.router.put(APIUrls.CreateQuestionComment, mustBeAuthenticated, this.createComment);
+        this.router.put(APIUrls.UpdateQuestionComment, mustBeAuthenticated, this.updateComment);
+        this.router.put(APIUrls.DeleteQuestionComment, mustBeAuthenticated, this.deleteComment);
     }
 
     public getQuestionPreviews = (req: AuthRequest, res: Response, next: NextFunction) => {
@@ -71,20 +71,20 @@ export class QuestionAPI extends BaseAPI {
         this.respondPromise(result, res, next);
     };
 
-    public UpdateComment = (req: AuthRequest, res: Response, next: NextFunction) => {
+    public updateComment = (req: AuthRequest, res: Response, next: NextFunction) => {
         let commentIndx: number = req.body.commentIndx;
         let updatedComment: CommentDto = req.body.updatedComment;
         let questionId: string = req.body.questionID;
         let user: User = req.user;
         let result = this.service.UpdateComment(commentIndx, questionId, user, updatedComment);
         this.respondPromise(result, res, next);
-    }
+    };
 
-    public DeleteComment = (req: AuthRequest, res: Response, next: NextFunction) => {
+    public deleteComment = (req: AuthRequest, res: Response, next: NextFunction) => {
         let commentIndx: number = req.body.commentIndx;
         let questionId: string = req.body.questionID;
         let user: User = req.user;
         let result = this.service.DeleteComment(commentIndx, questionId, user);
         this.respondPromise(result, res, next);
-    }
+    };
 }

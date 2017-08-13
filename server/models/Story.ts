@@ -1,22 +1,21 @@
 import {Document, model, Schema} from "mongoose";
 import {BaseModel} from './Base/BaseModel';
-import {User, UserModel, userSchema} from './User';
+import {User, userSchema} from './User';
 import {PublicityStatus} from "../enums/PublicityStatus";
-import {DifficultyLevel, QuestionEducationLevel} from "../enums/QuestionEducationLevel";
-import {listNumericalEnumValues} from "../utils/EnumsUtil";
 import {RawDraftContentState} from "draft-js";
 import {Tag, tagSchema} from "./Tags";
 import {CategoryTypeEnum} from "../enums/CategoryTypeEnum";
 
 let mongoosastic = require("mongoosastic");
 
-export class StoryComment {
+export class StoryComment extends BaseModel {
     commentBy: User;
     commentContent: string;
     lastEditedUtc: Date;
     commentedDate: Date;
 
     constructor(user: User, content: string) {
+        super();
         this.commentBy = user;
         this.commentContent = content;
         this.commentedDate = new Date(Date.now());

@@ -1,21 +1,22 @@
-import {ITag, Tag, TagModel} from "../models/Tags";
 import {BaseRepository, IBaseRepository} from "./BaseRepository";
-import {getUniqueArray} from "../utils/ArrayUtils";
 import {IStory, Story, StoryComment, StoryModel} from "../models/Story";
 import {isNullOrUndefined} from "util";
 import {AppError} from "../errors/AppError";
 import {ClientError} from "../errors/HttpStatus";
-import {UserAnswerVote} from "../models/UserAnswerVote";
-import {UserStoryVoteModel, UserStoryVote} from "../models/UserStoryVote";
+import {UserStoryVote, UserStoryVoteModel} from "../models/UserStoryVote";
 import {User} from "../models/User";
 
 export interface IStoryRepository extends IBaseRepository<Story> {
+    getStoryByTitle(title: string): Promise<Story>;
+    getStoriesByAuthor(user: User): Promise<Story[]>;
+    findOneAndUpdateVoteStory(userStoryVote: UserStoryVote): Promise<Story>;
+    increaseViewCount(questionId: any) :Promise<any>;
 }
 
 export class StoryRepository extends BaseRepository<Story, IStory> implements IStoryRepository {
 
     constructor() {
-        super(StoryModel)
+        super(StoryModel);
     }
 
     getStoryByTitle(title: string): Promise<Story> {
@@ -26,7 +27,7 @@ export class StoryRepository extends BaseRepository<Story, IStory> implements IS
             });
     }
 
-    getStorysByAuthor(user: User): Promise<Story[]> {
+    getStoriesByAuthor(user: User): Promise<Story[]> {
         return StoryModel.find({author: user}).lean().exec()
             .then((stories: Story[]) => Promise.all(stories.map((q) => this.applyAdditionalFunction(q))))
             .then((question: Story[]) => {

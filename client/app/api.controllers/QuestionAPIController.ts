@@ -71,7 +71,7 @@ export class QuestionAPIController extends ApiController {
     }
 
     createComment(question: Question){
-        return this.questionPutApiHelper(APIUrls.CreateComment, question);
+        return this.questionPutApiHelper(APIUrls.CreateQuestionComment, question);
     }
 
     UpdateComment(question: Question, commentIndx: number, updatedComment: CommentDto){
@@ -82,7 +82,7 @@ export class QuestionAPIController extends ApiController {
             updatedComment: updatedComment,
             questionID: questionDto._id,
         };
-        return this.put(APIUrls.UpdateComment, reqBody).then((response: AxiosResponse) => {
+        return this.put(APIUrls.UpdateQuestionComment, reqBody).then((response: AxiosResponse) => {
             response.data = this.convertDtoToQuestion(response.data);
             return response;
         });
@@ -95,7 +95,7 @@ export class QuestionAPIController extends ApiController {
             commentIndx: commentIndx,
             questionID: questionDto._id,
         };
-        return this.put(APIUrls.DeleteComment, reqBody).then((response: AxiosResponse) => {
+        return this.put(APIUrls.DeleteQuestionComment, reqBody).then((response: AxiosResponse) => {
             response.data = this.convertDtoToQuestion(response.data);
             return response;
         });
