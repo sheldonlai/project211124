@@ -22,7 +22,7 @@ import {UserPreferences} from "../models/UserPerferences";
 export interface IQuestionService {
     getQuestionPreview(user?: User): Promise<QuestionPreviewCollectionsDto>;
     createQuestion(question: QuestionDto, user: User): Promise<QuestionDto>;
-    getQuestionPageByID(name: string): Promise<QuestionPageDto>;
+    getQuestionPageByID(name: string, user?: User): Promise<QuestionPageDto>;
     getUserQuestions(currentUser: User): Promise<QuestionDto[]>;
     updateQuestion(question: QuestionDto, user: User): Promise<QuestionDto>;
     upVoteQuestion(questionId: string, user: User): Promise<QuestionDto>;
@@ -73,7 +73,7 @@ export class QuestionService extends BaseService implements IQuestionService {
         })
     }
 
-    getQuestionPageByID(id: string): Promise<QuestionPageDto> {
+    getQuestionPageByID(id: string, user?: User): Promise<QuestionPageDto> {
         let questionPage: QuestionPageDto = {
             question: null,
             answers: []
@@ -87,6 +87,12 @@ export class QuestionService extends BaseService implements IQuestionService {
                 // TODO: some kind of logging
                 console.log("increased view");
             });
+            if (user){
+                this.userRepository.updateQuestionVector(user, questionPage.question).then(() => {
+                    // TODO: some kind of logging
+                    console.log("Updated Question Vector");
+                });
+            }
             return questionPage;
         });
     }

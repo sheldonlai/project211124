@@ -40,7 +40,7 @@ export class QuestionAPI extends BaseAPI {
 
     public getQuestion = (req: AuthRequest, res: Response, next: NextFunction) => {
         let id = req.params.id;
-        let result = this.service.getQuestionPageByID(id);
+        let result = this.service.getQuestionPageByID(id, req.user);
         this.respondPromise(result, res, next);
     };
 

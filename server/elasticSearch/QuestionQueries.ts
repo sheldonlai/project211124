@@ -39,20 +39,24 @@ export const getQuestionsQueryByPreference = (userPreference: UserPreferences) =
     }
   };
   for (let tag in  tagPref){
+    let score = (tagPref[tag] * 10);
     sampleQuery.bool.should.push({
       term: {
         "tags.tag" : {
           "value" : tag,
-          "boost": (tagPref[tag] * 10)
+          "boost": score
         }
       }
     });
   }
   for (let cat in catPref){
+    let score = (catPref[cat] * 10);
     sampleQuery.bool.should.push({
-      "category" : {
-          "value" : cat,
-          "boost": (tagPref[cat] * 10)
+        "term": {
+            "category": {
+                "value": cat,
+                "boost": score
+            }
         }
     })
   }

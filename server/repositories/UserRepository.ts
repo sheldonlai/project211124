@@ -4,6 +4,7 @@ import {Question} from "../models/Question";
 import {IUserPreferences, UserPreferences, UserPreferencesModel} from "../models/UserPerferences";
 import {AppError} from "../errors/AppError";
 import {isNullOrUndefined} from "util";
+import {CategoryTypeEnum} from "../enums/CategoryTypeEnum";
 
 export interface IUserRepository extends IBaseRepository<User> {
     getByEmail(email: string): Promise<User>;
@@ -35,8 +36,9 @@ export class UserRepository extends BaseRepository<User, IUser> implements IUser
     }
 
     updateQuestionVector(user: User, question: Question) {
-        return UserPreferencesModel.findOne({user: user._id}).exec()
+        return UserPreferencesModel.findOne({user: user._id}).lean().exec()
             .then((p: IUserPreferences) => {
+                p.question_pref = p.question_pref? p.question_pref: {tags_vec: {}, cat_vec: {}};
                 let prevValues = p.question_pref.tags_vec;
                 for (let tag of question.tags) {
                     let value = prevValues[tag.tag];
@@ -55,10 +57,14 @@ export class UserRepository extends BaseRepository<User, IUser> implements IUser
                     prevValues[key] /= length;
                 }
                 p.question_pref.tags_vec = prevValues;
-                let cat = p.question_pref.cat_vec[question.category];
-                p.question_pref.cat_vec[question.category] = !isNullOrUndefined(cat) ?
-                    cat + this.getAdditionAmount(cat) : this.getAdditionAmount(cat);
-                return p.save();
+
+                // update the map if the category is not NOT_SPECIFIED
+                if (question.category !== CategoryTypeEnum.NOT_SPECIFIED) {
+                    let cat = p.question_pref.cat_vec[question.category];
+                    p.question_pref.cat_vec[question.category] = !isNullOrUndefined(cat) ?
+                        cat + this.getAdditionAmount(cat) : this.getAdditionAmount(cat);
+                }
+                return UserPreferencesModel.findByIdAndUpdate(p._id, p);
             });
 
     }
