@@ -11,6 +11,7 @@ export class Routes {
     static createQuestion = '/create-question';
     static question_by_id = '/question/id/:id';
 
+
     // story
     static story = '/story';
     static my_profile = "/my-profile";

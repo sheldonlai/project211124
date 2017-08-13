@@ -23,6 +23,11 @@ export class TestApiServer {
         app.use(bodyParser.json({limit: '50mb'}));
         listOfRoutes.forEach((route) => app.use(route.router));
         let server = http.createServer(app);
+        let errorHandler = (err, req, res, next) => {
+            res.statusCode = (err.status)? err.status.code : 500;
+            res.json({error: err.message});
+        };
+        app.use(errorHandler);
         await new Promise((fulfill) => {
             server.listen(0, function (res) {
                 fulfill(server);

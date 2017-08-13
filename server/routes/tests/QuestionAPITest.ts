@@ -43,34 +43,39 @@ describe('question api test', function () {
         let question = new Question(
             "question_api_test", createRawDraftContentState(), user, []
         );
-        let result: QuestionDto = await client.post(APIUrls.CreateQuestion, question);
-        expect(result.author.username).toEqual(user.username);
-        expect(result.title).toBe(question.title);
+        try {
+            let result: QuestionDto = await client.post(APIUrls.CreateQuestion, question)
+            expect(result.author.username).toEqual(user.username);
+            expect(result.title).toBe(question.title);
 
-        let questionPreviews: QuestionPreviewCollectionsDto = await client.get(APIUrls.QuestionPreviews);
-        expect(questionPreviews.myQuestions.filter((q) => q._id === result._id).length).toBe(1);
+            let questionPreviews: QuestionPreviewCollectionsDto = await client.get(APIUrls.QuestionPreviews);
+            expect(questionPreviews.myQuestions.filter((q) => q._id === result._id).length).toBe(1);
 
-        let questionPage: QuestionPageDto = await client.get(APIUrls.GetQuestionPage.replace(":id", result._id));
-        expect(questionPage).toBeDefined();
+            let questionPage: QuestionPageDto = await client.get(APIUrls.GetQuestionPage.replace(":id", result._id));
+            expect(questionPage).toBeDefined();
 
-        questionPage.question.title = "question_api_test_2";
-        questionPage.question.content = createRawDraftContentState(
-            "Hello, it's me."
-        );
-        let updatedResult: QuestionDto = await client.put(APIUrls.UpdateQuestion, questionPage.question);
-        expect(updatedResult).not.toEqual(result);
-        expect(updatedResult.title).toEqual(questionPage.question.title);
-        expect(updatedResult.content).toEqual(questionPage.question.content);
+            questionPage.question.title = "question_api_test_2";
+            questionPage.question.content = createRawDraftContentState(
+                "Hello, it's me."
+            );
+            let updatedResult: QuestionDto = await client.put(APIUrls.UpdateQuestion, questionPage.question);
+            expect(updatedResult).not.toEqual(result);
+            expect(updatedResult.title).toEqual(questionPage.question.title);
+            expect(updatedResult.content).toEqual(questionPage.question.content);
 
-        updatedResult.title = "question_api_test should not change";
-        let upVotedResult: QuestionDto = await client.put(APIUrls.UpVoteQuestion, updatedResult);
-        expect(upVotedResult.title).not.toEqual(updatedResult.title);
-        expect(upVotedResult.upVotes).toBe(1);
+            updatedResult.title = "question_api_test should not change";
+            let upVotedResult: QuestionDto = await client.put(APIUrls.UpVoteQuestion, updatedResult);
+            expect(upVotedResult.title).not.toEqual(updatedResult.title);
+            expect(upVotedResult.upVotes).toBe(1);
 
-        let downVotedResult: QuestionDto = await client.put(APIUrls.DownVoteQuestion, upVotedResult);
-        expect(downVotedResult.title).not.toEqual(updatedResult.title);
-        expect(downVotedResult.downVotes).toBe(1);
-        expect(downVotedResult.upVotes).toBe(0);
+            let downVotedResult: QuestionDto = await client.put(APIUrls.DownVoteQuestion, upVotedResult);
+            expect(downVotedResult.title).not.toEqual(updatedResult.title);
+            expect(downVotedResult.downVotes).toBe(1);
+            expect(downVotedResult.upVotes).toBe(0);
+        } catch (err) {
+            console.error(err.error);
+            expect(err).toBeUndefined();
+        }
     });
 
 });

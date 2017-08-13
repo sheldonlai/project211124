@@ -20,7 +20,7 @@ export class OptionalTextFieldEditor extends React.Component<props> {
     render() {
         const containerStyle: CSSProperties = {height: 50, display: "inline-block", margin: "10px 0"};
         return (
-            <Grid container style={containerStyle} justify="center" align="center" gutter={0} direction="row">
+            <Grid container style={containerStyle} justify="center" align="center" direction="row">
                 <Grid item>
                     {
                         (

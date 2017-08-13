@@ -20,6 +20,7 @@ import TransitionGroup =require('react-transition-group/TransitionGroup');
 import {Bundle} from "../components/Bundle";
 import {LoadingScreen} from "../components/Animations/LoadingScreen";
 let questionLoader = require("bundle-loader?lazy&name=question!./QuestionRouter");
+let storyLoader = require("bundle-loader?lazy&name=story!./StoryRouter");
 let muiTheme = createMuiTheme({
     palette: createPalette({
         primary: deepOrange,
@@ -34,6 +35,14 @@ const firstChild = props => {
 
 const QuestionModule = () => (
     <Bundle load={questionLoader}>
+        {(mod) => (
+            mod ? mod() : <LoadingScreen/>
+        )}
+    </Bundle>
+);
+
+const StoryModule = () => (
+    <Bundle load={storyLoader}>
         {(mod) => (
             mod ? mod() : <LoadingScreen/>
         )}
@@ -73,11 +82,7 @@ export class App extends React.Component<any, any> {
                                    component={QuestionModule}
                             />
                             <Route path={Routes.story}
-                                   render={({match, ...rest}) => (
-                                       <TransitionGroup component={firstChild}>
-                                           <ServiceHomeView match={match} {...rest} />
-                                       </TransitionGroup>
-                                   )}
+                                   component={StoryModule}
                             />
                             <Route path={Routes.my_profile}
                                    render={({match, ...rest}) => (
