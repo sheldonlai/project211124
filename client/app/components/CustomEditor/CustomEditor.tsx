@@ -20,7 +20,7 @@ const style = {
     marginBottom: "10px",
     minHeight: 150,
     boxSizing: 'border-box',
-    padding: 16,
+    padding: 10,
     borderRadius: 2,
     boxShadow: 'inset 0px 1px 8px -3px #ABABAB',
     background: '#fefefe'
