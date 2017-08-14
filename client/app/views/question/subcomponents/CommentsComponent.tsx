@@ -66,6 +66,7 @@ export class CommentsComponent extends React.Component<CommentsComponentProps, C
         else {
             this.setState({errorMsg: "Cannot submit empty comment."});
         }
+        console.log(this.state.showMaxComments);
     };
 
     onCommentChange = (event) => {
@@ -186,12 +187,12 @@ export class CommentsComponent extends React.Component<CommentsComponentProps, C
 
     renderComments = () => {
         let comments:CommentDto[] = this.props.comments.slice(0, this.state.showMaxComments);
+        //<div>Posted on {comment.commentedDate}</div>
         return comments.map((comment, indx) => {
             return (
                 <ListItem key={comment.lastEditedUtc + comment.commentBy.username}>
                     <ListItemText primary={this.onEditComment(indx)}></ListItemText>
                     <div style={{color: "grey", fontSize: 10, textAlign: "right"}}>
-                        {comment.commentedDate && <div>Posted on {comment.commentedDate}</div>}
                         <br/>
                         by {comment.commentBy.username}
                     </div>
@@ -206,6 +207,7 @@ export class CommentsComponent extends React.Component<CommentsComponentProps, C
     }
 
     render() {
+        console.log(this.props.comments);
         return (
             <div>
                 <List className={"Comments"}>

@@ -70,11 +70,11 @@ export class QuestionAPIController extends ApiController {
         return this.questionPutApiHelper(APIUrls.DownVoteQuestion, question);
     }
 
-    createComment(question: Question){
+    createQuestionComment(question: Question){
         return this.questionPutApiHelper(APIUrls.CreateQuestionComment, question);
     }
 
-    UpdateComment(question: Question, commentIndx: number, updatedComment: CommentDto){
+    UpdateQuestionComment(question: Question, commentIndx: number, updatedComment: CommentDto){
         const questionDto = this.convertQuestionToDto(question);
         const reqBody = {
             questionDto: questionDto,
@@ -88,7 +88,7 @@ export class QuestionAPIController extends ApiController {
         });
     }
 
-    DelteComment(question: Question, commentIndx: number){
+    DeleteQuestionComment(question: Question, commentIndx: number){
         const questionDto = this.convertQuestionToDto(question);
         const reqBody = {
             questionDto: questionDto,
@@ -99,6 +99,36 @@ export class QuestionAPIController extends ApiController {
             response.data = this.convertDtoToQuestion(response.data);
             return response;
         });
+    }
+
+    createAnswerComment(answer: Answer){
+        return this.put(APIUrls.CreateAnswerComment, answer).then((response: AxiosResponse) => {
+            response.data = this.convertDtoToAnswer(response.data);
+            return response;
+        });
+    }
+
+    UpdateAnswerComment(commentIndx: number, answerId: string, updatedComment: CommentDto){
+        const reqBody = {
+            commentIndx: commentIndx,
+            answerId: answerId,
+            updatedComment: updatedComment,
+        };
+        return this.put(APIUrls.UpdateAnswerComment, reqBody).then((response: AxiosResponse) => {
+            response.data = this.convertDtoToAnswer(response.data);
+            return response;
+        });
+    }
+
+    DeleteAnswerComment(commentIndx: number, answerId: string){
+        const reqBody = {
+            commentIndx: commentIndx,
+            answerId: answerId,
+        };
+        return this.put(APIUrls.DeleteAnswerComment, reqBody).then((response: AxiosResponse) => {
+            response.data = this.convertDtoToAnswer(response.data);
+            return response;
+        })
     }
 
     fetchQuestionByID(id: string): AxiosPromise {
