@@ -28,7 +28,6 @@ export class QuestionActions extends BaseActions {
     }
 
     static createQuestion(questionReq: Question): (dispatch: any) => void {
-        console.log('was here');
         return function (dispatch) {
             apiController.createQuestion(questionReq).then(res => {
                 dispatch({
@@ -76,7 +75,7 @@ export class QuestionActions extends BaseActions {
 
     static createComment(question: Question){
         return (dispatch) => {
-            apiController.createComment(question).then(res => {
+            apiController.createQuestionComment(question).then(res => {
                 dispatch({
                     type: QuestionActionTypes.createComment,
                     data: res.data
@@ -89,7 +88,7 @@ export class QuestionActions extends BaseActions {
 
     static updateComment(question: Question, commentIndx: number, updatedComment: CommentDto){
         return (dispatch) => {
-            apiController.UpdateComment(question, commentIndx, updatedComment).then(res => {
+            apiController.UpdateQuestionComment(question, commentIndx, updatedComment).then(res => {
                 dispatch({
                     type: QuestionActionTypes.UpdateComment,
                     data: res.data,
@@ -102,7 +101,7 @@ export class QuestionActions extends BaseActions {
 
     static deleteComment(question: Question, commentIndx: number){
         return (dispatch) => {
-            apiController.DelteComment(question, commentIndx).then(res => {
+            apiController.DeleteQuestionComment(question, commentIndx).then(res => {
                 dispatch({
                     type: QuestionActionTypes.DeleteComment,
                     data: res.data,

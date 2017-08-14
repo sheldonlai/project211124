@@ -6,12 +6,17 @@ import {IAnswerRepository} from "../repositories/AnswerRepository";
 import {Answer} from "../models/Answer";
 import {AppError} from "../errors/AppError";
 import {UserAnswerVote} from "../models/UserAnswerVote";
+import {CommentDto} from "../dtos/q&a/CommentDto";
+import {ClientError} from "../errors/HttpStatus";
 
 export interface IAnswerService {
     createAnswer(user: User, answer: AnswerDto): Promise<AnswerDto>;
     updateAnswer(user: User, answer: AnswerDto): Promise<AnswerDto>;
     upVoteAnswer(user: User, answerId: string): Promise<AnswerDto>;
     downVoteAnswer(user: User, answerId: string): Promise<AnswerDto>;
+    createAnswerComment(answer: Answer): Promise<AnswerDto>;
+    UpdateAnswerComment(commentIndx: number, answerId: string, user: User, updatedComment: CommentDto): Promise<AnswerDto>;
+    DeleteAnswerComment(commentIndx: number, answerId: string, user: User): Promise<AnswerDto>;
 }
 
 export class AnswerService extends BaseService implements IAnswerService {
@@ -55,6 +60,37 @@ export class AnswerService extends BaseService implements IAnswerService {
             .then((answer: Answer)  => {
             return answer;
         });
+    }
+
+    createAnswerComment(answer: AnswerDto){
+        return this.answerRepository.getById(answer._id).then((answerFound: Answer) => {
+            answerFound.comments = answer.comments;
+            return this.answerRepository.update(answerFound).then((answerFound: Answer) => {
+                return this.answerRepository.getById(answerFound._id);
+            });
+        });
+    }
+
+    UpdateAnswerComment(commentIndx: number, answerId: string, user: User, updatedComment: CommentDto){
+        return this.answerRepository.getById(answerId).then((answerFound: Answer) => {
+            if(answerFound.comments[commentIndx].commentBy.username != user.username ||
+                !answerFound.comments[commentIndx].commentBy._id.equals(user._id)){
+                throw new AppError("You are not the owner of this question!", ClientError.UNAUTHORIZED);
+            }
+            answerFound.comments[commentIndx] = updatedComment;
+            return this.answerRepository.update(answerFound);
+        })
+    }
+
+    DeleteAnswerComment(commentIndx: number, answerId: string, user: User){
+        return this.answerRepository.getById(answerId).then((answerFound: Answer) => {
+            if(answerFound.comments[commentIndx].commentBy.username != user.username ||
+                !answerFound.comments[commentIndx].commentBy._id.equals(user._id)){
+                throw new AppError("You are not the owner of this question!", ClientError.UNAUTHORIZED);
+            }
+            answerFound.comments.splice(commentIndx, 1);
+            return this.answerRepository.update(answerFound);
+        })
     }
 
     private checkPermissionForModification = (answerByUser: AnswerDto, answerFoundInDb: Answer, currentUser: User) => {

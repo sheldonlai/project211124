@@ -32,10 +32,10 @@ export enum QuestionActionTypes {
     createComment = <any> "createComment",
     createCommentError = <any> "createCommentError",
 
-    UpdateComment = <any> "UpdateComment",
+    UpdateComment = <any> "UpdateQuesitonComment",
     UpdateCommentError = <any> "UpdateCommentError",
 
-    DeleteComment = <any> "DeleteComment",
+    DeleteComment = <any> "DeleteQuestionComment",
     DeleteCommentError = <any> "DeleteCommentError",
 
     UpVoteQuestion = <any> "UpVoteQuestion",

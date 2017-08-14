@@ -27,9 +27,9 @@ export interface IQuestionService {
     updateQuestion(question: QuestionDto, user: User): Promise<QuestionDto>;
     upVoteQuestion(questionId: string, user: User): Promise<QuestionDto>;
     downVoteQuestion(questionId: string, user: User): Promise<QuestionDto>;
-    createComment(question: Question): Promise<QuestionDto>;
-    UpdateComment(commentIndx: number, questionId: string, user: User, updatedComment: CommentDto): Promise<QuestionDto>;
-    DeleteComment(commentIndx: number, questionId: string, user: User): Promise<QuestionDto>;
+    createQuestionComment(question: Question): Promise<QuestionDto>;
+    UpdateQuestionComment(commentIndx: number, questionId: string, user: User, updatedComment: CommentDto): Promise<QuestionDto>;
+    DeleteQuestionComment(commentIndx: number, questionId: string, user: User): Promise<QuestionDto>;
 }
 
 export class QuestionService extends BaseService implements IQuestionService {
@@ -138,7 +138,7 @@ export class QuestionService extends BaseService implements IQuestionService {
         });
     }
 
-    createComment(question: Question){
+    createQuestionComment(question: Question){
         return this.questionRepository.getById(question._id).then((questionFound: Question) => {
             questionFound.comments = question.comments;
             return this.questionRepository.update(questionFound).then((questionFound: Question) => {
@@ -147,7 +147,7 @@ export class QuestionService extends BaseService implements IQuestionService {
         });
     }
 
-    UpdateComment(commentIndx: number, questionId: string, user: User, updatedComment: CommentDto){
+    UpdateQuestionComment(commentIndx: number, questionId: string, user: User, updatedComment: CommentDto){
         return this.questionRepository.getById(questionId).then((questionFound: Question) => {
             if(questionFound.comments[commentIndx].commentBy.username != user.username ||
             !questionFound.comments[commentIndx].commentBy._id.equals(user._id)){
@@ -160,7 +160,7 @@ export class QuestionService extends BaseService implements IQuestionService {
         })
     }
 
-    DeleteComment(commentIndx: number, questionId: string, user: User){
+    DeleteQuestionComment(commentIndx: number, questionId: string, user: User){
         return this.questionRepository.getById(questionId).then((questionFound: Question) => {
             if(questionFound.comments[commentIndx].commentBy.username != user.username ||
                 !questionFound.comments[commentIndx].commentBy._id.equals(user._id)){

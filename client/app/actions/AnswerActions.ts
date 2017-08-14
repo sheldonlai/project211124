@@ -5,6 +5,7 @@ import {FrontEndQuestionModels} from "../models/QuestionModels";
 import Question = FrontEndQuestionModels.Question;
 import QuestionPage = FrontEndQuestionModels.QuestionPage;
 import Answer = FrontEndQuestionModels.Answer;
+import {CommentDto} from "../../../server/dtos/q&a/CommentDto";
 
 let apiController : QuestionAPIController = QuestionAPIController.getInstance();
 
@@ -67,4 +68,45 @@ export class AnswerActions extends BaseActions{
             )
         }
     }
+
+    static createComment (answer: Answer): (dispatch: any) => void {
+        return function(dispatch) {
+            apiController.createAnswerComment(answer).then((response) => {
+                dispatch({
+                    type: QuestionActionTypes.createComment,
+                    data: response.data,
+                })
+            }).catch(err =>
+            AnswerActions.handleError(dispatch, err, QuestionActionTypes.createCommentError)
+            )
+        }
+    }
+
+    static UpdateComment(commentIndx: number, answerId: string, updatedComment: CommentDto): (dispatch: any) => void {
+        return function(dispatch){
+            apiController.UpdateAnswerComment(commentIndx, answerId, updatedComment).then((response) => {
+                dispatch({
+                    type: QuestionActionTypes.UpdateComment,
+                    data: response.data,
+                })
+            }).catch(err =>
+            AnswerActions.handleError(dispatch, err, QuestionActionTypes.UpdateCommentError)
+            )
+        }
+    }
+
+    static DeleteComment(commentIndx: number, answerId: string): (dispatch: any) => void {
+        return function(dispatch){
+            apiController.DeleteAnswerComment(commentIndx, answerId).then((response) => {
+                dispatch({
+                    type: QuestionActionTypes.DeleteComment,
+                    data: response.data
+                })
+            }).catch(err =>
+            AnswerActions.handleError(dispatch, err, QuestionActionTypes.DeleteCommentError)
+            )
+        }
+    }
+
+
 }

@@ -61,7 +61,7 @@ export class CommentsComponent extends React.Component<CommentsComponentProps, C
             let comments = [...this.props.comments];
             comments.push(tmpComment);
             this.props.onCommentsSubmit(comments);
-            this.setState({commentContent: "", errorMsg: "", inputMode: false});
+            this.setState({commentContent: "", errorMsg: "", inputMode: false, showMaxComments: this.props.comments.length + 1});
         }
         else {
             this.setState({errorMsg: "Cannot submit empty comment."});
@@ -166,16 +166,14 @@ export class CommentsComponent extends React.Component<CommentsComponentProps, C
         else{
             return(
                 <div  style={{textAlign: "left"}}>
-                    <Button onClick={() => this.setState({EditCommentIndx: -1, commentContent: "", errorMsg: ""})}>
-                        cancel
-                    </Button>
+                    <Button onClick = {() => this.setState({EditCommentIndx: -1, commentContent: "", errorMsg: ""})}>cancel</Button>
                 </div>
             );
         }
     };
 
     renderCommentActions = (commentBy: UserDto, commentIndx: number) => {
-        if(this.props.user && this.props.user.username == commentBy.username && commentBy._id == this.props.user._id){
+        if(this.props.user.username == commentBy.username && commentBy._id == this.props.user._id){
             return(
                 <div>
                     {this.EditAndSaveButton(commentIndx)}
@@ -204,6 +202,7 @@ export class CommentsComponent extends React.Component<CommentsComponentProps, C
     };
 
     onShowMore = () => {
+        this.setState({showMaxComments: this.props.comments.length + 1})
     }
 
     render() {
@@ -219,7 +218,7 @@ export class CommentsComponent extends React.Component<CommentsComponentProps, C
                     </IconButton>
                 </div>
                 {this.renderInputCommentBox()}
-                <a onClick={this.onShowMore}>Show more comments</a>
+                <a style={{cursor: 'pointer'}}onClick={this.onShowMore}>Show more comments</a>
             </div>
         );
     }
