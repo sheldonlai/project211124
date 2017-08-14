@@ -40,7 +40,7 @@ export class Server {
         this.configure();
         if (this.config.database.initialize)
             this.checkAndInsertUniversityData().then();
-        synchronizeIndex(true);
+
     }
 
     private configure(): void {
@@ -72,6 +72,10 @@ export class Server {
         db.on('error', console.error);
         db.on('connected', function () {
             console.log('Mongoose default connection open to ' + dbURI);
+            synchronizeIndex(true).catch(err => {
+                console.error(err.stack);
+                console.log("Please check if elastic search is running on port 9200.")
+            });
         });
     }
 

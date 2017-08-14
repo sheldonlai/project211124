@@ -10,7 +10,6 @@ import {RouterController} from "../api.controllers/RouterController";
 import {Provider} from "react-redux";
 import {Menu} from "./Menu";
 import {ErrorSnackBar} from "./ErrorView";
-import {ServiceHomeView} from "./services/ServiceHome";
 import {UserProfileView} from "./profile/UserProfileView";
 import {RatingHomeView} from "./rating/RatingHomeView";
 import {blueGrey, deepOrange} from "material-ui/colors";

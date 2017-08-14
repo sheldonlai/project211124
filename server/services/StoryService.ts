@@ -52,7 +52,7 @@ export class StoryService extends BaseService implements IStoryService {
 
         return Promise.all(promises).then((result) => {
             return {
-                featuredStories: result[0] ? result[0] : [],
+                recommendedPreviews: result[0] ? result[0] : [],
                 myStories: result[1] ? result[1] : []
             };
         })

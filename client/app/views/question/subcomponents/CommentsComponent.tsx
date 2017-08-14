@@ -52,6 +52,7 @@ export class CommentsComponent extends React.Component<CommentsComponentProps, C
     addNewComment = () => {
         if (this.state.commentContent) {
             let tmpComment: CommentDto = {
+                _id: undefined,
                 commentContent: this.state.commentContent,
                 commentedDate: new Date(Date.now()),
                 commentBy: this.props.user,

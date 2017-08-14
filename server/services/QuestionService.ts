@@ -86,12 +86,12 @@ export class QuestionService extends BaseService implements IQuestionService {
             this.questionRepository.increaseViewCount(questionPage.question._id).then(() => {
                 // TODO: some kind of logging
                 console.log("increased view");
-            });
+            }).catch(err => console.error(err));
             if (user){
                 this.userRepository.updateQuestionVector(user, questionPage.question).then(() => {
                     // TODO: some kind of logging
                     console.log("Updated Question Vector");
-                });
+                }).catch(err => console.error(err));
             }
             return questionPage;
         });

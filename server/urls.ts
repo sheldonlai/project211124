@@ -52,6 +52,8 @@ export class APIUrls {
     static getStory = "/story/:id";
     static createStory = "/create-story";
     static updateStory = "/update-story";
-    static createStoryComment = "/create-story-comment";
-    static updateStoryComment = "/update-story-comment";
+    static createStoryComment = "/create-story-comment/:id";
+    static updateStoryComment = "/update-story-comment/:id";
+    static UpVoteStory = "/up-vote-story";
+    static DownVoteStory = "/down-vote-story";
 }
