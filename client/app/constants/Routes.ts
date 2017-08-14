@@ -8,7 +8,7 @@ export class Routes {
     // question
     static question = '/question/';
     static questionHome = '/question/home';
-    static createQuestion = '/create-question';
+    static createQuestion = '/question/create-question';
     static question_by_id = '/question/id/:id';
 
 

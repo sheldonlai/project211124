@@ -120,16 +120,16 @@ class CreateQuestion extends Component<props, Question> {
         const inputContainer = {paddingLeft: 20, paddingRight: 20};
         const input= {width: "100%"};
         return (
-            <Grid container justify="center" gutter={0}>
+            <Grid container justify="center">
                 <Grid item xs={12}>
-                    <Grid container style={inputContainer} gutter={0}>
+                    <Grid container style={inputContainer}>
                         <Grid item xs={12} md={6}>
                             <TextField
                                 style={input}
                                 label="Title"
                                 type="text"
                                 value={this.state.title}
-                                onChange={this.titleChange}Q
+                                onChange={this.titleChange}
                             />
                         </Grid>
                         <Grid item xs={12} md={12}>
@@ -169,7 +169,7 @@ class CreateQuestion extends Component<props, Question> {
                             />
                         </Grid>
                     </Grid>
-                    <Grid container justify="flex-end" style={inputContainer} gutter={0}>
+                    <Grid container justify="flex-end" style={inputContainer}>
                         <Grid item>
                             <Button raised label="Make Post" onClick={this.submit}>
                                 Make Post
