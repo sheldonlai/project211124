@@ -57,6 +57,7 @@
     "body-parser": "^1.17.2",
     "bundle-loader": "^0.5.5",
     "caniuse-api": "^1.5.2",
+    "compression": "^1.7.0",
     "cookie-parser": "^1.4.3",
     "css-loader": "^0.28.4",
     "draft-js": "^0.10.1",
