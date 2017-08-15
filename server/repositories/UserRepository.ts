@@ -51,8 +51,10 @@ export class UserRepository extends BaseRepository<User, IUser> implements IUser
                 }
 
                 let length = this.getMapLength(prevValues);
-                for (let key in prevValues) {
-                    prevValues[key] /= length;
+                if (length > 1) {
+                    for (let key in prevValues) {
+                        prevValues[key] /= length;
+                    }
                 }
                 p.question_pref.tags_vec = prevValues;
 
@@ -65,7 +67,7 @@ export class UserRepository extends BaseRepository<User, IUser> implements IUser
                     // if the length is larger than one then normalize it
                     if (catLength > 1){
                         for (let key in p.question_pref.cat_vec) {
-                            prevValues[key] /= length;
+                            p.question_pref.cat_vec[key] /= catLength;
                         }
                     }
                 }
@@ -84,7 +86,10 @@ export class UserRepository extends BaseRepository<User, IUser> implements IUser
     private getAdditionAmount(prev: number): number {
         // temp function to calculate the addition amount
         // 1/((x+2)^2) - 1/9 = additional amount
-        if (prev < 0 || prev > 1) {
+        if ( prev > 1) {
+            return 0;
+        }
+        if (prev < 0) {
             throw new AppError("The inputted value is not in range [0,1]. value: " + prev);
         }
         if (isNullOrUndefined(prev))
