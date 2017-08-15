@@ -29,14 +29,20 @@ export enum QuestionActionTypes {
 
     ChangePostPage = <any> "ChangePostPage",
 
-    createComment = <any> "createComment",
-    createCommentError = <any> "createCommentError",
+    createQuestionComment = <any> "createQuestionComment",
+    createQuestionCommentError = <any> "createQuestionCommentError",
+    createAnswerComment = <any> "createAnswerComment",
+    createAnswerCommentError = <any> "createAnswerCommentError",
 
-    UpdateComment = <any> "UpdateQuesitonComment",
-    UpdateCommentError = <any> "UpdateCommentError",
+    UpdateQuestionComment = <any> "UpdateQuesitonComment",
+    UpdateQuestionCommentError = <any> "UpdateQuestionCommentError",
+    UpdateAnswerComment = <any> "UpdateAnswerComment",
+    UpdateAnswerCommentError = <any> "UpdateAnswerCommentError",
 
-    DeleteComment = <any> "DeleteComment",
-    DeleteCommentError = <any> "DeleteCommentError",
+    DeleteQuestionComment = <any> "DeleteQuestionComment",
+    DeleteQuestionCommentError = <any> "DeleteQuestionCommentError",
+    DeleteAnswerComment = <any> "DeleteAnswerComment",
+    DeleteAnswerCommentError = <any> "DeleteAnswerCommentError",
 
     UpVoteQuestion = <any> "UpVoteQuestion",
     DownVoteQuestion = <any> "DownVoteQuestion",

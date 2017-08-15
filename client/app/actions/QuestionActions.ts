@@ -77,11 +77,11 @@ export class QuestionActions extends BaseActions {
         return (dispatch) => {
             apiController.createQuestionComment(question).then(res => {
                 dispatch({
-                    type: QuestionActionTypes.createComment,
+                    type: QuestionActionTypes.createQuestionComment,
                     data: res.data
                 });
             }).catch(err =>
-            QuestionActions.handleError(dispatch, err, QuestionActionTypes.createCommentError)
+            QuestionActions.handleError(dispatch, err, QuestionActionTypes.createQuestionCommentError)
             )
         }
     }
@@ -90,11 +90,11 @@ export class QuestionActions extends BaseActions {
         return (dispatch) => {
             apiController.UpdateQuestionComment(question, commentIndx, updatedComment).then(res => {
                 dispatch({
-                    type: QuestionActionTypes.UpdateComment,
+                    type: QuestionActionTypes.UpdateQuestionComment,
                     data: res.data,
                 });
             }).catch(err =>
-            QuestionActions.handleError(dispatch, err, QuestionActionTypes.UpdateCommentError)
+            QuestionActions.handleError(dispatch, err, QuestionActionTypes.UpdateQuestionCommentError)
             )
         }
     }
@@ -103,11 +103,11 @@ export class QuestionActions extends BaseActions {
         return (dispatch) => {
             apiController.DeleteQuestionComment(question, commentIndx).then(res => {
                 dispatch({
-                    type: QuestionActionTypes.DeleteComment,
+                    type: QuestionActionTypes.DeleteQuestionComment,
                     data: res.data,
                 })
             }).catch(err =>
-                QuestionActions.handleError(dispatch, err, QuestionActionTypes.DeleteCommentError)
+                QuestionActions.handleError(dispatch, err, QuestionActionTypes.DeleteQuestionCommentError)
             )
         }
     }

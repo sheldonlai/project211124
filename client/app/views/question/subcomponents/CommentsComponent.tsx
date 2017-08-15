@@ -1,7 +1,6 @@
 import * as React from "react";
 import {CommentDto} from "../../../../../server/dtos/q&a/CommentDto";
 import PropTypes from 'prop-types';
-import {withStyles, createStyleSheet} from 'material-ui/styles';
 import List, {ListItem, ListItemText} from 'material-ui/List';
 import Divider from 'material-ui/Divider';
 import Icon from 'material-ui/Icon';
@@ -40,6 +39,7 @@ const styleSheet: CSSProperties = {
 export class CommentsComponent extends React.Component<CommentsComponentProps, CommentsComponentState> {
     constructor(props) {
         super(props);
+        //console.log(this.props.comments);
         this.state = {
             inputMode: false,
             commentContent: "",
@@ -66,7 +66,6 @@ export class CommentsComponent extends React.Component<CommentsComponentProps, C
         else {
             this.setState({errorMsg: "Cannot submit empty comment."});
         }
-        console.log(this.state.showMaxComments);
     };
 
     onCommentChange = (event) => {
@@ -93,7 +92,7 @@ export class CommentsComponent extends React.Component<CommentsComponentProps, C
                         <textarea rows={4} cols={50} value={this.state.commentContent}
                                   onChange={this.onCommentChange}></textarea>
                     </form>
-                    <Button raised color="primary" className={styleSheet.root} onClick={this.addNewComment}>
+                    <Button raised color="primary" onClick={this.addNewComment}>
                         Submit
                     </Button>
                 </div>
@@ -207,7 +206,6 @@ export class CommentsComponent extends React.Component<CommentsComponentProps, C
     }
 
     render() {
-        console.log(this.props.comments);
         return (
             <div>
                 <List className={"Comments"}>

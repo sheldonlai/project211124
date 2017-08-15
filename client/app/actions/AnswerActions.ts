@@ -73,11 +73,11 @@ export class AnswerActions extends BaseActions{
         return function(dispatch) {
             apiController.createAnswerComment(answer).then((response) => {
                 dispatch({
-                    type: QuestionActionTypes.createComment,
+                    type: QuestionActionTypes.createAnswerComment,
                     data: response.data,
                 })
             }).catch(err =>
-            AnswerActions.handleError(dispatch, err, QuestionActionTypes.createCommentError)
+            AnswerActions.handleError(dispatch, err, QuestionActionTypes.createAnswerCommentError)
             )
         }
     }
@@ -86,11 +86,11 @@ export class AnswerActions extends BaseActions{
         return function(dispatch){
             apiController.UpdateAnswerComment(commentIndx, answerId, updatedComment).then((response) => {
                 dispatch({
-                    type: QuestionActionTypes.UpdateComment,
+                    type: QuestionActionTypes.UpdateAnswerComment,
                     data: response.data,
                 })
             }).catch(err =>
-            AnswerActions.handleError(dispatch, err, QuestionActionTypes.UpdateCommentError)
+            AnswerActions.handleError(dispatch, err, QuestionActionTypes.UpdateAnswerCommentError)
             )
         }
     }
@@ -99,11 +99,11 @@ export class AnswerActions extends BaseActions{
         return function(dispatch){
             apiController.DeleteAnswerComment(commentIndx, answerId).then((response) => {
                 dispatch({
-                    type: QuestionActionTypes.DeleteComment,
+                    type: QuestionActionTypes.DeleteAnswerComment,
                     data: response.data
                 })
             }).catch(err =>
-            AnswerActions.handleError(dispatch, err, QuestionActionTypes.DeleteCommentError)
+            AnswerActions.handleError(dispatch, err, QuestionActionTypes.DeleteAnswerCommentError)
             )
         }
     }
