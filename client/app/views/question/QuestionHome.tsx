@@ -43,7 +43,8 @@ class QuestionHomeComponent extends Component<QuestionViewProps> {
                         {this.createQuestionButton()}
                     </Grid>
                 </Grid>
-                <QuestionPreviewCardsComponent list={this.props.featuredQuestions} />
+                <QuestionPreviewCardsComponent list={this.props.featuredQuestions} label="Featured"/>
+                <QuestionPreviewCardsComponent list={this.props.myQuestions} label="My Questions"/>
             </div>
         )
     }

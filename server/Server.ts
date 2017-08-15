@@ -23,7 +23,7 @@ import {UserAPI} from "./routes/UserAPI";
 import {TeammateRatingAPI} from "./routes/TeammateRatingAPI";
 import {BaseAPI} from "./routes/BaseAPI";
 import {synchronizeIndex} from "./elasticSearch/_IndexModels";
-
+import compression = require('compression');
 export class Server {
     public app: express.Application;
     private config;
@@ -49,6 +49,7 @@ export class Server {
 
         /* Third party middleware */
         this.app.use(helmet());
+        this.app.use(compression());
         this.app.use(bodyParser.urlencoded({extended: false}));
         this.app.use(bodyParser.json({limit: '50mb'}));
         this.app.use(cookieParser());

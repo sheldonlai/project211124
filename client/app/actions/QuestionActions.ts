@@ -34,7 +34,7 @@ export class QuestionActions extends BaseActions {
                     type: QuestionActionTypes.QuestionCreated,
                     data: res.data
                 });
-                RouterController.history.push(Routes.question);
+                RouterController.history.push(Routes.question_by_id.replace(":id", res.data._id));
             }).catch(err =>
                 QuestionActions.handleError(dispatch, err, QuestionActionTypes.CreateQuestionError)
             )
