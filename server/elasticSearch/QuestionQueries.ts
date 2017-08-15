@@ -39,7 +39,7 @@ export const getQuestionsQueryByPreference = (userPreference: UserPreferences) =
     }
   };
   for (let tag in  tagPref){
-    let score = (tagPref[tag] * 10);
+    let score = tagPref[tag]? (tagPref[tag] * 10) : 0;
     sampleQuery.bool.should.push({
       term: {
         "tags.tag" : {
