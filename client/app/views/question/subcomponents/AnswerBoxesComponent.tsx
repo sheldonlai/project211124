@@ -34,11 +34,11 @@ export class AnswerBoxesComponent extends Component<props, AnswerBoxesComponentS
         this.setState({answers: cloneAnswers(this.props.answers)});
     }
 
-    /*componentWillReceiveProps(nextProps: props) {
+    componentWillReceiveProps(nextProps: props) {
         if (nextProps.answers != this.props.answers) {
             this.setState({editAnswer: false, answers: cloneAnswers(nextProps.answers)});
         }
-    }*/
+    }
 
     componentWillUnmount() {
         this.resetAnswers();
