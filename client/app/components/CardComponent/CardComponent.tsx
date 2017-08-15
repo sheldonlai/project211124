@@ -6,8 +6,7 @@ import Typography from "material-ui/Typography";
 
 const styleSheet = createStyleSheet('SimpleCard', theme => ({
     card: {
-        width: 275,
-        height: 300,
+        height: 250,
         yOverflow: "hidden",
         position: "relative",
         //background:"linear-gradient(transparent 150px, white)"
@@ -28,7 +27,7 @@ const styleSheet = createStyleSheet('SimpleCard', theme => ({
         position: "absolute",
         left: 0,
         top: 0,
-        background: "linear-gradient(transparent 200px, white 260px)",
+        background: "linear-gradient(transparent 200px, white 220px)",
     }
 }));
 
@@ -39,15 +38,23 @@ export interface CardComponentProps {
     date: Date;
     content: string;
     onClick?: () => void;
+    wide?: boolean;
+
 }
 
 export class CardComponent extends React.Component<CardComponentProps, any> {
+
+    constructor(props) {
+        super(props);
+    }
+
     render() {
         const classes = this.props.classes;
+        const width = this.props.wide? 500 + 16 : 250;
         return (
             <div>
-                <Card className={classes.card}>
-                    <div className={classes.shader}></div>
+                <Card className={classes.card} style={{width: width}}>
+                    <div className={classes.shader}/>
                     <CardContent>
                         <Typography type="headline" component="h2">
                             {this.props.title}
