@@ -58,8 +58,6 @@ export class QuestionBoxComponent extends Component<props, {}> {
         question.comments = comments;
         this.props.createComment(question);
         this.props.changeQuestionEditorState({edit: this.props.edit, question});
-        // TODO : Create edit/create comment actions
-        //this.onSubmit();
     };
 
     onCommentUpdate = (commentIndx, updatedComment) => {

@@ -57,7 +57,7 @@ export class AnswerBoxesComponent extends Component<props, AnswerBoxesComponentS
             }
             return ans;
         });
-        this.setState({answers});
+        this.setState({answers: answers});
     };
 
     addAnswer = () => {

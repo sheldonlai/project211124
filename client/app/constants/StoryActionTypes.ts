@@ -26,7 +26,7 @@ export enum StoryActionTypes {
     UpdateStoryCommentError = <any> "UpdateStoryCommentError",
 
     DeleteComment = <any> "DeleteComment",
-    DeleteCommentError = <any> "DeleteCommentError",
+    DeleteCommentError = <any> "DeleteQuestionCommentError",
 
     UpVoteStory = <any> "UpVoteStory",
     DownVoteStory = <any> "DownVoteStory",

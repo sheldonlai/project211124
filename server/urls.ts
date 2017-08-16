@@ -31,6 +31,10 @@ export class APIUrls {
     static UpdateQuestionComment = "/update-question-comment";
     static DeleteQuestionComment = "/delete-question-comment";
 
+    static CreateAnswerComment = "/create-answer-comment";
+    static UpdateAnswerComment = "/update-answer-comment";
+    static DeleteAnswerComment = "/delete-answer-comment";
+
     /* Utils */
     static getCountries = "/get-countries";
     static getUniversitiesByCountry = "/university/:country";

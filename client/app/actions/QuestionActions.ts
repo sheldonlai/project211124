@@ -28,7 +28,6 @@ export class QuestionActions extends BaseActions {
     }
 
     static createQuestion(questionReq: Question): (dispatch: any) => void {
-        console.log('was here');
         return function (dispatch) {
             apiController.createQuestion(questionReq).then(res => {
                 dispatch({
@@ -76,39 +75,39 @@ export class QuestionActions extends BaseActions {
 
     static createComment(question: Question){
         return (dispatch) => {
-            apiController.createComment(question).then(res => {
+            apiController.createQuestionComment(question).then(res => {
                 dispatch({
-                    type: QuestionActionTypes.createComment,
+                    type: QuestionActionTypes.createQuestionComment,
                     data: res.data
                 });
             }).catch(err =>
-            QuestionActions.handleError(dispatch, err, QuestionActionTypes.createCommentError)
+            QuestionActions.handleError(dispatch, err, QuestionActionTypes.createQuestionCommentError)
             )
         }
     }
 
     static updateComment(question: Question, commentIndx: number, updatedComment: CommentDto){
         return (dispatch) => {
-            apiController.UpdateComment(question, commentIndx, updatedComment).then(res => {
+            apiController.UpdateQuestionComment(question, commentIndx, updatedComment).then(res => {
                 dispatch({
-                    type: QuestionActionTypes.UpdateComment,
+                    type: QuestionActionTypes.UpdateQuestionComment,
                     data: res.data,
                 });
             }).catch(err =>
-            QuestionActions.handleError(dispatch, err, QuestionActionTypes.UpdateCommentError)
+            QuestionActions.handleError(dispatch, err, QuestionActionTypes.UpdateQuestionCommentError)
             )
         }
     }
 
     static deleteComment(question: Question, commentIndx: number){
         return (dispatch) => {
-            apiController.DelteComment(question, commentIndx).then(res => {
+            apiController.DeleteQuestionComment(question, commentIndx).then(res => {
                 dispatch({
-                    type: QuestionActionTypes.DeleteComment,
+                    type: QuestionActionTypes.DeleteQuestionComment,
                     data: res.data,
                 })
             }).catch(err =>
-                QuestionActions.handleError(dispatch, err, QuestionActionTypes.DeleteCommentError)
+                QuestionActions.handleError(dispatch, err, QuestionActionTypes.DeleteQuestionCommentError)
             )
         }
     }

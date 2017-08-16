@@ -1,7 +1,6 @@
 import * as React from "react";
 import {CommentDto} from "../../../../../server/dtos/q&a/CommentDto";
 import PropTypes from 'prop-types';
-import {withStyles, createStyleSheet} from 'material-ui/styles';
 import List, {ListItem, ListItemText} from 'material-ui/List';
 import Divider from 'material-ui/Divider';
 import Icon from 'material-ui/Icon';
@@ -40,6 +39,7 @@ const styleSheet: CSSProperties = {
 export class CommentsComponent extends React.Component<CommentsComponentProps, CommentsComponentState> {
     constructor(props) {
         super(props);
+        //console.log(this.props.comments);
         this.state = {
             inputMode: false,
             commentContent: "",
@@ -61,7 +61,7 @@ export class CommentsComponent extends React.Component<CommentsComponentProps, C
             let comments = [...this.props.comments];
             comments.push(tmpComment);
             this.props.onCommentsSubmit(comments);
-            this.setState({commentContent: "", errorMsg: "", inputMode: false});
+            this.setState({commentContent: "", errorMsg: "", inputMode: false, showMaxComments: this.props.comments.length + 1});
         }
         else {
             this.setState({errorMsg: "Cannot submit empty comment."});
@@ -92,7 +92,7 @@ export class CommentsComponent extends React.Component<CommentsComponentProps, C
                         <textarea rows={4} cols={50} value={this.state.commentContent}
                                   onChange={this.onCommentChange}></textarea>
                     </form>
-                    <Button raised color="primary" className={styleSheet.root} onClick={this.addNewComment}>
+                    <Button raised color="primary" onClick={this.addNewComment}>
                         Submit
                     </Button>
                 </div>
@@ -166,16 +166,14 @@ export class CommentsComponent extends React.Component<CommentsComponentProps, C
         else{
             return(
                 <div  style={{textAlign: "left"}}>
-                    <Button onClick={() => this.setState({EditCommentIndx: -1, commentContent: "", errorMsg: ""})}>
-                        cancel
-                    </Button>
+                    <Button onClick = {() => this.setState({EditCommentIndx: -1, commentContent: "", errorMsg: ""})}>cancel</Button>
                 </div>
             );
         }
     };
 
     renderCommentActions = (commentBy: UserDto, commentIndx: number) => {
-        if(this.props.user && this.props.user.username == commentBy.username && commentBy._id == this.props.user._id){
+        if(this.props.user.username == commentBy.username && commentBy._id == this.props.user._id){
             return(
                 <div>
                     {this.EditAndSaveButton(commentIndx)}
@@ -188,12 +186,12 @@ export class CommentsComponent extends React.Component<CommentsComponentProps, C
 
     renderComments = () => {
         let comments:CommentDto[] = this.props.comments.slice(0, this.state.showMaxComments);
+        //<div>Posted on {comment.commentedDate}</div>
         return comments.map((comment, indx) => {
             return (
                 <ListItem key={comment.lastEditedUtc + comment.commentBy.username}>
                     <ListItemText primary={this.onEditComment(indx)}></ListItemText>
                     <div style={{color: "grey", fontSize: 10, textAlign: "right"}}>
-                        {comment.commentedDate && <div>Posted on {comment.commentedDate}</div>}
                         <br/>
                         by {comment.commentBy.username}
                     </div>
@@ -204,6 +202,7 @@ export class CommentsComponent extends React.Component<CommentsComponentProps, C
     };
 
     onShowMore = () => {
+        this.setState({showMaxComments: this.props.comments.length + 1})
     }
 
     render() {
@@ -219,7 +218,7 @@ export class CommentsComponent extends React.Component<CommentsComponentProps, C
                     </IconButton>
                 </div>
                 {this.renderInputCommentBox()}
-                <a onClick={this.onShowMore}>Show more comments</a>
+                <a style={{cursor: 'pointer'}}onClick={this.onShowMore}>Show more comments</a>
             </div>
         );
     }

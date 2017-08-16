@@ -14,6 +14,8 @@ import cloneAnswer = FrontEndQuestionModels.cloneAnswer;
 import {FooterComponent} from "./FooterComponent";
 import {connect} from "react-redux";
 import {AnswerActions} from "../../../actions/AnswerActions";
+import {CommentDto} from "../../../../../server/dtos/q&a/CommentDto";
+import {CommentsComponent} from "./CommentsComponent";
 
 export interface AnswerBoxComponentProps {
     onAnswerChange: (answer: Answer) => void;
@@ -28,6 +30,9 @@ export interface AnswerBoxComponentProps {
 interface dispatch {
     upVote: (answer: Answer) => void
     downVote: (answer: Answer) => void
+    createComment: (answer: Answer) => void;
+    UpdateComment: (answer: Answer, commentIndx: number, updatedComment: CommentDto) => void;
+    DeleteComment: (answer: Answer, commentIndx: number) => void;
 }
 
 
@@ -45,6 +50,25 @@ export class AnswerBoxComponent extends Component<AnswerBoxComponentProps & disp
 
     downVote = () => this.props.downVote(this.props.answer);
 
+    onCommentSubmit = (comments) => {
+        let answer = cloneAnswer(this.props.answer);
+        answer.comments = comments;
+        this.props.createComment(answer);
+        this.props.onAnswerChange(answer);
+    };
+
+    onUpdateComment = (commentIndx, updatedComment) => {
+        let answer = cloneAnswer(this.props.answer);
+        this.props.UpdateComment(answer, commentIndx, updatedComment);
+        this.props.onAnswerChange(answer);
+    };
+
+    onDeleteComment = (commentIndx) =>{
+        let answer = cloneAnswer(this.props.answer);
+        this.props.DeleteComment(answer, commentIndx);
+        this.props.onAnswerChange(answer);
+    };
+
     render() {
         const answer: Answer = {...this.props.answer};
         const editable = (this.props.user && this.props.user.username === answer.author.username);
@@ -61,6 +85,13 @@ export class AnswerBoxComponent extends Component<AnswerBoxComponentProps & disp
                     <QAEditorComponent value={this.props.answer.content} onChange={this.onContentChange}
                                        onSubmit={this.props.onSubmit} readOnly={!this.props.editMode}
                                        style={{fontSize: 14}} reset={this.props.resetAnswer}
+                    />
+                    <Divider/>
+                    <CommentsComponent comments = {this.props.answer.comments}
+                                       user = {this.props.user}
+                                       onCommentsSubmit = {this.onCommentSubmit}
+                                       onCommentUpdate = {this.onUpdateComment}
+                                       onCommentDelete = {this.onDeleteComment}
                     />
                     <Divider/>
                     <FooterComponent
@@ -82,6 +113,9 @@ export class AnswerBoxComponent extends Component<AnswerBoxComponentProps & disp
 const mapDispatchToProps = (dispatch) => ({
     upVote: (answer: Answer) => dispatch(AnswerActions.upVoteAnswer(answer)),
     downVote: (answer: Answer) => dispatch(AnswerActions.downVoteAnswer(answer)),
+    createComment: (answer: Answer) => dispatch(AnswerActions.createComment(answer)),
+    UpdateComment: (answer: Answer, commentIndx: number, updatedComment: CommentDto) => dispatch(AnswerActions.UpdateComment(commentIndx, answer._id, updatedComment)),
+    DeleteComment: (answer: Answer, commentIndx: number) => dispatch(AnswerActions.DeleteComment(commentIndx, answer._id)),
 });
 
 export const AnswerBoxView = connect<void, dispatch, AnswerBoxComponentProps>(
