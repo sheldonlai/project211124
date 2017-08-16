@@ -9,6 +9,7 @@ import {QuestionEditorReducer, QuestionEditorReducerState} from "../reducers/Que
 import {LocationDataReducer, LocationDataReducerState} from "../reducers/LocationDataReducer";
 import {RatingHomeReducer, RatingHomeReducerState} from "../reducers/TammateRatingHomeReducer";
 import {RatingPageReducer, RatingPageReducerState} from "../reducers/RatingPageReducer";
+import {StoryHomeReducer, StoryHomeReducerState} from "../reducers/StoryHomeReducer";
 
 const loggerMiddleware = createLogger();
 const composeEnhancers = window['__REDUX_DEVTOOLS_EXTENSION_COMPOSE__'] || compose;
@@ -23,6 +24,7 @@ export interface AppStoreState {
     locationData: LocationDataReducerState;
     ratingHome: RatingHomeReducerState;
     ratingPage: RatingPageReducerState;
+    storyHome: StoryHomeReducerState;
 }
 
 const reducer = combineReducers({
@@ -33,7 +35,8 @@ const reducer = combineReducers({
     questionEditorState: QuestionEditorReducer,
     locationData: LocationDataReducer,
     ratingHome: RatingHomeReducer,
-    ratingPage: RatingPageReducer
+    ratingPage: RatingPageReducer,
+    storyHome: StoryHomeReducer
 });
 
 export const store = createStore(

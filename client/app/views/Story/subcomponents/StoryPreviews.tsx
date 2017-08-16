@@ -1,27 +1,30 @@
 import * as React from "react";
-import {FrontEndQuestionModels} from "../../../models/QuestionModels";
+import {isElementWide, sortListToGetSameWidthEachRow} from "../../../utils/WideBoxUtils";
+import Typography from "material-ui/Typography";
 import {CustomLink} from "../../../components/CustomLink";
 import {CustomCard} from "../../../components/CardComponent/CardComponent";
 import {Routes} from "../../../constants/Routes";
 import Grid from "material-ui/Grid";
-import Typography from "material-ui/Typography";
-import {isElementWide, sortListToGetSameWidthEachRow} from "../../../utils/WideBoxUtils";
-import QuestionPreview = FrontEndQuestionModels.QuestionPreview;
+import {FrontEndStoryModels} from "../../../models/StoryModels";
+import StoryPreview = FrontEndStoryModels.StoryPreview;
 
-export interface QuestionPreviewCardsComponentProps {
-    list: QuestionPreview[];
-    label: string;
-    trim?: boolean; // if there is a non fully populated trim the bottom row
-    maxWidth?: number;
-}
 interface state {
-    width: number; height: number;
+    height: number;
+    width: number;
 }
-export class QuestionPreviewCardsComponent extends React.Component<QuestionPreviewCardsComponentProps, state> {
+
+interface props {
+    list : StoryPreview[];
+    label: string;
+    maxWidth? : number;
+    trim?: boolean;
+}
+
+export class StoryPreviews extends React.Component<props, state> {
 
     constructor(props) {
         super(props);
-        this.state = { width: 0, height: 0 };
+        this.state = {width: 0, height: 0};
     }
 
     componentDidMount() {
@@ -34,28 +37,28 @@ export class QuestionPreviewCardsComponent extends React.Component<QuestionPrevi
     }
 
     updateWindowDimensions = () => {
-        this.setState({ width: window.innerWidth, height: window.innerHeight});
+        this.setState({width: window.innerWidth, height: window.innerHeight});
     };
 
     render() {
         if (!this.props.list) return undefined;
         const bodyMargin = 16;
         let width = this.state.width;
-        width = this.props.maxWidth && width > this.props.maxWidth? this.props.maxWidth: width;
+        width = this.props.maxWidth && width > this.props.maxWidth ? this.props.maxWidth : width;
         let n = Math.floor((width - bodyMargin) / (250 + 16));
         let list = sortListToGetSameWidthEachRow(this.props.list, n, this.props.trim);
         return (
             <div style={{marginTop: 16}}>
                 <Typography type="display2" style={{margin: "20px 20px 10px 20px"}}>{this.props.label}</Typography>
                 <Grid container justify="center">
-                    {list.map((e: QuestionPreview) => (
+                    {list.map((e: StoryPreview) => (
                         <Grid item key={e.title}>
                             <div style={{display: "inline-block"}}>
                                 <CustomLink to={Routes.question_by_id.replace(':id', e._id)}>
                                     <CustomCard
                                         title={e.title}
-                                        content={e.content}
-                                        date={e.createdUtc}
+                                        content={e.content.getCurrentContent().getPlainText()}
+                                        date={e.createdAt}
                                         wide={n > 1 && isElementWide(e)}
                                     />
                                 </CustomLink>
