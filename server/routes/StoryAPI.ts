@@ -12,7 +12,7 @@ export class StoryAPI extends BaseAPI {
         super();
         this.router = Router();
         this.service = service;
-        this.router.post(APIUrls.getStoryPreviews, maybeAuthenticated, this.getStoryPreviews);
+        this.router.get(APIUrls.getStoryPreviews, maybeAuthenticated, this.getStoryPreviews);
         this.router.get(APIUrls.getStory, maybeAuthenticated, this.getStory);
         this.router.post(APIUrls.createStory, mustBeAuthenticated, this.createStory);
         this.router.put(APIUrls.updateStory, mustBeAuthenticated, this.updateStory);
@@ -22,7 +22,6 @@ export class StoryAPI extends BaseAPI {
 
     public getStoryPreviews = (req: AuthRequest, res: Response, next: NextFunction) => {
         const user = req.user;
-        const createDto = req.body;
         const promise = this.service.getStoryPreview(user);
         this.respondPromise(promise, res, next);
     };

@@ -37,7 +37,7 @@ export namespace FrontEndStoryModels {
     export class StoryPreview {
         _id: string;
         title: string;
-        content: EditorState;
+        content: string;
         author: UserDto;
         tags: any[];
         upVotes: number;

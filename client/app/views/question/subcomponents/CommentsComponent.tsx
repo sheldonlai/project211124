@@ -173,7 +173,7 @@ export class CommentsComponent extends React.Component<CommentsComponentProps, C
     };
 
     renderCommentActions = (commentBy: UserDto, commentIndx: number) => {
-        if(this.props.user.username == commentBy.username && commentBy._id == this.props.user._id){
+        if(this.props.user && this.props.user.username == commentBy.username && commentBy._id == this.props.user._id){
             return(
                 <div>
                     {this.EditAndSaveButton(commentIndx)}

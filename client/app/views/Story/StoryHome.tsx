@@ -18,34 +18,22 @@ export class StoryHomeComponent extends React.Component<props, state> {
 
     constructor(props) {
         super(props);
-        this.state = { width: 0, height: 0 };
     }
 
     componentWillMount(){
         this.props.fetchStories();
     }
 
-    componentDidMount() {
-        this.updateWindowDimensions();
-        window.addEventListener('resize', this.updateWindowDimensions);
-    }
-
-    componentWillUnmount() {
-        window.removeEventListener('resize', this.updateWindowDimensions);
-    }
-
-    updateWindowDimensions = () => {
-        this.setState({ width: window.innerWidth, height: window.innerHeight});
-    };
-
     render() {
         //const loading = th
+        console.log('render')
         return (
             <div>
-                <CustomLink to={Routes.story}>
+                <CustomLink to={Routes.createStory}>
                     <Button>New Story</Button>
                 </CustomLink>
-                <StoryPreviews label="Featured" list={[]} />
+                {/*<StoryPreviews label="Featured" list={this.props.previews} />*/}
+                <StoryPreviews label="My Stories" list={this.props.previews} />
             </div>
         );
     }

@@ -1,10 +1,10 @@
 import * as React from "react";
 import {Route} from "react-router";
-import {Routes} from "../constants/Routes";
+import {Routes} from "../../constants/Routes";
 import TransitionGroup =require('react-transition-group/TransitionGroup');
-import {QuestionHomePage} from "./question/QuestionHome";
-import {CreateQuestionPage} from "./question/CreateQuestion";
-import {QuestionPageView} from "./question/QuestionPage";
+import {QuestionHomePage} from "./QuestionHome";
+import {CreateQuestionPage} from "./CreateQuestion";
+import {QuestionPageView} from "./QuestionPage";
 
 const firstChild = props => {
     const childrenArray = React.Children.toArray(props.children);
@@ -13,7 +13,7 @@ const firstChild = props => {
 
 export const QuestionRouter = () => (
     <div>
-        <Route exact path={Routes.questionHome}
+        <Route exact path={Routes.question}
                render={({match, ...rest}) => (
                    <TransitionGroup component={firstChild}>
                        <QuestionHomePage match={match} {...rest} />

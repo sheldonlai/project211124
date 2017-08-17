@@ -57,7 +57,7 @@ export class StoryPreviews extends React.Component<props, state> {
                                 <CustomLink to={Routes.question_by_id.replace(':id', e._id)}>
                                     <CustomCard
                                         title={e.title}
-                                        content={e.content.getCurrentContent().getPlainText()}
+                                        content={e.content}
                                         date={e.createdAt}
                                         wide={n > 1 && isElementWide(e)}
                                     />
