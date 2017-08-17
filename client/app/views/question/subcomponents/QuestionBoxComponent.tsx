@@ -60,15 +60,15 @@ export class QuestionBoxComponent extends Component<props, {}> {
         this.props.changeQuestionEditorState({edit: this.props.edit, question});
     };
 
-    onCommentUpdate = (commentIndx, updatedComment) => {
+    onCommentUpdate = (commentId, updatedComment) => {
       let question = cloneQuestion(this.props.question);
-      this.props.UpdateComment(question, commentIndx, updatedComment);
+      this.props.UpdateComment(question, commentId, updatedComment);
       this.props.changeQuestionEditorState({edit: this.props.edit, question});
     };
 
-    onCommentDelete = (commentIndx) => {
+    onCommentDelete = (commentId) => {
       let question = cloneQuestion(this.props.question);
-      this.props.DeleteComment(question, commentIndx);
+      this.props.DeleteComment(question, commentId);
       this.props.changeQuestionEditorState({edit: this.props.edit, question});
     };
 
@@ -158,10 +158,10 @@ const mapDispatchToProps = (dispatch): DispatchProps => ({
     changeQuestionEditorState: (state: QuestionEditorReducerState) =>
         dispatch(QuestionActions.changeQuestionEditorState(state)),
     createComment: (question: Question) => dispatch(QuestionActions.createComment(question)),
-    UpdateComment: (question: Question, commentIndex: number, updatedComment: CommentDto) =>
-        dispatch(QuestionActions.updateComment(question, commentIndex, updatedComment)),
-    DeleteComment: (question: Question, commentIndex: number) =>
-        dispatch(QuestionActions.deleteComment(question, commentIndex)),
+    UpdateComment: (question: Question, commentId: string, updatedComment: CommentDto) =>
+        dispatch(QuestionActions.updateComment(question, commentId, updatedComment)),
+    DeleteComment: (question: Question, commentId: string) =>
+        dispatch(QuestionActions.deleteComment(question, commentId)),
 });
 
 interface DispatchProps {
@@ -170,8 +170,8 @@ interface DispatchProps {
     editQuestion: (question: Question) => void;
     changeQuestionEditorState: (state: QuestionEditorReducerState) => void;
     createComment: (question: Question) => void;
-    UpdateComment: (question: Question, commentIndex: number, updatedComment: CommentDto) => void;
-    DeleteComment: (question: Question, commentIndex: number) => void;
+    UpdateComment: (question: Question, commentId: string, updatedComment: CommentDto) => void;
+    DeleteComment: (question: Question, commentId: string) => void;
 }
 
 export const QuestionBoxView = connect<QuestionBoxComponentProps, DispatchProps, any>(

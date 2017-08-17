@@ -82,9 +82,9 @@ export class AnswerActions extends BaseActions{
         }
     }
 
-    static UpdateComment(commentIndx: number, answerId: string, updatedComment: CommentDto): (dispatch: any) => void {
+    static UpdateComment(commentId: string, answerId: string, updatedComment: CommentDto): (dispatch: any) => void {
         return function(dispatch){
-            apiController.UpdateAnswerComment(commentIndx, answerId, updatedComment).then((response) => {
+            apiController.UpdateAnswerComment(commentId, answerId, updatedComment).then((response) => {
                 dispatch({
                     type: QuestionActionTypes.UpdateAnswerComment,
                     data: response.data,
@@ -95,9 +95,9 @@ export class AnswerActions extends BaseActions{
         }
     }
 
-    static DeleteComment(commentIndx: number, answerId: string): (dispatch: any) => void {
+    static DeleteComment(commentId: string, answerId: string): (dispatch: any) => void {
         return function(dispatch){
-            apiController.DeleteAnswerComment(commentIndx, answerId).then((response) => {
+            apiController.DeleteAnswerComment(commentId, answerId).then((response) => {
                 dispatch({
                     type: QuestionActionTypes.DeleteAnswerComment,
                     data: response.data

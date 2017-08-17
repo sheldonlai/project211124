@@ -11,14 +11,15 @@ import IconButton from 'material-ui/IconButton'
 import {UserDto} from "../../../../../server/dtos/auth/UserDto";
 import {FrontEndQuestionModels} from "../../../models/QuestionModels";
 import CommentModel = FrontEndQuestionModels.CommentModel;
+import _ = require("lodash");
 
 
 export interface CommentsComponentProps {
     comments: CommentDto[];
     user: UserDto;
     onCommentsSubmit: (comments: CommentDto[]) => void;
-    onCommentUpdate: (commentIndx: number, updatedComment: CommentDto) => void;
-    onCommentDelete: (commentIndx: number) => void;
+    onCommentUpdate: (commentId: string, updatedComment: CommentDto) => void;
+    onCommentDelete: (commentId: string) => void;
 }
 
 export interface CommentsComponentState {
@@ -102,8 +103,9 @@ export class CommentsComponent extends React.Component<CommentsComponentProps, C
     };
 
     DeleteComment = (indx: number) => {
+        let commentId: string = this.props.comments[indx]._id;
         this.props.comments.splice(indx, 1);
-        this.props.onCommentDelete(indx);
+        this.props.onCommentDelete(commentId);
     };
 
     onEditComment = (indx: number) => {
@@ -135,19 +137,19 @@ export class CommentsComponent extends React.Component<CommentsComponentProps, C
         else{
             return(
                 <div  style={{textAlign: "left"}}>
-                    <Button color = "primary" onClick = {() => this.UpdateEditedComment(indx)}>save</Button>
+                    <Button color = "primary" onClick = {() => this.UpdateEditedComment(this.props.comments[indx]._id)}>save</Button>
                 </div>
             );
         }
     };
 
-    UpdateEditedComment = (indx) => {
+    UpdateEditedComment = (commentId: string) => {
         if(this.state.commentContent){
+            let indx: number = _.findIndex(this.props.comments, function(comment){return comment._id == commentId});
             this.props.comments[indx].commentContent = this.state.commentContent;
             this.props.comments[indx].lastEditedUtc = new Date(Date.now());
             let updatedComment: CommentDto = this.props.comments[indx];
-            this.props.onCommentUpdate(indx, updatedComment);
-            //this.props.onCommentsSubmit(this.props.comments);
+            this.props.onCommentUpdate(commentId, updatedComment);
             this.setState({EditCommentIndx: -1, commentContent: ""});
         }
         else{

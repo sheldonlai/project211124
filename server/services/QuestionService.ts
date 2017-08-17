@@ -17,6 +17,7 @@ import {CommentDto} from "../dtos/q&a/CommentDto"
 import {IUserRepository} from "../repositories/UserRepository";
 import {getQuestionsQueryByPreference} from "../elasticSearch/QuestionQueries";
 import {UserPreferences} from "../models/UserPerferences";
+import * as _ from "lodash";
 
 
 export interface IQuestionService {
@@ -28,8 +29,8 @@ export interface IQuestionService {
     upVoteQuestion(questionId: string, user: User): Promise<QuestionDto>;
     downVoteQuestion(questionId: string, user: User): Promise<QuestionDto>;
     createComment(question: Question): Promise<QuestionDto>;
-    UpdateComment(commentIndx: number, questionId: string, user: User, updatedComment: CommentDto): Promise<QuestionDto>;
-    DeleteComment(commentIndx: number, questionId: string, user: User): Promise<QuestionDto>;
+    UpdateComment(commentIndx: string, questionId: string, user: User, updatedComment: CommentDto): Promise<QuestionDto>;
+    DeleteComment(commentIndx: string, questionId: string, user: User): Promise<QuestionDto>;
 }
 
 export class QuestionService extends BaseService implements IQuestionService {
@@ -147,8 +148,9 @@ export class QuestionService extends BaseService implements IQuestionService {
         });
     }
 
-    UpdateComment(commentIndx: number, questionId: string, user: User, updatedComment: CommentDto){
+    UpdateComment(commentId: string, questionId: string, user: User, updatedComment: CommentDto){
         return this.questionRepository.getById(questionId).then((questionFound: Question) => {
+            let commentIndx = _.findIndex(questionFound.comments, function(comment){return comment._id == commentId});
             if(questionFound.comments[commentIndx].commentBy.username != user.username ||
             !questionFound.comments[commentIndx].commentBy._id.equals(user._id)){
                 throw new AppError("You are not the owner of this question!", ClientError.UNAUTHORIZED);
@@ -160,8 +162,9 @@ export class QuestionService extends BaseService implements IQuestionService {
         })
     }
 
-    DeleteComment(commentIndx: number, questionId: string, user: User){
+    DeleteComment(commentId: string, questionId: string, user: User){
         return this.questionRepository.getById(questionId).then((questionFound: Question) => {
+            let commentIndx = _.findIndex(questionFound.comments, function(comment){return comment._id == commentId});
             if(questionFound.comments[commentIndx].commentBy.username != user.username ||
                 !questionFound.comments[commentIndx].commentBy._id.equals(user._id)){
                 throw new AppError("You are not the owner of this question!", ClientError.UNAUTHORIZED);

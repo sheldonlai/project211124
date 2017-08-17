@@ -65,8 +65,8 @@ export class AnswerAPI extends BaseAPI{
 		let answerId: string = req.body.answerId;
 		let updatedComment: CommentDto = req.body.updatedComment;
 		let user: User = req.user;
-		let commentIndx: number = req.body.commentIndx;
-		let result = this.service.UpdateAnswerComment(commentIndx, answerId, user, updatedComment);
+		let commentId: string = req.body.commentId;
+		let result = this.service.UpdateAnswerComment(commentId, answerId, user, updatedComment);
 
 		this.respondPromise(result, res, next);
 	}
@@ -74,8 +74,8 @@ export class AnswerAPI extends BaseAPI{
 	public DeleteComment = (req: AuthRequest, res: Response, next: NextFunction) => {
 		let answerId: string = req.body.answerId;
 		let user: User = req.user;
-		let commentIndx: number = req.body.commentIndx;
-		let result = this.service.DeleteAnswerComment(commentIndx, answerId, user);
+		let commentId: string = req.body.commentId;
+		let result = this.service.DeleteAnswerComment(commentId, answerId, user);
 
 		this.respondPromise(result, res, next);
 	}

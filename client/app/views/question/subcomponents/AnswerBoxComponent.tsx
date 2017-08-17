@@ -31,8 +31,8 @@ interface dispatch {
     upVote: (answer: Answer) => void
     downVote: (answer: Answer) => void
     createComment: (answer: Answer) => void;
-    UpdateComment: (answer: Answer, commentIndx: number, updatedComment: CommentDto) => void;
-    DeleteComment: (answer: Answer, commentIndx: number) => void;
+    UpdateComment: (answer: Answer, commentId: string, updatedComment: CommentDto) => void;
+    DeleteComment: (answer: Answer, commentId: string) => void;
 }
 
 
@@ -57,15 +57,15 @@ export class AnswerBoxComponent extends Component<AnswerBoxComponentProps & disp
         this.props.onAnswerChange(answer);
     };
 
-    onUpdateComment = (commentIndx, updatedComment) => {
+    onUpdateComment = (commentId, updatedComment) => {
         let answer = cloneAnswer(this.props.answer);
-        this.props.UpdateComment(answer, commentIndx, updatedComment);
+        this.props.UpdateComment(answer, commentId, updatedComment);
         this.props.onAnswerChange(answer);
     };
 
-    onDeleteComment = (commentIndx) =>{
+    onDeleteComment = (commentId) =>{
         let answer = cloneAnswer(this.props.answer);
-        this.props.DeleteComment(answer, commentIndx);
+        this.props.DeleteComment(answer, commentId);
         this.props.onAnswerChange(answer);
     };
 
@@ -114,8 +114,8 @@ const mapDispatchToProps = (dispatch) => ({
     upVote: (answer: Answer) => dispatch(AnswerActions.upVoteAnswer(answer)),
     downVote: (answer: Answer) => dispatch(AnswerActions.downVoteAnswer(answer)),
     createComment: (answer: Answer) => dispatch(AnswerActions.createComment(answer)),
-    UpdateComment: (answer: Answer, commentIndx: number, updatedComment: CommentDto) => dispatch(AnswerActions.UpdateComment(commentIndx, answer._id, updatedComment)),
-    DeleteComment: (answer: Answer, commentIndx: number) => dispatch(AnswerActions.DeleteComment(commentIndx, answer._id)),
+    UpdateComment: (answer: Answer, commentId: string, updatedComment: CommentDto) => dispatch(AnswerActions.UpdateComment(commentId, answer._id, updatedComment)),
+    DeleteComment: (answer: Answer, commentId: string) => dispatch(AnswerActions.DeleteComment(commentId, answer._id)),
 });
 
 export const AnswerBoxView = connect<void, dispatch, AnswerBoxComponentProps>(
