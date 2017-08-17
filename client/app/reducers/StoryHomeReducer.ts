@@ -8,11 +8,13 @@ import {StoryActionTypes} from "../constants/StoryActionTypes";
 export interface StoryHomeReducerState {
     status : ReducerStateStatus;
     previews: StoryPreview[];
+    myPreviews: StoryPreview[];
 }
 
 const initialState : StoryHomeReducerState = {
     status : ReducerStateStatus.LOADING,
     previews : [],
+    myPreviews: []
 
 };
 
@@ -29,7 +31,8 @@ export const StoryHomeReducer = (state = initialState, action) : StoryHomeReduce
         case StoryActionTypes.StoryPreviewsOK:
             state = {...state};
             state.status = ReducerStateStatus.DONE;
-            state.previews = action.data;
+            state.previews = action.data.myStories;
+            state.myPreviews = action.data.myStories;
             return state;
         default:
             return state;

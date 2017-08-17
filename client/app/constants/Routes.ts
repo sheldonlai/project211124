@@ -6,14 +6,17 @@ export class Routes {
     static registration = '/registration';
 
     // question
-    static question = '/question/';
-    static questionHome = '/question/home';
-    static createQuestion = '/question/create-question';
-    static question_by_id = '/question/id/:id';
+    static question = '/question';
+    static createQuestion = Routes.question + '/create';
+    static question_by_id = Routes.question + '/:id/:name';
 
 
     // story
     static story = '/story';
+    static createStory = Routes.story + '/create';
+    static story_by_id = Routes.story + '/:id/:name';
+
+
     static my_profile = "/my-profile";
 
     // rating

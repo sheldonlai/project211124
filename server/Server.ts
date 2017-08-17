@@ -24,6 +24,7 @@ import {TeammateRatingAPI} from "./routes/TeammateRatingAPI";
 import {BaseAPI} from "./routes/BaseAPI";
 import {synchronizeIndex} from "./elasticSearch/_IndexModels";
 import compression = require('compression');
+import {StoryAPI} from "./routes/StoryAPI";
 export class Server {
     public app: express.Application;
     private config;
@@ -110,7 +111,11 @@ export class Server {
 
         routes.push(new TeammateRatingAPI(ServiceProvider.TeammateRecordService));
 
+        routes.push(new StoryAPI(ServiceProvider.StoryService));
+
         routes.forEach((route) => this.app.use('/api',route.router));
+
+
     }
 
     private checkAndInsertUniversityData() {

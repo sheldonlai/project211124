@@ -37,6 +37,11 @@ export class QuestionPreviewCardsComponent extends React.Component<QuestionPrevi
         this.setState({ width: window.innerWidth, height: window.innerHeight});
     };
 
+    prepareToLink = (id: string, title: string): string => {
+        title = encodeURIComponent(title).replace(/%20/g,'-');//title.replace(new RegExp(' ', 'g'), "-");
+        return Routes.question_by_id.replace(':id', id).replace(':name', title)
+    };
+
     render() {
         if (!this.props.list) return undefined;
         const bodyMargin = 16;
@@ -51,7 +56,7 @@ export class QuestionPreviewCardsComponent extends React.Component<QuestionPrevi
                     {list.map((e: QuestionPreview) => (
                         <Grid item key={e.title}>
                             <div style={{display: "inline-block"}}>
-                                <CustomLink to={Routes.question_by_id.replace(':id', e._id)}>
+                                <CustomLink to={this.prepareToLink(e._id, e.title)}>
                                     <CustomCard
                                         title={e.title}
                                         content={e.content}

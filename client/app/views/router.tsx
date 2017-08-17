@@ -18,8 +18,8 @@ import {RatingPageView} from "./rating/RatingPageView";
 import TransitionGroup =require('react-transition-group/TransitionGroup');
 import {Bundle} from "../components/Bundle";
 import {LoadingScreen} from "../components/Animations/LoadingScreen";
-let questionLoader = require("bundle-loader?lazy&name=question!./QuestionRouter");
-let storyLoader = require("bundle-loader?lazy&name=story!./StoryRouter");
+let questionLoader = require("bundle-loader?lazy&name=question!./question/QuestionRouter");
+let storyLoader = require("bundle-loader?lazy&name=story!./story/StoryRouter");
 let muiTheme = createMuiTheme({
     palette: createPalette({
         primary: deepOrange,
