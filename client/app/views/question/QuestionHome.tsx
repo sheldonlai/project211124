@@ -6,7 +6,6 @@ import {AppStoreState} from "../../stores/AppStore";
 import {QuestionActions} from "../../actions/QuestionActions";
 import {QuestionHomeReducerState} from "../../reducers/QuestionHomeReducer";
 import {ErrorReducerState} from "../../reducers/ErrorReducer";
-import AnimatedWrapper from "../../components/Animations/AnimatedWrapper";
 import {Card, CardActions, CardHeader, CardMedia, CardText, CardTitle} from "material-ui/Card";
 import {CustomLink} from "../../components/CustomLink";
 import Button from "material-ui/Button";
@@ -53,7 +52,7 @@ class QuestionHomeComponent extends Component<QuestionViewProps> {
     }
 }
 
-export const QuestionHomePage = AnimatedWrapper(connect(
+export const QuestionHomePage = connect(
     (state: AppStoreState) => ({
         loggedIn: state.auth.loggedIn,
         globalError: state.errors,
@@ -62,4 +61,4 @@ export const QuestionHomePage = AnimatedWrapper(connect(
     (dispatch) => ({
         fetchQuestion: () => dispatch(QuestionActions.getQuestionPreviews())
     })
-)(QuestionHomeComponent));
+)(QuestionHomeComponent);

@@ -1,5 +1,4 @@
 import * as React from "react";
-import AnimatedWrapper from "../../components/Animations/AnimatedWrapper";
 
 export class HomeComponent extends React.Component<any, any> {
 
@@ -13,4 +12,4 @@ export class HomeComponent extends React.Component<any, any> {
 
 }
 
-export const Home = AnimatedWrapper(HomeComponent);
+export const Home = HomeComponent;

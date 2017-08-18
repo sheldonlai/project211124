@@ -7,15 +7,13 @@ import {UserDto} from "../../../../../server/dtos/auth/UserDto";
 import Button from "material-ui/Button";
 import Paper from "material-ui/Paper";
 import Grid from "material-ui/Grid";
-import QuestionPreview = FrontEndQuestionModels.QuestionPreview;
-import Question = FrontEndQuestionModels.Question;
-import Answer = FrontEndQuestionModels.Answer;
-import cloneAnswer = FrontEndQuestionModels.cloneAnswer;
 import {FooterComponent} from "./FooterComponent";
 import {connect} from "react-redux";
 import {AnswerActions} from "../../../actions/AnswerActions";
 import {CommentDto} from "../../../../../server/dtos/q&a/CommentDto";
 import {CommentsComponent} from "./CommentsComponent";
+import Answer = FrontEndQuestionModels.Answer;
+import cloneAnswer = FrontEndQuestionModels.cloneAnswer;
 
 export interface AnswerBoxComponentProps {
     onAnswerChange: (answer: Answer) => void;

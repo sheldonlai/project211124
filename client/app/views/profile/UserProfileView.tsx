@@ -2,7 +2,6 @@ import * as React from "react";
 import {connect} from "react-redux";
 import {AppStoreState} from "../../stores/AppStore";
 import {UserDto} from "../../../../server/dtos/auth/UserDto";
-import AnimatedWrapper from "../../components/Animations/AnimatedWrapper";
 import Grid from "material-ui/Grid";
 import Paper from "material-ui/Paper";
 import TextField from "material-ui/TextField";
@@ -13,7 +12,6 @@ import Typography from "material-ui/Typography";
 import {LocationActions} from "../../actions/LocationActions";
 import {DropDownSelect} from "../../components/Forms/DropDownSelect";
 import {CountryDto} from "../../../../server/dtos/location/CountryDto";
-import {UniversityDto} from "../../../../server/dtos/location/UniversityDto";
 import {RouterProps} from "react-router";
 import {Routes} from "../../constants/Routes";
 import {UserActions} from "../../actions/UserActions";
@@ -21,6 +19,7 @@ import {EmailNameInputStyles} from "../../constants/StyleClasses";
 import {isNullOrUndefined} from "util";
 import {UniversitiesMap} from "../../reducers/LocationDataReducer";
 import {SplitVIewTemplate} from "../../components/Templates/SplitVIewTemplate";
+import {ReducerStateStatus} from "../../constants/ReducerStateStatus";
 
 interface state {
     error: string;
@@ -144,6 +143,7 @@ interface StateToProps {
     user: UserDto;
     countries: CountryDto[];
     universitiesMap: UniversitiesMap;
+    locationDataStatus: ReducerStateStatus
 }
 
 interface DispatchToProps {
@@ -157,6 +157,7 @@ const mapStateToProps = (state: AppStoreState): StateToProps => ({
     user: state.auth.user,
     countries: state.locationData.countries,
     universitiesMap: state.locationData.universitiesMap,
+    locationDataStatus : state.locationData.status
 
 });
 const mapDispatchToProps = (dispatch): DispatchToProps => ({
@@ -164,7 +165,7 @@ const mapDispatchToProps = (dispatch): DispatchToProps => ({
     getUniversities: (countryId) => dispatch(LocationActions.getUniversities(countryId)),
     updateProfile: (user: UserDto) => dispatch(UserActions.updateUserProfile(user))
 });
-export const UserProfileView = AnimatedWrapper(connect<StateToProps, DispatchToProps, {}>(
+export const UserProfileView = connect<StateToProps, DispatchToProps, {}>(
     mapStateToProps,
     mapDispatchToProps
-)(UserProfileComponent));
+)(UserProfileComponent);

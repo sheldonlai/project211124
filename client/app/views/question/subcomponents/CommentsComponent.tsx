@@ -1,17 +1,14 @@
 import * as React from "react";
+import {CSSProperties} from "react";
 import {CommentDto} from "../../../../../server/dtos/q&a/CommentDto";
-import PropTypes from 'prop-types';
 import List, {ListItem, ListItemText} from 'material-ui/List';
 import Divider from 'material-ui/Divider';
 import Icon from 'material-ui/Icon';
-import {CSSProperties} from "react";
-import TextField from 'material-ui/TextField';
 import Button from 'material-ui/Button';
 import IconButton from 'material-ui/IconButton'
 import {UserDto} from "../../../../../server/dtos/auth/UserDto";
-import {FrontEndQuestionModels} from "../../../models/QuestionModels";
-import CommentModel = FrontEndQuestionModels.CommentModel;
-import _ = require("lodash");
+import {findIndex} from "../../../utils/ArrayUtils";
+import TextField from "material-ui/TextField";
 
 
 export interface CommentsComponentProps {
@@ -62,7 +59,12 @@ export class CommentsComponent extends React.Component<CommentsComponentProps, C
             let comments = [...this.props.comments];
             comments.push(tmpComment);
             this.props.onCommentsSubmit(comments);
-            this.setState({commentContent: "", errorMsg: "", inputMode: false, showMaxComments: this.props.comments.length + 1});
+            this.setState({
+                commentContent: "",
+                errorMsg: "",
+                inputMode: false,
+                showMaxComments: this.props.comments.length + 1
+            });
         }
         else {
             this.setState({errorMsg: "Cannot submit empty comment."});
@@ -90,8 +92,9 @@ export class CommentsComponent extends React.Component<CommentsComponentProps, C
                 <div>
                     {this.onErrMsg()}
                     <form>
-                        <textarea rows={4} cols={50} value={this.state.commentContent}
-                                  onChange={this.onCommentChange}></textarea>
+                        <TextField multiline rows={4} value={this.state.commentContent}
+                                   fullWidth
+                                   onChange={this.onCommentChange}/>
                     </form>
                     <Button raised color="primary" onClick={this.addNewComment}>
                         Submit
@@ -109,74 +112,84 @@ export class CommentsComponent extends React.Component<CommentsComponentProps, C
     };
 
     onEditComment = (indx: number) => {
-        if(this.state.EditCommentIndx == -1 || indx != this.state.EditCommentIndx){
-            return(
+        if (this.state.EditCommentIndx == -1 || indx != this.state.EditCommentIndx) {
+            return (
                 this.props.comments[indx].commentContent
             );
-        } else if(indx == this.state.EditCommentIndx){
-            return(
-            <div>
-            <p>
-                <mark>{this.state.errorMsg}</mark>
-            </p>
-                <textarea defaultValue={this.props.comments[indx].commentContent} onChange={this.onCommentChange}></textarea>
-            </div>
+        } else if (indx == this.state.EditCommentIndx) {
+            return (
+                <div>
+                    <p>
+                        <mark>{this.state.errorMsg}</mark>
+                    </p>
+                    <TextField defaultValue={this.props.comments[indx].commentContent}
+                               onChange={this.onCommentChange}
+                               multiline
+                               fullWidth
+                               rows={4}
+                    />
+                </div>
             )
         }
         return undefined;
     };
 
     EditAndSaveButton = (indx: number) => {
-        if(this.state.EditCommentIndx == -1 || indx != this.state.EditCommentIndx){
-            return(
+        if (this.state.EditCommentIndx == -1 || indx != this.state.EditCommentIndx) {
+            return (
                 <IconButton>
-                <Icon onClick = {() => this.setState({EditCommentIndx: indx, commentContent: this.props.comments[indx].commentContent, errorMsg: ""})}>mode_edit</Icon>
+                    <Icon onClick={() => this.setState({
+                        EditCommentIndx: indx,
+                        commentContent: this.props.comments[indx].commentContent,
+                        errorMsg: ""
+                    })}>mode_edit</Icon>
                 </IconButton>
             );
         }
-        else{
-            return(
-                <div  style={{textAlign: "left"}}>
-                    <Button color = "primary" onClick = {() => this.UpdateEditedComment(this.props.comments[indx]._id)}>save</Button>
+        else {
+            return (
+                <div style={{textAlign: "left"}}>
+                    <Button color="primary"
+                            onClick={() => this.UpdateEditedComment(this.props.comments[indx]._id)}>save</Button>
                 </div>
             );
         }
     };
 
     UpdateEditedComment = (commentId: string) => {
-        if(this.state.commentContent){
-            let indx: number = _.findIndex(this.props.comments, function(comment){return comment._id == commentId});
+        if (this.state.commentContent) {
+            let indx: number = findIndex(this.props.comments, comment => comment._id == commentId);
             this.props.comments[indx].commentContent = this.state.commentContent;
             this.props.comments[indx].lastEditedUtc = new Date(Date.now());
             let updatedComment: CommentDto = this.props.comments[indx];
             this.props.onCommentUpdate(commentId, updatedComment);
             this.setState({EditCommentIndx: -1, commentContent: ""});
         }
-        else{
+        else {
             this.setState({errorMsg: "Cannot submit empty comment."});
         }
     };
 
     CancelAndDeleteButton = (indx: number) => {
-        if(this.state.EditCommentIndx == -1 || indx != this.state.EditCommentIndx){
-            return(
+        if (this.state.EditCommentIndx == -1 || indx != this.state.EditCommentIndx) {
+            return (
                 <IconButton>
-                    <Icon onClick = {() => this.DeleteComment(indx)}>delete</Icon>
+                    <Icon onClick={() => this.DeleteComment(indx)}>delete</Icon>
                 </IconButton>
             );
         }
-        else{
-            return(
-                <div  style={{textAlign: "left"}}>
-                    <Button onClick = {() => this.setState({EditCommentIndx: -1, commentContent: "", errorMsg: ""})}>cancel</Button>
+        else {
+            return (
+                <div style={{textAlign: "left"}}>
+                    <Button onClick={() => this.setState({EditCommentIndx: -1, commentContent: "", errorMsg: ""})}>cancel</Button>
                 </div>
             );
         }
     };
 
     renderCommentActions = (commentBy: UserDto, commentIndx: number) => {
-        if(this.props.user && this.props.user.username == commentBy.username && commentBy._id == this.props.user._id){
-            return(
+        if (this.props.user && this.props.user.username == commentBy.username && commentBy._id == this.props.user._id) {
+            return (
                 <div>
                     {this.EditAndSaveButton(commentIndx)}
                     {this.CancelAndDeleteButton(commentIndx)}
@@ -187,25 +200,27 @@ export class CommentsComponent extends React.Component<CommentsComponentProps, C
     }
 
     renderComments = () => {
-        let comments:CommentDto[] = this.props.comments.slice(0, this.state.showMaxComments);
+        let comments: CommentDto[] = this.props.comments.slice(0, this.state.showMaxComments);
         //<div>Posted on {comment.commentedDate}</div>
         return comments.map((comment, indx) => {
             return (
-                <ListItem key={comment.lastEditedUtc + comment.commentBy.username}>
-                    <ListItemText primary={this.onEditComment(indx)}></ListItemText>
-                    <div style={{color: "grey", fontSize: 10, textAlign: "right"}}>
-                        <br/>
-                        by {comment.commentBy.username}
-                    </div>
-                    {this.renderCommentActions(comment.commentBy, indx)}
-                </ListItem>
+                <div key={comment.lastEditedUtc + comment.commentBy.username}>
+                    <ListItem>
+                        <ListItemText primary={this.onEditComment(indx)}/>
+                        <div style={{color: "grey", fontSize: 10, textAlign: "right"}}>
+                            <br/>
+                            by {comment.commentBy.username}
+                        </div>
+                        {this.renderCommentActions(comment.commentBy, indx)}
+                    </ListItem>
+                </div>
             )
         });
     };
 
     onShowMore = () => {
         this.setState({showMaxComments: this.props.comments.length + 1})
-    }
+    };
 
     render() {
         return (
@@ -216,11 +231,11 @@ export class CommentsComponent extends React.Component<CommentsComponentProps, C
                 </List>
                 <div className={styleSheet.root}>
                     <IconButton>
-                        <Icon onClick={() => this.setState({inputMode: !this.state.inputMode}) }>add_circle</Icon>
+                        <Icon onClick={() => this.setState({inputMode: !this.state.inputMode})}>add_circle</Icon>
                     </IconButton>
                 </div>
                 {this.renderInputCommentBox()}
-                <a style={{cursor: 'pointer'}}onClick={this.onShowMore}>Show more comments</a>
+                <a style={{cursor: 'pointer'}} onClick={this.onShowMore}>Show more comments</a>
             </div>
         );
     }

@@ -8,7 +8,6 @@ import {QuestionActions} from "../../actions/QuestionActions";
 import {PublicityStatus} from "../../../../server/enums/PublicityStatus";
 import {QuestionDifficulty} from "../../../../server/models/Question";
 import {AppStoreState} from "../../stores/AppStore";
-import AnimatedWrapper from "../../components/Animations/AnimatedWrapper";
 import {CustomEditor} from "../../components/CustomEditor/CustomEditor";
 import {EditorState} from "draft-js";
 import {FrontEndQuestionModels} from "../../models/QuestionModels";
@@ -192,9 +191,9 @@ interface dispatchToProps {
     createQuestion : (question: Question) => void;
 }
 
-export const CreateQuestionPage = AnimatedWrapper((connect(
+export const CreateQuestionPage = (connect(
     (state: AppStoreState) => ({loggedIn: state.auth.loggedIn}),
     (dispatch) => ({
         createQuestion: (question: Question) => dispatch(QuestionActions.createQuestion(question))
     })
-)(CreateQuestion)));
+)(CreateQuestion));

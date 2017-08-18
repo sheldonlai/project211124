@@ -8,10 +8,9 @@ import {Routes} from "../../constants/Routes";
 import {FormWrapper} from "../../components/FormWrapper";
 import {connect} from "react-redux";
 import {AppStoreState} from "../../stores/AppStore";
-import AnimatedWrapper from "../../components/Animations/AnimatedWrapper";
 import {FrontEndAuthModels} from "../../models/AuthModels";
-import LoginRequest = FrontEndAuthModels.LoginRequest;
 import {EmailNameInputStyles} from "../../constants/StyleClasses";
+import LoginRequest = FrontEndAuthModels.LoginRequest;
 
 export interface LoginViewState {
     loginRequest: LoginRequest;
@@ -68,7 +67,7 @@ export class LoginView extends Component<any, any> {
     }
 }
 
-export const LoginPage = AnimatedWrapper(connect(
+export const LoginPage = connect(
     (state : AppStoreState) => ({loggedIn : state.auth.loggedIn}),
     (dispatch) => ({login : (login: LoginRequest) => dispatch(AuthActions.login(login))})
-)(LoginView));
+)(LoginView);

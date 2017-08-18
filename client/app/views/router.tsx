@@ -15,7 +15,6 @@ import {RatingHomeView} from "./rating/RatingHomeView";
 import {blueGrey, deepOrange} from "material-ui/colors";
 import {CreateTeammateView} from "./rating/CreateTeammateView";
 import {RatingPageView} from "./rating/RatingPageView";
-import TransitionGroup =require('react-transition-group/TransitionGroup');
 import {Bundle} from "../components/Bundle";
 import {LoadingScreen} from "../components/Animations/LoadingScreen";
 let questionLoader = require("bundle-loader?lazy&name=question!./question/QuestionRouter");
@@ -26,12 +25,6 @@ let muiTheme = createMuiTheme({
         accent: blueGrey
     })
 });
-
-const firstChild = props => {
-    const childrenArray = React.Children.toArray(props.children);
-    return childrenArray[0] || null;
-};
-
 const QuestionModule = () => (
     <Bundle load={questionLoader}>
         {(mod) => (
@@ -57,60 +50,15 @@ export class App extends React.Component<any, any> {
                         <div>
                             <Route path={Routes.home} component={Menu}/>
                             <Route path={Routes.home} component={ErrorSnackBar}/>
-                            <Route exact path={Routes.home}
-                                   render={({match, ...rest}) => (
-                                       <TransitionGroup component={firstChild}>
-                                           <Home match={match} {...rest} />
-                                       </TransitionGroup>
-                                   )}/>
-                            <Route exact path={Routes.login}
-                                   render={({match, ...rest}) => (
-                                       <TransitionGroup component={firstChild}>
-                                           <LoginPage match={match} {...rest} />
-                                       </TransitionGroup>
-                                   )}
-                            />
-                            <Route exact path={Routes.registration}
-                                   render={({match, ...rest}) => (
-                                       <TransitionGroup component={firstChild}>
-                                           <RegistrationPage match={match} {...rest} />
-                                       </TransitionGroup>
-                                   )}
-                            />
-                            <Route path={Routes.question}
-                                   component={QuestionModule}
-                            />
-                            <Route path={Routes.story}
-                                   component={StoryModule}
-                            />
-                            <Route path={Routes.my_profile}
-                                   render={({match, ...rest}) => (
-                                       <TransitionGroup component={firstChild}>
-                                           <UserProfileView match={match} {...rest} />
-                                       </TransitionGroup>
-                                   )}
-                            />
-                            <Route path={Routes.rate_my_teammate}
-                                   render={({match, ...rest}) => (
-                                       <TransitionGroup component={firstChild}>
-                                           <RatingHomeView match={match} {...rest} />
-                                       </TransitionGroup>
-                                   )}
-                            />
-                            <Route path={Routes.create_teammate_record}
-                                   render={({match, ...rest}) => (
-                                       <TransitionGroup component={firstChild}>
-                                           <CreateTeammateView match={match} {...rest} />
-                                       </TransitionGroup>
-                                   )}
-                            />
-                            <Route path={Routes.rating}
-                                   render={({match, ...rest}) => (
-                                       <TransitionGroup component={firstChild}>
-                                           <RatingPageView match={match} {...rest} />
-                                       </TransitionGroup>
-                                   )}
-                            />
+                            <Route exact path={Routes.home} component={Home}/>
+                            <Route exact path={Routes.login} component={LoginPage}/>
+                            <Route exact path={Routes.registration} component={RegistrationPage}/>
+                            <Route path={Routes.question} component={QuestionModule}/>
+                            <Route path={Routes.story} component={StoryModule}/>
+                            <Route exact path={Routes.my_profile} component={UserProfileView}/>
+                            <Route exact path={Routes.rate_my_teammate} component={RatingHomeView}/>
+                            <Route exact path={Routes.create_teammate_record} component={CreateTeammateView}/>
+                            <Route exact path={Routes.rating} component={RatingPageView}/>
                         </div>
                     </Router>
                 </Provider>

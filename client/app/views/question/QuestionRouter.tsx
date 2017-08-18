@@ -1,7 +1,6 @@
 import * as React from "react";
 import {Route} from "react-router";
 import {Routes} from "../../constants/Routes";
-import TransitionGroup =require('react-transition-group/TransitionGroup');
 import {QuestionHomePage} from "./QuestionHome";
 import {CreateQuestionPage} from "./CreateQuestion";
 import {QuestionPageView} from "./QuestionPage";
@@ -13,26 +12,13 @@ const firstChild = props => {
 
 export const QuestionRouter = () => (
     <div>
-        <Route exact path={Routes.question}
-               render={({match, ...rest}) => (
-                   <TransitionGroup component={firstChild}>
-                       <QuestionHomePage match={match} {...rest} />
-                   </TransitionGroup>
-               )}
+        <Route exact path={Routes.question} component={QuestionHomePage}
         />
         <Route exact path={Routes.createQuestion}
-               render={({match, ...rest}) => (
-                   <TransitionGroup component={firstChild}>
-                       <CreateQuestionPage match={match} {...rest} />
-                   </TransitionGroup>
-               )}
+               component={CreateQuestionPage}
         />
         <Route exact path={Routes.question_by_id}
-               render={({match, ...rest}) => (
-                   <TransitionGroup component={firstChild}>
-                       <QuestionPageView match={match} {...rest} />
-                   </TransitionGroup>
-               )}
+               component={QuestionPageView}
         />
     </div>
 );

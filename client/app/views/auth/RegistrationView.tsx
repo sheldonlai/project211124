@@ -9,10 +9,9 @@ import {CommonController} from "../../api.controllers/CommonController";
 import {Routes} from "../../constants/Routes";
 import {RouterController} from "../../api.controllers/RouterController";
 import {AppStoreState} from "../../stores/AppStore";
-import AnimatedWrapper from "../../components/Animations/AnimatedWrapper";
 import {FrontEndAuthModels} from "../../models/AuthModels";
-import RegistrationRequest = FrontEndAuthModels.RegistrationRequest;
 import {EmailNameInputStyles} from "../../constants/StyleClasses";
+import RegistrationRequest = FrontEndAuthModels.RegistrationRequest;
 
 export interface RegistrationViewState {
     error : string;
@@ -105,7 +104,7 @@ export class RegistrationView extends Component<RegistrationViewProps, Registrat
     }
 }
 
-export const RegistrationPage = AnimatedWrapper(connect(
+export const RegistrationPage = connect(
     (state: AppStoreState)=> ({loggedIn: state.auth.loggedIn}),
     (dispatch) => ({})
-)(RegistrationView));
+)(RegistrationView);
