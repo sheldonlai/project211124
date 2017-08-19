@@ -40,6 +40,10 @@ export class StoryPreviews extends React.Component<props, state> {
         this.setState({width: window.innerWidth, height: window.innerHeight});
     };
 
+    prepareStoryUrl = (url: string, preview : StoryPreview) => {
+        return url.replace(":id", preview._id).replace(":name", preview.title)
+    };
+
     render() {
         if (!this.props.list) return undefined;
         const bodyMargin = 16;
@@ -54,7 +58,7 @@ export class StoryPreviews extends React.Component<props, state> {
                     {list.map((e: StoryPreview) => (
                         <Grid item key={e.title}>
                             <div style={{display: "inline-block"}}>
-                                <CustomLink to={Routes.question_by_id.replace(':id', e._id)}>
+                                <CustomLink to={this.prepareStoryUrl(Routes.story_by_id, e)}>
                                     <CustomCard
                                         title={e.title}
                                         content={e.content}

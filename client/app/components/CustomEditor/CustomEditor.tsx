@@ -8,7 +8,7 @@ import {EditorFactory} from "./EditorFactory";
 export interface CustomEditorProps {
     value: EditorState;
     readOnly?: boolean;
-    onChange: (text: EditorState) => void;
+    onChange?: (text: EditorState) => void;
     height?: number;
     border?: boolean;
     style?: CSSProperties;
@@ -42,8 +42,10 @@ export class CustomEditor extends React.Component<CustomEditorProps> {
 
     render() {
         let modifiedStyle = {...style};
-        if (this.props.border === false)
+        if (this.props.border === false) {
             delete modifiedStyle.border;
+            delete modifiedStyle.boxShadow;
+        }
         applyStylesToDefaultStyle(modifiedStyle, this.props.style);
         //modifiedStyle['height'] = this.props.height ? this.props.height : undefined;
 

@@ -4,6 +4,7 @@ import {Routes} from "../../constants/Routes";
 import TransitionGroup =require('react-transition-group/TransitionGroup');
 import {StoryHome, StoryHomeComponent} from "./StoryHome";
 import {CreateStoryView} from "./CreateStoryView";
+import {StoryPageView} from "./StoryPage";
 
 const firstChild = props => {
     const childrenArray = React.Children.toArray(props.children);
@@ -13,19 +14,12 @@ const firstChild = props => {
 export const StoryRouter = () => (
     <div>
         <Route exact path={Routes.story}
-               render={({match, ...rest}) => (
-                   <TransitionGroup component={firstChild}>
-                       <StoryHome match={match} {...rest} />
-                   </TransitionGroup>
-               )}
+               component={StoryHome}
         />
         <Route exact path={Routes.createStory}
-               render={({match, ...rest}) => (
-                   <TransitionGroup component={firstChild}>
-                       <CreateStoryView match={match} {...rest} />
-                   </TransitionGroup>
-               )}
+               component={CreateStoryView}
         />
+        <Route exact path={Routes.story_by_id} component={StoryPageView}/>
     </div>
 );
 

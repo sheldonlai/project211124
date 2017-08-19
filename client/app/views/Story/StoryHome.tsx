@@ -8,9 +8,12 @@ import {Routes} from "../../constants/Routes";
 import {AppStoreState} from "../../stores/AppStore";
 import {StoryHomeReducerState} from "../../reducers/StoryHomeReducer";
 import {RouteComponentProps, RouteProps} from "react-router";
+import {ReducerStateStatus} from "../../constants/ReducerStateStatus";
+import {LoadingScreen} from "../../components/Animations/LoadingScreen";
 
 interface state {
-    height: number; width: number;
+    height: number;
+    width: number;
 
 }
 
@@ -20,32 +23,42 @@ export class StoryHomeComponent extends React.Component<props, state> {
         super(props);
     }
 
-    componentWillMount(){
+    componentWillMount() {
         this.props.fetchStories();
     }
 
     render() {
         //const loading = th
+
         console.log('render')
         return (
             <div>
                 <CustomLink to={Routes.createStory}>
                     <Button>New Story</Button>
                 </CustomLink>
-                {/*<StoryPreviews label="Featured" list={this.props.previews} />*/}
-                <StoryPreviews label="My Stories" list={this.props.previews} />
+                {this.props.status === ReducerStateStatus.LOADING ?
+                    <LoadingScreen/> :
+                    <div>
+                        {/*<StoryPreviews label="Featured" list={this.props.previews} />*/}
+                        <StoryPreviews label="My Stories" list={this.props.previews}/>
+
+                    </div>
+                }
             </div>
         );
     }
 }
 
-interface stateToProps extends StoryHomeReducerState{}
+interface stateToProps extends StoryHomeReducerState {
+}
 
-interface  dispatchProps {
+interface dispatchProps {
     fetchStories: () => void;
 }
 
-interface props extends stateToProps, dispatchProps, RouteComponentProps<void>{}
+interface props extends stateToProps, dispatchProps, RouteComponentProps<void> {
+}
+
 const mapStateToProps = (state: AppStoreState) => ({
     ...state.storyHome
 });
