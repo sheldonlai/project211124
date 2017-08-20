@@ -6,7 +6,7 @@ import {AuthActions} from "../actions/AuthActions";
 import {connect} from "react-redux";
 import {AppStoreState} from "../stores/AppStore";
 import {ReducerStateStatus} from "../constants/ReducerStateStatus";
-import {RouterProps} from "react-router";
+import {RouteComponentProps, RouterProps} from "react-router";
 import {CustomLink} from "../components/CustomLink";
 import AppBar from 'material-ui/AppBar';
 import {UserDto} from "../../../server/dtos/auth/UserDto";
@@ -19,7 +19,7 @@ const menuButtonStyle : CSSProperties= {
 };
 
 
-export interface MenuClassProps extends RouterProps {
+export interface MenuClassProps extends RouteComponentProps<{}> {
     logout: () => void;
     loggedIn: boolean;
     authStatus: ReducerStateStatus;
@@ -60,9 +60,24 @@ class MenuClass extends Component<MenuClassProps> {
         }
     };
 
+    getColor = () => {
+        let pathName = this.props.location.pathname;
+        if (pathName === Routes.home){
+            return "#FF6526";
+        } else if (pathName.indexOf(Routes.question) !== -1){
+            return "#32d29d";
+        } else if (pathName.indexOf(Routes.story) !== -1){
+            return "#3066f8";
+        } else {
+            return "#37474F";
+        }
+
+    }
+
     render() {
+        let color = this.getColor();
         return (
-            <AppBar position="static" className="menu">
+            <AppBar position="static" className="menu" style={{backgroundColor: color}}>
                 <Toolbar>
                     <div style={{flex: 1}}>
                         <CustomLink to={Routes.home}>
@@ -73,7 +88,7 @@ class MenuClass extends Component<MenuClassProps> {
                             </Button>
                         </CustomLink>
                         {this.button("Questions", Routes.question)}
-                        {this.button("Services", Routes.story)}
+                        {this.button("Stories", Routes.story)}
                         {this.button("RateMyTeammate", Routes.rate_my_teammate)}
                     </div>
                     <div style={{float: "left"}}>
