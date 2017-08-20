@@ -9,7 +9,7 @@ import IconButton from 'material-ui/IconButton'
 import {UserDto} from "../../../../../server/dtos/auth/UserDto";
 import {findIndex} from "../../../utils/ArrayUtils";
 import TextField from "material-ui/TextField";
-
+import Typography from "material-ui/Typography"
 
 export interface CommentsComponentProps {
     comments: CommentDto[];
@@ -33,6 +33,15 @@ const styleSheet: CSSProperties = {
         maxWidth: '360px'
     }
 };
+
+const iconButtonStyle: CSSProperties = {
+    height: 24,
+    width: 24
+};
+
+const iconStyle: CSSProperties = {
+    fontSize: 18
+}
 
 export class CommentsComponent extends React.Component<CommentsComponentProps, CommentsComponentState> {
     constructor(props) {
@@ -114,7 +123,9 @@ export class CommentsComponent extends React.Component<CommentsComponentProps, C
     onEditComment = (indx: number) => {
         if (this.state.EditCommentIndx == -1 || indx != this.state.EditCommentIndx) {
             return (
-                this.props.comments[indx].commentContent
+                <Typography type="body1">
+                    {this.props.comments[indx].commentContent}
+                </Typography>
             );
         } else if (indx == this.state.EditCommentIndx) {
             return (
@@ -126,7 +137,7 @@ export class CommentsComponent extends React.Component<CommentsComponentProps, C
                                onChange={this.onCommentChange}
                                multiline
                                fullWidth
-                               rows={4}
+                               style={{fontSize : 14}}
                     />
                 </div>
             )
@@ -137,8 +148,8 @@ export class CommentsComponent extends React.Component<CommentsComponentProps, C
     EditAndSaveButton = (indx: number) => {
         if (this.state.EditCommentIndx == -1 || indx != this.state.EditCommentIndx) {
             return (
-                <IconButton>
-                    <Icon onClick={() => this.setState({
+                <IconButton style={iconButtonStyle}>
+                    <Icon style={iconStyle} onClick={() => this.setState({
                         EditCommentIndx: indx,
                         commentContent: this.props.comments[indx].commentContent,
                         errorMsg: ""
@@ -173,15 +184,17 @@ export class CommentsComponent extends React.Component<CommentsComponentProps, C
     CancelAndDeleteButton = (indx: number) => {
         if (this.state.EditCommentIndx == -1 || indx != this.state.EditCommentIndx) {
             return (
-                <IconButton>
-                    <Icon onClick={() => this.DeleteComment(indx)}>delete</Icon>
+                <IconButton style={iconButtonStyle}>
+                    <Icon style={iconStyle} onClick={() => this.DeleteComment(indx)}>delete</Icon>
                 </IconButton>
             );
         }
         else {
             return (
                 <div style={{textAlign: "left"}}>
-                    <Button onClick={() => this.setState({EditCommentIndx: -1, commentContent: "", errorMsg: ""})}>cancel</Button>
+                    <Button onClick={() => this.setState({EditCommentIndx: -1, commentContent: "", errorMsg: ""})}>
+                        cancel
+                    </Button>
                 </div>
             );
         }
@@ -190,7 +203,7 @@ export class CommentsComponent extends React.Component<CommentsComponentProps, C
     renderCommentActions = (commentBy: UserDto, commentIndx: number) => {
         if (this.props.user && this.props.user.username == commentBy.username && commentBy._id == this.props.user._id) {
             return (
-                <div>
+                <div style={{float: "right"}}>
                     {this.EditAndSaveButton(commentIndx)}
                     {this.CancelAndDeleteButton(commentIndx)}
                 </div>
@@ -204,15 +217,21 @@ export class CommentsComponent extends React.Component<CommentsComponentProps, C
         //<div>Posted on {comment.commentedDate}</div>
         return comments.map((comment, indx) => {
             return (
-                <div key={comment.lastEditedUtc + comment.commentBy.username}>
-                    <ListItem>
-                        <ListItemText primary={this.onEditComment(indx)}/>
-                        <div style={{color: "grey", fontSize: 10, textAlign: "right"}}>
-                            <br/>
-                            by {comment.commentBy.username}
+                <div key={comment.lastEditedUtc + comment.commentBy.username}
+                     style={{marginLeft: 15, paddingLeft: 10, minHeight: 72, marginBottom: 2,
+                         borderLeft: "1px lightblue solid", borderBottom: "1px #eeeeee solid"}}>
+                    <div>
+                        <div style={{display: "inline-block", width: "80%"}}>
+                        {this.onEditComment(indx)}
                         </div>
+
                         {this.renderCommentActions(comment.commentBy, indx)}
-                    </ListItem>
+                    </div>
+                    <div style={{color: "grey", fontSize: 10, textAlign: "right", marginTop: 10}}>
+                        posted on {comment.lastEditedUtc}
+                        <br/>
+                        by {comment.commentBy.username}
+                    </div>
                 </div>
             )
         });
@@ -227,7 +246,7 @@ export class CommentsComponent extends React.Component<CommentsComponentProps, C
             <div>
                 <List className={"Comments"}>
                     {this.renderComments()}
-                    <Divider light/>
+                    {/*<Divider light/>*/}
                 </List>
                 <div className={styleSheet.root}>
                     <IconButton>
