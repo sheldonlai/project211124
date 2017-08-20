@@ -25,8 +25,15 @@ const getLoadingState = (state): StoryPageReducerState  => {
 export const StoryPageReducer = (state = initialState, action) : StoryPageReducerState => {
     switch (action.type) {
         case StoryActionTypes.FetchStoryPageRequest:
-            return getLoadingState(state);
+        return getLoadingState(state);
         case StoryActionTypes.FetchStoryPageOK:
+            state = {...state};
+            state.status = ReducerStateStatus.DONE;
+            state.story = action.data;
+            return state;
+        case StoryActionTypes.EditStoryRequest:
+            return getLoadingState(state);
+        case StoryActionTypes.EditStoryOK:
             state = {...state};
             state.status = ReducerStateStatus.DONE;
             state.story = action.data;

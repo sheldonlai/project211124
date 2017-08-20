@@ -17,69 +17,108 @@ import {CustomEditor} from "../../components/CustomEditor/CustomEditor";
 import Typography from "material-ui/Typography";
 import {ReducerStateStatus} from "../../constants/ReducerStateStatus";
 import {LoadingScreen} from "../../components/Animations/LoadingScreen";
+import {StoryEditor} from "./subcomponents/StoryEditor";
+import {FrontEndStoryModels} from "../../models/StoryModels";
+import Story = FrontEndStoryModels.Story;
+import Grid from "material-ui/Grid";
+export class StoryPage extends React.Component<props, { edit: boolean }> {
+    constructor(props) {
+        super(props);
+        this.state = {edit: false}
+    }
 
-export class StoryPage extends React.Component<props> {
-
-    componentWillMount(){
+    componentWillMount() {
         let id = this.props.match.params.id;
         this.props.fetchStoryPage(id);
     }
 
+    componentWillReceiveProps(nextProps: props){
+       if (this.props.story&&
+           JSON.stringify(this.props.story) !== JSON.stringify(nextProps.story)){
+           this.setState({edit: false});
+       }
+    }
+
     editButton() {
-        if (this.props.user)
-            return  undefined;
+        if (!this.props.user || this.state.edit)
+            return undefined;
         return (
-            <div>
-                <Button>
-                    Edit
-                </Button>
-            </div>
+            <Grid container justify="flex-end">
+                <Grid item>
+                    <Button onClick={() => this.setState({edit: true})}>
+                        Edit
+                    </Button>
+                </Grid>
+            </Grid>
         )
     }
 
-    view () {
+    view() {
         let paperStyle: CSSProperties = {};
         return (
             <SplitVIewTemplate>
                 <Paper style={paperStyle} elevation={0}>
+                    {this.editButton()}
                     <Typography type="display1">{this.props.story.title}</Typography>
+                    <Typography type="caption" style={{flex: "flex-end"}}>by {this.props.story.author.username}</Typography>
                     {this.editButton}
-                    <Divider />
+                    <Divider/>
                     <div>
                         <CustomEditor value={this.props.story.content} readOnly={true} border={false}/>
-                        <div>
-                            <ChipListComponent chips={this.props.story.tags} keyName={"tag"}/>
-                        </div>
+                        <div/>
                     </div>
                 </Paper>
                 <div>
-
+                    <Typography type="headline">Tags</Typography>
+                    <ChipListComponent chips={this.props.story.tags} keyName={"tag"}/>
                 </div>
             </SplitVIewTemplate>
 
         )
     }
 
-    render () {
+    editor() {
+        let story: Story = {...this.props.story};
+        story.tags = story.tags.map((tag)=> tag.tag);
+        return (
+            <SplitVIewTemplate>
+                <StoryEditor story={story} onSubmit={this.props.updateStory} onCancel={this.onCancel}/>
+                <div/>
+            </SplitVIewTemplate>
+        )
+    }
+
+    onCancel = () => {
+        this.setState({edit: false});
+    }
+
+    mainView = () => {
+        return this.state.edit ? this.editor() : this.view()
+    };
+
+    render() {
         return (
             <div style={{margin: 20}}>
-                {this.props.status === ReducerStateStatus.LOADING?
-                    <LoadingScreen/>:
-                    this.view()}
+                {
+                    this.props.status === ReducerStateStatus.LOADING ?
+                        <LoadingScreen/> :
+                        this.mainView()
+                }
             </div>
         )
     }
 }
 
-interface StateToProps extends StoryPageReducerState{
+interface StateToProps extends StoryPageReducerState {
     user: UserDto;
 }
 
 interface DispatchToProps {
     fetchStoryPage: (id: string) => void
+    updateStory: (story: Story) => void
 }
 
-interface props extends StateToProps, DispatchToProps, RouteComponentProps<{id: string}>{
+interface props extends StateToProps, DispatchToProps, RouteComponentProps<{ id: string }> {
 
 }
 
@@ -89,10 +128,11 @@ const mapStateToProps = (state: AppStoreState): StateToProps => ({
 });
 
 const mapDispatchToProps = (dispatch) => ({
-    fetchStoryPage : (id: string) => dispatch(StoryActions.fetchStoryPage(id))
+    fetchStoryPage: (id: string) => dispatch(StoryActions.fetchStoryPage(id)),
+    updateStory: (story: Story) => dispatch(StoryActions.updateStory(story))
 });
 
-export const StoryPageView = connect<StateToProps, DispatchToProps, RouteComponentProps<{id: string}>>(
+export const StoryPageView = connect<StateToProps, DispatchToProps, RouteComponentProps<{ id: string }>>(
     mapStateToProps,
     mapDispatchToProps
 )(StoryPage);

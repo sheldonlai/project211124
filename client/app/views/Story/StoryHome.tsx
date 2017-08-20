@@ -28,9 +28,6 @@ export class StoryHomeComponent extends React.Component<props, state> {
     }
 
     render() {
-        //const loading = th
-
-        console.log('render')
         return (
             <div>
                 <CustomLink to={Routes.createStory}>
