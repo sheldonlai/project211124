@@ -132,7 +132,7 @@ export class StoryService extends BaseService implements IStoryService {
 
     updateComment(comment: CommentDto, storyId: string, user: User): Promise<StoryDto>{
         return this.storyRepository.getById(storyId).then((storyFound: Story) => {
-            const commentIndex = _.findIndex(storyFound.comments, (comment) => comment._id.toString() === comment._id);
+            const commentIndex = _.findIndex(storyFound.comments, (c) => c._id.toString() === comment._id);
             const commentFound = storyFound.comments[commentIndex];
             if(!commentFound.commentBy._id.equals(user._id)){
                 throw new AppError("You are not the owner of this story!", ClientError.UNAUTHORIZED);
@@ -146,7 +146,7 @@ export class StoryService extends BaseService implements IStoryService {
 
     deleteComment(comment: CommentDto, storyId: string, user: User): Promise<StoryDto>{
         return this.storyRepository.getById(storyId).then((storyFound: Story) => {
-            const commentIndex = _.findIndex(storyFound.comments, (comment) => comment._id.toString() === comment._id);
+            const commentIndex = _.findIndex(storyFound.comments, (c) => c._id.toString() === comment._id);
             const commentFound = storyFound.comments[commentIndex];
             if(!commentFound.commentBy._id.equals(user._id)){
                 throw new AppError("You are not the owner of this story!", ClientError.UNAUTHORIZED);

@@ -74,9 +74,12 @@ export class StoryActions extends BaseActions {
 
     static createComment(comment: CommentDto, storyId: string){
         return (dispatch) => {
+            dispatch({
+                type: StoryActionTypes.CreateStoryCommentRequest
+            });
             apiController.addComment(comment, storyId).then(res => {
                 dispatch({
-                    type: StoryActionTypes.CreateStoryComment,
+                    type: StoryActionTypes.CreateStoryCommentOK,
                     data: res.data
                 });
             }).catch(err =>
@@ -87,9 +90,12 @@ export class StoryActions extends BaseActions {
 
     static updateComment(updatedComment: CommentDto, storyId: string){
         return (dispatch) => {
+            dispatch({
+                type: StoryActionTypes.UpdateStoryCommentRequest
+            });
             apiController.updateComment(updatedComment, storyId).then(res => {
                 dispatch({
-                    type: StoryActionTypes.UpdateStoryComment,
+                    type: StoryActionTypes.UpdateStoryCommentOK,
                     data: res.data,
                 });
             }).catch(err =>

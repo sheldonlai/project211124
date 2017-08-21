@@ -19,6 +19,22 @@ export class StoryRepository extends BaseRepository<Story, IStory> implements IS
         super(StoryModel);
     }
 
+    create(question: Story): Promise<Story> {
+        question.createdAt = undefined;
+        question.updatedAt = undefined;
+        return super.create(question).then((question: Story) => {
+            return this.getById(question._id);
+        });
+    }
+
+    update(question: Story): Promise<Story> {
+        delete question.createdAt;
+        question.updatedAt = new Date(Date.now());
+        return super.update(question).then((question: Story) => {
+            return this.getById(question._id);
+        });
+    }
+
     getStoryByTitle(title: string): Promise<Story> {
         return StoryModel.findOne({title: title}).lean().exec()
             .then((question: Story) => this.applyAdditionalFunction(question))

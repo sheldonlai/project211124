@@ -17,7 +17,7 @@ export class StoryAPI extends BaseAPI {
         this.router.post(APIUrls.createStory, mustBeAuthenticated, this.createStory);
         this.router.put(APIUrls.updateStory, mustBeAuthenticated, this.updateStory);
         this.router.post(APIUrls.createStoryComment, mustBeAuthenticated, this.createStoryComment);
-        this.router.post(APIUrls.updateStoryComment, mustBeAuthenticated, this.updateStoryComment);
+        this.router.put(APIUrls.updateStoryComment, mustBeAuthenticated, this.updateStoryComment);
     }
 
     public getStoryPreviews = (req: AuthRequest, res: Response, next: NextFunction) => {

@@ -19,10 +19,12 @@ export enum StoryActionTypes {
 
     ChangePostPage = <any> "ChangePostPage",
 
-    CreateStoryComment = <any> "CreateStoryComment",
+    CreateStoryCommentRequest = <any> "CreateStoryCommentRequest",
+    CreateStoryCommentOK = <any> "CreateStoryCommentOK",
     CreateStoryCommentError = <any> "CreateStoryCommentError",
 
-    UpdateStoryComment = <any> "UpdateStoryComment",
+    UpdateStoryCommentRequest = <any> "UpdateStoryCommentRequest",
+    UpdateStoryCommentOK = <any> "UpdateStoryCommentOK",
     UpdateStoryCommentError = <any> "UpdateStoryCommentError",
 
     DeleteComment = <any> "DeleteComment",

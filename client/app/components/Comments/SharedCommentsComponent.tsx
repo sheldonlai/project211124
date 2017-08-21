@@ -1,29 +1,31 @@
 import * as React from "react";
 import {CSSProperties} from "react";
-import {CommentDto} from "../../../../../server/dtos/q&a/CommentDto";
 import List, {ListItem, ListItemText} from 'material-ui/List';
 import Divider from 'material-ui/Divider';
 import Icon from 'material-ui/Icon';
 import Button from 'material-ui/Button';
 import IconButton from 'material-ui/IconButton'
-import {UserDto} from "../../../../../server/dtos/auth/UserDto";
-import {findIndex} from "../../../utils/ArrayUtils";
 import TextField from "material-ui/TextField";
 import Typography from "material-ui/Typography"
+import {UserDto} from "../../../../server/dtos/auth/UserDto";
+import {CommentDto} from "../../../../server/dtos/q&a/CommentDto";
+import {findIndex} from "../../utils/ArrayUtils";
+import {LoadingScreen} from "../Animations/LoadingScreen";
 
 export interface CommentsComponentProps {
     comments: CommentDto[];
     user: UserDto;
-    onCommentsSubmit: (comments: CommentDto[]) => void;
-    onCommentUpdate: (commentId: string, updatedComment: CommentDto) => void;
-    onCommentDelete: (commentId: string) => void;
+    onCommentCreate: (comment: CommentDto) => void;
+    onCommentUpdate: (comment: CommentDto) => void;
+    onCommentDelete?: (commentId: string) => void;
+    loading? : boolean;
 }
 
 export interface CommentsComponentState {
     inputMode: boolean;
     commentContent: string;
     errorMsg: string;
-    EditCommentIndx: number;
+    EditCommentIndex: number;
     showMaxComments: number;
 }
 
@@ -43,7 +45,7 @@ const iconStyle: CSSProperties = {
     fontSize: 18
 };
 
-export class CommentsComponent extends React.Component<CommentsComponentProps, CommentsComponentState> {
+export class SharedCommentsComponent extends React.Component<CommentsComponentProps, CommentsComponentState> {
     constructor(props) {
         super(props);
         //console.log(this.props.comments);
@@ -51,7 +53,7 @@ export class CommentsComponent extends React.Component<CommentsComponentProps, C
             inputMode: false,
             commentContent: "",
             errorMsg: "",
-            EditCommentIndx: -1,
+            EditCommentIndex: -1,
             showMaxComments: 5,
         };
     }
@@ -65,9 +67,7 @@ export class CommentsComponent extends React.Component<CommentsComponentProps, C
                 commentBy: this.props.user,
                 lastEditedUtc: new Date(Date.now()),
             };
-            let comments = [...this.props.comments];
-            comments.push(tmpComment);
-            this.props.onCommentsSubmit(comments);
+            this.props.onCommentCreate(tmpComment);
             this.setState({
                 commentContent: "",
                 errorMsg: "",
@@ -121,13 +121,13 @@ export class CommentsComponent extends React.Component<CommentsComponentProps, C
     };
 
     onEditComment = (indx: number) => {
-        if (this.state.EditCommentIndx == -1 || indx != this.state.EditCommentIndx) {
+        if (this.state.EditCommentIndex == -1 || indx != this.state.EditCommentIndex) {
             return (
                 <Typography type="body1">
                     {this.props.comments[indx].commentContent}
                 </Typography>
             );
-        } else if (indx == this.state.EditCommentIndx) {
+        } else if (indx == this.state.EditCommentIndex) {
             return (
                 <div>
                     <p>
@@ -146,11 +146,11 @@ export class CommentsComponent extends React.Component<CommentsComponentProps, C
     };
 
     EditAndSaveButton = (indx: number) => {
-        if (this.state.EditCommentIndx == -1 || indx != this.state.EditCommentIndx) {
+        if (this.state.EditCommentIndex == -1 || indx != this.state.EditCommentIndex) {
             return (
                 <IconButton style={iconButtonStyle}>
                     <Icon style={iconStyle} onClick={() => this.setState({
-                        EditCommentIndx: indx,
+                        EditCommentIndex: indx,
                         commentContent: this.props.comments[indx].commentContent,
                         errorMsg: ""
                     })}>mode_edit</Icon>
@@ -168,7 +168,9 @@ export class CommentsComponent extends React.Component<CommentsComponentProps, C
     };
 
     CancelAndDeleteButton = (indx: number) => {
-        if (this.state.EditCommentIndx == -1 || indx != this.state.EditCommentIndx) {
+        if (this.state.EditCommentIndex == -1 || indx != this.state.EditCommentIndex) {
+            if (!this.props.onCommentDelete)
+                return undefined;
             return (
                 <IconButton style={iconButtonStyle}>
                     <Icon style={iconStyle} onClick={() => this.DeleteComment(indx)}>delete</Icon>
@@ -178,7 +180,7 @@ export class CommentsComponent extends React.Component<CommentsComponentProps, C
         else {
             return (
                 <div style={{textAlign: "left"}}>
-                    <Button onClick={() => this.setState({EditCommentIndx: -1, commentContent: "", errorMsg: ""})}>
+                    <Button onClick={() => this.setState({EditCommentIndex: -1, commentContent: "", errorMsg: ""})}>
                         cancel
                     </Button>
                 </div>
@@ -192,8 +194,8 @@ export class CommentsComponent extends React.Component<CommentsComponentProps, C
             this.props.comments[indx].commentContent = this.state.commentContent;
             this.props.comments[indx].lastEditedUtc = new Date(Date.now());
             let updatedComment: CommentDto = this.props.comments[indx];
-            this.props.onCommentUpdate(commentId, updatedComment);
-            this.setState({EditCommentIndx: -1, commentContent: ""});
+            this.props.onCommentUpdate(updatedComment);
+            this.setState({EditCommentIndex: -1, commentContent: ""});
         }
         else {
             this.setState({errorMsg: "Cannot submit empty comment."});
@@ -202,12 +204,12 @@ export class CommentsComponent extends React.Component<CommentsComponentProps, C
 
 
 
-    renderCommentActions = (commentBy: UserDto, commentIndx: number) => {
+    renderCommentActions = (commentBy: UserDto, commentIndex: number) => {
         if (this.props.user && this.props.user.username == commentBy.username && commentBy._id == this.props.user._id) {
             return (
                 <div style={{float: "right"}}>
-                    {this.EditAndSaveButton(commentIndx)}
-                    {this.CancelAndDeleteButton(commentIndx)}
+                    {this.EditAndSaveButton(commentIndex)}
+                    {this.CancelAndDeleteButton(commentIndex)}
                 </div>
             )
         }
@@ -246,6 +248,8 @@ export class CommentsComponent extends React.Component<CommentsComponentProps, C
     };
 
     render() {
+        if (this.props.loading === true)
+            return <LoadingScreen />
         return (
             <div>
                 <List className={"Comments"}>

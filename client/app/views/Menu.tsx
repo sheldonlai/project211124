@@ -65,7 +65,7 @@ class MenuClass extends Component<MenuClassProps> {
         if (pathName === Routes.home){
             return "#FF6526";
         } else if (pathName.indexOf(Routes.question) !== -1){
-            return "#32d29d";
+            return "#008e52";
         } else if (pathName.indexOf(Routes.story) !== -1){
             return "#3066f8";
         } else {
