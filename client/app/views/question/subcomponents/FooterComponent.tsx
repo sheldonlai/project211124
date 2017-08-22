@@ -2,6 +2,7 @@ import * as React from "react";
 import {UserDto} from "../../../../../server/dtos/auth/UserDto";
 import {ThumbComponent} from "../../../components/Forms/ThumbComponent";
 import Grid from "material-ui/Grid";
+import {convertDateTimeToString} from "../../../utils/DateUtils";
 interface props {
     onUpVote: () => void;
     onDownVote: () => void;
@@ -35,7 +36,7 @@ export class FooterComponent extends React.Component<props> {
                     <Grid item xs={6}>
                         <div style={{color: "grey", fontSize: 10, textAlign: "right"}}>
                             <br/>
-                            {this.props.createdUtc && <div>Posted on {this.props.createdUtc}</div>}
+                            {this.props.createdUtc && <div>Posted on {convertDateTimeToString(this.props.createdUtc)}</div>}
                             <br/>
                             <div>by {this.props.author.username}</div>
                             <br/>

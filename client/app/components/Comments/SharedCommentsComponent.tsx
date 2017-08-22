@@ -11,6 +11,7 @@ import {UserDto} from "../../../../server/dtos/auth/UserDto";
 import {CommentDto} from "../../../../server/dtos/q&a/CommentDto";
 import {findIndex} from "../../utils/ArrayUtils";
 import {LoadingScreen} from "../Animations/LoadingScreen";
+import {convertDateTimeToString} from "../../utils/DateUtils";
 
 export interface CommentsComponentProps {
     comments: CommentDto[];
@@ -252,7 +253,7 @@ export class SharedCommentsComponent extends React.Component<CommentsComponentPr
                         {this.renderCommentActions(comment.commentBy, indx)}
                     </div>
                     <div style={{color: "grey", fontSize: 10, textAlign: "right", marginTop: 10}}>
-                        posted on {comment.lastEditedUtc}
+                        posted on {convertDateTimeToString(comment.lastEditedUtc)}
                         <br/>
                         by {comment.commentBy.username}
                     </div>

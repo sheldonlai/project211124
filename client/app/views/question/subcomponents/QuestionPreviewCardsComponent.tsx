@@ -7,6 +7,7 @@ import Grid from "material-ui/Grid";
 import Typography from "material-ui/Typography";
 import {isElementWide, sortListToGetSameWidthEachRow} from "../../../utils/WideBoxUtils";
 import QuestionPreview = FrontEndQuestionModels.QuestionPreview;
+import {convertDateToString} from "../../../utils/DateUtils";
 
 export interface QuestionPreviewCardsComponentProps {
     list: QuestionPreview[];
