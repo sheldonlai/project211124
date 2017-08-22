@@ -34,6 +34,7 @@ const changeOkState = (state, story: Story) => {
     state = {...state};
     state.status = ReducerStateStatus.DONE;
     state.story = story;
+    state.commentStatus = ReducerStateStatus.DONE;
     return state;
 };
 

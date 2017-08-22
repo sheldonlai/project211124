@@ -68,16 +68,20 @@ export class SharedCommentsComponent extends React.Component<CommentsComponentPr
                 lastEditedUtc: new Date(Date.now()),
             };
             this.props.onCommentCreate(tmpComment);
-            this.setState({
-                commentContent: "",
-                errorMsg: "",
-                inputMode: false,
-                showMaxComments: this.props.comments.length + 1
-            });
+            this.resetState();
         }
         else {
             this.setState({errorMsg: "Cannot submit empty comment."});
         }
+    };
+
+    resetState = () => {
+        this.setState({
+            commentContent: "",
+            errorMsg: "",
+            inputMode: false,
+            showMaxComments: this.props.comments.length + 1
+        });
     };
 
     onCommentChange = (event) => {
@@ -96,18 +100,32 @@ export class SharedCommentsComponent extends React.Component<CommentsComponentPr
     };
 
     renderInputCommentBox() {
-        if (this.state.inputMode) {
+        if (this.state.inputMode && this.state.EditCommentIndex === -1) {
             return (
                 <div>
                     {this.onErrMsg()}
                     <form>
-                        <TextField multiline rows={4} value={this.state.commentContent}
+                        <TextField
+                            style={{border: "1px lightgrey solid"}}
+                            multiline rows={4}
+                                   value={this.state.commentContent}
                                    fullWidth
                                    onChange={this.onCommentChange}/>
                     </form>
-                    <Button raised color="primary" onClick={this.addNewComment}>
-                        Submit
-                    </Button>
+                    <div style={{height: 36, margin: "4px 0px"}}>
+
+                        <Button
+                            style={{float: "right"}}
+                            color="primary"
+                            onClick={this.addNewComment}>
+                            Submit
+                        </Button>
+                        <Button
+                            style={{float: "right"}}
+                            onClick={this.resetState}>
+                            Cancel
+                        </Button>
+                    </div>
                 </div>
             )
         }
@@ -249,19 +267,29 @@ export class SharedCommentsComponent extends React.Component<CommentsComponentPr
 
     render() {
         if (this.props.loading === true)
-            return <LoadingScreen />
+            return <LoadingScreen size={100} padding={50}/>
         return (
             <div>
                 <List className={"Comments"}>
                     {this.renderComments()}
+                    {
+                        this.props.comments.length > this.state.showMaxComments &&
+                        <Button style={{width: "100%"}} onClick={this.onShowMore}>Show more comments</Button>
+                    }
                 </List>
-                <div className={styleSheet.root}>
-                    <IconButton>
-                        <Icon onClick={() => this.setState({inputMode: !this.state.inputMode})}>add_circle</Icon>
-                    </IconButton>
-                </div>
+
+                {
+                    !this.state.inputMode &&
+                    <div className={styleSheet.root}>
+                        <Button raised
+                                color="primary"
+                                style={{float: "right",}}
+                                onClick={() => this.setState({inputMode: !this.state.inputMode})}>
+                            Comment
+                        </Button>
+                    </div>
+                }
                 {this.renderInputCommentBox()}
-                <a style={{cursor: 'pointer'}} onClick={this.onShowMore}>Show more comments</a>
             </div>
         );
     }

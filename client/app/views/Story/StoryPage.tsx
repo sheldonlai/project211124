@@ -23,6 +23,7 @@ import Story = FrontEndStoryModels.Story;
 import Grid from "material-ui/Grid";
 import {SharedCommentsComponent} from "../../components/Comments/SharedCommentsComponent";
 import {CommentDto} from "../../../../server/dtos/q&a/CommentDto";
+
 export class StoryPage extends React.Component<props, { edit: boolean }> {
     constructor(props) {
         super(props);
@@ -34,11 +35,11 @@ export class StoryPage extends React.Component<props, { edit: boolean }> {
         this.props.fetchStoryPage(id);
     }
 
-    componentWillReceiveProps(nextProps: props){
-       if (this.props.story&&
-           JSON.stringify(this.props.story) !== JSON.stringify(nextProps.story)){
-           this.setState({edit: false});
-       }
+    componentWillReceiveProps(nextProps: props) {
+        if (this.props.story &&
+            JSON.stringify(this.props.story) !== JSON.stringify(nextProps.story)) {
+            this.setState({edit: false});
+        }
     }
 
     editButton() {
@@ -63,17 +64,20 @@ export class StoryPage extends React.Component<props, { edit: boolean }> {
                 <Paper style={paperStyle} elevation={0}>
                     {this.editButton()}
                     <Typography type="display1">{this.props.story.title}</Typography>
-                    <Typography type="caption" style={{flex: "flex-end"}}>by {this.props.story.author.username}</Typography>
+                    <Typography type="caption"
+                                style={{flex: "flex-end"}}>by {this.props.story.author.username}</Typography>
                     {this.editButton}
                     <Divider/>
                     <div>
                         <CustomEditor value={this.props.story.content} readOnly={true} border={false}/>
                         <div/>
                     </div>
-                    <SharedCommentsComponent comments={this.props.story.comments}
-                                       user={this.props.user}
-                                       onCommentCreate={(comment) => this.props.createComment(comment, story._id)}
-                                       onCommentUpdate={(comment) => this.props.updateComment(comment, story._id)}
+                    <SharedCommentsComponent
+                        comments={this.props.story.comments}
+                        user={this.props.user}
+                        onCommentCreate={(comment) => this.props.createComment(comment, story._id)}
+                        onCommentUpdate={(comment) => this.props.updateComment(comment, story._id)}
+                        loading={this.props.commentStatus == ReducerStateStatus.LOADING}
                     />
                 </Paper>
                 <div>
@@ -87,7 +91,7 @@ export class StoryPage extends React.Component<props, { edit: boolean }> {
 
     editor() {
         let story: Story = {...this.props.story};
-        story.tags = story.tags.map((tag)=> tag.tag);
+        story.tags = story.tags.map((tag) => tag.tag);
         return (
             <SplitVIewTemplate>
                 <StoryEditor story={story} onSubmit={this.props.updateStory} onCancel={this.onCancel}/>
@@ -124,8 +128,8 @@ interface StateToProps extends StoryPageReducerState {
 interface DispatchToProps {
     fetchStoryPage: (id: string) => void;
     updateStory: (story: Story) => void;
-    createComment: (comment:CommentDto, storyId: string) => void;
-    updateComment: (comment:CommentDto, storyId: string) => void;
+    createComment: (comment: CommentDto, storyId: string) => void;
+    updateComment: (comment: CommentDto, storyId: string) => void;
 }
 
 interface props extends StateToProps, DispatchToProps, RouteComponentProps<{ id: string }> {
@@ -140,8 +144,8 @@ const mapStateToProps = (state: AppStoreState): StateToProps => ({
 const mapDispatchToProps = (dispatch): DispatchToProps => ({
     fetchStoryPage: (id: string) => dispatch(StoryActions.fetchStoryPage(id)),
     updateStory: (story: Story) => dispatch(StoryActions.updateStory(story)),
-    createComment: (comment:CommentDto, storyId: string) => dispatch(StoryActions.createComment(comment, storyId)),
-    updateComment: (comment:CommentDto, storyId: string) => dispatch(StoryActions.updateComment(comment, storyId)),
+    createComment: (comment: CommentDto, storyId: string) => dispatch(StoryActions.createComment(comment, storyId)),
+    updateComment: (comment: CommentDto, storyId: string) => dispatch(StoryActions.updateComment(comment, storyId)),
 });
 
 export const StoryPageView = connect<StateToProps, DispatchToProps, RouteComponentProps<{ id: string }>>(
