@@ -46,3 +46,4 @@ export const SearchByNameAndUniversityQuery = (firstName: string, lastName: stri
     console.log(JSON.stringify(query));
     return query;
 };
+

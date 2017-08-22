@@ -12,8 +12,17 @@ import {ReducerStateStatus} from "../../constants/ReducerStateStatus";
 import {LoadingScreen} from "../../components/Animations/LoadingScreen";
 import {RatingPreviewCard} from "./subcomponents/RatingPreviewCard";
 import {TeammateRecordDto} from "../../../../server/dtos/rating/TeammateRecordDto";
+import Input from "material-ui/Input/Input";
+import Icon from 'material-ui/Icon';
+import IconButton from 'material-ui/IconButton'
 
 export class RatingHomeViewComponent extends React.Component<StateToProps & DispatchToProps, any> {
+    constructor(props) {
+        super(props);
+        this.state = {
+            searchString: "",
+        };
+    }
 
     componentWillMount() {
         this.props.fetchRatingPreviews();
@@ -23,13 +32,47 @@ export class RatingHomeViewComponent extends React.Component<StateToProps & Disp
         return (<RatingPreviewCard preview={preview} key={index}/>);
     };
 
-    FindSimilarTeammates = (InputString: string) => {
+    onSearchStringChange = (event) => {
+        this.setState({searchString: event.target.value});
+    };
 
+    renderSearchBar = () => {
+        const pos = {
+            padding: 10,
+            Position: 'relative',
+            left: 700,
+            top: 0,
+        };
+        return(
+            <div>
+                <Input
+                    placeholder="Search..."
+                    value = {this.state.searchString}
+                    onChange = {this.onSearchStringChange}
+                    style = {pos}
+                    inputProps={{
+                        'aria-label': 'Description',
+                    }}
+                />
+                <IconButton style = {{float: "right",}} onClick = {this.FindSimilarTeammates}>
+                    <Icon>search</Icon>
+                </IconButton>
+            </div>
+        )
+    }
+
+    FindSimilarTeammates = () => {
+        console.log(this.state.searchString);
+        let InputTeammate: TeammateRecordDto = {
+            _id: '',
+
+        }
     };
 
     render() {
         return (
             <div style={{padding: 10}}>
+                {this.renderSearchBar()}
                 <Grid container justify="center" direction="row-reverse">
                     <Grid item xs={12} md={3} lg={2}>
                     </Grid>
