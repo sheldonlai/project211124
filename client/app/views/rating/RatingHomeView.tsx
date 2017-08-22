@@ -11,14 +11,20 @@ import {CardActions, CardContent} from 'material-ui/Card';
 import {ReducerStateStatus} from "../../constants/ReducerStateStatus";
 import {LoadingScreen} from "../../components/Animations/LoadingScreen";
 import {RatingPreviewCard} from "./subcomponents/RatingPreviewCard";
+import {TeammateRecordDto} from "../../../../server/dtos/rating/TeammateRecordDto";
 
 export class RatingHomeViewComponent extends React.Component<StateToProps & DispatchToProps, any> {
+
     componentWillMount() {
         this.props.fetchRatingPreviews();
     }
 
     recordRow = (preview: TeammatePreviewDto, index: number) => {
         return (<RatingPreviewCard preview={preview} key={index}/>);
+    };
+
+    FindSimilarTeammates = (InputString: string) => {
+
     };
 
     render() {
@@ -47,10 +53,12 @@ export class RatingHomeViewComponent extends React.Component<StateToProps & Disp
 
 interface DispatchToProps {
     fetchRatingPreviews: () => void;
+    FindSimilarTeammates: (InputTeammate: TeammateRecordDto) => void;
 }
 
 const mapDispatchToProps = (dispatch): DispatchToProps => ({
-    fetchRatingPreviews: () => dispatch(RatingActions.getTeammateRecordPreview())
+    fetchRatingPreviews: () => dispatch(RatingActions.getTeammateRecordPreview()),
+    FindSimilarTeammates: (InputTeammate: TeammateRecordDto) => dispatch(RatingActions.searchForTeammate(InputTeammate))
 });
 
 interface StateToProps {
