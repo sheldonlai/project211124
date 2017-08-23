@@ -8,7 +8,7 @@ import {Routes} from "../constants/Routes";
 import {RegistrationPage} from "./auth/RegistrationView";
 import {RouterController} from "../api.controllers/RouterController";
 import {Provider} from "react-redux";
-import {Menu} from "./Menu";
+import {MenuView} from "./Menu";
 import {ErrorSnackBar} from "./ErrorView";
 import {UserProfileView} from "./profile/UserProfileView";
 import {RatingHomeView} from "./rating/RatingHomeView";
@@ -48,7 +48,7 @@ export class App extends React.Component<any, any> {
                 <Provider store={this.props.store}>
                     <Router history={RouterController.history}>
                         <div>
-                            <Route path={Routes.home} component={Menu}/>
+                            <Route path={Routes.home} component={MenuView}/>
                             <Route path={Routes.home} component={ErrorSnackBar}/>
                             <Route exact path={Routes.home} component={Home}/>
                             <Route exact path={Routes.login} component={LoginPage}/>

@@ -63,10 +63,10 @@ export class RatingHomeViewComponent extends React.Component<StateToProps & Disp
 
     FindSimilarTeammates = () => {
         console.log(this.state.searchString);
-        let InputTeammate: TeammateRecordDto = {
-            _id: '',
-
-        }
+        // let InputTeammate: TeammateRecordDto = {
+        //     _id: '',
+        //
+        // }
     };
 
     render() {
