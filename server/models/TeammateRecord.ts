@@ -48,6 +48,7 @@ export interface ITeammateRecord extends TeammateRecord, Document {}
 
 const schema = new Schema({
     firstName: {type: String, es_indexed: true},
+    middleName: {type: String, es_indexed: true},
     lastName: {type: String, es_indexed: true},
     university: {
         type: Schema.Types.ObjectId, ref: "university",

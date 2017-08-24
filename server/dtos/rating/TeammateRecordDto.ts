@@ -13,6 +13,7 @@ export interface AcademicInfoDto {
 export interface TeammateRecordDto {
     _id: string;
     firstName: string;
+    middleName?: string;
     lastName: string;
     description: string;
     university?: UniversityDto; // university id

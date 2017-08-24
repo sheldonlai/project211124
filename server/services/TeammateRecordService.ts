@@ -8,7 +8,7 @@ import {TeammateRatingDto} from "../dtos/rating/TeammateRatingDto";
 import {TeammatePreviewDto} from "../dtos/rating/TeammatePreviewDto";
 import {AppError} from "../errors/AppError";
 import {ClientError} from "../errors/HttpStatus";
-import {SearchByNameAndUniversityQuery} from "../elasticSearch/TeammateRecordQueries";
+import {SearchByNameAndUniversityQuery, BlurrySearch} from "../elasticSearch/TeammateRecordQueries";
 import {elasticSearchModel} from "../elasticSearch/ElasticSearchUtils";
 import {universitySchema} from "../models/LocationModels/Universities";
 
@@ -16,6 +16,8 @@ export interface ITeammateRecordService {
     createTeammateRecordRepo (teammateRecord: TeammateRecordDto, currentUser: User): Promise<TeammateRecordDto>;
 
     searchForSimilarTeammateRecord (t: SearchTeammateDto): Promise<TeammatePreviewDto[]>;
+
+    BlurryTeammateSearch(InputStrings: string[]) : Promise<TeammatePreviewDto[]>;
 
     getRecentTeammateRecordPreview (currentUser?: User): Promise<TeammatePreviewDto[]>;
 
@@ -47,6 +49,12 @@ export class TeammateRecordService extends BaseService implements ITeammateRecor
 
     searchForSimilarTeammateRecord (t: SearchTeammateDto): Promise<TeammatePreviewDto[]> {
         let query = SearchByNameAndUniversityQuery(t.firstName, t.lastName, t.university, t.year);
+        return this.teammateRecordRepo.searchRecord(query).then((teammates) =>
+            teammates.map((teammate) => this.convertTeammateToPreview(teammate)));
+    }
+
+    BlurryTeammateSearch(InputStrings: string[]) : Promise<TeammatePreviewDto[]> {
+        let query = BlurrySearch(InputStrings);
         return this.teammateRecordRepo.searchRecord(query).then((teammates) =>
             teammates.map((teammate) => this.convertTeammateToPreview(teammate)));
     }

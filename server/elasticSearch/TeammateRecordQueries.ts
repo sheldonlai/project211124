@@ -47,3 +47,46 @@ export const SearchByNameAndUniversityQuery = (firstName: string, lastName: stri
     return query;
 };
 
+export const BlurrySearch = (InputStrings: string[]) => {
+    if(InputStrings.length == 0){
+        return {"match_none": {}}
+    }
+
+    let query = ({
+        "bool":{
+            "minimum_should_match": InputStrings.length / 2,
+        }
+    });
+
+    let shouldArray: any[] = [];
+    InputStrings.forEach((inputString) => {
+        shouldArray.push({
+            "match": {
+                "firstName": inputString,
+                "operator": "or",
+            }
+        });
+        shouldArray.push({
+            "match": {
+                "middleName": inputString,
+                "operator": "or",
+            }
+        });
+        shouldArray.push({
+            "match": {
+                "lastName": inputString,
+                "operator": "or",
+            }
+        });
+        shouldArray.push({
+            "match": {
+                "description": inputString,
+                "operator": "or",
+            }
+        });
+    });
+    query.bool["should"] = shouldArray;
+    console.log(JSON.stringify(query));
+    return query;
+};
+
