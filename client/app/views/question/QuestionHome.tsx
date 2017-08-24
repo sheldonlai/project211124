@@ -37,15 +37,15 @@ class QuestionHomeComponent extends Component<QuestionViewProps> {
         }
         return (
             <Grid container justify="center" >
-                <Grid item xs={12} style={{maxWidth: 1620}}>
+                <Grid item xs={12} style={{maxWidth: 1082}}>
                     <Grid container justify="flex-end" style={{width: "100%"}}>
                         <Grid item>
                             {this.createQuestionButton()}
                         </Grid>
                     </Grid>
                     <QuestionPreviewCardsComponent list={this.props.featuredQuestions}
-                                                   label="Featured" trim={true} maxWidth={1620}/>
-                    <QuestionPreviewCardsComponent list={this.props.myQuestions} label="My Questions" maxWidth={1620}/>
+                                                   label="Featured" trim={true} maxWidth={1082}/>
+                    <QuestionPreviewCardsComponent list={this.props.myQuestions} label="My Questions" maxWidth={1082}/>
                 </Grid>
             </Grid>
         )

@@ -13,6 +13,9 @@ import {UserDto} from "../../../server/dtos/auth/UserDto";
 import Typography from 'material-ui/Typography';
 import Toolbar from 'material-ui/Toolbar';
 import Menu, {MenuItem} from 'material-ui/Menu';
+import IconButton from 'material-ui/IconButton';
+import MenuIcon from 'material-ui-icons/Menu';
+import List, {ListItem, ListItemIcon, ListItemText} from 'material-ui/List';
 
 const menuButtonStyle: CSSProperties = {
     height: "50px",
@@ -30,7 +33,7 @@ export interface MenuClassProps extends RouteComponentProps<{}> {
 interface state {
     open: boolean,
     width: number;
-    height: number;
+    collapsed: boolean;
 }
 
 class MenuClass extends Component<MenuClassProps, state> {
@@ -38,16 +41,16 @@ class MenuClass extends Component<MenuClassProps, state> {
     state = {
         open: false,
         width: 0,
-         height :0
+        collapsed: true
     };
 
     handleRequestClose = () => {
         this.setState({open: false});
     };
 
-    button = (text: string, to: string) => (
+    button = (text: string, to: string, fullWidth?: boolean) => (
         <CustomLink to={to}>
-            <Button color="contrast" style={menuButtonStyle}>
+            <Button color="contrast" style={{...menuButtonStyle, width: fullWidth ? "100%" : undefined}}>
                 {text}
             </Button>
         </CustomLink>
@@ -89,10 +92,9 @@ class MenuClass extends Component<MenuClassProps, state> {
                         onRequestClose={this.handleRequestClose}
                     >
                         <MenuItem
-                            onClick={()=>this.handleMenuClick('profile')}
+                            onClick={() => this.handleMenuClick('profile')}
                             selected={false}>
                             <CustomLink
-
                                 to={Routes.my_profile}>
                                 Profile
                             </CustomLink>
@@ -100,9 +102,9 @@ class MenuClass extends Component<MenuClassProps, state> {
 
                         <MenuItem
                             selected={false}
-                            onClick={()=>this.handleMenuClick('logout')}
+                            onClick={() => this.handleMenuClick('logout')}
                         >
-                            <div style={{width: 100}}>Log Out</div>
+                            <div style={{width: 150}}>Log Out</div>
                         </MenuItem>
 
                     </Menu>
@@ -116,13 +118,79 @@ class MenuClass extends Component<MenuClassProps, state> {
         if (pathName === Routes.home) {
             return "#FF6526";
         } else if (pathName.indexOf(Routes.question) !== -1) {
-            return "#008e52";
+            return "#6bb4f8";
         } else if (pathName.indexOf(Routes.story) !== -1) {
             return "#3066f8";
         } else {
             return "#37474F";
         }
 
+    };
+
+    largeMenu = () => {
+        return (
+            <Toolbar style={{paddingLeft: 10, paddingRight: 10}}>
+                <div style={{flex: 1}}>
+                    <CustomLink to={Routes.home}>
+                        <Button color="contrast" style={menuButtonStyle}>
+                            <Typography type="title" color="inherit">
+                                Askalot
+                            </Typography>
+                        </Button>
+                    </CustomLink>
+                    {this.button("Questions", Routes.question)}
+                    {this.button("Stories", Routes.story)}
+                    {this.button("Teammate", Routes.rate_my_teammate)}
+                </div>
+                <div>
+                    {this.buttons()}
+                </div>
+            </Toolbar>
+        )
+    };
+
+    smallMenu = () => {
+        return (
+            <div>
+                <Toolbar>
+                    <IconButton color="contrast"
+                                aria-label="Menu"
+                                onClick={this.openMenu}
+                    >
+                        <MenuIcon/>
+                    </IconButton>
+                    <Typography type="title" color="inherit">
+                        Askalot
+                    </Typography>
+
+                </Toolbar>
+                {
+                    !this.state.collapsed &&
+                    <div>
+                        {this.button("Questions", Routes.question, true)}
+                        {this.button("Stories", Routes.story, true)}
+                        {this.button("Teammate", Routes.rate_my_teammate, true)}
+
+                        {
+                            this.props.loggedIn ?
+                                <div>
+                                    {this.button("Profile", Routes.my_profile, true)}
+                                    <Button color="contrast"
+                                             style={{...menuButtonStyle, width: "100%"}}
+                                             onClick={() => this.handleMenuClick('logout')}>
+                                        Log Out
+                                    </Button>
+                                </div> :
+                                this.button("Login", Routes.login, true)
+                        }
+                    </div>
+                }
+            </div>
+        )
+    };
+
+    openMenu = () => {
+        this.setState({collapsed: !this.state.collapsed});
     };
 
     componentDidMount() {
@@ -135,32 +203,20 @@ class MenuClass extends Component<MenuClassProps, state> {
     }
 
     updateWindowDimensions = () => {
-        this.setState({ width: window.innerWidth, height: window.innerHeight});
+        this.setState({width: window.innerWidth});
     };
+
 
     render() {
         let color = this.getColor();
-        // if (this.state.width > )
+        const smallScreen = this.state.width <= 650;
         return (
             <AppBar position="static" className="menu" style={{backgroundColor: color}}>
-                <Toolbar>
-                    <div style={{flex: 1}}>
-                        <CustomLink to={Routes.home}>
-                            <Button color="contrast" style={menuButtonStyle}>
-                                <Typography type="title" color="inherit">
-                                    Askalot
-                                </Typography>
-                            </Button>
-                        </CustomLink>
-                        {this.button("Questions", Routes.question)}
-                        {this.button("Stories", Routes.story)}
-                        {this.button("Teammate", Routes.rate_my_teammate)}
-                    </div>
-                    <div style={{float: "left"}}>
-                        {this.buttons()}
-                    </div>
 
-                </Toolbar>
+                {!smallScreen ?
+                    this.largeMenu() :
+                    this.smallMenu()
+                }
             </AppBar>
         )
     }

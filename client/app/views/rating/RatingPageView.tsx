@@ -62,7 +62,7 @@ export class RatingViewComponent extends React.Component<props, state> {
     }
 
     componentWillReceiveProps(nextProps: props) {
-        if (JSON.stringify(this.props.ratingPage) !== JSON.stringify(nextProps.ratingPage)) {
+        if (this.props.lastUpdated !== nextProps.lastUpdated) {
             this.setState({record: {...nextProps.ratingPage}, edit: false});
         }
     }

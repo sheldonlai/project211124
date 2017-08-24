@@ -14,9 +14,9 @@ interface state {
 }
 
 interface props {
-    list : StoryPreview[];
+    list: StoryPreview[];
     label: string;
-    maxWidth? : number;
+    maxWidth?: number;
     trim?: boolean;
 }
 
@@ -40,7 +40,7 @@ export class StoryPreviews extends React.Component<props, state> {
         this.setState({width: window.innerWidth, height: window.innerHeight});
     };
 
-    prepareStoryUrl = (url: string, preview : StoryPreview) => {
+    prepareStoryUrl = (url: string, preview: StoryPreview) => {
         return url.replace(":id", preview._id).replace(":name", preview.title)
     };
 
@@ -52,25 +52,27 @@ export class StoryPreviews extends React.Component<props, state> {
         let n = Math.floor((width - bodyMargin) / (250 + 16));
         let list = sortListToGetSameWidthEachRow(this.props.list, n, this.props.trim);
         return (
-            <div style={{marginTop: 16}}>
-                <Typography type="display2" style={{margin: "20px 20px 10px 20px"}}>{this.props.label}</Typography>
-                <Grid container justify="center">
-                    {list.map((e: StoryPreview) => (
-                        <Grid item key={e.title}>
-                            <div style={{display: "inline-block"}}>
-                                <CustomLink to={this.prepareStoryUrl(Routes.story_by_id, e)}>
-                                    <CustomCard
-                                        title={e.title}
-                                        content={e.content}
-                                        date={e.createdAt}
-                                        wide={n > 1 && isElementWide(e)}
-                                    />
-                                </CustomLink>
-                            </div>
-                        </Grid>
-                    ))}
+            <Grid container justify="center">
+                <Grid item style={{marginTop: 16, width: n * 266}}>
+                    <Typography type="display2" style={{marginBottom: 10}}>{this.props.label}</Typography>
+                    <Grid container justify="center">
+                        {list.map((e: StoryPreview) => (
+                            <Grid item key={e.title}>
+                                <div style={{display: "inline-block"}}>
+                                    <CustomLink to={this.prepareStoryUrl(Routes.story_by_id, e)}>
+                                        <CustomCard
+                                            title={e.title}
+                                            content={e.content}
+                                            date={e.createdAt}
+                                            wide={n > 1 && isElementWide(e)}
+                                        />
+                                    </CustomLink>
+                                </div>
+                            </Grid>
+                        ))}
+                    </Grid>
                 </Grid>
-            </div>
+            </Grid>
         );
     }
 }
