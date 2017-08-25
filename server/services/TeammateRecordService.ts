@@ -11,6 +11,8 @@ import {ClientError} from "../errors/HttpStatus";
 import {SearchByNameAndUniversityQuery, BlurrySearch} from "../elasticSearch/TeammateRecordQueries";
 import {elasticSearchModel} from "../elasticSearch/ElasticSearchUtils";
 import {universitySchema} from "../models/LocationModels/Universities";
+import * as _ from "lodash";
+import {STATUS_CODES} from "http";
 
 export interface ITeammateRecordService {
     createTeammateRecordRepo (teammateRecord: TeammateRecordDto, currentUser: User): Promise<TeammateRecordDto>;
@@ -79,7 +81,11 @@ export class TeammateRecordService extends BaseService implements ITeammateRecor
               teammateRatingId: string,
               currentUser: User): Promise<TeammateRecordDto> {
         return this.teammateRecordRepo.getById(teammateRatingId).then((teammate: TeammateRecord) => {
-            const now = new Date(Date.now());
+            if (_.findIndex(teammate.ratings, (rating) =>
+                    rating.createdBy._id.toString() === currentUser._id.toString()) !== -1){
+                  throw new AppError("There is already a rating under your name.", ClientError.BAD_REQUEST);
+            }
+            const now = new Date();
             teammateRatingDto.createdAt = now;
             teammateRatingDto.updatedAt = now;
             teammateRatingDto.createdBy = currentUser;

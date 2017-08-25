@@ -7,7 +7,7 @@ import {convertDateToString} from "../../utils/DateUtils";
 
 const styleSheet = createStyleSheet('SimpleCard', theme => ({
     card: {
-        height: 250,
+        height: 200,
         yOverflow: "hidden",
         position: "relative",
         //background:"linear-gradient(transparent 150px, white)"
@@ -18,7 +18,7 @@ const styleSheet = createStyleSheet('SimpleCard', theme => ({
         color: theme.palette.text.secondary,
     },
     pos: {
-        marginBottom: 12,
+        fontSize: 10,
         color: theme.palette.text.secondary,
     },
     shader: {
@@ -28,7 +28,7 @@ const styleSheet = createStyleSheet('SimpleCard', theme => ({
         position: "absolute",
         left: 0,
         top: 0,
-        background: "linear-gradient(transparent 200px, white 220px)",
+        background: "linear-gradient(transparent 150px, white 175px)",
     }
 }));
 
@@ -57,17 +57,17 @@ export class CardComponent extends React.Component<CardComponentProps, any> {
                 <Card className={classes.card} style={{width: width}}>
                     <div className={classes.shader}/>
                     <CardContent>
-                        <Typography type="headline" component="h2">
+                        <Typography type="headline" style={{fontSize: 18}}>
                             {this.props.title}
                         </Typography>
                         <Typography type="body1" className={classes.pos}>
                             {convertDateToString(this.props.date)}
                         </Typography>
-                        <Typography type="body1"  style={{height: 150}}>
+                        <Typography type="body1"  style={{height: 150, fontSize: 12}}>
                             {this.props.content}
                         </Typography>
                     </CardContent>
-                    <CardActions style={{position: "absolute", bottom: 0, right: 0}}>
+                    <CardActions style={{position: "absolute", bottom: 0, right: 0, height: 36}}>
                         <Button dense color="primary" onClick={this.props.onClick}>Read More</Button>
                     </CardActions>
                 </Card>

@@ -1,5 +1,5 @@
 import * as React from "react";
-import {isElementWide, sortListToGetSameWidthEachRow} from "../../../utils/WideBoxUtils";
+import {getLengthFromBoxes, isElementWide, sortListToGetSameWidthEachRow} from "../../../utils/WideBoxUtils";
 import Typography from "material-ui/Typography";
 import {CustomLink} from "../../../components/CustomLink";
 import {CustomCard} from "../../../components/CardComponent/CardComponent";
@@ -51,6 +51,10 @@ export class StoryPreviews extends React.Component<props, state> {
         width = width;
         let n = Math.floor((width - bodyMargin) / (250 + 16));
         n = n > this.props.maxBlock? this.props.maxBlock : n;
+        if (this.props.list.length < n){
+            let length = getLengthFromBoxes(this.props.list)
+            n = n > length? length : n;
+        }
         let list = sortListToGetSameWidthEachRow(this.props.list, n, this.props.trim);
         return (
             <Grid container justify="center">

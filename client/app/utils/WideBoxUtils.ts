@@ -29,6 +29,15 @@ const findSlimBoxFromReverse = (list: any[],index? : number, stopIndex?: number)
     }
     return -1;
 };
+
+export const getLengthFromBoxes = (list: any[]) => {
+    let length = 0;
+    for (let el of list){
+        length += isElementWide(el)? 2 : 1;
+    }
+    return length;
+};
+
 export const sortListToGetSameWidthEachRow = (list: any[], numOfBoxPerRow: number, trim?: boolean) => {
     let rList = [...list];
     if (numOfBoxPerRow <= 1){
