@@ -51,10 +51,10 @@ export const BlurrySearch = (InputStrings: string[]) => {
     if(InputStrings.length == 0){
         return {"match_none": {}}
     }
-
+    console.log("string length/2 = " + InputStrings.length/2);
     let query = ({
         "bool":{
-            "minimum_should_match": InputStrings.length / 2,
+            "minimum_should_match": Math.ceil(InputStrings.length/2),
         }
     });
 
@@ -63,25 +63,21 @@ export const BlurrySearch = (InputStrings: string[]) => {
         shouldArray.push({
             "match": {
                 "firstName": inputString,
-                "operator": "or",
             }
         });
         shouldArray.push({
             "match": {
                 "middleName": inputString,
-                "operator": "or",
             }
         });
         shouldArray.push({
             "match": {
                 "lastName": inputString,
-                "operator": "or",
             }
         });
         shouldArray.push({
             "match": {
                 "description": inputString,
-                "operator": "or",
             }
         });
     });

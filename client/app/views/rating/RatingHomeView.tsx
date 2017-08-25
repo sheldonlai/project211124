@@ -62,11 +62,8 @@ export class RatingHomeViewComponent extends React.Component<StateToProps & Disp
     }
 
     FindSimilarTeammates = () => {
-        console.log(this.state.searchString);
-        // let InputTeammate: TeammateRecordDto = {
-        //     _id: '',
-        //
-        // }
+        let splittedStrings: string[] = this.state.searchString.split(" ");
+        this.props.BlurrySearch(splittedStrings);
     };
 
     render() {
@@ -96,17 +93,17 @@ export class RatingHomeViewComponent extends React.Component<StateToProps & Disp
 
 interface DispatchToProps {
     fetchRatingPreviews: () => void;
-    FindSimilarTeammates: (InputTeammate: TeammateRecordDto) => void;
+    BlurrySearch: (InputStrings: string[]) => void;
 }
 
 const mapDispatchToProps = (dispatch): DispatchToProps => ({
     fetchRatingPreviews: () => dispatch(RatingActions.getTeammateRecordPreview()),
-    FindSimilarTeammates: (InputTeammate: TeammateRecordDto) => dispatch(RatingActions.searchForTeammate(InputTeammate))
+    BlurrySearch: (InputStrings: string[]) => dispatch(RatingActions.BlurrySearch(InputStrings)),
 });
 
 interface StateToProps {
     ratingPreviewStatus: ReducerStateStatus;
-    ratingPreviews: TeammatePreviewDto[]
+    ratingPreviews: TeammatePreviewDto[];
 }
 
 const mapStateToProps = (state: AppStoreState): StateToProps => ({

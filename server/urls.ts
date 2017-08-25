@@ -50,6 +50,7 @@ export class APIUrls {
     static editRating = "/edit-teammate-rating/:id";
 
     static searchForTeammate = "/search-teammate";
+    static BlurryTeammateSearch = "/blurry-teammate-search";
 
     /* Story */
     static getStoryPreviews = "/story-previews";

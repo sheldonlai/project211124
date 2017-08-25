@@ -28,6 +28,14 @@ export const RatingHomeReducer = (state = initialState, action) : RatingHomeRedu
             state.status = ReducerStateStatus.DONE;
             state.previews = action.data;
             return state;
+
+        case RatingActionTypes.BlurrySearchPreviewRequest:
+            return getLoadingState(state);
+        case RatingActionTypes.BlurrySearchPreviewOK:
+            state = {...state};
+            state.status = ReducerStateStatus.DONE;
+            state.previews = action.data;
+
         default:
             return state;
     }

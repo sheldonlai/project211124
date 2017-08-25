@@ -56,7 +56,10 @@ export class TeammateRecordService extends BaseService implements ITeammateRecor
     BlurryTeammateSearch(InputStrings: string[]) : Promise<TeammatePreviewDto[]> {
         let query = BlurrySearch(InputStrings);
         return this.teammateRecordRepo.searchRecord(query).then((teammates) =>
-            teammates.map((teammate) => this.convertTeammateToPreview(teammate)));
+            teammates.map((teammate) =>
+            {
+                return this.convertTeammateToPreview(teammate)
+            }));
     }
 
     getRecentTeammateRecordPreview(currentUser?: User): Promise<TeammatePreviewDto[]> {

@@ -95,6 +95,21 @@ export class RatingActions extends BaseActions {
         }
     }
 
+    static BlurrySearch(InputStrings: string[]) {
+        return function(dispatch) {
+            dispatch({
+                type: RatingActionTypes.BlurrySearchPreviewRequest,
+            });
+            apiController.BlurryTeammateSearch(InputStrings).then((res) => {
+                dispatch({
+                    type: RatingActionTypes.BlurrySearchPreviewOK,
+                    data: res.data,
+                });
+            }).catch((err) =>
+                RatingActions.handleError(dispatch, err, RatingActionTypes.BlurrySearchPreviewError));
+        }
+    }
+
 
 
 
