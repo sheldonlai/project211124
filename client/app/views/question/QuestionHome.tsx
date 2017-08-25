@@ -44,8 +44,8 @@ class QuestionHomeComponent extends Component<QuestionViewProps> {
                         </Grid>
                     </Grid>
                     <QuestionPreviewCardsComponent list={this.props.featuredQuestions}
-                                                   label="Featured" trim={true} maxWidth={1082}/>
-                    <QuestionPreviewCardsComponent list={this.props.myQuestions} label="My Questions" maxWidth={1082}/>
+                                                   label="Featured" trim={false} maxBlock={4}/>
+                    <QuestionPreviewCardsComponent list={this.props.myQuestions} label="My Questions" maxBlock={4}/>
                 </Grid>
             </Grid>
         )

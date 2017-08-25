@@ -9,7 +9,7 @@ export const getQuestionsQueryByPreference = (userPreference: UserPreferences) =
       "should": [
         {
           "range": {
-            "createdAt": {
+            "createdUtc": {
               "gte": "2016",
               "format": "yyyy"
             }
@@ -19,7 +19,7 @@ export const getQuestionsQueryByPreference = (userPreference: UserPreferences) =
           "function_score": {
             "query": {
               "range": {
-                "createdAt": {
+                "createdUtc": {
                   "gte": "2016",
                   "format": "dd/MM/yyyy||yyyy"
                 }
