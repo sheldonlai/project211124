@@ -16,8 +16,8 @@ export namespace FrontEndStoryModels {
         downVotes: number;
         views: number;
         isPublished: boolean;
-        createdAt : Date;
-        updatedAt : Date;
+        createdUtc : Date;
+        lastEditedUtc : Date;
         comments: StoryComment[];
         publicityStatus: PublicityStatus;
         category: CategoryTypeEnum;
@@ -43,8 +43,8 @@ export namespace FrontEndStoryModels {
         upVotes: number;
         downVotes: number;
         views: number;
-        createdAt: Date;
-        updatedAt: Date;
+        createdUtc: Date;
+        lastEditedUtc: Date;
     }
 
 }

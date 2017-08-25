@@ -16,7 +16,7 @@ interface state {
 interface props {
     list: StoryPreview[];
     label: string;
-    maxWidth?: number;
+    maxBlock?: number;
     trim?: boolean;
 }
 
@@ -48,8 +48,9 @@ export class StoryPreviews extends React.Component<props, state> {
         if (!this.props.list) return undefined;
         const bodyMargin = 16;
         let width = this.state.width;
-        width = this.props.maxWidth && width > this.props.maxWidth ? this.props.maxWidth : width;
+        width = width;
         let n = Math.floor((width - bodyMargin) / (250 + 16));
+        n = n > this.props.maxBlock? this.props.maxBlock : n;
         let list = sortListToGetSameWidthEachRow(this.props.list, n, this.props.trim);
         return (
             <Grid container justify="center">
@@ -63,7 +64,7 @@ export class StoryPreviews extends React.Component<props, state> {
                                         <CustomCard
                                             title={e.title}
                                             content={e.content}
-                                            date={e.createdAt}
+                                            date={e.createdUtc}
                                             wide={n > 1 && isElementWide(e)}
                                         />
                                     </CustomLink>

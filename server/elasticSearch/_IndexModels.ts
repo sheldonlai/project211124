@@ -4,6 +4,7 @@ import {TagModel} from "../models/Tags";
 import {UserModel} from "../models/User";
 import {TeammateRecordModel} from "../models/TeammateRecord";
 import {QuestionModel} from "../models/Question";
+import {StoryModel} from "../models/Story";
 
 let loadModels = {TagModel, CountryModel, UniversityModel, UserModel};
 
@@ -11,7 +12,7 @@ export const synchronizeIndex = async (isServer = false) => {
 
     let indexModels: any[] = [
         //QuestionModel, // question takes too long to index?
-        UserModel, TeammateRecordModel
+        UserModel, TeammateRecordModel, StoryModel
     ];
     if (isServer)
         indexModels.push(QuestionModel);

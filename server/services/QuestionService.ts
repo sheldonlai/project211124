@@ -117,7 +117,7 @@ export class QuestionService extends BaseService implements IQuestionService {
             questionFound.category = questionDto.category;
 
             // update last edited utc
-            questionFound.lastEditedUtc = new Date(Date.now());
+            questionFound.lastEditedUtc = new Date();
 
             return this.questionRepository.update(questionFound)
                 .then((question)=> this.questionRepository.getById(question._id));

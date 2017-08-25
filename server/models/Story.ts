@@ -31,8 +31,8 @@ export class Story extends BaseModel {
     downVotes: number;
     views: number;
     isPublished: boolean;
-    createdAt : Date;
-    updatedAt : Date;
+    createdUtc : Date;
+    lastEditedUtc : Date;
     comments: StoryComment[];
     publicityStatus: PublicityStatus;
     category: CategoryTypeEnum;
@@ -88,9 +88,8 @@ const storySchema = new Schema({
         lastEditedUtc: {type: Date, default: Date.now}
     }],
     views: {type: Number, default: 0, es_indexed: true},
-
-},{
-    timestamps: true
+    lastEditedUtc: {type: Date, default: Date.now, es_indexed: true},
+    createdUtc: {type: Date, default: Date.now, es_indexed: true},
 });
 
 

@@ -27,8 +27,7 @@ export class QuestionRepository extends BaseRepository<Question, IQuestion> impl
     }
 
     update(question: Question): Promise<Question> {
-        delete question.createdUtc;
-        question.lastEditedUtc = new Date(Date.now());
+        question.createdUtc = undefined;
         return super.update(question);
     }
 

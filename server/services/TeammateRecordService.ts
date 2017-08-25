@@ -66,7 +66,7 @@ export class TeammateRecordService extends BaseService implements ITeammateRecor
         if (currentUser) {
             // TODO sort by user preference
         }
-        return this.teammateRecordRepo.getAll({sort: "-createdAt"}).then((teammates: TeammateRecord[]) => {
+        return this.teammateRecordRepo.getAll({sort: "-createdUtc"}).then((teammates: TeammateRecord[]) => {
             return teammates.map((teammate) => this.convertTeammateToPreview(teammate));
         })
     }

@@ -9,9 +9,9 @@ export interface StoryDto{
     title : string;
     author: UserDto;
     content : RawDraftContentState;
-    createdAt: Date;
+    createdUtc: Date;
     isPublished : boolean;
-    updatedAt : Date;
+    lastEditedUtc : Date;
     upVotes: number;
     downVotes: number;
     views: number;

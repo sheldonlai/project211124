@@ -36,8 +36,8 @@ export class StoryHomeComponent extends React.Component<props, state> {
                 {this.props.status === ReducerStateStatus.LOADING ?
                     <LoadingScreen/> :
                     <div>
-                        {/*<StoryPreviews label="Featured" list={this.props.previews} />*/}
-                        <StoryPreviews label="My Stories" list={this.props.previews}/>
+                        <StoryPreviews label="Featured" list={this.props.previews} maxBlock={4}/>
+                        <StoryPreviews label="My Stories" list={this.props.previews} maxBlock={4}/>
 
                     </div>
                 }

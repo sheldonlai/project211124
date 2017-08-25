@@ -48,7 +48,7 @@ export class StoryService extends BaseService implements IStoryService {
             let preferences = new UserPreferences();
             promises.push(this.storyRepository.search(getQuestionsQueryByPreference(preferences)));
         }
-        promises.push(this.storyRepository.getAll({sort: "-createdUtc", limit: 25}));
+        promises.push(this.storyRepository.getAll({sort: "-createdUtc"}));
 
         return Promise.all(promises).then((result) => {
             return {
@@ -100,6 +100,7 @@ export class StoryService extends BaseService implements IStoryService {
             storyFound.title = storyDto.title;
             storyFound.publicityStatus = storyDto.publicityStatus;
             storyFound.category = storyDto.category;
+            storyFound.lastEditedUtc = new Date();
 
             return this.storyRepository.update(storyFound)
                 .then((story)=> this.storyRepository.getById(story._id));
