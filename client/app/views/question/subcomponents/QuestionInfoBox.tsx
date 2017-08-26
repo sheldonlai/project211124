@@ -17,6 +17,7 @@ import Question = FrontEndQuestionModels.Question;
 import cloneQuestion = FrontEndQuestionModels.cloneQuestion;
 import {DisplayField} from "../../../components/Forms/DisplayField";
 import {CategoryTypeEnum} from "../../../../../server/enums/CategoryTypeEnum";
+import Paper from "material-ui/Paper";
 
 interface stateToProps {
     question: Question;
@@ -106,11 +107,11 @@ export class QuestionInfoBox extends React.Component<props, {}> {
 
 
         return (
-            <div>
+            <Paper elevation={0}>
                 <Divider />
                     {this.props.edit? this.editor(): this.view()}
                 <Divider />
-            </div>
+            </Paper>
         );
     }
 }

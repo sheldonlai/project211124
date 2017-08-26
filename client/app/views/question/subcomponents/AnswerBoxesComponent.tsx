@@ -40,6 +40,7 @@ export class AnswerBoxesComponent extends Component<props, AnswerBoxesComponentS
             JSON.stringify((this.props.answers.map(e=> e.content)))) {
             this.setState({editAnswer: false, answers: cloneAnswers(nextProps.answers)});
         } else if (this.props.answers != nextProps.answers && this.state.editAnswer && this.state.answerId != undefined) {
+            // for thumbs up and thumbs down
             let answers = cloneAnswers(nextProps.answers);
             let index = findIndex(answers, ans => ans._id === this.state.answerId);
             answers[index].content = arrayFind(answers, (ans) => ans._id === this.state.answerId).content;
@@ -135,8 +136,6 @@ interface  StateToProps {
 interface DispatchToProps {
     editAnswer: (answer: Answer) => void;
     addAnswer: (answer: Answer) => void;
-    upVoteAnswer: (answer: Answer) => void;
-    downVoteAnswer: (answer: Answer) => void;
 }
 
 const mapStateToProps = (state: AppStoreState): StateToProps => ({
@@ -148,8 +147,6 @@ const mapStateToProps = (state: AppStoreState): StateToProps => ({
 const mapDispatchToProps = (dispatch): DispatchToProps => ({
     editAnswer: (answer: Answer) => dispatch(AnswerActions.updateAnswer(answer)),
     addAnswer: (answer: Answer) => dispatch(AnswerActions.createAnswer(answer)),
-    upVoteAnswer: (answer: Answer) => dispatch(AnswerActions.createAnswer(answer)),
-    downVoteAnswer: (answer: Answer) => dispatch(AnswerActions.createAnswer(answer))
 });
 
 export const AnswerBoxesView = connect<StateToProps, DispatchToProps, any>(

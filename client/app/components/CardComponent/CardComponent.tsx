@@ -3,7 +3,7 @@ import {createStyleSheet, withStyles} from "material-ui/styles";
 import Card, {CardActions, CardContent} from "material-ui/Card";
 import Button from "material-ui/Button";
 import Typography from "material-ui/Typography";
-import {convertDateToString} from "../../utils/DateUtils";
+import {convertDateTimeToString, convertDateToString} from "../../utils/DateUtils";
 
 const styleSheet = createStyleSheet('SimpleCard', theme => ({
     card: {
@@ -52,6 +52,13 @@ export class CardComponent extends React.Component<CardComponentProps, any> {
     render() {
         const classes = this.props.classes;
         const width = this.props.wide? 500 + 16 : 250;
+        console.log(this.props);
+        let dateString
+        try {
+            dateString = convertDateTimeToString(this.props.date);
+        } catch (err ){
+            console.error(err);
+        }
         return (
             <div>
                 <Card className={classes.card} style={{width: width}}>
@@ -61,7 +68,7 @@ export class CardComponent extends React.Component<CardComponentProps, any> {
                             {this.props.title}
                         </Typography>
                         <Typography type="body1" className={classes.pos}>
-                            {convertDateToString(this.props.date)}
+                            {dateString}
                         </Typography>
                         <Typography type="body1"  style={{height: 150, fontSize: 12}}>
                             {this.props.content}

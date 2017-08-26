@@ -95,31 +95,25 @@ export class QuestionAPIController extends ApiController {
             });
     }
 
-    createAnswerComment(answer: Answer) {
-        return this.put(APIUrls.CreateAnswerComment, answer).then((response: AxiosResponse) => {
+    createAnswerComment(comment: CommentDto, answerId: string) {
+        return this.put(APIUrls.CreateAnswerComment.replace(":id", answerId), comment)
+            .then((response: AxiosResponse) => {
             response.data = this.convertDtoToAnswer(response.data);
             return response;
         });
     }
 
-    updateAnswerComment(commentId: string, answerId: string, updatedComment: CommentDto) {
-        const reqBody = {
-            commentId: commentId,
-            answerId: answerId,
-            updatedComment: updatedComment,
-        };
-        return this.put(APIUrls.UpdateAnswerComment, reqBody).then((response: AxiosResponse) => {
+    updateAnswerComment(comment: CommentDto, answerId: string) {
+        return this.put(APIUrls.UpdateAnswerComment.replace(":id", answerId), comment)
+            .then((response: AxiosResponse) => {
             response.data = this.convertDtoToAnswer(response.data);
             return response;
         });
     }
 
-    DeleteAnswerComment(commentId: string, answerId: string) {
-        const reqBody = {
-            commentId: commentId,
-            answerId: answerId,
-        };
-        return this.put(APIUrls.DeleteAnswerComment, reqBody).then((response: AxiosResponse) => {
+    DeleteAnswerComment(comment: CommentDto, answerId: string) {
+        return this.put(APIUrls.DeleteAnswerComment.replace(":id", answerId), comment)
+            .then((response: AxiosResponse) => {
             response.data = this.convertDtoToAnswer(response.data);
             return response;
         })

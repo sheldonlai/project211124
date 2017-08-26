@@ -7,12 +7,12 @@ import QuestionPage = FrontEndQuestionModels.QuestionPage;
 import Answer = FrontEndQuestionModels.Answer;
 import {CommentDto} from "../../../server/dtos/q&a/CommentDto";
 
-let apiController : QuestionAPIController = QuestionAPIController.getInstance();
+let apiController: QuestionAPIController = QuestionAPIController.getInstance();
 
-export class AnswerActions extends BaseActions{
+export class AnswerActions extends BaseActions {
 
     static createAnswer(answer: Answer): (dispatch: any) => void {
-        return function(dispatch) {
+        return function (dispatch) {
             dispatch({
                 type: QuestionActionTypes.AddAnswerRequest
             });
@@ -20,7 +20,7 @@ export class AnswerActions extends BaseActions{
                 dispatch({
                     type: QuestionActionTypes.AddAnswerOK,
                     data: response.data
-                })
+                });
             }).catch(err =>
                 AnswerActions.handleError(dispatch, err, QuestionActionTypes.AddAnswerError)
             )
@@ -28,7 +28,7 @@ export class AnswerActions extends BaseActions{
     }
 
     static updateAnswer(answer: Answer): (dispatch: any) => void {
-        return function(dispatch) {
+        return function (dispatch) {
             dispatch({
                 type: QuestionActionTypes.EditAnswerRequest
             });
@@ -36,74 +36,74 @@ export class AnswerActions extends BaseActions{
                 dispatch({
                     type: QuestionActionTypes.EditAnswerOK,
                     data: response.data
-                })
+                });
             }).catch(err =>
                 AnswerActions.handleError(dispatch, err, QuestionActionTypes.EditAnswerError)
             )
         }
     }
 
-    static upVoteAnswer (answer: Answer): (dispatch: any) => void {
-        return function(dispatch) {
+    static upVoteAnswer(answer: Answer): (dispatch: any) => void {
+        return function (dispatch) {
             apiController.upVoteAnswer(answer).then((response) => {
                 dispatch({
                     type: QuestionActionTypes.UpVoteAnswer,
                     data: response.data
-                })
+                });
             }).catch(err =>
                 AnswerActions.handleError(dispatch, err, QuestionActionTypes.QuestionPageError)
             )
         }
     }
 
-    static downVoteAnswer (answer: Answer): (dispatch: any) => void {
-        return function(dispatch) {
+    static downVoteAnswer(answer: Answer): (dispatch: any) => void {
+        return function (dispatch) {
             apiController.downVoteAnswer(answer).then((response) => {
                 dispatch({
                     type: QuestionActionTypes.DownVoteAnswer,
                     data: response.data
-                })
+                });
             }).catch(err =>
                 AnswerActions.handleError(dispatch, err, QuestionActionTypes.QuestionPageError)
             )
         }
     }
 
-    static createComment (answer: Answer): (dispatch: any) => void {
-        return function(dispatch) {
-            apiController.createAnswerComment(answer).then((response) => {
+    static createComment(comment: CommentDto, answerId: string): (dispatch: any) => void {
+        return function (dispatch) {
+            apiController.createAnswerComment(comment, answerId).then((response) => {
                 dispatch({
                     type: QuestionActionTypes.createAnswerComment,
                     data: response.data,
-                })
+                });
             }).catch(err =>
-            AnswerActions.handleError(dispatch, err, QuestionActionTypes.createAnswerCommentError)
+                AnswerActions.handleError(dispatch, err, QuestionActionTypes.createAnswerCommentError)
             )
         }
     }
 
-    static UpdateComment(commentId: string, answerId: string, updatedComment: CommentDto): (dispatch: any) => void {
-        return function(dispatch){
-            apiController.updateAnswerComment(commentId, answerId, updatedComment).then((response) => {
+    static updateComment(comment: CommentDto, answerId: string): (dispatch: any) => void {
+        return function (dispatch) {
+            apiController.updateAnswerComment(comment, answerId).then((response) => {
                 dispatch({
                     type: QuestionActionTypes.UpdateAnswerComment,
                     data: response.data,
-                })
+                });
             }).catch(err =>
-            AnswerActions.handleError(dispatch, err, QuestionActionTypes.UpdateAnswerCommentError)
+                AnswerActions.handleError(dispatch, err, QuestionActionTypes.UpdateAnswerCommentError)
             )
         }
     }
 
-    static DeleteComment(commentId: string, answerId: string): (dispatch: any) => void {
-        return function(dispatch){
-            apiController.DeleteAnswerComment(commentId, answerId).then((response) => {
+    static deleteComment(comment: CommentDto, answerId: string): (dispatch: any) => void {
+        return function (dispatch) {
+            apiController.DeleteAnswerComment(comment, answerId).then((response) => {
                 dispatch({
                     type: QuestionActionTypes.DeleteAnswerComment,
                     data: response.data
-                })
+                });
             }).catch(err =>
-            AnswerActions.handleError(dispatch, err, QuestionActionTypes.DeleteAnswerCommentError)
+                AnswerActions.handleError(dispatch, err, QuestionActionTypes.DeleteAnswerCommentError)
             )
         }
     }

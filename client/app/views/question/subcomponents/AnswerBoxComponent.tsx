@@ -14,6 +14,7 @@ import {CommentDto} from "../../../../../server/dtos/q&a/CommentDto";
 import {CommentsComponent} from "./CommentsComponent";
 import Answer = FrontEndQuestionModels.Answer;
 import cloneAnswer = FrontEndQuestionModels.cloneAnswer;
+import {SharedCommentsComponent} from "../../../components/Comments/SharedCommentsComponent";
 
 export interface AnswerBoxComponentProps {
     onAnswerChange: (answer: Answer) => void;
@@ -25,13 +26,7 @@ export interface AnswerBoxComponentProps {
     resetAnswer?: () => void;
 }
 
-interface dispatch {
-    upVote: (answer: Answer) => void
-    downVote: (answer: Answer) => void
-    createComment: (answer: Answer) => void;
-    UpdateComment: (answer: Answer, commentId: string, updatedComment: CommentDto) => void;
-    DeleteComment: (answer: Answer, commentId: string) => void;
-}
+
 
 
 const paperStyle = {height: "100%", padding: 15};
@@ -44,35 +39,16 @@ export class AnswerBoxComponent extends Component<AnswerBoxComponentProps & disp
         this.props.onAnswerChange(answer);
     };
 
-    upVote  = () => this.props.upVote(this.props.answer);
+    upVote = () => this.props.upVote(this.props.answer);
 
     downVote = () => this.props.downVote(this.props.answer);
-
-    onCommentSubmit = (comments) => {
-        let answer = cloneAnswer(this.props.answer);
-        answer.comments = comments;
-        this.props.createComment(answer);
-        this.props.onAnswerChange(answer);
-    };
-
-    onUpdateComment = (commentId, updatedComment) => {
-        let answer = cloneAnswer(this.props.answer);
-        this.props.UpdateComment(answer, commentId, updatedComment);
-        this.props.onAnswerChange(answer);
-    };
-
-    onDeleteComment = (commentId) =>{
-        let answer = cloneAnswer(this.props.answer);
-        this.props.DeleteComment(answer, commentId);
-        this.props.onAnswerChange(answer);
-    };
 
     render() {
         const answer: Answer = {...this.props.answer};
         const editable = (this.props.user && this.props.user.username === answer.author.username);
         return (
 
-            <Paper style={paperStyle}>
+            <Paper style={{...paperStyle, marginBottom: 10}} elevation={1}>
                 <div>
                     <Grid container justify="flex-end">
                         <Grid item>
@@ -85,11 +61,11 @@ export class AnswerBoxComponent extends Component<AnswerBoxComponentProps & disp
                                        style={{fontSize: 14}} reset={this.props.resetAnswer}
                     />
                     <Divider/>
-                    <CommentsComponent comments = {this.props.answer.comments}
-                                       user = {this.props.user}
-                                       onCommentsSubmit = {this.onCommentSubmit}
-                                       onCommentUpdate = {this.onUpdateComment}
-                                       onCommentDelete = {this.onDeleteComment}
+                    <SharedCommentsComponent comments={this.props.answer.comments}
+                                       user={this.props.user}
+                                       onCommentCreate={(c) => this.props.createComment(c, answer._id)}
+                                       onCommentUpdate={(c) => this.props.updateComment(c, answer._id)}
+                                       onCommentDelete={(c) => this.props.deleteComment(c, answer._id)}
                     />
                     <Divider/>
                     <FooterComponent
@@ -106,14 +82,20 @@ export class AnswerBoxComponent extends Component<AnswerBoxComponentProps & disp
     }
 }
 
+interface dispatch {
+    upVote: (answer: Answer) => void
+    downVote: (answer: Answer) => void
+    createComment: (comment: CommentDto, answerId: string) => void;
+    updateComment: (comment: CommentDto, answerId: string) => void;
+    deleteComment: (comment: CommentDto, answerId: string) => void;
+}
 
-
-const mapDispatchToProps = (dispatch) => ({
+const mapDispatchToProps = (dispatch): dispatch => ({
     upVote: (answer: Answer) => dispatch(AnswerActions.upVoteAnswer(answer)),
     downVote: (answer: Answer) => dispatch(AnswerActions.downVoteAnswer(answer)),
-    createComment: (answer: Answer) => dispatch(AnswerActions.createComment(answer)),
-    UpdateComment: (answer: Answer, commentId: string, updatedComment: CommentDto) => dispatch(AnswerActions.UpdateComment(commentId, answer._id, updatedComment)),
-    DeleteComment: (answer: Answer, commentId: string) => dispatch(AnswerActions.DeleteComment(commentId, answer._id)),
+    createComment: (comment: CommentDto, answerId: string) => dispatch(AnswerActions.createComment(comment, answerId)),
+    updateComment: (comment: CommentDto, answerId: string) => dispatch(AnswerActions.updateComment(comment, answerId)),
+    deleteComment: (comment: CommentDto, answerId: string) => dispatch(AnswerActions.deleteComment(comment, answerId)),
 });
 
 export const AnswerBoxView = connect<void, dispatch, AnswerBoxComponentProps>(

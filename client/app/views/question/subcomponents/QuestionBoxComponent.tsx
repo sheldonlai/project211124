@@ -91,7 +91,7 @@ export class QuestionBoxComponent extends Component<props, {}> {
                         `All unsaved changes will be discarded. Are you sure you want to leave?`
                     )}
                 />
-                <Paper style={paperStyle} elevation={1}>
+                <Paper style={paperStyle} elevation={0}>
                     <EditableMultiPurposeHeader value={question.title} editMode={this.props.edit}
                                                 onEditClick={this.onEditClick}
                                                 onTitleChange={this.onTitleChange}/>

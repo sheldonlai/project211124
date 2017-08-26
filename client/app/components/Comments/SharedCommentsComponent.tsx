@@ -12,6 +12,7 @@ import {CommentDto} from "../../../../server/dtos/q&a/CommentDto";
 import {findIndex} from "../../utils/ArrayUtils";
 import {LoadingScreen} from "../Animations/LoadingScreen";
 import {convertDateTimeToString} from "../../utils/DateUtils";
+import Grid from "material-ui/Grid";
 
 export interface CommentsComponentProps {
     comments: CommentDto[];
@@ -136,26 +137,26 @@ export class SharedCommentsComponent extends React.Component<CommentsComponentPr
         return undefined;
     };
 
-    DeleteComment = (indx: number) => {
-        this.props.onCommentDelete(this.props.comments[indx]);
-        this.props.comments.splice(indx, 1);
+    DeleteComment = (index: number) => {
+        this.props.onCommentDelete(this.props.comments[index]);
+        this.props.comments.splice(index, 1);
 
     };
 
-    onEditComment = (indx: number) => {
-        if (this.state.EditCommentIndex == -1 || indx != this.state.EditCommentIndex) {
+    onEditComment = (index: number) => {
+        if (this.state.EditCommentIndex == -1 || index != this.state.EditCommentIndex) {
             return (
                 <Typography type="body1">
-                    {this.props.comments[indx].commentContent}
+                    {this.props.comments[index].commentContent}
                 </Typography>
             );
-        } else if (indx == this.state.EditCommentIndex) {
+        } else if (index == this.state.EditCommentIndex) {
             return (
                 <div>
                     <p>
                         <mark>{this.state.errorMsg}</mark>
                     </p>
-                    <TextField defaultValue={this.props.comments[indx].commentContent}
+                    <TextField defaultValue={this.props.comments[index].commentContent}
                                onChange={this.onCommentChange}
                                multiline
                                fullWidth
@@ -167,13 +168,13 @@ export class SharedCommentsComponent extends React.Component<CommentsComponentPr
         return undefined;
     };
 
-    EditAndSaveButton = (indx: number) => {
-        if (this.state.EditCommentIndex == -1 || indx != this.state.EditCommentIndex) {
+    EditAndSaveButton = (index: number) => {
+        if (this.state.EditCommentIndex == -1 || index != this.state.EditCommentIndex) {
             return (
                 <IconButton style={iconButtonStyle}>
                     <Icon style={iconStyle} onClick={() => this.setState({
-                        EditCommentIndex: indx,
-                        commentContent: this.props.comments[indx].commentContent,
+                        EditCommentIndex: index,
+                        commentContent: this.props.comments[index].commentContent,
                         errorMsg: ""
                     })}>mode_edit</Icon>
                 </IconButton>
@@ -183,26 +184,27 @@ export class SharedCommentsComponent extends React.Component<CommentsComponentPr
             return (
                 <div style={{textAlign: "left"}}>
                     <Button dense color="primary"
-                            onClick={() => this.UpdateEditedComment(this.props.comments[indx]._id)}>save</Button>
+                            onClick={() => this.UpdateEditedComment(this.props.comments[index]._id)}>save</Button>
                 </div>
             );
         }
     };
 
-    CancelAndDeleteButton = (indx: number) => {
-        if (this.state.EditCommentIndex == -1 || indx != this.state.EditCommentIndex) {
+    CancelAndDeleteButton = (index: number) => {
+        if (this.state.EditCommentIndex == -1 || index != this.state.EditCommentIndex) {
             if (!this.props.onCommentDelete)
                 return undefined;
             return (
                 <IconButton style={iconButtonStyle}>
-                    <Icon style={iconStyle} onClick={() => this.DeleteComment(indx)}>delete</Icon>
+                    <Icon style={iconStyle} onClick={() => this.DeleteComment(index)}>delete</Icon>
                 </IconButton>
             );
         }
         else {
             return (
                 <div style={{textAlign: "left"}}>
-                    <Button dense onClick={() => this.setState({EditCommentIndex: -1, commentContent: "", errorMsg: ""})}>
+                    <Button dense onClick={() =>
+                        this.setState({EditCommentIndex: -1, commentContent: "", errorMsg: ""})}>
                         cancel
                     </Button>
                 </div>
@@ -212,14 +214,13 @@ export class SharedCommentsComponent extends React.Component<CommentsComponentPr
 
     UpdateEditedComment = (commentId: string) => {
         if (this.state.commentContent) {
-            let indx: number = findIndex(this.props.comments, comment => comment._id == commentId);
-            this.props.comments[indx].commentContent = this.state.commentContent;
-            this.props.comments[indx].lastEditedUtc = new Date(Date.now());
-            let updatedComment: CommentDto = this.props.comments[indx];
+            let index: number = findIndex(this.props.comments, comment => comment._id == commentId);
+            this.props.comments[index].commentContent = this.state.commentContent;
+            this.props.comments[index].lastEditedUtc = new Date(Date.now());
+            let updatedComment: CommentDto = this.props.comments[index];
             this.props.onCommentUpdate(updatedComment);
             this.setState({EditCommentIndex: -1, commentContent: ""});
-        }
-        else {
+        } else {
             this.setState({errorMsg: "Cannot submit empty comment."});
         }
     };
@@ -253,7 +254,6 @@ export class SharedCommentsComponent extends React.Component<CommentsComponentPr
                         <div style={{display: "inline-block", width: "80%"}}>
                             {this.onEditComment(index)}
                         </div>
-
                         {this.renderCommentActions(comment.commentBy, index)}
                     </div>
                     {
@@ -277,7 +277,8 @@ export class SharedCommentsComponent extends React.Component<CommentsComponentPr
         if (this.props.loading === true)
             return <LoadingScreen size={100} padding={50}/>
         return (
-            <div>
+            <Grid container justify="flex-end">
+                <Grid item xs={12} style={{paddingLeft: 15, paddingRight: 15, background: "white"}}>
                 <List className={"Comments"}>
                     {this.renderComments()}
                     {
@@ -285,7 +286,6 @@ export class SharedCommentsComponent extends React.Component<CommentsComponentPr
                         <Button style={{width: "100%"}} onClick={this.onShowMore}>Show more comments</Button>
                     }
                 </List>
-
                 {
                     !this.state.newCommentMode &&
                     <div style={{height: 36, marginBottom : 10}}>
@@ -298,7 +298,8 @@ export class SharedCommentsComponent extends React.Component<CommentsComponentPr
                     </div>
                 }
                 {this.renderInputCommentBox()}
-            </div>
+                </Grid>
+            </Grid>
         );
     }
 }

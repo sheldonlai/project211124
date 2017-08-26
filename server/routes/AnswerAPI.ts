@@ -7,13 +7,14 @@ import {User} from "../models/User";
 import {IAnswerService} from "../services/AnswerService";
 import {CommentDto} from "../dtos/q&a/CommentDto";
 
-export class AnswerAPI extends BaseAPI{
-	private service : IAnswerService;
-	public router: Router;
-	constructor(service: IAnswerService){
-		super();
-		this.router = Router();
-		this.service = service;
+export class AnswerAPI extends BaseAPI {
+    private service: IAnswerService;
+    public router: Router;
+
+    constructor(service: IAnswerService) {
+        super();
+        this.router = Router();
+        this.service = service;
         this.router.post(APIUrls.CreateAnswer, mustBeAuthenticated, this.CreateAnswer);
         this.router.put(APIUrls.UpdateAnswer, mustBeAuthenticated, this.UpdateAnswer);
         this.router.put(APIUrls.UpVoteAnswer, mustBeAuthenticated, this.UpVoteAnswer);
@@ -21,62 +22,56 @@ export class AnswerAPI extends BaseAPI{
         this.router.put(APIUrls.CreateAnswerComment, mustBeAuthenticated, this.CreateComment);
         this.router.put(APIUrls.UpdateAnswerComment, mustBeAuthenticated, this.UpdateComment);
         this.router.put(APIUrls.DeleteAnswerComment, mustBeAuthenticated, this.DeleteComment);
-	}
+    }
 
-	public CreateAnswer = (req: AuthRequest, res: Response, next: NextFunction) => {
-		let answer : AnswerDto = req.body;
-		let user : User = req.user;
-		let result = this.service.createAnswer(user, answer);
-
-		this.respondPromise(result, res, next);
+    public CreateAnswer = (req: AuthRequest, res: Response, next: NextFunction) => {
+        let answer: AnswerDto = req.body;
+        let user: User = req.user;
+        let result = this.service.createAnswer(user, answer);
+        this.respondPromise(result, res, next);
     };
     public UpdateAnswer = (req: AuthRequest, res: Response, next: NextFunction) => {
-		let answer : AnswerDto = req.body;
-		let user : User = req.user;
-		let result = this.service.updateAnswer(user, answer);
+        let answer: AnswerDto = req.body;
+        let user: User = req.user;
+        let result = this.service.updateAnswer(user, answer);
+        this.respondPromise(result, res, next);
+    };
 
-		this.respondPromise(result, res, next);
-	};
+    public UpVoteAnswer = (req: AuthRequest, res: Response, next: NextFunction) => {
+        let answer: AnswerDto = req.body;
+        let user: User = req.user;
+        let result = this.service.upVoteAnswer(user, answer._id);
+        this.respondPromise(result, res, next);
+    };
 
-	public UpVoteAnswer = (req: AuthRequest, res: Response, next: NextFunction) => {
-		let answer : AnswerDto = req.body;
-		let user : User = req.user;
-		let result = this.service.upVoteAnswer(user, answer._id);
+    public DownVoteAnswer = (req: AuthRequest, res: Response, next: NextFunction) => {
+        let answer: AnswerDto = req.body;
+        let user: User = req.user;
+        let result = this.service.downVoteAnswer(user, answer._id);
+        this.respondPromise(result, res, next);
+    };
 
-		this.respondPromise(result, res, next);
-	};
+    public CreateComment = (req: AuthRequest, res: Response, next: NextFunction) => {
+        let answerId: string = req.params.id;
+        let comment: CommentDto = req.body;
+        let user: User = req.user;
+        let result = this.service.createAnswerComment(comment, answerId, user);
+        this.respondPromise(result, res, next);
+    };
 
-	public DownVoteAnswer = (req: AuthRequest, res: Response, next: NextFunction) => {
-		let answer : AnswerDto = req.body;
-		let user : User = req.user;
-		let result = this.service.downVoteAnswer(user, answer._id);
+    public UpdateComment = (req: AuthRequest, res: Response, next: NextFunction) => {
+        let answerId: string = req.params.id;
+        let comment: CommentDto = req.body;
+        let user: User = req.user;
+        let result = this.service.updateAnswerComment(comment, answerId, user);
+        this.respondPromise(result, res, next);
+    };
 
-		this.respondPromise(result, res, next);
-	}
-
-	public CreateComment = (req: AuthRequest, res: Response, next: NextFunction) => {
-		let answer: AnswerDto = req.body;
-		let result = this.service.createAnswerComment(answer);
-
-		this.respondPromise(result, res, next);
-	}
-
-	public UpdateComment = (req: AuthRequest, res: Response, next: NextFunction) => {
-		let answerId: string = req.body.answerId;
-		let updatedComment: CommentDto = req.body.updatedComment;
-		let user: User = req.user;
-		let commentId: string = req.body.commentId;
-		let result = this.service.UpdateAnswerComment(commentId, answerId, user, updatedComment);
-
-		this.respondPromise(result, res, next);
-	}
-
-	public DeleteComment = (req: AuthRequest, res: Response, next: NextFunction) => {
-		let answerId: string = req.body.answerId;
-		let user: User = req.user;
-		let commentId: string = req.body.commentId;
-		let result = this.service.DeleteAnswerComment(commentId, answerId, user);
-
-		this.respondPromise(result, res, next);
-	}
+    public DeleteComment = (req: AuthRequest, res: Response, next: NextFunction) => {
+        let answerId: string = req.body.answerId;
+        let user: User = req.user;
+        let comment = req.body;
+        let result = this.service.deleteAnswerComment(comment, answerId, user);
+        this.respondPromise(result, res, next);
+    };
 }

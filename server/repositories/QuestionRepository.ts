@@ -19,7 +19,7 @@ export class QuestionRepository extends BaseRepository<Question, IQuestion> impl
     }
 
     create(question: Question): Promise<Question> {
-        question.createdUtc = undefined;
+        delete question.createdUtc;
         question.lastEditedUtc = undefined;
         return super.create(question).then((question: Question) => {
             return this.getById(question._id);
@@ -27,7 +27,7 @@ export class QuestionRepository extends BaseRepository<Question, IQuestion> impl
     }
 
     update(question: Question): Promise<Question> {
-        question.createdUtc = undefined;
+        delete question.createdUtc;
         return super.update(question);
     }
 
