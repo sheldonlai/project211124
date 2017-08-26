@@ -73,9 +73,9 @@ export class QuestionActions extends BaseActions {
         }
     }
 
-    static createComment(question: Question){
+    static createComment(comment: CommentDto, questionId: string){
         return (dispatch) => {
-            apiController.createQuestionComment(question).then(res => {
+            apiController.createQuestionComment(comment, questionId).then(res => {
                 dispatch({
                     type: QuestionActionTypes.createQuestionComment,
                     data: res.data
@@ -86,9 +86,9 @@ export class QuestionActions extends BaseActions {
         }
     }
 
-    static updateComment(question: Question, commentId: string, updatedComment: CommentDto){
+    static updateComment(comment: CommentDto, questionId: string){
         return (dispatch) => {
-            apiController.UpdateQuestionComment(question, commentId, updatedComment).then(res => {
+            apiController.updateQuestionComment(comment, questionId).then(res => {
                 dispatch({
                     type: QuestionActionTypes.UpdateQuestionComment,
                     data: res.data,
@@ -99,9 +99,9 @@ export class QuestionActions extends BaseActions {
         }
     }
 
-    static deleteComment(question: Question, commentId: string){
+    static deleteComment(comment: CommentDto, questionId: string){
         return (dispatch) => {
-            apiController.DeleteQuestionComment(question, commentId).then(res => {
+            apiController.deleteQuestionComment(comment, questionId).then(res => {
                 dispatch({
                     type: QuestionActionTypes.DeleteQuestionComment,
                     data: res.data,

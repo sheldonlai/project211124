@@ -12,13 +12,13 @@ export class StoryComment extends BaseModel {
     commentBy: User;
     commentContent: string;
     lastEditedUtc: Date;
-    commentedDate: Date;
+    createdUtc: Date;
 
     constructor(user: User, content: string) {
         super();
         this.commentBy = user;
         this.commentContent = content;
-        this.commentedDate = new Date(Date.now());
+        this.createdUtc = new Date();
     }
 }
 

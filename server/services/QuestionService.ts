@@ -28,9 +28,9 @@ export interface IQuestionService {
     updateQuestion(question: QuestionDto, user: User): Promise<QuestionDto>;
     upVoteQuestion(questionId: string, user: User): Promise<QuestionDto>;
     downVoteQuestion(questionId: string, user: User): Promise<QuestionDto>;
-    createComment(question: Question): Promise<QuestionDto>;
-    UpdateComment(commentIndx: string, questionId: string, user: User, updatedComment: CommentDto): Promise<QuestionDto>;
-    DeleteComment(commentIndx: string, questionId: string, user: User): Promise<QuestionDto>;
+    createComment(comment: CommentDto, questionId: string, user: User): Promise<QuestionDto>;
+    updateComment(comment: CommentDto, questionId: string, user: User): Promise<QuestionDto>;
+    deleteComment(comment: CommentDto, questionId: string, user: User): Promise<QuestionDto>;
 }
 
 export class QuestionService extends BaseService implements IQuestionService {
@@ -139,32 +139,35 @@ export class QuestionService extends BaseService implements IQuestionService {
         });
     }
 
-    createComment(question: Question){
-        return this.questionRepository.getById(question._id).then((questionFound: Question) => {
-            questionFound.comments = question.comments;
+    createComment(comment: CommentDto, questionId: string, user: User){
+        return this.questionRepository.getById(questionId).then((questionFound: Question) => {
+            let now = new Date();
+            comment.createdUtc = now;
+            comment.lastEditedUtc = now;
+            questionFound.comments.push(comment);
             return this.questionRepository.update(questionFound).then((questionFound: Question) => {
                 return this.questionRepository.getById(questionFound._id);
             });
         });
     }
 
-    UpdateComment(commentId: string, questionId: string, user: User, updatedComment: CommentDto){
+    updateComment(c: CommentDto, questionId: string, user: User){
         return this.questionRepository.getById(questionId).then((questionFound: Question) => {
-            let commentIndx = _.findIndex(questionFound.comments, function(comment){return comment._id == commentId});
+            let commentIndx = _.findIndex(questionFound.comments,comment => comment._id == c._id);
             if(questionFound.comments[commentIndx].commentBy.username != user.username ||
             !questionFound.comments[commentIndx].commentBy._id.equals(user._id)){
                 throw new AppError("You are not the owner of this question!", ClientError.UNAUTHORIZED);
             }
             else{
-                questionFound.comments[commentIndx] = updatedComment;
+                questionFound.comments[commentIndx] = c;
                 return this.questionRepository.update(questionFound);
             }
         })
     }
 
-    DeleteComment(commentId: string, questionId: string, user: User){
+    deleteComment(c: CommentDto, questionId: string, user: User){
         return this.questionRepository.getById(questionId).then((questionFound: Question) => {
-            let commentIndx = _.findIndex(questionFound.comments, function(comment){return comment._id == commentId});
+            let commentIndx = _.findIndex(questionFound.comments, comment => comment._id == c._id);
             if(questionFound.comments[commentIndx].commentBy.username != user.username ||
                 !questionFound.comments[commentIndx].commentBy._id.equals(user._id)){
                 throw new AppError("You are not the owner of this question!", ClientError.UNAUTHORIZED);

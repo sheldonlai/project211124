@@ -10,6 +10,7 @@ import {UserDto} from "../../../../../server/dtos/auth/UserDto";
 import {findIndex} from "../../../utils/ArrayUtils";
 import TextField from "material-ui/TextField";
 import Typography from "material-ui/Typography"
+import {convertDateTimeToString} from "../../../utils/DateUtils";
 
 export interface CommentsComponentProps {
     comments: CommentDto[];
@@ -61,7 +62,7 @@ export class CommentsComponent extends React.Component<CommentsComponentProps, C
             let tmpComment: CommentDto = {
                 _id: undefined,
                 commentContent: this.state.commentContent,
-                commentedDate: new Date(Date.now()),
+                createdUtc: new Date(Date.now()),
                 commentBy: this.props.user,
                 lastEditedUtc: new Date(Date.now()),
             };
@@ -216,7 +217,7 @@ export class CommentsComponent extends React.Component<CommentsComponentProps, C
 
     renderComments = () => {
         let comments: CommentDto[] = this.props.comments.slice(0, this.state.showMaxComments);
-        //<div>Posted on {comment.commentedDate}</div>
+        //<div>Posted on {comment.createdUtc}</div>
         return comments.map((comment, indx) => {
             return (
                 <div key={comment.lastEditedUtc + comment.commentBy.username}
@@ -232,7 +233,7 @@ export class CommentsComponent extends React.Component<CommentsComponentProps, C
                         {this.renderCommentActions(comment.commentBy, indx)}
                     </div>
                     <div style={{color: "grey", fontSize: 10, textAlign: "right", marginTop: 10}}>
-                        posted on {comment.lastEditedUtc}
+                        posted on {convertDateTimeToString(comment.lastEditedUtc)}
                         <br/>
                         by {comment.commentBy.username}
                     </div>

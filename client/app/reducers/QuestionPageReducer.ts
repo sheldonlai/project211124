@@ -8,6 +8,7 @@ import QuestionPage = FrontEndQuestionModels.QuestionPage;
 import cloneQuestionPage = FrontEndQuestionModels.cloneQuestionPage;
 import Answer = FrontEndQuestionModels.Answer;
 import cloneQuestion = FrontEndQuestionModels.cloneQuestion;
+import Question = FrontEndQuestionModels.Question;
 
 export interface QuestionPageReducerState {
     status: ReducerStateStatus;    // status of the state
@@ -50,6 +51,18 @@ const getLoadingState = (state: QuestionPageReducerState) => {
     };
 };
 
+const getUpdatedStateForQuestion = ( question : Question, state: QuestionPageReducerState) => {
+    state.questionPage = cloneQuestionPage(state.questionPage);
+    state.questionPage.question = cloneQuestion(question);
+    return getOKState(state.questionPage);
+};
+
+const getUpdatedStateForAnswer = (answer : Answer, state: QuestionPageReducerState) => {
+    state.questionPage = cloneQuestionPage(state.questionPage);
+    state.questionPage.answers = state.questionPage.answers.map(a => a._id == answer._id? answer: a);
+    return getOKState(state.questionPage);
+};
+
 export const QuestionPageReducer = (state = initialState, action): QuestionPageReducerState => {
     switch (action.type) {
 
@@ -63,44 +76,46 @@ export const QuestionPageReducer = (state = initialState, action): QuestionPageR
         case QuestionActionTypes.FetchQuestionPageError:
             return getErrorState(state, action);
 
-
         // Edit Question
         case QuestionActionTypes.EditQuestionRequest:
             return getLoadingState(state);
 
         case QuestionActionTypes.EditQuestionOK:
-            // clone question page so that changing this object wont change the current state
-            let questionPage = cloneQuestionPage(state.questionPage);
-            questionPage.question = cloneQuestion(action.data);
-            return getOKState(questionPage);
+            return getUpdatedStateForQuestion(action.data, state);
 
         case QuestionActionTypes.EditQuestionError:
             return getErrorState(state, action);
 
+
+        // Comments
+
+
         case QuestionActionTypes.createQuestionComment:
-            state.questionPage = cloneQuestionPage(state.questionPage);
-            state.questionPage.question = cloneQuestion(action.data);
-            return getOKState(state.questionPage);
+            return getUpdatedStateForQuestion(action.data, state);
+
+        case QuestionActionTypes.UpdateQuestionComment:
+            return getUpdatedStateForQuestion(action.data, state);
+
+        case QuestionActionTypes.DeleteQuestionComment:
+            return getUpdatedStateForQuestion(action.data, state);
 
         case QuestionActionTypes.createQuestionCommentError:
             return getErrorState(state, action);
 
-        case QuestionActionTypes.createAnswerComment:
-            let tmpQuestionPage = cloneQuestionPage(state.questionPage);
-            tmpQuestionPage.answers = tmpQuestionPage.answers.map((answer) => {
-                return (answer._id == action.data._id)?action.data:answer;
-            });
-            return getOKState(tmpQuestionPage);
+        case QuestionActionTypes.UpdateQuestionCommentError:
+            return getErrorState(state, action);
+
+        case QuestionActionTypes.DeleteQuestionCommentError:
+            return getErrorState(state, action);
+
+
+        // Up and down votes
 
         case QuestionActionTypes.UpVoteQuestion:
-            questionPage = cloneQuestionPage(state.questionPage);
-            questionPage.question = action.data;
-            return getOKState(questionPage);
+            return getUpdatedStateForQuestion(action.data, state);
 
         case QuestionActionTypes.DownVoteQuestion:
-            questionPage = cloneQuestionPage(state.questionPage);
-            questionPage.question = action.data;
-            return getOKState(questionPage);
+            return getUpdatedStateForQuestion(action.data, state);
 
 
         // Add Answer
@@ -108,10 +123,9 @@ export const QuestionPageReducer = (state = initialState, action): QuestionPageR
             return getLoadingState(state);
 
         case QuestionActionTypes.AddAnswerOK:
-            // clone question page so that changing this object wont change the current state
-            let questionPage2 = cloneQuestionPage(state.questionPage);
-            questionPage2.answers.push(action.data);
-            return getOKState(questionPage2);
+            state.questionPage = cloneQuestionPage(state.questionPage);
+            state.questionPage.answers.push(action.data);
+            return getOKState(state.questionPage);
 
         case QuestionActionTypes.AddAnswerError:
             return getErrorState(state, action);
@@ -122,29 +136,29 @@ export const QuestionPageReducer = (state = initialState, action): QuestionPageR
             return getLoadingState(state);
 
         case QuestionActionTypes.EditAnswerOK:
-            // clone question page so that changing this object wont change the current state
-            let questionPage3 = cloneQuestionPage(state.questionPage);
-            questionPage3.answers = questionPage3.answers.map((answer) =>  {
-                return (answer._id == action.data._id)? action.data: answer;
-            });
-            return getOKState(questionPage3);
+            return getUpdatedStateForAnswer(action.data, state);
 
         case QuestionActionTypes.EditAnswerError:
             return getErrorState(state, action);
 
+
+        // Comments
+        case QuestionActionTypes.createAnswerComment:
+            return getUpdatedStateForAnswer(action.data, state);
+
+        case QuestionActionTypes.UpdateAnswerComment:
+            return getUpdatedStateForAnswer(action.data, state);
+
+        case QuestionActionTypes.DeleteAnswerComment:
+            return getUpdatedStateForAnswer(action.data, state);
+
+
+         // up vote answers
         case QuestionActionTypes.UpVoteAnswer:
-            questionPage = cloneQuestionPage(state.questionPage);
-            let updatedAnswer = action.data;
-            questionPage.answers = questionPage.answers.map((answer: Answer) =>
-                answer._id == updatedAnswer._id? updatedAnswer: answer);
-            return getOKState(questionPage);
+            return getUpdatedStateForAnswer(action.data, state);
 
         case QuestionActionTypes.DownVoteAnswer:
-            questionPage = cloneQuestionPage(state.questionPage);
-            updatedAnswer = action.data;
-            questionPage.answers = questionPage.answers.map((answer: Answer) =>
-                answer._id == updatedAnswer._id? updatedAnswer: answer);
-            return getOKState(questionPage);
+            return getUpdatedStateForAnswer(action.data, state);
 
         default:
             return state;

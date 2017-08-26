@@ -84,7 +84,7 @@ export class AnswerActions extends BaseActions{
 
     static UpdateComment(commentId: string, answerId: string, updatedComment: CommentDto): (dispatch: any) => void {
         return function(dispatch){
-            apiController.UpdateAnswerComment(commentId, answerId, updatedComment).then((response) => {
+            apiController.updateAnswerComment(commentId, answerId, updatedComment).then((response) => {
                 dispatch({
                     type: QuestionActionTypes.UpdateAnswerComment,
                     data: response.data,

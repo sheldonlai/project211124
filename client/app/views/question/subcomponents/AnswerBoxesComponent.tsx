@@ -15,6 +15,7 @@ import {AnswerActions} from "../../../actions/AnswerActions";
 import {QuestionPageReducerState} from "../../../reducers/QuestionPageReducer";
 import cloneAnswer = FrontEndQuestionModels.cloneAnswer;
 import {Prompt} from "react-router";
+import {arrayFind, findIndex} from "../../../utils/ArrayUtils";
 export interface AnswerBoxesComponentProps {
 }
 
@@ -35,8 +36,16 @@ export class AnswerBoxesComponent extends Component<props, AnswerBoxesComponentS
     }
 
     componentWillReceiveProps(nextProps: props) {
-        if (nextProps.answers != this.props.answers) {
+        if (JSON.stringify(nextProps.answers.map(e => e.content)) !=
+            JSON.stringify((this.props.answers.map(e=> e.content)))) {
             this.setState({editAnswer: false, answers: cloneAnswers(nextProps.answers)});
+        } else if (this.props.answers != nextProps.answers && this.state.editAnswer && this.state.answerId != undefined) {
+            let answers = cloneAnswers(nextProps.answers);
+            let index = findIndex(answers, ans => ans._id === this.state.answerId);
+            answers[index].content = arrayFind(answers, (ans) => ans._id === this.state.answerId).content;
+            this.setState({answers: answers});
+        } else {
+            this.setState({answers:  cloneAnswers(nextProps.answers)});
         }
     }
 

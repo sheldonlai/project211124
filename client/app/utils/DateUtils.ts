@@ -13,7 +13,7 @@ export const convertDateTimeToString = function(date: string | Date){
     if (typeof date === "string" ){
         let newDate = new Date(date);
         return newDate.toLocaleString();
-    } else if (!date.toLocaleString) {
+    } else if (date.toLocaleString) {
         return date.toLocaleString();
     } else {
         throw new Error("date must be of type string or Date")

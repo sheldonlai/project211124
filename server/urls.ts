@@ -27,13 +27,13 @@ export class APIUrls {
     static DownVoteAnswer = "/down-vote-answer";
     static DownVoteQuestion = "/down-vote-question";
 
-    static CreateQuestionComment = "/create-question-comment";
-    static UpdateQuestionComment = "/update-question-comment";
-    static DeleteQuestionComment = "/delete-question-comment";
+    static CreateQuestionComment = "/create-question-comment/:id";
+    static UpdateQuestionComment = "/update-question-comment/:id";
+    static DeleteQuestionComment = "/delete-question-comment/:id";
 
-    static CreateAnswerComment = "/create-answer-comment";
-    static UpdateAnswerComment = "/update-answer-comment";
-    static DeleteAnswerComment = "/delete-answer-comment";
+    static CreateAnswerComment = "/create-answer-comment/:id";
+    static UpdateAnswerComment = "/update-answer-comment/:id";
+    static DeleteAnswerComment = "/delete-answer-comment/:id";
 
     /* Utils */
     static getCountries = "/get-countries";

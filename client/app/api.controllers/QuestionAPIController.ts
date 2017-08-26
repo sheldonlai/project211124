@@ -1,4 +1,4 @@
- import {ApiController} from "./ApiController";
+import {ApiController} from "./ApiController";
 import {AxiosPromise, AxiosResponse} from "axios";
 import {APIUrls} from "../../../server/urls";
 import {QuestionDto} from "../../../server/dtos/q&a/QuestionDto";
@@ -12,7 +12,7 @@ import Question = FrontEndQuestionModels.Question;
 import QuestionPreviewCollections = FrontEndQuestionModels.QuestionPreviewCollections;
 import QuestionPage = FrontEndQuestionModels.QuestionPage;
 import Answer = FrontEndQuestionModels.Answer;
- import {CommentDto} from "../../../server/dtos/q&a/CommentDto";
+import {CommentDto} from "../../../server/dtos/q&a/CommentDto";
 
 export class QuestionAPIController extends ApiController {
 
@@ -58,7 +58,7 @@ export class QuestionAPIController extends ApiController {
         return this.questionPostApiHelper(APIUrls.CreateQuestion, question);
     }
 
-    updateQuestion(question: Question): AxiosPromise{
+    updateQuestion(question: Question): AxiosPromise {
         return this.questionPutApiHelper(APIUrls.UpdateQuestion, question);
     }
 
@@ -70,45 +70,39 @@ export class QuestionAPIController extends ApiController {
         return this.questionPutApiHelper(APIUrls.DownVoteQuestion, question);
     }
 
-    createQuestionComment(question: Question){
-        return this.questionPutApiHelper(APIUrls.CreateQuestionComment, question);
+    createQuestionComment(comment: CommentDto, questionId: string) {
+        return this.put(APIUrls.CreateQuestionComment.replace(":id", questionId), comment)
+            .then((response: AxiosResponse) => {
+                response.data = this.convertDtoToQuestion(response.data);
+                return response;
+            });
+        ;
     }
 
-    UpdateQuestionComment(question: Question, commentId: string, updatedComment: CommentDto){
-        const questionDto = this.convertQuestionToDto(question);
-        const reqBody = {
-            questionDto: questionDto,
-            commentId: commentId,
-            updatedComment: updatedComment,
-            questionID: questionDto._id,
-        };
-        return this.put(APIUrls.UpdateQuestionComment, reqBody).then((response: AxiosResponse) => {
-            response.data = this.convertDtoToQuestion(response.data);
-            return response;
-        });
+    updateQuestionComment(comment: CommentDto, questionId: string) {
+        return this.put(APIUrls.UpdateQuestionComment.replace(":id", questionId), comment)
+            .then((response: AxiosResponse) => {
+                response.data = this.convertDtoToQuestion(response.data);
+                return response;
+            });
     }
 
-    DeleteQuestionComment(question: Question, commentId: string){
-        const questionDto = this.convertQuestionToDto(question);
-        const reqBody = {
-            questionDto: questionDto,
-            commentId: commentId,
-            questionID: questionDto._id,
-        };
-        return this.put(APIUrls.DeleteQuestionComment, reqBody).then((response: AxiosResponse) => {
-            response.data = this.convertDtoToQuestion(response.data);
-            return response;
-        });
+    deleteQuestionComment(comment: CommentDto, questionId: string) {
+        return this.put(APIUrls.DeleteQuestionComment.replace(":id", questionId), comment)
+            .then((response: AxiosResponse) => {
+                response.data = this.convertDtoToQuestion(response.data);
+                return response;
+            });
     }
 
-    createAnswerComment(answer: Answer){
+    createAnswerComment(answer: Answer) {
         return this.put(APIUrls.CreateAnswerComment, answer).then((response: AxiosResponse) => {
             response.data = this.convertDtoToAnswer(response.data);
             return response;
         });
     }
 
-    UpdateAnswerComment(commentId: string, answerId: string, updatedComment: CommentDto){
+    updateAnswerComment(commentId: string, answerId: string, updatedComment: CommentDto) {
         const reqBody = {
             commentId: commentId,
             answerId: answerId,
@@ -120,7 +114,7 @@ export class QuestionAPIController extends ApiController {
         });
     }
 
-    DeleteAnswerComment(commentId: string, answerId: string){
+    DeleteAnswerComment(commentId: string, answerId: string) {
         const reqBody = {
             commentId: commentId,
             answerId: answerId,
@@ -135,9 +129,9 @@ export class QuestionAPIController extends ApiController {
         return this.get(APIUrls.GetQuestionPage.replace(":id", id))
             .then((response: AxiosResponse) => {
                 let data: QuestionPageDto = response.data;
-                let converted_data: QuestionPage = {question: undefined, answers:[]};
+                let converted_data: QuestionPage = {question: undefined, answers: []};
                 converted_data.question = this.convertDtoToQuestion(data.question);
-                converted_data.answers = (data.answers)?
+                converted_data.answers = (data.answers) ?
                     data.answers.map(answer => this.convertDtoToAnswer(answer)) :
                     [];
                 return response;
@@ -163,7 +157,7 @@ export class QuestionAPIController extends ApiController {
 
     // Helpers
 
-    private answerPutApiHelper (url: string, answer: Answer): AxiosPromise {
+    private answerPutApiHelper(url: string, answer: Answer): AxiosPromise {
         const answerDto = this.convertAnswerToDto(answer);
         return this.put(url, answerDto).then((response: AxiosResponse) => {
             response.data = this.convertDtoToAnswer(response.data);
@@ -171,7 +165,7 @@ export class QuestionAPIController extends ApiController {
         });
     }
 
-    private answerPostApiHelper (url: string, answer: Answer): AxiosPromise {
+    private answerPostApiHelper(url: string, answer: Answer): AxiosPromise {
         const answerDto = this.convertAnswerToDto(answer);
         return this.post(url, answerDto).then((response: AxiosResponse) => {
             response.data = this.convertDtoToAnswer(response.data);
@@ -179,7 +173,7 @@ export class QuestionAPIController extends ApiController {
         });
     }
 
-    private questionPutApiHelper (url: string, question: Question): AxiosPromise {
+    private questionPutApiHelper(url: string, question: Question): AxiosPromise {
         const questionDto = this.convertQuestionToDto(question);
         return this.put(url, questionDto).then((response: AxiosResponse) => {
             response.data = this.convertDtoToQuestion(response.data);
@@ -187,7 +181,7 @@ export class QuestionAPIController extends ApiController {
         });
     }
 
-    private questionPostApiHelper (url: string, question: Question): AxiosPromise {
+    private questionPostApiHelper(url: string, question: Question): AxiosPromise {
         const questionDto = this.convertQuestionToDto(question);
         return this.post(url, questionDto).then((response: AxiosResponse) => {
             response.data = this.convertDtoToQuestion(response.data);
@@ -202,7 +196,7 @@ export class QuestionAPIController extends ApiController {
     }
 
     private convertAnswerToDto(answer: Answer): AnswerDto {
-        let answerDto: AnswerDto= <any>{...answer};
+        let answerDto: AnswerDto = <any>{...answer};
         answerDto.content = this.convertEditorStateToRaw(answer.content);
         return answerDto;
     }

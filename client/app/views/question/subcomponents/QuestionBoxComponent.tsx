@@ -22,6 +22,7 @@ import {Prompt} from "react-router";
 import {FooterComponent} from "./FooterComponent";
 import {QuestionEditorReducerState} from "../../../reducers/QuestionEditorReducer";
 import {CommentDto} from "../../../../../server/dtos/q&a/CommentDto";
+import {SharedCommentsComponent} from "../../../components/Comments/SharedCommentsComponent";
 
 interface QuestionBoxComponentProps {
     user: UserDto; // current user
@@ -29,11 +30,12 @@ interface QuestionBoxComponentProps {
     questionEditorState: Question; // editor state
     edit: boolean; // edit mode
 }
+
 interface props extends QuestionBoxComponentProps, DispatchProps {
 
 }
 
-let paperStyle = {height: "100%"};
+let paperStyle = {height: "100%", padding: 15};
 
 export class QuestionBoxComponent extends Component<props, {}> {
 
@@ -51,25 +53,6 @@ export class QuestionBoxComponent extends Component<props, {}> {
 
     onEditClick = () => {
         this.props.changeQuestionEditorState({edit: true, question: this.props.questionEditorState});
-    };
-
-    onCommentSubmit = (comments) => {
-        let question = cloneQuestion(this.props.question);
-        question.comments = comments;
-        this.props.createComment(question);
-        this.props.changeQuestionEditorState({edit: this.props.edit, question});
-    };
-
-    onCommentUpdate = (commentId, updatedComment) => {
-      let question = cloneQuestion(this.props.question);
-      this.props.UpdateComment(question, commentId, updatedComment);
-      this.props.changeQuestionEditorState({edit: this.props.edit, question});
-    };
-
-    onCommentDelete = (commentId) => {
-      let question = cloneQuestion(this.props.question);
-      this.props.DeleteComment(question, commentId);
-      this.props.changeQuestionEditorState({edit: this.props.edit, question});
     };
 
     resetQuestion = () => {
@@ -108,12 +91,12 @@ export class QuestionBoxComponent extends Component<props, {}> {
                         `All unsaved changes will be discarded. Are you sure you want to leave?`
                     )}
                 />
-                <Paper style={paperStyle} elevation={0}>
+                <Paper style={paperStyle} elevation={1}>
                     <EditableMultiPurposeHeader value={question.title} editMode={this.props.edit}
                                                 onEditClick={this.onEditClick}
                                                 onTitleChange={this.onTitleChange}/>
                     {editButton}
-                    <Divider />
+                    <Divider/>
                     <div>
                         <QAEditorComponent value={question.content} onChange={this.onContentChange}
                                            onSubmit={this.onSubmit} readOnly={!this.props.edit}
@@ -134,11 +117,12 @@ export class QuestionBoxComponent extends Component<props, {}> {
                         />
                     </div>
                 </Paper>
-                <CommentsComponent comments={this.props.question.comments}
-                                   user={this.props.user}
-                                   onCommentsSubmit={this.onCommentSubmit}
-                                   onCommentUpdate={this.onCommentUpdate}
-                                   onCommentDelete={this.onCommentDelete}
+                <SharedCommentsComponent
+                    comments={this.props.question.comments}
+                    user={this.props.user}
+                    onCommentCreate={(c) => this.props.createComment(c, question._id)}
+                    onCommentUpdate={(c) => this.props.updateComment(c, question._id)}
+                    onCommentDelete={(c) => this.props.deleteComment(c, question._id)}
                 />
             </div>
         )
@@ -157,11 +141,9 @@ const mapDispatchToProps = (dispatch): DispatchProps => ({
     editQuestion: (question: Question) => dispatch(QuestionActions.updateQuestion(question)),
     changeQuestionEditorState: (state: QuestionEditorReducerState) =>
         dispatch(QuestionActions.changeQuestionEditorState(state)),
-    createComment: (question: Question) => dispatch(QuestionActions.createComment(question)),
-    UpdateComment: (question: Question, commentId: string, updatedComment: CommentDto) =>
-        dispatch(QuestionActions.updateComment(question, commentId, updatedComment)),
-    DeleteComment: (question: Question, commentId: string) =>
-        dispatch(QuestionActions.deleteComment(question, commentId)),
+    createComment: (c: CommentDto, id: string) => dispatch(QuestionActions.createComment(c, id)),
+    updateComment: (c: CommentDto, id: string) => dispatch(QuestionActions.updateComment(c, id)),
+    deleteComment: (c: CommentDto, id: string) => dispatch(QuestionActions.deleteComment(c, id)),
 });
 
 interface DispatchProps {
@@ -169,9 +151,9 @@ interface DispatchProps {
     downVoteQuestion: (question: Question) => void;
     editQuestion: (question: Question) => void;
     changeQuestionEditorState: (state: QuestionEditorReducerState) => void;
-    createComment: (question: Question) => void;
-    UpdateComment: (question: Question, commentId: string, updatedComment: CommentDto) => void;
-    DeleteComment: (question: Question, commentId: string) => void;
+    createComment: (c: CommentDto, id: string) => void;
+    updateComment: (c: CommentDto, id: string) => void;
+    deleteComment: (c: CommentDto, id: string) => void;
 }
 
 export const QuestionBoxView = connect<QuestionBoxComponentProps, DispatchProps, any>(

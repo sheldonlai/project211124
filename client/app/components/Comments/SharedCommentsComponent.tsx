@@ -18,12 +18,12 @@ export interface CommentsComponentProps {
     user: UserDto;
     onCommentCreate: (comment: CommentDto) => void;
     onCommentUpdate: (comment: CommentDto) => void;
-    onCommentDelete?: (commentId: string) => void;
+    onCommentDelete?: (comment: CommentDto) => void;
     loading? : boolean;
 }
 
 export interface CommentsComponentState {
-    inputMode: boolean;
+    newCommentMode: boolean;
     commentContent: string;
     errorMsg: string;
     EditCommentIndex: number;
@@ -33,7 +33,8 @@ export interface CommentsComponentState {
 const styleSheet: CSSProperties = {
     root: {
         width: '100%',
-        maxWidth: '360px'
+        maxWidth: '360px',
+        height: 36
     }
 };
 
@@ -51,7 +52,7 @@ export class SharedCommentsComponent extends React.Component<CommentsComponentPr
         super(props);
         //console.log(this.props.comments);
         this.state = {
-            inputMode: false,
+            newCommentMode: false,
             commentContent: "",
             errorMsg: "",
             EditCommentIndex: -1,
@@ -64,7 +65,7 @@ export class SharedCommentsComponent extends React.Component<CommentsComponentPr
             let tmpComment: CommentDto = {
                 _id: undefined,
                 commentContent: this.state.commentContent,
-                commentedDate: new Date(Date.now()),
+                createdUtc: new Date(Date.now()),
                 commentBy: this.props.user,
                 lastEditedUtc: new Date(Date.now()),
             };
@@ -80,7 +81,7 @@ export class SharedCommentsComponent extends React.Component<CommentsComponentPr
         this.setState({
             commentContent: "",
             errorMsg: "",
-            inputMode: false,
+            newCommentMode: false,
             showMaxComments: this.props.comments.length + 1
         });
     };
@@ -101,7 +102,7 @@ export class SharedCommentsComponent extends React.Component<CommentsComponentPr
     };
 
     renderInputCommentBox() {
-        if (this.state.inputMode && this.state.EditCommentIndex === -1) {
+        if (this.state.newCommentMode && this.state.EditCommentIndex === -1) {
             return (
                 <div>
                     {this.onErrMsg()}
@@ -116,12 +117,14 @@ export class SharedCommentsComponent extends React.Component<CommentsComponentPr
                     <div style={{height: 36, margin: "4px 0px"}}>
 
                         <Button
+                            dense
                             style={{float: "right"}}
                             color="primary"
                             onClick={this.addNewComment}>
                             Submit
                         </Button>
                         <Button
+                            dense
                             style={{float: "right"}}
                             onClick={this.resetState}>
                             Cancel
@@ -134,9 +137,9 @@ export class SharedCommentsComponent extends React.Component<CommentsComponentPr
     };
 
     DeleteComment = (indx: number) => {
-        let commentId: string = this.props.comments[indx]._id;
+        this.props.onCommentDelete(this.props.comments[indx]);
         this.props.comments.splice(indx, 1);
-        this.props.onCommentDelete(commentId);
+
     };
 
     onEditComment = (indx: number) => {
@@ -179,7 +182,7 @@ export class SharedCommentsComponent extends React.Component<CommentsComponentPr
         else {
             return (
                 <div style={{textAlign: "left"}}>
-                    <Button color="primary"
+                    <Button dense color="primary"
                             onClick={() => this.UpdateEditedComment(this.props.comments[indx]._id)}>save</Button>
                 </div>
             );
@@ -199,7 +202,7 @@ export class SharedCommentsComponent extends React.Component<CommentsComponentPr
         else {
             return (
                 <div style={{textAlign: "left"}}>
-                    <Button onClick={() => this.setState({EditCommentIndex: -1, commentContent: "", errorMsg: ""})}>
+                    <Button dense onClick={() => this.setState({EditCommentIndex: -1, commentContent: "", errorMsg: ""})}>
                         cancel
                     </Button>
                 </div>
@@ -237,8 +240,9 @@ export class SharedCommentsComponent extends React.Component<CommentsComponentPr
 
     renderComments = () => {
         let comments: CommentDto[] = this.props.comments.slice(0, this.state.showMaxComments);
-        //<div>Posted on {comment.commentedDate}</div>
-        return comments.map((comment, indx) => {
+        //<div>Posted on {comment.createdUtc}</div>
+        return comments.map((comment, index) => {
+            const showFooter = index != this.state.EditCommentIndex;
             return (
                 <div key={comment.lastEditedUtc + comment.commentBy.username}
                      style={{
@@ -247,16 +251,19 @@ export class SharedCommentsComponent extends React.Component<CommentsComponentPr
                      }}>
                     <div>
                         <div style={{display: "inline-block", width: "80%"}}>
-                            {this.onEditComment(indx)}
+                            {this.onEditComment(index)}
                         </div>
 
-                        {this.renderCommentActions(comment.commentBy, indx)}
+                        {this.renderCommentActions(comment.commentBy, index)}
                     </div>
-                    <div style={{color: "grey", fontSize: 10, textAlign: "right", marginTop: 10}}>
-                        posted on {convertDateTimeToString(comment.lastEditedUtc)}
-                        <br/>
-                        by {comment.commentBy.username}
-                    </div>
+                    {
+                        showFooter &&
+                        <div style={{color: "grey", fontSize: 10, textAlign: "right", marginTop: 10, marginBottom: 5}}>
+                            posted on {convertDateTimeToString(comment.lastEditedUtc)}
+                            <br/>
+                            by {comment.commentBy.username}
+                        </div>
+                    }
                 </div>
             )
         });
@@ -280,12 +287,12 @@ export class SharedCommentsComponent extends React.Component<CommentsComponentPr
                 </List>
 
                 {
-                    !this.state.inputMode &&
-                    <div className={styleSheet.root}>
-                        <Button raised
+                    !this.state.newCommentMode &&
+                    <div style={{height: 36, marginBottom : 10}}>
+                        <Button raised dense
                                 color="primary"
-                                style={{float: "right",}}
-                                onClick={() => this.setState({inputMode: !this.state.inputMode})}>
+                                style={{float: "right"}}
+                                onClick={() => this.setState({newCommentMode: !this.state.newCommentMode})}>
                             Comment
                         </Button>
                     </div>

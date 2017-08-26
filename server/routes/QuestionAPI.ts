@@ -66,25 +66,25 @@ export class QuestionAPI extends BaseAPI {
     };
 
     public createComment = (req: AuthRequest, res: Response, next: NextFunction) => {
-        let question: QuestionDto = req.body;
-        let result = this.service.createComment(question);
+        let id = req.params.id;
+        let comment: CommentDto = req.body;
+        let result = this.service.createComment(comment, id, req.user);
         this.respondPromise(result, res, next);
     };
 
     public updateComment = (req: AuthRequest, res: Response, next: NextFunction) => {
-        let commentId: string = req.body.commentId;
-        let updatedComment: CommentDto = req.body.updatedComment;
-        let questionId: string = req.body.questionID;
+        let id = req.params.id;
+        let comment = req.body;
         let user: User = req.user;
-        let result = this.service.UpdateComment(commentId, questionId, user, updatedComment);
+        let result = this.service.updateComment(comment, id, req.user);
         this.respondPromise(result, res, next);
     };
 
     public deleteComment = (req: AuthRequest, res: Response, next: NextFunction) => {
-        let commentId: string = req.body.commentId;
-        let questionId: string = req.body.questionID;
+        let id = req.params.id;
+        let comment = req.body;
         let user: User = req.user;
-        let result = this.service.DeleteComment(commentId, questionId, user);
+        let result = this.service.deleteComment(comment, id, req.user);
         this.respondPromise(result, res, next);
     };
 }

@@ -7,5 +7,5 @@ export interface CommentDto {
     commentBy: UserDto;
     commentContent: string;
     lastEditedUtc: Date;
-    commentedDate: Date;
+    createdUtc: Date;
 }
