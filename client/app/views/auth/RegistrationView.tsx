@@ -1,110 +1,84 @@
 import * as React from "react";
-import {Component} from "react";
-import TextField from "material-ui/TextField";
-import {FormWrapper} from "../../components/FormWrapper";
-import {ErrorView} from "../../components/ErrorView";
-import Button from "material-ui/Button";
 import {connect} from "react-redux";
-import {CommonController} from "../../api.controllers/CommonController";
-import {Routes} from "../../constants/Routes";
-import {RouterController} from "../../api.controllers/RouterController";
 import {AppStoreState} from "../../stores/AppStore";
-import {FrontEndAuthModels} from "../../models/AuthModels";
-import {EmailNameInputStyles} from "../../constants/StyleClasses";
-import RegistrationRequest = FrontEndAuthModels.RegistrationRequest;
+import Grid from "material-ui/Grid";
+import Paper from "material-ui/Paper";
+import {SplitVIewTemplate} from "../../components/Templates/SplitVIewTemplate";
+import Button from "material-ui/Button";
+import {TermsAndCondition} from "./TermsAndCondition";
+import Checkbox from 'material-ui/Checkbox';
+import Typography from "material-ui/Typography";
+import {FormGroup, FormControlLabel} from 'material-ui/Form';
+import {RegistrationForm} from "./RegistrationForm";
 
-export interface RegistrationViewState {
-    error : string;
-    regRequest : RegistrationRequest;
-    confirmPassword : string;
-    passwordError  : string;
+enum PageEnum {
+    terms_and_conditions,
+    form,
+    confirmation
 }
 
-export interface RegistrationViewProps {
-    loggedIn : boolean;
+interface state {
+    page: PageEnum;
+    agree: boolean;
 }
 
-export class RegistrationView extends Component<RegistrationViewProps, RegistrationViewState>{
+export class RegistrationViewComp extends React.Component<stateToProps> {
+    state = {
+        page: PageEnum.terms_and_conditions,
+        agree: false
+    };
 
-    apiController : CommonController;
-    constructor (props) {
-        super(props);
-        this.state = {
-            error: '',
-            regRequest : new RegistrationRequest(),
-            confirmPassword : '',
-            passwordError : ''
-        };
-        this.apiController = CommonController.getInstance();
+    nextOnTermsAndCondition = () => {
+        if (this.state.agree == false){
+            alert("You have to agree to the terms of services to process")
+        } else {
+            this.setState({page: PageEnum.form})
+        }
+    };
+
+    getPage() {
+        if (this.state.page === PageEnum.terms_and_conditions) {
+            return <div>
+                <TermsAndCondition/>
+                <FormControlLabel
+                    control={
+                        <Checkbox
+                            checked={this.state.agree}
+                            onChange={() => this.setState({agree: !this.state.agree})}/>
+                    }
+                    label="by checking this box I agree with the terms above"
+                />
+                <Button raised color="primary" onClick={this.nextOnTermsAndCondition}>Next</Button>
+            </div>
+        } else {
+            return <RegistrationForm loggedIn={this.props.loggedIn}/>;
+        }
     }
 
-    updateRequest = (key: string, value: string) => {
-        let regRequest = this.state.regRequest;
-        regRequest[key] = value;
-        this.setState({regRequest : regRequest});
-    };
 
-    updatePassword = (event) => {
-        this.updateRequest('password', event.target.value);
-    };
-
-    updateUsername = (event) => {
-        this.updateRequest('username', event.target.value);
-    };
-
-    updateEmail = (event) => {
-        this.updateRequest('email', event.target.value);
-    };
-
-    updateConfirmPassword = (event) => {
-        this.setState({confirmPassword : event.target.value});
-    };
-
-    submit =()=> {
-        if(this.state.regRequest.password != this.state.confirmPassword){
-            this.setState({passwordError : 'Password not matched'});
-            return;
-        }
-        this.apiController.registerUser(this.state.regRequest).then(res => {
-            this.apiController.setToken(res.data.token);
-            RouterController.history.push(Routes.login);
-        }).catch(err=> {
-            console.log(err.response.data.error);
-            this.setState({error : err.response.data.error});
-        })
-    };
-
-    render(){
+    render() {
         return (
-            <FormWrapper>
-                <ErrorView errorTxt={this.state.error}/>
-                <TextField
-                    label="Email"
-                    onChange={this.updateEmail}
-                    inputProps={EmailNameInputStyles}
-                /><br/>
-                <TextField
-                    label="Username"
-                    onChange={this.updateUsername}
-                /><br />
-                <TextField
-                    error={!!this.state.passwordError}
-                    label="password"
-                    type="password"
-                    onChange={this.updatePassword}
-                /><br />
-                <TextField
-                    label="confirm password"
-                    type="password"
-                    onChange={this.updateConfirmPassword}
-                /><br />
-                <Button raised onClick={this.submit}>Submit</Button>
-            </FormWrapper>
+            <SplitVIewTemplate>
+
+                <Paper style={{textAlign: "center", padding: 20, margin: 20}}>
+                    {this.getPage()}
+
+                </Paper>
+                <div/>
+            </SplitVIewTemplate>
         )
     }
 }
 
-export const RegistrationPage = connect(
-    (state: AppStoreState)=> ({loggedIn: state.auth.loggedIn}),
-    (dispatch) => ({})
-)(RegistrationView);
+interface stateToProps {
+    loggedIn: boolean;
+}
+
+const mapStateToProps = (state: AppStoreState): stateToProps => ({
+    loggedIn: state.auth.loggedIn
+});
+
+export const RegistrationView = connect<stateToProps, any, any>(
+    mapStateToProps
+)(RegistrationViewComp);
+
