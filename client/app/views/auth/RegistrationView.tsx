@@ -29,7 +29,7 @@ export class RegistrationViewComp extends React.Component<stateToProps> {
     };
 
     nextOnTermsAndCondition = () => {
-        if (this.state.agree == false){
+        if (this.state.agree == false) {
             alert("You have to agree to the terms of services to process")
         } else {
             this.setState({page: PageEnum.form})
@@ -58,14 +58,14 @@ export class RegistrationViewComp extends React.Component<stateToProps> {
 
     render() {
         return (
-            <SplitVIewTemplate>
+            <Grid container justify="center" align="center" style={{height: "100%"}}>
+                <Grid item style={{maxWidth: 800}}>
+                    <Paper style={{textAlign: "center", padding: 20, margin: 20}}>
+                        {this.getPage()}
 
-                <Paper style={{textAlign: "center", padding: 20, margin: 20}}>
-                    {this.getPage()}
-
-                </Paper>
-                <div/>
-            </SplitVIewTemplate>
+                    </Paper>
+                </Grid>
+            </Grid>
         )
     }
 }

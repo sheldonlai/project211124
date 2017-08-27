@@ -34,6 +34,14 @@ export class CommonController extends ApiController{
         return this.post(APIUrls.Register, regRequest);
     }
 
+    checkEmailAvailability(email: string){
+        return this.get(APIUrls.EmailAvailability.replace(":email", email));
+    }
+
+    checkUserNameAvailability(username: string){
+        return this.get(APIUrls.UsernameAvailability.replace(":username", username));
+    }
+
     getCountries () : AxiosPromise {
         return this.get(APIUrls.getCountries);
     }

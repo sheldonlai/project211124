@@ -20,6 +20,9 @@ export class AuthenticationAPI extends BaseAPI {
         this.router.post(APIUrls.Login, this.login);
         this.router.post(APIUrls.Register, this.register);
         this.router.get(APIUrls.Verify, this.verify);
+
+        this.router.get(APIUrls.UsernameAvailability, this.checkUsername);
+        this.router.get(APIUrls.EmailAvailability, this.checkEmail);
     }
 
     public register = (req: Request, res: Response, next: NextFunction) => {
@@ -37,6 +40,18 @@ export class AuthenticationAPI extends BaseAPI {
     public verify = (req: Request, res: Response, next: NextFunction) => {
         let code: string = req.params.code;
         let result: Promise<User> = this.service.verifyAccount(code);
+        this.respondPromise(result, res, next);
+    };
+
+    public checkUsername = (req: Request, res: Response, next: NextFunction) => {
+        let username = req.params.username;
+        let result: Promise<User> = this.service.checkUsername(username);
+        this.respondPromise(result, res, next);
+    };
+
+    public checkEmail = (req: Request, res: Response, next: NextFunction) => {
+        let email = req.params.email;
+        let result: Promise<User> = this.service.checkEmail(email);
         this.respondPromise(result, res, next);
     };
 }

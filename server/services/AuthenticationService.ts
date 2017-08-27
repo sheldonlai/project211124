@@ -37,11 +37,16 @@ export interface IAuthenticationService {
     sendEmailVerification(currentUser: User): Promise<any>
 
     verifyAccount(code: string): Promise<User>;
+
+    checkEmail(email: string): Promise<any>;
+
+    checkUsername(username: string): Promise<any>;
+
 }
 
 export class AuthenticationService extends BaseService implements IAuthenticationService {
-
     private mailService: IMailService;
+
     private templatesProvider: TemplatesProvider;
     private userRepository: IUserRepository;
     private emailVerificationRepository: IEmailVerificationRepository;
@@ -132,6 +137,34 @@ export class AuthenticationService extends BaseService implements IAuthenticatio
                 user.verified = true;
                 return this.userRepository.update(user);
             })
+    }
+
+    checkEmail(email: string): Promise<any> {
+        return this.userRepository.getByEmail(email).then((existingUser: User) => {
+            if (existingUser) {
+                throw new AppError("Entered e-mail is already in use.");
+            }
+        }).catch((err: AppError) => {
+            if (err.message === "Entity not found"){
+                return;
+            } else {
+                throw err;
+            }
+        });
+    }
+
+    checkUsername(username: string): Promise<any> {
+        return this.userRepository.findOne({username: username}).then((existingUser: User) => {
+            if (existingUser) {
+                throw new AppError("Entered username is already in use.");
+            }
+        }).catch((err: AppError) => {
+            if (err.message === "Entity not found"){
+                return;
+            } else {
+                throw err;
+            }
+        });
     }
 
 }

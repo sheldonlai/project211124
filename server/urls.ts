@@ -9,6 +9,8 @@ export class APIUrls {
     static Login = "/auth/login";
     static Register = "/auth/register";
     static Verify = "/auth/verify/:code";
+    static EmailAvailability = "/email-availability/:email";
+    static UsernameAvailability = "/username-availability/:username";
 
     /* upload */
     static Upload = "/upload";
