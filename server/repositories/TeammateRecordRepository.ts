@@ -62,7 +62,7 @@ export class TeammateRecordRepository extends BaseRepository<TeammateRecord, ITe
         return this.getById(recordId).then((record) => {
             for (let r of record.ratings){
                 if (r._id.toString() === rating._id.toString()){
-                    r.rating = rating.rating;
+                    r.satisfied = rating.satisfied;
                     r.comment = rating.comment;
                     r.updatedAt = new Date(Date.now());
                 }

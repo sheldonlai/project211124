@@ -15,6 +15,7 @@ import {TeammateRecordDto} from "../../../../server/dtos/rating/TeammateRecordDt
 import Input from "material-ui/Input/Input";
 import Icon from 'material-ui/Icon';
 import IconButton from 'material-ui/IconButton'
+import Typography from "material-ui/Typography";
 
 export class RatingHomeViewComponent extends React.Component<StateToProps & DispatchToProps, any> {
     constructor(props) {
@@ -66,6 +67,28 @@ export class RatingHomeViewComponent extends React.Component<StateToProps & Disp
         this.props.BlurrySearch(splittedStrings);
     };
 
+    mainContent = () => {
+        if (this.props.ratingPreviews.length < 1) {
+            return <Grid container justify="center">
+                <Grid item xs={12} style={{textAlign: "center"}}>
+                    <Typography type="headline">
+                        There are currently no ratings available.
+                    </Typography>
+                </Grid>
+                <Grid item style={{textAlign: "center"}}>
+                    {
+                        !this.props.loggedIn &&
+                        <Typography type="body1" color="inherit" style={{color: "#aaa"}}>
+                            Please log in to make a write about a teammate.
+                        </Typography>
+                    }
+                </Grid>
+            </Grid>
+        } else {
+            return this.props.ratingPreviews.map((e, i) => this.recordRow(e, i))
+        }
+    };
+
     render() {
         return (
             <div style={{padding: 10}}>
@@ -75,13 +98,17 @@ export class RatingHomeViewComponent extends React.Component<StateToProps & Disp
                     </Grid>
                     <Grid item xs={12} md={8} lg={6}>
                         <div>
-                            <CustomLink to={Routes.create_teammate_record}>
-                                <Button raised>Create A Teammate Record</Button>
-                            </CustomLink>
+                            {
+                                this.props.loggedIn &&
+                                <CustomLink to={Routes.create_teammate_record}>
+                                    <Button color="primary">Create A Teammate Record</Button>
+                                </CustomLink>
+                            }
                             {
                                 this.props.ratingPreviewStatus === ReducerStateStatus.LOADING ?
                                     <LoadingScreen/>:
-                                    this.props.ratingPreviews.map((e, i) => this.recordRow(e, i))
+                                    this.mainContent()
+
                             }
                         </div>
                     </Grid>
@@ -104,11 +131,13 @@ const mapDispatchToProps = (dispatch): DispatchToProps => ({
 interface StateToProps {
     ratingPreviewStatus: ReducerStateStatus;
     ratingPreviews: TeammatePreviewDto[];
+    loggedIn: boolean;
 }
 
 const mapStateToProps = (state: AppStoreState): StateToProps => ({
     ratingPreviewStatus: state.ratingHome.status,
-    ratingPreviews: state.ratingHome.previews
+    ratingPreviews: state.ratingHome.previews,
+    loggedIn: state.auth.loggedIn,
 });
 
 export const RatingHomeView = connect<StateToProps, DispatchToProps, any>(

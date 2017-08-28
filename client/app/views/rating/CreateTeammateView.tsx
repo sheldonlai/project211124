@@ -1,3 +1,4 @@
+
 import * as React from "react";
 import {CSSProperties} from "react";
 import {connect} from "react-redux";
@@ -15,6 +16,8 @@ import {RatingApiController} from "../../api.controllers/RatingApiController";
 import {TeammatePreviewDto} from "../../../../server/dtos/rating/TeammatePreviewDto";
 import {RatingPreviewCard} from "./subcomponents/RatingPreviewCard";
 import {LoadingScreen} from "../../components/Animations/LoadingScreen";
+import {RouterController} from "../../api.controllers/RouterController";
+import {Routes} from "../../constants/Routes";
 
 interface state {
     teammateObj: TeammateRecordDto;
@@ -22,6 +25,7 @@ interface state {
     similarPreviews: TeammatePreviewDto[];
     lastSearched: number;
     loading: boolean
+    error: string;
 }
 
 interface props extends DispatchToProps {
@@ -42,9 +46,10 @@ export class CreateTeammateViewComponent extends React.Component<props, state> {
             university: undefined,
             year: undefined,
             ratings: []
-        }
+        };
         this.state = {
             teammateObj: obj,
+            error: "",
             showDesHint: false,
             similarPreviews: [],
             lastSearched: 0,
@@ -62,6 +67,15 @@ export class CreateTeammateViewComponent extends React.Component<props, state> {
         });
     };
 
+    createTeammate = () => {
+        this.apiController.createTeammateRecord(this.state.teammateObj).then((res) => {
+            RouterController.history.push(Routes.rating.replace(":id", res.data._id));
+        }).catch((err) => {
+            console.log(err);
+            this.setState({error: err.response.data.error});
+        });
+    }
+
     updateObj = (key, value) => {
         let obj = {...this.state.teammateObj};
         if (typeof  value === "string" && key !== "description")
@@ -75,8 +89,7 @@ export class CreateTeammateViewComponent extends React.Component<props, state> {
     };
 
     onSubmit = () => {
-        let teammate = this.state.teammateObj;
-        this.props.createTeammate(teammate);
+        this.createTeammate();
     };
 
     render() {
@@ -93,6 +106,10 @@ export class CreateTeammateViewComponent extends React.Component<props, state> {
                         <Paper style={{padding: "20px"}}>
                             <Typography type="display1">
                                 Describe your teammate
+                            </Typography>
+
+                            <Typography style={{color: "red"}} color="inherit" type="body1">
+                                {this.state.error}
                             </Typography>
                             <TextField
                                 label="First name"

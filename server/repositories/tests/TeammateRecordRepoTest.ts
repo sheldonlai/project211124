@@ -57,8 +57,8 @@ describe(testName, function () {
         );
         let result = await teammateRecordRepo.create(newTeammate);
 
-        result.ratings.push(new TeammateRating(5, "gr8 guy", user));
-        result = await teammateRecordRepo.addRating(result._id, new TeammateRating(5, testName + " gr8 guy", user));
+        result.ratings.push(new TeammateRating(true, "gr8 guy", user));
+        result = await teammateRecordRepo.addRating(result._id, new TeammateRating(true, testName + " gr8 guy", user));
 
         expect(result.createdBy._id).toEqual(user._id);
         expect(result.createdBy.local).toBeUndefined();
@@ -69,7 +69,7 @@ describe(testName, function () {
         expect(result.ratings[0].createdBy.local).toBeUndefined();
 
         let rating = result.ratings[0];
-        rating.rating = 4;
+        rating.satisfied = false;
         rating.comment = testName + " not that great anymore";
         rating.createdAt = new Date(Date.now());
 

@@ -8,8 +8,19 @@ import Question = FrontEndQuestionModels.Question;
 import {Route, Router, withRouter} from "react-router";
 import {RouterController} from "../../../api.controllers/RouterController";
 import {MuiThemeProvider, createMuiTheme} from "material-ui/styles";
+import {CommentDto} from "../../../../../server/dtos/q&a/CommentDto";
+
 
 jest.mock('draft-js/lib/generateRandomKey', () => () => '123');
+jest.mock('../../../components/CustomEditor/EditorFactory');
+const e = require("../../../components/CustomEditor/EditorFactory");
+const mMock = jest.fn();
+e.EditorFactory.mockImplementation(() => {
+    return {
+        createRichEditor: () => null
+    }
+});
+
 let muiTheme = createMuiTheme();
 test('render question', () => {
     let user: UserDto = {
@@ -28,6 +39,10 @@ test('render question', () => {
     let questionStub: Question = new Question();
     questionStub.author = user;
     let propsStub = {
+    //     user: UserDto; // current user
+    // question: Question; // original question
+    // questionEditorState: Question; // editor state
+    // edit: boolean; // edit mode
         user: user,
         question: questionStub,
         questionEditorState: questionStub,
@@ -36,8 +51,17 @@ test('render question', () => {
         downVoteQuestion: functionStub,
         editQuestion: functionStub,
         changeQuestionEditorState: functionStub,
-        createComment: functionStub,
-        UpdateComment: functionStub,
+        createComment: (c: CommentDto, id: string) => {},
+        updateComment: (c: CommentDto, id: string) => {},
+        deleteComment: (c: CommentDto, id: string) => {}
+        /*
+            upVoteQuestion: (question: Question) => void;
+            downVoteQuestion: (question: Question) => void;
+            editQuestion: (question: Question) => void;
+            changeQuestionEditorState: (state: QuestionEditorReducerState) => void;
+            createComment: (c: CommentDto, id: string) => void;
+            updateComment: (c: CommentDto, id: string) => void;
+            deleteComment: (c: CommentDto, id: string) => void;*/
     };
 
     const component = renderer.create(

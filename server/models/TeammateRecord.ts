@@ -14,13 +14,13 @@ export interface AcademicInfo {
 
 export class TeammateRating{
     _id: any;
-    rating: number;
+    satisfied: boolean;
     comment: string;
     createdBy: User;
     createdAt: Date;
     updatedAt: Date;
-    constructor(score: number, comment:string, createdBy: User){
-        this.rating = score;
+    constructor(score: boolean, comment:string, createdBy: User){
+        this.satisfied = score;
         this.comment = comment;
         this.createdBy = createdBy;
     }
@@ -67,7 +67,7 @@ const schema = new Schema({
     },
     ratings: [
         {
-            rating: {type: Number, max: 5, min: 0, es_indexed: true},
+            satisfied: {type: Boolean},
             comment: {type: String},
             createdBy: {type: Schema.Types.ObjectId, ref: 'user'},
             createdAt: {type: Date, default: Date.now()},

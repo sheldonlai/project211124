@@ -48,9 +48,6 @@ describe('question api test', function () {
             expect(result.author.username).toEqual(user.username);
             expect(result.title).toBe(question.title);
 
-            let questionPreviews: QuestionPreviewCollectionsDto = await client.get(APIUrls.QuestionPreviews);
-            expect(questionPreviews.myQuestions.filter((q) => q._id === result._id).length).toBe(1);
-
             let questionPage: QuestionPageDto = await client.get(APIUrls.GetQuestionPage.replace(":id", result._id));
             expect(questionPage).toBeDefined();
 

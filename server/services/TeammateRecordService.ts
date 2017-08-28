@@ -13,6 +13,7 @@ import {elasticSearchModel} from "../elasticSearch/ElasticSearchUtils";
 import {universitySchema} from "../models/LocationModels/Universities";
 import * as _ from "lodash";
 import {STATUS_CODES} from "http";
+import {isNullOrUndefined} from "util";
 
 export interface ITeammateRecordService {
     createTeammateRecordRepo (teammateRecord: TeammateRecordDto, currentUser: User): Promise<TeammateRecordDto>;
@@ -37,6 +38,7 @@ export class TeammateRecordService extends BaseService implements ITeammateRecor
     }
 
     createTeammateRecordRepo(teammateRecord: TeammateRecordDto, currentUser: User): Promise<TeammateRecordDto> {
+        this.checkRequiredFields(teammateRecord, ["firstName" , "lastName", "university", "year"]);
         const record = new TeammateRecord(
             teammateRecord.firstName.toLowerCase(),
             teammateRecord.lastName.toLowerCase(),
@@ -104,7 +106,7 @@ export class TeammateRecordService extends BaseService implements ITeammateRecor
                 if (rating._id.toString() === teammateRatingDto._id &&
                     rating.createdBy._id.toString() === currentUser._id.toString()) {
                     rating.createdBy = teammateRatingDto.createdBy;
-                    rating.rating = teammateRatingDto.rating;
+                    rating.satisfied = teammateRatingDto.satisfied;
                     rating.comment= teammateRatingDto.comment;
                     rating.updatedAt = now;
                     found = true;
@@ -125,7 +127,7 @@ export class TeammateRecordService extends BaseService implements ITeammateRecor
     convertTeammateToPreview(teammate : TeammateRecord): TeammatePreviewDto {
         let sum = 0;
         for (let rating of teammate.ratings) {
-            sum += rating.rating;
+            sum += (rating.satisfied)? 1: 0;
         }
         let avgRating = sum / teammate.ratings.length;
         return {

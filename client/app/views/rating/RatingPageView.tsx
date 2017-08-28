@@ -19,6 +19,8 @@ import AddIcon from "material-ui-icons/Add";
 import {UserDto} from "../../../../server/dtos/auth/UserDto";
 import {RatingBox, RatingBoxView} from "./subcomponents/RatingBox";
 import {isNullOrUndefined} from "util";
+import {SatisfactionComponent} from "../../components/Satisfaction/SatisfactionComponent";
+import {DistributionBar} from "../../components/Satisfaction/DistributionBar";
 
 interface DispatchToProps {
     fetchTeammateRecord: (id: string) => void;
@@ -82,7 +84,7 @@ export class RatingViewComponent extends React.Component<props, state> {
         let record = {...this.state.record};
         record.ratings.push({
             _id: undefined,
-            rating: 0,
+            satisfied: undefined,
             createdBy: this.props.user,
             createdAt: new Date(Date.now()),
             comment: "",
@@ -94,7 +96,7 @@ export class RatingViewComponent extends React.Component<props, state> {
     getAverageRating() {
         let sum = 0;
         for (let rating of this.props.ratingPage.ratings) {
-            sum += rating.rating;
+            sum += rating.satisfied? 1 : 0;
         }
         return sum / this.props.ratingPage.ratings.length;
     }
@@ -124,7 +126,8 @@ export class RatingViewComponent extends React.Component<props, state> {
                                             <Typography type="caption">
                                                 Average Rating
                                             </Typography>
-                                            <ReactStars size={34} value={this.getAverageRating()} edit={false}/>
+                                            <SatisfactionComponent readonly={true} satisfy={undefined}/>
+                                            <DistributionBar faction={this.getAverageRating()} />
                                             <TeammateLocationEditor
                                                 university={record.university}
                                                 year={record.year}

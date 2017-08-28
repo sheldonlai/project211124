@@ -13,6 +13,7 @@ import {RatingActions} from "../../../actions/RatingActions";
 import Grid from "material-ui/Grid";
 import {AppStoreState} from "../../../stores/AppStore";
 import {ReducerStateStatus} from "../../../constants/ReducerStateStatus";
+import {SatisfactionComponent} from "../../../components/Satisfaction/SatisfactionComponent";
 
 interface props {
     user: UserDto,
@@ -102,8 +103,12 @@ export class RatingBox extends React.Component<props & DispatchToProps& StateToP
                     <Typography type="caption">
                         Rating
                     </Typography>
-                    <ReactStars size={24} value={rating.rating}
-                                onChange={(num) => this.onRatingChange("rating", num)}/>
+                    <SatisfactionComponent
+                        readonly={!this.state.edit}
+                        satisfy={rating.satisfied}
+                        onNotSatisfyClick={() => this.onRatingChange("satisfied", false)}
+                        onSatisfyClick={() => this.onRatingChange("satisfied", true)}
+                    />
                     <Divider/>
                     {
                         edit ?

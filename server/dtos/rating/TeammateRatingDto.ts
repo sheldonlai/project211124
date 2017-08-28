@@ -2,7 +2,7 @@ import {UserDto} from "../auth/UserDto";
 
 export interface TeammateRatingDto {
     _id: string;
-    rating: number;
+    satisfied: boolean;
     comment: string;
     createdBy: UserDto;
     createdAt: Date;

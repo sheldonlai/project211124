@@ -12,6 +12,7 @@ import Button from "material-ui/Button";
 import {QuestionPreviewCardsComponent} from "./subcomponents/QuestionPreviewCardsComponent";
 import Grid from "material-ui/Grid";
 import {LoadingScreen} from "../../components/Animations/LoadingScreen";
+import Typography from "material-ui/Typography";
 
 export interface QuestionViewProps extends QuestionHomeReducerState {
     loggedIn: boolean;
@@ -31,12 +32,25 @@ class QuestionHomeComponent extends Component<QuestionViewProps> {
         return undefined;
     };
 
-    render() {
-        if (this.props.featuredQuestions.length == 0) {
-            return <LoadingScreen/>
-        }
-        return (
-            <Grid container justify="center" >
+    mainContent = () => {
+        if (this.props.featuredQuestions.length < 1 && this.props.myQuestions.length < 1) {
+            return <Grid container justify="center">
+                <Grid item xs={12} style={{textAlign: "center"}}>
+                    <Typography type="headline">
+                        There are currently no ratings available.
+                    </Typography>
+                </Grid>
+                <Grid item style={{textAlign: "center"}}>
+                    {
+                        !this.props.loggedIn &&
+                        <Typography type="body1" color="inherit" style={{color: "#aaa"}}>
+                            Please log in to make a write about a teammate.
+                        </Typography>
+                    }
+                </Grid>
+            </Grid>
+        } else {
+            return <Grid container justify="center" >
                 <Grid item xs={12} style={{maxWidth: 1082}}>
                     <Grid container justify="flex-end" style={{width: "100%"}}>
                         <Grid item>
@@ -48,7 +62,15 @@ class QuestionHomeComponent extends Component<QuestionViewProps> {
                     <QuestionPreviewCardsComponent list={this.props.myQuestions} label="My Questions" maxBlock={4}/>
                 </Grid>
             </Grid>
-        )
+        }
+    };
+
+
+    render() {
+        if (this.props.featuredQuestions.length == 0) {
+            return <LoadingScreen/>
+        }
+        return this.mainContent();
     }
 }
 

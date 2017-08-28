@@ -5,7 +5,6 @@ import "draft-js/dist/Draft.css";
 export class EditorStateUtil {
 
     public static insertImages(editorState: EditorState, imageSrcs: string[]): EditorState {
-        console.log(imageSrcs);
         let newEditorState = editorState;
         for (let src of imageSrcs) {
             newEditorState = EditorStateUtil.insertImage(newEditorState, src);

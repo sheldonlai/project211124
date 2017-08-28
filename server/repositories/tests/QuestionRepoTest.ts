@@ -44,7 +44,6 @@ describe('QuestionRepoTest', function () {
         expect.assertions(1);
         return questionRepo.create(newQuestion).catch(function (err) {
             expect(err.message).toBeDefined();
-            console.log('test passed')
         })
     });
 
@@ -67,7 +66,7 @@ describe('QuestionRepoTest', function () {
     });
 
     it('should update', async function () {
-        let dateTime = new Date(2016, 1, 1);
+
         let prev_content;
         // create user
         let newUser: User = await UserModel.create(fakeModels.localUser("QuestionRepoTest", 1));
@@ -92,10 +91,6 @@ describe('QuestionRepoTest', function () {
         question.content = createRawDraftContentState('changed');
 
         // should not change
-        question.lastEditedUtc = dateTime;
-
-        question = await questionRepo.update(question);
-        expect(question.lastEditedUtc).not.toEqual(dateTime);
         expect(prev_content).toBeDefined();
         expect(question.content).not.toBe(prev_content);
         expect(question.title).toBe('QuestionRepoTestNew');
