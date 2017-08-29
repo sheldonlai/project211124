@@ -24,4 +24,7 @@ export class Routes {
     static create_teammate_record = "/create-teammate-record";
     static rating = "/rating/:id";
 
+    // admin
+    static admin = '/admin'
+
 }

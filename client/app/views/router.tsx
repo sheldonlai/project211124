@@ -7,7 +7,7 @@ import {LoginPage} from "./auth/LoginView";
 import {Routes} from "../constants/Routes";
 import {RegistrationPage} from "./auth/RegistrationForm";
 import {RouterController} from "../api.controllers/RouterController";
-import {Provider} from "react-redux";
+import {connect, Provider} from "react-redux";
 import {MenuView} from "./Menu";
 import {ErrorSnackBar} from "./ErrorView";
 import {UserProfileView} from "./profile/UserProfileView";
@@ -18,9 +18,13 @@ import {RatingPageView} from "./rating/RatingPageView";
 import {Bundle} from "../components/Bundle";
 import {LoadingScreen} from "../components/Animations/LoadingScreen";
 import {RegistrationView} from "./auth/RegistrationView";
+import {AppStoreState} from "../stores/AppStore";
+import {UserTypeEnum} from "../../../server/enums/UserTypeEnum";
 
 let questionLoader = require("bundle-loader?lazy&name=question!./question/QuestionRouter");
 let storyLoader = require("bundle-loader?lazy&name=story!./story/StoryRouter");
+let adminLoader = require("bundle-loader?lazy&name=admin!./admin/AdminRouter");
+
 let muiTheme = createMuiTheme({
     palette: createPalette({
         primary: deepOrange,
@@ -43,6 +47,22 @@ const StoryModule = () => (
     </Bundle>
 );
 
+
+const AdminModule = connect(
+    (state: AppStoreState) => ({user : state.auth.user})
+)((props) => {
+    if (!props.user || props.user.role !== UserTypeEnum.ADMIN){
+        return <div>
+            404 Not Found
+        </div>
+    }
+    return <Bundle load={adminLoader}>
+        {(mod) => (
+            mod ? mod() : <LoadingScreen/>
+        )}
+    </Bundle>
+});
+
 export class App extends React.Component<any, any> {
     render() {
         return (
@@ -61,6 +81,7 @@ export class App extends React.Component<any, any> {
                             <Route exact path={Routes.rate_my_teammate} component={RatingHomeView}/>
                             <Route exact path={Routes.create_teammate_record} component={CreateTeammateView}/>
                             <Route exact path={Routes.rating} component={RatingPageView}/>
+                            <Route path={Routes.admin} component={AdminModule} />
                         </div>
                     </Router>
                 </Provider>

@@ -99,6 +99,11 @@ class MenuClass extends Component<MenuClassProps, state> {
                                 Profile
                             </CustomLink>
                         </MenuItem>
+                        <MenuItem onClick={() => this.handleMenuClick('admin')} selected={false}>
+                            <CustomLink to={Routes.admin}>
+                                Admin
+                            </CustomLink>
+                        </MenuItem>
 
                         <MenuItem
                             selected={false}
@@ -175,6 +180,7 @@ class MenuClass extends Component<MenuClassProps, state> {
                             this.props.loggedIn ?
                                 <div>
                                     {this.button("Profile", Routes.my_profile, true)}
+                                    {this.button("Admin", Routes.admin, true)}
                                     <Button color="contrast"
                                              style={{...menuButtonStyle, width: "100%"}}
                                              onClick={() => this.handleMenuClick('logout')}>

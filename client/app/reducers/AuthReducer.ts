@@ -3,9 +3,10 @@ import {ReducerStateStatus} from "../constants/ReducerStateStatus";
 import {CommonController} from "../api.controllers/CommonController";
 import * as JwtDecode from 'jwt-decode';
 import {UserActionTypes} from "../constants/UserActionTypes";
+import {UserDto} from "../../../server/dtos/auth/UserDto";
 export interface AuthReducerState {
     status: ReducerStateStatus;
-    user: any;
+    user: UserDto;
     loggedIn: boolean;
 }
 
