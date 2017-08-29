@@ -7,6 +7,8 @@ import {TeammatePreviewDto} from "../../../../../server/dtos/rating/TeammatePrev
 import {Routes} from "../../../constants/Routes";
 import {convertEnumStringToViewString} from "../../../utils/utils";
 import {UniversityYearEnum} from "../../../../../server/enums/UniversityYearEnum";
+import {SatisfactionComponent} from "../../../components/Satisfaction/SatisfactionComponent";
+import {DistributionBar} from "../../../components/Satisfaction/DistributionBar";
 
 interface props {
     preview: TeammatePreviewDto;
@@ -23,7 +25,8 @@ export class RatingPreviewCard extends React.Component<props>{
                         <Typography type="headline" style={{textTransform: "capitalize"}}>
                             {preview.firstName + " " + preview.lastName}
                         </Typography>
-                        <ReactStars size={34} value={preview.averageRating} edit={false}/>
+                        <SatisfactionComponent readonly={true} satisfy={undefined}/>
+                        <DistributionBar faction={this.props.preview.averageRating} />
                         {
                             preview.university &&
                             <div>
