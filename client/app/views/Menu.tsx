@@ -65,9 +65,8 @@ class MenuClass extends Component<MenuClassProps, state> {
             case 'logout':
                 this.props.logout();
                 break;
-            case 'profile':
-                break;
             default:
+                this.props.history.push(key)
                 break;
         }
         this.setState({open: false});
@@ -79,12 +78,15 @@ class MenuClass extends Component<MenuClassProps, state> {
         } else {
             return (
                 <div>
-                    <Button id="menu-drop-down-button" color="contrast"
-                            style={menuButtonStyle}
-                            onClick={() => this.setState({open: true})}
-                    >
-                        {this.props.user.email}
-                    </Button>
+                    <div id="menu-drop-down-button">
+                        <Button color="contrast"
+                                style={menuButtonStyle}
+                                onClick={() => this.setState({open: true})}
+                        >
+                            {this.props.user.email}
+                        </Button>
+                    </div>
+
                     <Menu
                         id="lock-menu"
                         anchorEl={document.getElementById("menu-drop-down-button")}
@@ -92,17 +94,12 @@ class MenuClass extends Component<MenuClassProps, state> {
                         onRequestClose={this.handleRequestClose}
                     >
                         <MenuItem
-                            onClick={() => this.handleMenuClick('profile')}
+                            onClick={() => this.handleMenuClick(Routes.my_profile)}
                             selected={false}>
-                            <CustomLink
-                                to={Routes.my_profile}>
                                 Profile
-                            </CustomLink>
                         </MenuItem>
-                        <MenuItem onClick={() => this.handleMenuClick('admin')} selected={false}>
-                            <CustomLink to={Routes.admin}>
+                        <MenuItem onClick={() => this.handleMenuClick(Routes.admin)} selected={false}>
                                 Admin
-                            </CustomLink>
                         </MenuItem>
 
                         <MenuItem

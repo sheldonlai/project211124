@@ -38,7 +38,6 @@ export class CustomCard extends React.Component<CardComponentProps, any> {
 
     render() {
         const width = this.props.wide? 500 + 16 : 250;
-        console.log(this.props);
         let dateString;
         try {
             dateString = convertDateTimeToString(this.props.date);
@@ -50,7 +49,7 @@ export class CustomCard extends React.Component<CardComponentProps, any> {
                 <Card style={{width: width, ...cardStyle}}>
                     <div style={shader}/>
                     <CardContent>
-                        <Typography type="headline" style={{fontSize: 18}}>
+                        <Typography type="headline" style={{fontSize: 18, lineHeight: "24px"}}>
                             {this.props.title}
                         </Typography>
                         <Typography type="body1" style={{fontSize: 10}} color="secondary">

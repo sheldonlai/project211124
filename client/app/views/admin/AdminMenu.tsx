@@ -11,7 +11,7 @@ interface state {
     page: number;
 }
 
-class AdminDashboard extends React.Component<any, state>{
+class AdminMenu extends React.Component<any, state>{
 
     constructor(props){
         super(props);
@@ -24,6 +24,12 @@ class AdminDashboard extends React.Component<any, state>{
     handleChange = (event, v: number) => {
         console.log(v);
         switch (v) {
+            case 0:
+                this.props.history.push(Routes.admin_dashboard);
+                break;
+            case 1:
+                this.props.history.push(Routes.admin_teammate);
+                break;
         }
         this.setState({page: v});
     };
@@ -39,8 +45,8 @@ class AdminDashboard extends React.Component<any, state>{
                     indicatorColor="primary"
                     textColor="primary"
                 >
-                    <CustomLink to={Routes.admin_dashboard}><Tab label="Dashboard" icon={<Icon>dashboard</Icon>} /></CustomLink>
-                    <CustomLink to={Routes.admin_teammate}><Tab label="Teammate" icon={<Icon>people</Icon>} /></CustomLink>
+                    <Tab label="Dashboard" icon={<Icon>dashboard</Icon>}/>
+                    <Tab label="Teammate" icon={<Icon>people</Icon>}/>
                 </Tabs>
             </AppBar>
         </div>
@@ -49,4 +55,4 @@ class AdminDashboard extends React.Component<any, state>{
 
 export const AdminMenuView = connect(
     (state: AppStoreState) => ({user: state.auth.user})
-)(AdminDashboard);
+)(AdminMenu);

@@ -11,3 +11,7 @@ body {
 .example-enter {
     opacity: 0.01;
 }
+a {color: #080808;}      /* unvisited link */
+a:visited {color:#080808;}  /* visited link */
+a:hover {color:#080808;}  /* mouse over link */
+a:active {color:#080808;}  /* selected link */
