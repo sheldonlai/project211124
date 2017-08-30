@@ -1,7 +1,7 @@
 import * as React from "react";
 import {Route} from "react-router";
 import {Routes} from "../../constants/Routes";
-import {AdminDashboardView} from "./AdminDashboard";
+import {AdminMenuView} from "./AdminMenu";
 
 const firstChild = props => {
     const childrenArray = React.Children.toArray(props.children);
@@ -10,7 +10,7 @@ const firstChild = props => {
 
 export const AdminRouter = () => (
     <div>
-        <Route path={Routes.admin} component={AdminDashboardView}/>
+        <Route path={Routes.admin} component={AdminMenuView}/>
     </div>
 );
 

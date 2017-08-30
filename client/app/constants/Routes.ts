@@ -25,6 +25,8 @@ export class Routes {
     static rating = "/rating/:id";
 
     // admin
-    static admin = '/admin'
+    static admin = '/admin';
+    static admin_dashboard = '/admin/dashboard';
+    static admin_teammate = '/admin/teammate';
 
 }
