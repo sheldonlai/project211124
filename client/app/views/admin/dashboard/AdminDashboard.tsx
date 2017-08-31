@@ -58,8 +58,12 @@ export class AdminDashboardComp extends React.Component<any, state> {
     render() {
         return (
             <div>
-                <Typography type="body1"></Typography>
-                <Button onClick={this.onFormat}>Format</Button>
+                <div style={{padding: "20px 0px"}}>
+                    <Typography type="body1">
+                        
+                    </Typography>
+                    <Button onClick={this.onFormat}>Format</Button>
+                </div>
                 <textarea style={{width: "100%", minHeight: 300}} value={this.state.json} onChange={this.onChange}/>
             </div>
         )

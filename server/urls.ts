@@ -63,4 +63,9 @@ export class APIUrls {
     static updateStoryComment = "/update-story-comment/:id";
     static UpVoteStory = "/up-vote-story";
     static DownVoteStory = "/down-vote-story";
+
+    /* Admin*/
+    static SetDashboardSettings = "/set-dashboard-settings";
+    static GetDashboardSettings = "/get-dashboard-settings";
+
 }

@@ -27,7 +27,7 @@ const shader : CSSProperties = {
     position: "absolute",
     left: 0,
     top: 0,
-    background: "linear-gradient(transparent 150px, white 175px)",
+    background: "linear-gradient(transparent 100px, white 175px)",
 };
 
 export class CustomCard extends React.Component<CardComponentProps, any> {

@@ -17,6 +17,8 @@ import {TeammateRecordService} from "./services/TeammateRecordService";
 import {TeammateRecordRepository} from "./repositories/TeammateRecordRepository";
 import {StoryRepository} from "./repositories/StoryRepository";
 import {StoryService} from "./services/StoryService";
+import {DashboardViewRepository} from "./repositories/DashboardViewRepository";
+import {AdminService} from "./services/AdminService";
 
 export class RepositoryProvider {
     static AnswerRepository = new AnswerRepository();
@@ -28,6 +30,7 @@ export class RepositoryProvider {
     static UniversityRepository = new UniversityRepository();
     static TeammateRecordRepository = new TeammateRecordRepository();
     static StoryRepository = new StoryRepository();
+    static DashboardViewRepository = new DashboardViewRepository();
 }
 
 export class ServiceProvider {
@@ -58,5 +61,6 @@ export class ServiceProvider {
         RepositoryProvider.TagRepository,
         RepositoryProvider.UserRepository
     );
+    static AdminService = new AdminService(RepositoryProvider.DashboardViewRepository);
 
 }
