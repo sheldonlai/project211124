@@ -23,6 +23,7 @@ import Story = FrontEndStoryModels.Story;
 import Grid from "material-ui/Grid";
 import {SharedCommentsComponent} from "../../components/Comments/SharedCommentsComponent";
 import {CommentDto} from "../../../../server/dtos/q&a/CommentDto";
+import {QuestionFooterComponent} from "../question/subcomponents/QuestionFooterComponent";
 
 export class StoryPage extends React.Component<props, { edit: boolean }> {
     constructor(props) {
@@ -72,6 +73,12 @@ export class StoryPage extends React.Component<props, { edit: boolean }> {
                         <CustomEditor value={this.props.story.content} readOnly={true} border={false}/>
                         <div/>
                     </div>
+                    <QuestionFooterComponent onUpVote={() => this.props.upVote(story)}
+                                             onDownVote={() => this.props.downVote(story)}
+                                             upVotes={story.upVotes}
+                                             downVotes={story.downVotes}
+                                             author={story.author}
+                                             createdUtc={story.createdUtc}/>
                     <SharedCommentsComponent
                         comments={this.props.story.comments}
                         user={this.props.user}
@@ -130,6 +137,8 @@ interface DispatchToProps {
     updateStory: (story: Story) => void;
     createComment: (comment: CommentDto, storyId: string) => void;
     updateComment: (comment: CommentDto, storyId: string) => void;
+    upVote: (s: Story) => void;
+    downVote: (s: Story) => void;
 }
 
 interface props extends StateToProps, DispatchToProps, RouteComponentProps<{ id: string }> {
@@ -146,6 +155,8 @@ const mapDispatchToProps = (dispatch): DispatchToProps => ({
     updateStory: (story: Story) => dispatch(StoryActions.updateStory(story)),
     createComment: (comment: CommentDto, storyId: string) => dispatch(StoryActions.createComment(comment, storyId)),
     updateComment: (comment: CommentDto, storyId: string) => dispatch(StoryActions.updateComment(comment, storyId)),
+    upVote: (s: Story) => dispatch(StoryActions.upVoteStory(s)),
+    downVote: (s: Story) => dispatch(StoryActions.downVoteStory(s)),
 });
 
 export const StoryPageView = connect<StateToProps, DispatchToProps, RouteComponentProps<{ id: string }>>(

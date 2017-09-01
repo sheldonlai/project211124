@@ -38,6 +38,16 @@ const changeOkState = (state, story: Story) => {
     return state;
 };
 
+const updateVotes = (state, story: Story) => {
+    state = {...state};
+    state.status = ReducerStateStatus.DONE;
+    state.story = {...state.story};
+    state.story.upVotes = story.upVotes;
+    state.story.downVotes = story.downVotes;
+    state.commentStatus = ReducerStateStatus.DONE;
+    return state;
+};
+
 export const StoryPageReducer = (state = initialState, action): StoryPageReducerState => {
     switch (action.type) {
         case StoryActionTypes.FetchStoryPageRequest:
@@ -59,6 +69,12 @@ export const StoryPageReducer = (state = initialState, action): StoryPageReducer
             return getCommentLoadingState(state);
         case StoryActionTypes.UpdateStoryCommentOK:
             return changeOkState(state, action.data);
+
+        case StoryActionTypes.UpVoteStory:
+            return updateVotes(state, action.data);
+
+        case StoryActionTypes.DownVoteStory:
+            return updateVotes(state, action.data);
 
         default:
             return state;

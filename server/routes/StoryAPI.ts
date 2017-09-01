@@ -3,6 +3,7 @@ import {BaseAPI} from "./BaseAPI";
 import {APIUrls} from "../urls";
 import {AuthRequest, maybeAuthenticated, mustBeAuthenticated} from "../middlewares/AuthMiddleware";
 import {IStoryService} from "../services/StoryService";
+import {StoryDto} from "../dtos/story/StoryDto";
 
 export class StoryAPI extends BaseAPI {
 
@@ -18,6 +19,8 @@ export class StoryAPI extends BaseAPI {
         this.router.put(APIUrls.updateStory, mustBeAuthenticated, this.updateStory);
         this.router.post(APIUrls.createStoryComment, mustBeAuthenticated, this.createStoryComment);
         this.router.put(APIUrls.updateStoryComment, mustBeAuthenticated, this.updateStoryComment);
+        this.router.put(APIUrls.UpVoteStory, mustBeAuthenticated, this.upVoteStory);
+        this.router.put(APIUrls.DownVoteStory, mustBeAuthenticated, this.downVoteStory);
     }
 
     public getStoryPreviews = (req: AuthRequest, res: Response, next: NextFunction) => {
@@ -60,6 +63,20 @@ export class StoryAPI extends BaseAPI {
         const currentUser = req.user;
         const dto = req.body;
         const promise = this.service.updateComment(dto, storyId, currentUser);
+        this.respondPromise(promise, res, next);
+    };
+
+    public upVoteStory =  (req: AuthRequest, res: Response, next: NextFunction) => {
+        const story: StoryDto = req.body;
+        const user  = req.user;
+        const promise = this.service.upVoteStory(story._id, user);
+        this.respondPromise(promise, res, next);
+    };
+
+    public downVoteStory =  (req: AuthRequest, res: Response, next: NextFunction) => {
+        const story: StoryDto = req.body;
+        const user  = req.user;
+        const promise = this.service.downVoteStory(story._id, user);
         this.respondPromise(promise, res, next);
     };
 }

@@ -77,7 +77,7 @@ export class StoryRepository extends BaseRepository<Story, IStory> implements IS
         if (isNullOrUndefined(story)){
             throw new AppError("Cannot find the specified question", ClientError.BAD_REQUEST)
         }
-        return UserStoryVoteModel.find({question: story}).lean().exec()
+        return UserStoryVoteModel.find({story: story}).lean().exec()
             .then((userVote: UserStoryVote[]) => {
                 const upVote = userVote.filter((userVote) => userVote.upVote == true).length;
                 const downVote = userVote.length - upVote;
