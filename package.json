@@ -107,7 +107,7 @@
     "string_score": "^0.1.22",
     "style-loader": "^0.18.2",
     "typeface-roboto": "0.0.35",
-    "typescript": "^2.4.2"
+    "typescript": "^2.5.2"
   },
   "jest": {
     "transform": {

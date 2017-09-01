@@ -8,7 +8,7 @@ import {Routes} from "../constants/Routes";
 import {RegistrationPage} from "./auth/RegistrationForm";
 import {RouterController} from "../api.controllers/RouterController";
 import {connect, Provider} from "react-redux";
-import {MenuView} from "./Menu";
+import {MenuView} from "./menu/Menu";
 import {ErrorSnackBar} from "./ErrorView";
 import {UserProfileView} from "./profile/UserProfileView";
 import {RatingHomeView} from "./rating/RatingHomeView";
@@ -28,7 +28,7 @@ let adminLoader = require("bundle-loader?lazy&name=admin!./admin/AdminRouter");
 let muiTheme = createMuiTheme({
     palette: createPalette({
         primary: deepOrange,
-        accent: blueGrey
+        accent: blueGrey,
     })
 });
 const QuestionModule = () => (
