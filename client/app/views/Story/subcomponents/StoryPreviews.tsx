@@ -61,15 +61,15 @@ export class StoryPreviews extends React.Component<props, state> {
                 <Grid item style={{marginTop: 16, width: n * 266}}>
                     <Typography type="display2" style={{marginBottom: 10}}>{this.props.label}</Typography>
                     <Grid container justify="center">
-                        {list.map((e: StoryPreview) => (
-                            <Grid item key={e.title}>
+                        {list.map((e) => (
+                            <Grid item key={e.element.title}>
                                 <div style={{display: "inline-block"}}>
-                                    <CustomLink to={this.prepareStoryUrl(Routes.story_by_id, e)}>
+                                    <CustomLink to={this.prepareStoryUrl(Routes.story_by_id, e.element)}>
                                         <CustomCard
-                                            title={e.title}
-                                            content={e.content}
-                                            date={e.createdUtc}
-                                            wide={n > 1 && isElementWide(e)}
+                                            title={e.element.title}
+                                            content={e.element.content}
+                                            date={e.element.createdUtc}
+                                            wide={n > 1 && e.wide}
                                         />
                                     </CustomLink>
                                 </div>

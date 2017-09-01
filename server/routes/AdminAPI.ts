@@ -2,7 +2,7 @@ import {NextFunction, Response, Router} from "express";
 import {BaseAPI} from "./BaseAPI";
 import {APIUrls} from "../urls";
 import {IAdminService} from "../services/AdminService";
-import {AuthRequest, mustBeAuthenticated} from "../middlewares/AuthMiddleware";
+import {AuthRequest, mustBeAdministrator, mustBeAuthenticated} from "../middlewares/AuthMiddleware";
 
 export class AdminAPI extends BaseAPI {
 
@@ -13,8 +13,8 @@ export class AdminAPI extends BaseAPI {
         super();
         this.router = Router();
         this.service = service;
-        this.router.post(APIUrls.SetDashboardSettings, mustBeAuthenticated, this.setAdminDashboardSettings);
-        this.router.get(APIUrls.GetDashboardSettings, mustBeAuthenticated, this.getAdminDashboardSettings);
+        this.router.post(APIUrls.SetDashboardSettings, mustBeAdministrator, this.setAdminDashboardSettings);
+        this.router.get(APIUrls.GetDashboardSettings, mustBeAdministrator, this.getAdminDashboardSettings);
     }
 
 

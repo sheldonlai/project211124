@@ -1,36 +1,45 @@
+import {FrontEndStoryModels} from "../models/StoryModels";
+import Story = FrontEndStoryModels.Story;
+import {FrontEndQuestionModels} from "../models/QuestionModels";
+import Question = FrontEndQuestionModels.Question;
+import QuestionPreview = FrontEndQuestionModels.QuestionPreview;
+import StoryPreview = FrontEndStoryModels.StoryPreview;
+
 const wordsThreshold = 200;
 
-export const isElementWide = (element : any) => {
+export const isElementWide = (element : QuestionPreview|StoryPreview) => {
     return element.content && element.content.length > wordsThreshold
 };
 
-const swapElement =(list: any[], i: number, j: number) => {
+
+
+const swapElement =(list: WidableObject[], i: number, j: number) => {
     let temp = list[i];
     list[i] = list[j];
     list[j] = temp;
-}
+};
 
-const findSlimBoxFrom = (list: any[],index? : number) => {
+const findSlimBoxFrom = (list: WidableObject[],index? : number) => {
     index = index? index: 0;
     for (index; index < list.length; index++){
-        if (!isElementWide(list[index])){
+        if (!list[index].wide){
             return index;
         }
     }
     return -1;
 };
 
-const findSlimBoxFromReverse = (list: any[],index? : number, stopIndex?: number) => {
+const findSlimBoxFromReverse = (list: WidableObject[],index? : number, stopIndex?: number) => {
     index = index? index: 0;
     for (index; index > 0 || index > stopIndex; index--){
-        if (!isElementWide(list[index])){
+        if (!list[index].wide){
             return index;
         }
     }
     return -1;
 };
 
-export const getLengthFromBoxes = (list: any[]) => {
+export const getLengthFromBoxes = (list: (QuestionPreview|StoryPreview)[]) => {
     let length = 0;
     for (let el of list){
         length += isElementWide(el)? 2 : 1;
@@ -38,8 +47,13 @@ export const getLengthFromBoxes = (list: any[]) => {
     return length;
 };
 
-export const sortListToGetSameWidthEachRow = (list: any[], numOfBoxPerRow: number, trim?: boolean) => {
-    let rList = [...list];
+export interface WidableObject {
+    wide: boolean;
+    element: any;
+}
+
+export const sortListToGetSameWidthEachRow = (list: any[], numOfBoxPerRow: number, trim?: boolean) :WidableObject[] => {
+    let rList : WidableObject[] = list.map(e => ({wide: isElementWide(e), element: e}));
     if (numOfBoxPerRow <= 1){
         return rList;
     }
@@ -50,7 +64,7 @@ export const sortListToGetSameWidthEachRow = (list: any[], numOfBoxPerRow: numbe
         j = i;
         while(j < rList.length && j < i + numOfBoxPerRow && length < numOfBoxPerRow){
             // see if element is wide if not just add one to length and continue
-            if (isElementWide(rList[j])){
+            if (rList[j].wide){
                 // check if the element can fit into the row
                 if (length + 2 > numOfBoxPerRow) {
                     let nextSlim = findSlimBoxFrom(rList, j+ 1);
@@ -68,9 +82,9 @@ export const sortListToGetSameWidthEachRow = (list: any[], numOfBoxPerRow: numbe
                             // all elements are wide ?
                             // wut to do?!?!
                             // find two slim one in front to replace this
-
+                            list[j].wide = false;
                             // increment length
-                            length += 2;
+                            length ++;
                         }
                     } else {
                         // if there is a slim element after the wide element swap with that

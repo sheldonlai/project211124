@@ -9,11 +9,11 @@ export interface DashboardContent{
     wide? : boolean;
 }
 
-export class DashboardView extends BaseModel{
+export class DashboardSettings extends BaseModel{
     featured : DashboardContent[]
 }
 
-export interface IDashboardView extends DashboardView, Document {}
+export interface IDashboardSettings extends DashboardSettings, Document {}
 
 /* A schema for email verification */
 const DashboardViewSchema = new Schema({
@@ -21,4 +21,4 @@ const DashboardViewSchema = new Schema({
 });
 
 
-export const DashboardViewModel = model<IDashboardView>('dashboardView', DashboardViewSchema);
+export const DashboardViewModel = model<IDashboardSettings>('dashboardView', DashboardViewSchema);

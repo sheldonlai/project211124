@@ -58,15 +58,15 @@ export class QuestionPreviewCardsComponent extends React.Component<QuestionPrevi
                 <Grid item style={{marginTop: 16, width: n * 266}}>
                     <Typography type="display2" style={{marginBottom: 10}}>{this.props.label}</Typography>
                     <Grid container justify="center">
-                        {list.map((e: QuestionPreview) => (
-                            <Grid item key={e.title}>
+                        {list.map((e) => (
+                            <Grid item key={e.element.title}>
                                 <div style={{display: "inline-block"}}>
-                                    <CustomLink to={this.prepareToLink(e._id, e.title)}>
+                                    <CustomLink to={this.prepareToLink(e.element._id, e.element.title)}>
                                         <CustomCard
-                                            title={e.title}
-                                            content={e.content}
-                                            date={e.createdUtc}
-                                            wide={n > 1 && isElementWide(e)}
+                                            title={e.element.title}
+                                            content={e.element.content}
+                                            date={e.element.createdUtc}
+                                            wide={n > 1 && e.wide}
                                         />
                                     </CustomLink>
                                 </div>

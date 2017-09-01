@@ -2,6 +2,8 @@ import {BaseService} from "./BaseService";
 import {IDashboardViewRepository} from "../repositories/DashboardViewRepository";
 import {DashboardContent} from "../models/DashboardView";
 import {User} from "../models/User";
+import {UserTypeEnum} from "../enums/UserTypeEnum";
+import {AppError} from "../errors/AppError";
 
 export interface IAdminService {
     setDashboardView(jsonArray: DashboardContent[], user: User): Promise<void>
