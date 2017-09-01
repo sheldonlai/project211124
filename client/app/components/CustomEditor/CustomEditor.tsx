@@ -18,7 +18,7 @@ const style = {
     border: "1px #ececec solid",
     marginTop: "10px",
     marginBottom: "10px",
-    minHeight: 150,
+    // minHeight: 150,
     boxSizing: 'border-box',
     padding: 0,
     borderRadius: 2,

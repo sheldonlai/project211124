@@ -83,9 +83,8 @@ export class AnswerService extends BaseService implements IAnswerService {
                 throw new AppError("You are not the owner of this question!", ClientError.UNAUTHORIZED);
             }
             let now = new Date();
-            comment.createdUtc = now;
-            comment.lastEditedUtc = now;
-            answerFound.comments[commentIndx] = comment;
+            answerFound.comments[commentIndx].commentContent = comment.commentContent;
+            answerFound.comments[commentIndx].lastEditedUtc = now;
             return this.answerRepository.update(answerFound);
         })
     }

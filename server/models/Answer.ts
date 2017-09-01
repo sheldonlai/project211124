@@ -39,7 +39,8 @@ const schema = new Schema({
     comments: [{
         commentBy : {type: Schema.Types.ObjectId, ref: 'user'},
         commentContent : {type: String , required: true},
-        lastEditedUtc:  {type: Date, default: Date.now}
+        lastEditedUtc:  {type: Date, default: Date.now},
+        createdUtc: {type: Date, default: Date.now}
     }]
 });
 

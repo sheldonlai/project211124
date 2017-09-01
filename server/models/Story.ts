@@ -85,6 +85,7 @@ const storySchema = new Schema({
     comments: [{
         commentBy: {type: Schema.Types.ObjectId, ref: 'user'},
         commentContent: {type: String, required: true, es_indexed: true},
+        createdUtc: {type: Date, default: Date.now},
         lastEditedUtc: {type: Date, default: Date.now}
     }],
     views: {type: Number, default: 0, es_indexed: true},

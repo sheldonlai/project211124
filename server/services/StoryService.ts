@@ -124,6 +124,9 @@ export class StoryService extends BaseService implements IStoryService {
 
     createComment(comment: CommentDto, storyId: string, user: User): Promise<StoryDto>{
         return this.storyRepository.getById(storyId).then((storyFound: Story) => {
+            let now = new Date();
+            comment.createdUtc = now;
+            comment.lastEditedUtc = now;
             storyFound.comments.push(comment);
             return this.storyRepository.update(storyFound).then((storyFound: Story) => {
                 return this.storyRepository.getById(storyFound._id);
@@ -139,6 +142,9 @@ export class StoryService extends BaseService implements IStoryService {
                 throw new AppError("You are not the owner of this story!", ClientError.UNAUTHORIZED);
             }
             else{
+                let now = new Date();
+                delete storyFound.comments[commentIndex].createdUtc;
+                storyFound.comments[commentIndex].lastEditedUtc = now;
                 storyFound.comments[commentIndex] = comment;
                 return this.storyRepository.update(storyFound);
             }

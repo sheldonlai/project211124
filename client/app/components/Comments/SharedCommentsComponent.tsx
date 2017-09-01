@@ -20,7 +20,7 @@ export interface CommentsComponentProps {
     onCommentCreate: (comment: CommentDto) => void;
     onCommentUpdate: (comment: CommentDto) => void;
     onCommentDelete?: (comment: CommentDto) => void;
-    loading? : boolean;
+    loading?: boolean;
 }
 
 export interface CommentsComponentState {
@@ -102,7 +102,7 @@ export class SharedCommentsComponent extends React.Component<CommentsComponentPr
         return undefined;
     };
 
-    renderInputCommentBox() {
+    renderNewCommentBox() {
         if (this.state.newCommentMode && this.state.EditCommentIndex === -1) {
             return (
                 <div>
@@ -111,9 +111,9 @@ export class SharedCommentsComponent extends React.Component<CommentsComponentPr
                         <TextField
                             style={{border: "1px lightgrey solid"}}
                             multiline rows={4}
-                                   value={this.state.commentContent}
-                                   fullWidth
-                                   onChange={this.onCommentChange}/>
+                            value={this.state.commentContent}
+                            fullWidth
+                            onChange={this.onCommentChange}/>
                     </form>
                     <div style={{height: 36, margin: "4px 0px"}}>
 
@@ -143,16 +143,27 @@ export class SharedCommentsComponent extends React.Component<CommentsComponentPr
 
     };
 
-    onEditComment = (index: number) => {
+    renderCommentContent = (index: number) => {
         if (this.state.EditCommentIndex == -1 || index != this.state.EditCommentIndex) {
             return (
-                <Typography type="body1">
-                    {this.props.comments[index].commentContent}
-                </Typography>
+                <div style={{padding: 4}}>
+                    <Typography style={{display: "inline-block"}}>
+                        {this.props.comments[index].commentContent}
+                    </Typography>
+                    {" – "}
+                    <Typography style={{display: "inline-block", color: "blue"}}>
+                        {this.props.comments[index].commentBy.username}
+                    </Typography>
+                    <Typography type="caption" style={{display: "inline-block", marginLeft: 5}}>
+                        {convertDateTimeToString(this.props.comments[index].createdUtc)}
+                    </Typography>
+
+                </div>
+
             );
         } else if (index == this.state.EditCommentIndex) {
             return (
-                <div>
+                <div style={{minHeight: 60}}>
                     <p>
                         <mark>{this.state.errorMsg}</mark>
                     </p>
@@ -226,7 +237,6 @@ export class SharedCommentsComponent extends React.Component<CommentsComponentPr
     };
 
 
-
     renderCommentActions = (commentBy: UserDto, commentIndex: number) => {
         if (this.props.user && this.props.user.username == commentBy.username && commentBy._id == this.props.user._id) {
             return (
@@ -247,23 +257,15 @@ export class SharedCommentsComponent extends React.Component<CommentsComponentPr
             return (
                 <div key={comment.lastEditedUtc + comment.commentBy.username}
                      style={{
-                         marginLeft: 15, paddingLeft: 10, minHeight: 72, marginBottom: 2,
+                         marginLeft: 15, paddingLeft: 10, minHeight: 28, marginBottom: 2,
                          borderLeft: "1px lightblue solid", borderBottom: "1px #eeeeee solid"
                      }}>
                     <div>
                         <div style={{display: "inline-block", width: "80%"}}>
-                            {this.onEditComment(index)}
+                            {this.renderCommentContent(index)}
                         </div>
                         {this.renderCommentActions(comment.commentBy, index)}
                     </div>
-                    {
-                        showFooter &&
-                        <div style={{color: "grey", fontSize: 10, textAlign: "right", marginTop: 10, marginBottom: 5}}>
-                            posted on {convertDateTimeToString(comment.lastEditedUtc)}
-                            <br/>
-                            by {comment.commentBy.username}
-                        </div>
-                    }
                 </div>
             )
         });
@@ -279,25 +281,25 @@ export class SharedCommentsComponent extends React.Component<CommentsComponentPr
         return (
             <Grid container justify="flex-end">
                 <Grid item xs={12} style={{paddingLeft: 15, paddingRight: 15, background: "white"}}>
-                <List className={"Comments"}>
-                    {this.renderComments()}
+                    <List className={"Comments"}>
+                        {this.renderComments()}
+                        {
+                            this.props.comments.length > this.state.showMaxComments &&
+                            <Button style={{width: "100%"}} onClick={this.onShowMore}>Show more comments</Button>
+                        }
+                    </List>
                     {
-                        this.props.comments.length > this.state.showMaxComments &&
-                        <Button style={{width: "100%"}} onClick={this.onShowMore}>Show more comments</Button>
+                        !this.state.newCommentMode &&
+                        <div style={{height: 36, marginBottom: 10}}>
+                            <Button dense
+                                    color="primary"
+                                    style={{float: "right"}}
+                                    onClick={() => this.setState({newCommentMode: !this.state.newCommentMode})}>
+                                Comment
+                            </Button>
+                        </div>
                     }
-                </List>
-                {
-                    !this.state.newCommentMode &&
-                    <div style={{height: 36, marginBottom : 10}}>
-                        <Button raised dense
-                                color="primary"
-                                style={{float: "right"}}
-                                onClick={() => this.setState({newCommentMode: !this.state.newCommentMode})}>
-                            Comment
-                        </Button>
-                    </div>
-                }
-                {this.renderInputCommentBox()}
+                    {this.renderNewCommentBox()}
                 </Grid>
             </Grid>
         );
