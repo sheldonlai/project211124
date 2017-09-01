@@ -19,7 +19,7 @@ import {AppStoreState} from "../../../stores/AppStore";
 import {QuestionActions} from "../../../actions/QuestionActions";
 import {connect} from "react-redux";
 import {Prompt} from "react-router";
-import {FooterComponent} from "./FooterComponent";
+import {QuestionFooterComponent} from "./QuestionFooterComponent";
 import {QuestionEditorReducerState} from "../../../reducers/QuestionEditorReducer";
 import {CommentDto} from "../../../../../server/dtos/q&a/CommentDto";
 import {SharedCommentsComponent} from "../../../components/Comments/SharedCommentsComponent";
@@ -106,7 +106,7 @@ export class QuestionBoxComponent extends Component<props, {}> {
                             <ChipListComponent chips={question.tags} keyName={"tag"}/>
                         </div>
                         <Divider/>
-                        <FooterComponent
+                        <QuestionFooterComponent
                             onUpVote={this.upVote}
                             onDownVote={this.downVote}
                             upVotes={question.upVotes}

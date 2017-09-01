@@ -7,7 +7,7 @@ import {UserDto} from "../../../../../server/dtos/auth/UserDto";
 import Button from "material-ui/Button";
 import Paper from "material-ui/Paper";
 import Grid from "material-ui/Grid";
-import {FooterComponent} from "./FooterComponent";
+import {QuestionFooterComponent} from "./QuestionFooterComponent";
 import {connect} from "react-redux";
 import {AnswerActions} from "../../../actions/AnswerActions";
 import {CommentDto} from "../../../../../server/dtos/q&a/CommentDto";
@@ -68,7 +68,7 @@ export class AnswerBoxComponent extends Component<AnswerBoxComponentProps & disp
                                        onCommentDelete={(c) => this.props.deleteComment(c, answer._id)}
                     />
                     <Divider/>
-                    <FooterComponent
+                    <QuestionFooterComponent
                         onUpVote={this.upVote}
                         onDownVote={this.downVote}
                         upVotes={answer.upVotes}

@@ -14,6 +14,8 @@ import Grid from "material-ui/Grid";
 import {AppStoreState} from "../../../stores/AppStore";
 import {ReducerStateStatus} from "../../../constants/ReducerStateStatus";
 import {SatisfactionComponent} from "../../../components/Satisfaction/SatisfactionComponent";
+import {convertDateTimeToString, convertDateToString} from "../../../utils/DateUtils";
+import {FooterComponent} from "../../../components/Footer/FooterComponent";
 
 interface props {
     user: UserDto,
@@ -126,11 +128,7 @@ export class RatingBox extends React.Component<props & DispatchToProps& StateToP
                     }
 
                     <Divider/>
-                    <div style={{color: "grey", fontSize: 10, textAlign: "right"}}>
-                        {rating.createdAt && <div>Posted on {rating.createdAt.toLocaleString()}</div>}
-                        <br/>
-                        by {rating.createdBy.username}
-                    </div>
+                    <FooterComponent by={rating.createdBy.username} date={rating.createdAt} />
                 </Paper>
             </Grid>
         )

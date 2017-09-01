@@ -1,0 +1,1 @@
+export const USERNAME_COLOR = "#1f3b99";

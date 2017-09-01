@@ -3,6 +3,7 @@ import {UserDto} from "../../../../../server/dtos/auth/UserDto";
 import {ThumbComponent} from "../../../components/Forms/ThumbComponent";
 import Grid from "material-ui/Grid";
 import {convertDateTimeToString} from "../../../utils/DateUtils";
+import {FooterComponent} from "../../../components/Footer/FooterComponent";
 interface props {
     onUpVote: () => void;
     onDownVote: () => void;
@@ -13,7 +14,7 @@ interface props {
     views?: number;
 }
 
-export class FooterComponent extends React.Component<props> {
+export class QuestionFooterComponent extends React.Component<props> {
 
 
     render() {
@@ -34,14 +35,7 @@ export class FooterComponent extends React.Component<props> {
                             onClick={this.props.onDownVote} />
                     </Grid>
                     <Grid item xs={6}>
-                        <div style={{color: "grey", fontSize: 10, textAlign: "right"}}>
-                            <br/>
-                            {this.props.createdUtc && <div>Posted on {convertDateTimeToString(this.props.createdUtc)}</div>}
-                            <br/>
-                            <div>by {this.props.author.username}</div>
-                            <br/>
-                            {this.props.views && <div>views : {this.props.views}</div>}
-                        </div>
+                        <FooterComponent by={this.props.author.username} date={this.props.createdUtc}/>
                     </Grid>
                 </Grid>
             </div>

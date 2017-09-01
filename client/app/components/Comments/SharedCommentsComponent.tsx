@@ -13,6 +13,7 @@ import {findIndex} from "../../utils/ArrayUtils";
 import {LoadingScreen} from "../Animations/LoadingScreen";
 import {convertDateTimeToString} from "../../utils/DateUtils";
 import Grid from "material-ui/Grid";
+import {USERNAME_COLOR} from "../../styles/Colors";
 
 export interface CommentsComponentProps {
     comments: CommentDto[];
@@ -151,7 +152,7 @@ export class SharedCommentsComponent extends React.Component<CommentsComponentPr
                         {this.props.comments[index].commentContent}
                     </Typography>
                     {" – "}
-                    <Typography style={{display: "inline-block", color: "blue"}}>
+                    <Typography style={{display: "inline-block", color: USERNAME_COLOR}}>
                         {this.props.comments[index].commentBy.username}
                     </Typography>
                     <Typography type="caption" style={{display: "inline-block", marginLeft: 5}}>
