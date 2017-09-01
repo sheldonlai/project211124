@@ -22,56 +22,66 @@ e.EditorFactory.mockImplementation(() => {
 });
 
 let muiTheme = createMuiTheme();
-test('render question', () => {
-    let user: UserDto = {
-        _id: "something",
-        company: undefined,
-        email: "sheldon@email.com",
-        points: 0,
-        role: UserTypeEnum.NORMAL,
-        university: undefined,
-        username: "sheldon",
-        verified: true,
-        country: undefined
-    };
-    const functionStub = () => {
-    };
-    let questionStub: Question = new Question();
-    questionStub.author = user;
-    let propsStub = {
-    //     user: UserDto; // current user
-    // question: Question; // original question
-    // questionEditorState: Question; // editor state
-    // edit: boolean; // edit mode
-        user: user,
-        question: questionStub,
-        questionEditorState: questionStub,
-        edit: true,
-        upVoteQuestion: functionStub,
-        downVoteQuestion: functionStub,
-        editQuestion: functionStub,
-        changeQuestionEditorState: functionStub,
-        createComment: (c: CommentDto, id: string) => {},
-        updateComment: (c: CommentDto, id: string) => {},
-        deleteComment: (c: CommentDto, id: string) => {}
-        /*
-            upVoteQuestion: (question: Question) => void;
-            downVoteQuestion: (question: Question) => void;
-            editQuestion: (question: Question) => void;
-            changeQuestionEditorState: (state: QuestionEditorReducerState) => void;
-            createComment: (c: CommentDto, id: string) => void;
-            updateComment: (c: CommentDto, id: string) => void;
-            deleteComment: (c: CommentDto, id: string) => void;*/
-    };
+let user: UserDto = {
+    _id: "something",
+    company: undefined,
+    email: "sheldon@email.com",
+    points: 0,
+    role: UserTypeEnum.NORMAL,
+    university: undefined,
+    username: "sheldon",
+    verified: true,
+    country: undefined
+};
+const functionStub = () => {
+};
+let questionStub: Question = new Question();
+questionStub.author = user;
+let propsStub = {
+    user: user,
+    question: questionStub,
+    questionEditorState: questionStub,
+    edit: true,
+    upVoteQuestion: functionStub,
+    downVoteQuestion: functionStub,
+    editQuestion: functionStub,
+    changeQuestionEditorState: functionStub,
+    createComment: (c: CommentDto, id: string) => {
+    },
+    updateComment: (c: CommentDto, id: string) => {
+    },
+    deleteComment: (c: CommentDto, id: string) => {
+    }
+};
+
+test('render question logged in', () => {
+
 
     const component = renderer.create(
         <MuiThemeProvider theme={muiTheme}>
-        <Router history={RouterController.history}>
-            <Route render={(props: any) => {
-                return <QuestionBoxComponent {...propsStub} {...props} />
-            }} />
-        </Router>
+            <Router history={RouterController.history}>
+                <Route render={(props: any) => {
+                    return <QuestionBoxComponent {...propsStub} {...props} />
+                }}/>
+            </Router>
         </MuiThemeProvider>);
     let tree = component.toJSON();
     expect(tree).toMatchSnapshot();
 });
+
+
+test('render question box not logged in', () => {
+    let tempPropsStub = propsStub;
+    tempPropsStub.user = undefined;
+    const component = renderer.create(
+        <MuiThemeProvider theme={muiTheme}>
+            <Router history={RouterController.history}>
+                <Route render={(props: any) => {
+                    return <QuestionBoxComponent {...propsStub} {...props} />
+                }}/>
+            </Router>
+        </MuiThemeProvider>);
+
+    let tree = component.toJSON();
+    expect(tree).toMatchSnapshot();
+})
