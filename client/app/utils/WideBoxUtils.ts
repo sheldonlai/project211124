@@ -82,7 +82,7 @@ export const sortListToGetSameWidthEachRow = (list: any[], numOfBoxPerRow: numbe
                             // all elements are wide ?
                             // wut to do?!?!
                             // find two slim one in front to replace this
-                            list[j].wide = false;
+                            rList[j].wide = false;
                             // increment length
                             length ++;
                         }
