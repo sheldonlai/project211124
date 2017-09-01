@@ -1,10 +1,5 @@
-import {UserPreferences} from "../models/UserPerferences";
-
-export const getQuestionsQueryByPreference = (userPreference: UserPreferences) => {
-
-    let tagPref = userPreference.question_pref.tags_vec;
-    let catPref = userPreference.question_pref.cat_vec;
-    let sampleQuery: any = {
+export const getHottestQuery = () => {
+    let query: any = {
         "bool": {
             "should": [
                 {
@@ -38,29 +33,5 @@ export const getQuestionsQueryByPreference = (userPreference: UserPreferences) =
             ]
         }
     };
-    for (let tag in  tagPref) {
-        let score = tagPref[tag] ? (tagPref[tag] * 10) : 0;
-        sampleQuery.bool.should.push({
-            term: {
-                "tags.tag": {
-                    "value": tag,
-                    "boost": score
-                }
-            }
-        });
-    }
-    for (let cat in catPref) {
-        let score = (catPref[cat] * 10);
-        sampleQuery.bool.should.push({
-            "term": {
-                "category": {
-                    "value": cat,
-                    "boost": score
-                }
-            }
-        })
-    }
-    return sampleQuery;
+    return query;
 };
-
-

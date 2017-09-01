@@ -16,6 +16,13 @@ import Menu, {MenuItem} from 'material-ui/Menu';
 import IconButton from 'material-ui/IconButton';
 import MenuIcon from 'material-ui-icons/Menu';
 import List, {ListItem, ListItemIcon, ListItemText} from 'material-ui/List';
+import {UserTypeEnum} from "../../../server/enums/UserTypeEnum";
+import Dialog from "material-ui/Dialog/Dialog";
+import Slide from "material-ui/transitions/Slide";
+import DialogTitle from "material-ui/Dialog/DialogTitle";
+import DialogContent from "material-ui/Dialog/DialogContent";
+import DialogContentText from "material-ui/Dialog/DialogContentText";
+import DialogActions from "material-ui/Dialog/DialogActions";
 
 const menuButtonStyle: CSSProperties = {
     height: "50px",
@@ -34,6 +41,7 @@ interface state {
     open: boolean,
     width: number;
     collapsed: boolean;
+    dialogOpen: boolean;
 }
 
 class MenuClass extends Component<MenuClassProps, state> {
@@ -41,7 +49,8 @@ class MenuClass extends Component<MenuClassProps, state> {
     state = {
         open: false,
         width: 0,
-        collapsed: true
+        collapsed: true,
+        dialogOpen: false
     };
 
     handleRequestClose = () => {
@@ -63,7 +72,8 @@ class MenuClass extends Component<MenuClassProps, state> {
     handleMenuClick = (key: string) => {
         switch (key) {
             case 'logout':
-                this.props.logout();
+                this.setState({dialogOpen: true});
+                // this.props.logout();
                 break;
             default:
                 this.props.history.push(key)
@@ -96,11 +106,14 @@ class MenuClass extends Component<MenuClassProps, state> {
                         <MenuItem
                             onClick={() => this.handleMenuClick(Routes.my_profile)}
                             selected={false}>
-                                Profile
+                            Profile
                         </MenuItem>
-                        <MenuItem onClick={() => this.handleMenuClick(Routes.admin)} selected={false}>
+                        {
+                            this.props.user.role === UserTypeEnum.ADMIN &&
+                            <MenuItem onClick={() => this.handleMenuClick(Routes.admin)} selected={false}>
                                 Admin
-                        </MenuItem>
+                            </MenuItem>
+                        }
 
                         <MenuItem
                             selected={false}
@@ -161,9 +174,15 @@ class MenuClass extends Component<MenuClassProps, state> {
                     >
                         <MenuIcon/>
                     </IconButton>
-                    <Typography type="title" color="inherit">
-                        Askalot
-                    </Typography>
+
+                    <Button type="title" color="inherit"
+                            style={{
+                                textAlign: 'center', ...menuButtonStyle,
+                                fontSize: 20
+                            }}>
+                            Askalot
+                    </Button>
+
 
                 </Toolbar>
                 {
@@ -177,10 +196,14 @@ class MenuClass extends Component<MenuClassProps, state> {
                             this.props.loggedIn ?
                                 <div>
                                     {this.button("Profile", Routes.my_profile, true)}
-                                    {this.button("Admin", Routes.admin, true)}
+
+                                    {
+                                        this.props.user.role === UserTypeEnum.ADMIN &&
+                                        this.button("Admin", Routes.admin, true)
+                                    }
                                     <Button color="contrast"
-                                             style={{...menuButtonStyle, width: "100%"}}
-                                             onClick={() => this.handleMenuClick('logout')}>
+                                            style={{...menuButtonStyle, width: "100%"}}
+                                            onClick={() => this.handleMenuClick('logout')}>
                                         Log Out
                                     </Button>
                                 </div> :
@@ -191,6 +214,29 @@ class MenuClass extends Component<MenuClassProps, state> {
             </div>
         )
     };
+
+    logoutDialog = () => {
+        return (
+            <Dialog open={this.state.dialogOpen} transition={Slide} onRequestClose={this.handleRequestClose}>
+                <DialogContent>
+                    <DialogContentText>
+                        Are you sure you want to log out?
+                    </DialogContentText>
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={() => this.setState({dialogOpen: false})} color="primary">
+                        No
+                    </Button>
+                    <Button onClick={() => {
+                        this.props.logout();
+                        this.setState({dialogOpen: false});
+                    }} color="primary">
+                        Yes
+                    </Button>
+                </DialogActions>
+            </Dialog>
+        )
+    }
 
     openMenu = () => {
         this.setState({collapsed: !this.state.collapsed});
@@ -215,7 +261,7 @@ class MenuClass extends Component<MenuClassProps, state> {
         const smallScreen = this.state.width <= 650;
         return (
             <AppBar position="static" className="menu" style={{backgroundColor: color}}>
-
+                {this.logoutDialog()}
                 {!smallScreen ?
                     this.largeMenu() :
                     this.smallMenu()

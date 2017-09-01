@@ -116,6 +116,8 @@ const schema = new Schema({
         lastEditedUtc: {type: Date, default: Date.now}
     }],
     views: {type: Number, default: 0, es_indexed: true},
+    upVotes: {type: Number},
+    downVotes: {type: Number},
 
 });
 
