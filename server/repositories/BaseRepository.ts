@@ -102,13 +102,16 @@ export abstract class BaseRepository<T extends BaseModel, I extends Document & T
                 });
             });
             return Promise.all(elements.map((record)=>this.applyAdditionalFunction(record)));
-        });
+        }).then((array) => {
+            return this.getModels(array);
+        })
     }
 
     protected getModels(objs: T[]): T[] {
-        return objs.map((obj) => {
-            return this.getModel(obj);
-        });
+        for (let i in objs){
+            objs[i] = this.getModel(objs[i]);
+        }
+        return objs;
     }
 
     protected getModel(obj: T | I): T {
