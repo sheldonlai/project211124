@@ -7,7 +7,7 @@ import Icon from "material-ui/Icon";
 import Button from "material-ui/Button/Button";
 import * as React from "react";
 import {CSSProperties} from "react";
-import {MenuButton} from "./MenuButton";
+import {MenuButton} from "./subcomponents/MenuButton";
 import {Routes} from "../../constants/Routes";
 import {UserTypeEnum} from "../../../../server/enums/UserTypeEnum";
 import {UserDto} from "../../../../server/dtos/auth/UserDto";

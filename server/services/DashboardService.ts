@@ -7,7 +7,7 @@ import {Story} from "../models/Story";
 import {Question} from "../models/Question";
 
 export interface IDashboardService {
-
+    getHottestStoriesAndQuestions: () => Promise<DashboardDto>;
 }
 
 export class DashboardService extends BaseService implements IDashboardService {

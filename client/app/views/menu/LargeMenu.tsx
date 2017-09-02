@@ -6,7 +6,7 @@ import Button from "material-ui/Button/Button";
 import Typography from "material-ui/Typography";
 import {CSSProperties} from "react";
 import {menuButtonStyle} from "./MenuButtonStyles";
-import {MenuButton} from "./MenuButton";
+import {MenuButton} from "./subcomponents/MenuButton";
 import Menu from "material-ui/Menu/Menu";
 import MenuItem from "material-ui/Menu/MenuItem";
 import {UserTypeEnum} from "../../../../server/enums/UserTypeEnum";

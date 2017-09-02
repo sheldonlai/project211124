@@ -5,7 +5,7 @@ import {Route, Router} from "react-router";
 import {Home} from "./home/home";
 import {LoginPage} from "./auth/LoginView";
 import {Routes} from "../constants/Routes";
-import {RegistrationPage} from "./auth/RegistrationForm";
+import {RegistrationPage} from "./auth/subcomponents/RegistrationForm";
 import {RouterController} from "../api.controllers/RouterController";
 import {connect, Provider} from "react-redux";
 import {MenuView} from "./menu/Menu";

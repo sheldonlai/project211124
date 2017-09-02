@@ -19,6 +19,7 @@ import {StoryRepository} from "./repositories/StoryRepository";
 import {StoryService} from "./services/StoryService";
 import {DashboardViewRepository} from "./repositories/DashboardViewRepository";
 import {AdminService} from "./services/AdminService";
+import {DashboardService} from "./services/DashboardService";
 
 export class RepositoryProvider {
     static AnswerRepository = new AnswerRepository();
@@ -62,5 +63,9 @@ export class ServiceProvider {
         RepositoryProvider.UserRepository
     );
     static AdminService = new AdminService(RepositoryProvider.DashboardViewRepository);
+    static DashboardService = new DashboardService(
+        RepositoryProvider.QuestionRepository,
+        RepositoryProvider.StoryRepository
+    )
 
 }

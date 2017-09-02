@@ -2,6 +2,9 @@ export class APIUrls {
 
     static MainPage = "/";
 
+    /* Dashboard */
+    static FetchDashboard = "/fetch-dashboard";
+
     /* Common */
     static SearchUsers = "/search-users";
 

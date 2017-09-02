@@ -5,11 +5,11 @@ import Grid from "material-ui/Grid";
 import Paper from "material-ui/Paper";
 import {SplitVIewTemplate} from "../../components/Templates/SplitVIewTemplate";
 import Button from "material-ui/Button";
-import {TermsAndCondition} from "./TermsAndCondition";
+import {TermsAndCondition} from "./subcomponents/TermsAndCondition";
 import Checkbox from 'material-ui/Checkbox';
 import Typography from "material-ui/Typography";
 import {FormGroup, FormControlLabel} from 'material-ui/Form';
-import {RegistrationForm} from "./RegistrationForm";
+import {RegistrationForm} from "./subcomponents/RegistrationForm";
 
 enum PageEnum {
     terms_and_conditions,

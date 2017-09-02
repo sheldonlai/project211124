@@ -11,6 +11,7 @@ import {RatingHomeReducer, RatingHomeReducerState} from "../reducers/TammateRati
 import {RatingPageReducer, RatingPageReducerState} from "../reducers/RatingPageReducer";
 import {StoryHomeReducer, StoryHomeReducerState} from "../reducers/StoryHomeReducer";
 import {StoryPageReducer, StoryPageReducerState} from "../reducers/StoryPageReducer";
+import {DashboardReducer, DashboardReducerState} from "../reducers/DashboardReducer";
 
 const loggerMiddleware = createLogger();
 const composeEnhancers = window['__REDUX_DEVTOOLS_EXTENSION_COMPOSE__'] || compose;
@@ -18,6 +19,7 @@ const composeEnhancers = window['__REDUX_DEVTOOLS_EXTENSION_COMPOSE__'] || compo
 // The state we receive from match state to props
 export interface AppStoreState {
     auth: AuthReducerState;
+    dashboard: DashboardReducerState,
     questionHome: QuestionHomeReducerState;
     errors: ErrorReducerState;
     questionPage: QuestionPageReducerState;
@@ -30,7 +32,9 @@ export interface AppStoreState {
 }
 
 const reducer = combineReducers({
+
     auth: AuthReducer,
+    dashboard: DashboardReducer,
     questionHome: QuestionHomeReducer,
     errors: ErrorReducer,
     questionPage: QuestionPageReducer,

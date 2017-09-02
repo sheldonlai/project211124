@@ -96,7 +96,7 @@ export class Server {
     private api() {
         let routes : BaseAPI[] = [];
 
-        routes.push(new HomeAPI());
+        routes.push(new HomeAPI(ServiceProvider.DashboardService));
 
         routes.push(new QuestionAPI(ServiceProvider.QuestionService));
 

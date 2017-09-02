@@ -8,7 +8,7 @@ import {ReducerStateStatus} from "../../constants/ReducerStateStatus";
 import {RouteComponentProps} from "react-router";
 import AppBar from 'material-ui/AppBar';
 import {UserDto} from "../../../../server/dtos/auth/UserDto";
-import {LogoutDialog} from "./LogoutDialog";
+import {LogoutDialog} from "./subcomponents/LogoutDialog";
 import {LargeMenu} from "./LargeMenu";
 import {SmallMenu} from "./SmallMenu";
 
