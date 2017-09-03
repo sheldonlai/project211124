@@ -6,6 +6,7 @@ import {CategoryTypeEnum} from "../../../server/enums/CategoryTypeEnum";
 import {Routes} from "../constants/Routes";
 import {StoryDto} from "../../../server/dtos/story/StoryDto";
 import {convertRawToText} from "../utils/DraftJsUtils";
+import {Preview} from "./CommonModels";
 
 export namespace FrontEndStoryModels {
 
@@ -37,7 +38,7 @@ export namespace FrontEndStoryModels {
         }
     }
 
-    export class StoryPreview {
+    export class StoryPreview implements Preview{
         _id: string;
         title: string;
         content: string;

@@ -14,9 +14,10 @@ export class HomeComponent extends React.Component<props, any> {
     }
 
     render(){
+
         return (
             <div>
-                <PreviewCardsComponent list={this.props.questions} label={"Hottest Question"} maxBlock={4} />
+                <PreviewCardsComponent list={this.props.questions.concat(this.props.stories as any)} label={"Hottest Question"} maxBlock={4} />
                 {/*<GridList cellHeight={200} spacing={1}>*/}
                     {/*{this.props.questions.map(tile => (*/}
                         {/*<GridListTile key={tile._id} cols={isElementWide(tile) ? 2 : 1} rows={isElementWide(tile)? 2 : 1}>*/}

@@ -8,9 +8,10 @@ import Grid from "material-ui/Grid";
 import Typography from "material-ui/Typography";
 import {CustomLink} from "../CustomLink";
 import {CustomCard} from "./CardComponent";
+import {Preview} from "../../models/CommonModels";
 
 export interface props {
-    list: (QuestionPreview|StoryPreview)[];
+    list: Preview[];
     label: string;
     trim?: boolean; // if there is a non fully populated trim the bottom row
     maxBlock?: number;

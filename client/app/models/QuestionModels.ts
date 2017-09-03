@@ -9,6 +9,7 @@ import {CategoryTypeEnum} from "../../../server/enums/CategoryTypeEnum";
 import {QuestionDto} from "../../../server/dtos/q&a/QuestionDto";
 import {convertRawToText} from "../utils/DraftJsUtils";
 import {Routes} from "../constants/Routes";
+import {Preview} from "./CommonModels";
 
 export namespace FrontEndQuestionModels {
 
@@ -69,7 +70,7 @@ export namespace FrontEndQuestionModels {
         }
     }
 
-    export class QuestionPreview {
+    export class QuestionPreview implements Preview{
         _id : string;
         title : string;
         author: UserDto;
