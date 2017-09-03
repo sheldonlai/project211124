@@ -1,13 +1,17 @@
 import {CommentDto} from "../../../server/dtos/q&a/CommentDto";
 import {UserDto} from "../../../server/dtos/auth/UserDto";
-import {EditorState} from "draft-js";
+import {RawDraftContentState, EditorState} from "draft-js";
 import {PublicityStatus} from "../../../server/enums/PublicityStatus";
 import {QuestionComment, QuestionDifficulty} from "../../../server/models/Question";
 import {DifficultyLevel, QuestionEducationLevel} from "../../../server/enums/QuestionEducationLevel";
 import {mapFieldsOnToObject} from "../utils/utils";
 import {CategoryTypeEnum} from "../../../server/enums/CategoryTypeEnum";
+import {QuestionDto} from "../../../server/dtos/q&a/QuestionDto";
+import {convertRawToText} from "../utils/DraftJsUtils";
+import {Routes} from "../constants/Routes";
 
 export namespace FrontEndQuestionModels {
+
     export class Question {
         _id: string;
         title: string;
@@ -66,12 +70,35 @@ export namespace FrontEndQuestionModels {
     }
 
     export class QuestionPreview {
-        _id: any;
-        title: string;
-        content: string;
-        author: string;
+        _id : string;
+        title : string;
+        author: UserDto;
+        content : string;
         createdUtc: Date;
-        answered: boolean;
+        isPublished : boolean;
+        lastEditedUtc : Date;
+        upVotes: number;
+        downVotes: number;
+        views: number;
+        tags: any[];
+
+        constructor(dto: QuestionDto) {
+            this.title = dto.title;
+            this._id = dto._id;
+            this.content = convertRawToText(dto.content);
+            this.author = dto.author;
+            this.tags = dto.tags;
+            this.upVotes = dto.upVotes;
+            this.views = dto.views;
+            this.createdUtc = dto.createdUtc;
+            this.lastEditedUtc = dto.lastEditedUtc;
+        }
+
+        toLink() {
+            let title = encodeURIComponent(this.title).replace(/%20/g, '-');
+            title = encodeURIComponent(title).replace(/%3F/g, '');
+            return Routes.question_by_id.replace(':id', this._id).replace(':name', title);
+        }
     }
 
     export interface QuestionPreviewCollections {

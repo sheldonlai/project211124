@@ -1,6 +1,6 @@
-import {StoryPreviewDto} from "./StoryPreviewDto";
+import {StoryDto} from "./StoryDto";
 
 export interface StoryPreviewCollectionsDto {
-    recommendedPreviews: StoryPreviewDto[];
-    myStories?: StoryPreviewDto[];
+    recommendedPreviews: StoryDto[];
+    myStories?: StoryDto[];
 }

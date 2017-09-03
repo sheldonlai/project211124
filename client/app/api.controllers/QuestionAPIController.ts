@@ -13,6 +13,7 @@ import QuestionPreviewCollections = FrontEndQuestionModels.QuestionPreviewCollec
 import QuestionPage = FrontEndQuestionModels.QuestionPage;
 import Answer = FrontEndQuestionModels.Answer;
 import {CommentDto} from "../../../server/dtos/q&a/CommentDto";
+import QuestionPreview = FrontEndQuestionModels.QuestionPreview;
 
 export class QuestionAPIController extends ApiController {
 
@@ -36,17 +37,13 @@ export class QuestionAPIController extends ApiController {
             let data: QuestionPreviewCollectionsDto = response.data;
             let new_data: QuestionPreviewCollections = {myQuestions: [], featuredQuestions: []};
             if (data.featuredQuestions.length > 0) {
-                new_data.featuredQuestions = data.featuredQuestions.map((preview: QuestionPreviewDto) => {
-                    let new_preview = <any> preview;
-                    new_preview.content = this.convertRawToText(preview.content);
-                    return new_preview;
+                new_data.featuredQuestions = data.featuredQuestions.map((preview) => {
+                    return new QuestionPreview(preview);
                 });
             }
             if (data.myQuestions && data.myQuestions.length > 0) {
-                new_data.myQuestions = data.myQuestions.map((preview: QuestionPreviewDto) => {
-                    let new_preview = <any> preview;
-                    new_preview.content = this.convertRawToText(preview.content);
-                    return new_preview;
+                new_data.myQuestions = data.myQuestions.map((preview) => {
+                    return new QuestionPreview(preview);
                 });
             }
             response.data = new_data;
@@ -76,7 +73,6 @@ export class QuestionAPIController extends ApiController {
                 response.data = this.convertDtoToQuestion(response.data);
                 return response;
             });
-        ;
     }
 
     updateQuestionComment(comment: CommentDto, questionId: string) {

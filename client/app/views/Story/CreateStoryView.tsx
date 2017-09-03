@@ -1,30 +1,12 @@
 import * as React from "react";
 import {connect} from "react-redux";
-import {StoryPreviews} from "./subcomponents/StoryPreviews";
-import {StoryActions} from "../../actions/StoryActions";
-import Button from "material-ui/Button";
-import {CustomLink} from "../../components/CustomLink";
 import {Routes} from "../../constants/Routes";
 import {AppStoreState} from "../../stores/AppStore";
-import {StoryHomeReducerState} from "../../reducers/StoryHomeReducer";
-import {RouteComponentProps, RouteProps} from "react-router";
-import {CustomEditor} from "../../components/CustomEditor/CustomEditor";
-import {FileUploader} from "../../components/FileUpload/FileUploader";
-import Grid from "material-ui/Grid"
-import TextField from "material-ui/TextField";
-import {TagsSelector} from "../../components/TagsComponent/TagsComponent";
-import {DropDownSelect} from "../../components/Forms/DropDownSelect";
-import {getDropDownDataFromStringEnum} from "../../utils/utils";
-import {CategoryTypeEnum} from "../../../../server/enums/CategoryTypeEnum";
-import {StoryDto} from "../../../../server/dtos/story/StoryDto";
-import {EditorState} from "draft-js";
+import {RouteComponentProps} from "react-router";
 import {FrontEndStoryModels} from "../../models/StoryModels";
-import Story = FrontEndStoryModels.Story;
-import Typography from "material-ui/Typography";
-import {EditorStateUtil} from "../../components/CustomEditor/EditorStateUtil";
-import {PublicityStatus} from "../../../../server/enums/PublicityStatus";
 import {StoryApiController} from "../../api.controllers/StoryApiController";
 import {StoryEditor} from "./subcomponents/StoryEditor";
+import Story = FrontEndStoryModels.Story;
 
 
 interface state {

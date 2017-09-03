@@ -1,16 +1,16 @@
 import * as React from "react";
-import {FrontEndQuestionModels} from "../../../models/QuestionModels";
-import {CustomLink} from "../../../components/CustomLink";
-import {CustomCard} from "../../../components/CardComponent/CardComponent";
-import {Routes} from "../../../constants/Routes";
+import {FrontEndQuestionModels} from "../../models/QuestionModels";
+import QuestionPreview = FrontEndQuestionModels.QuestionPreview;
+import {FrontEndStoryModels} from "../../models/StoryModels";
+import StoryPreview = FrontEndStoryModels.StoryPreview;
+import {sortListToGetSameWidthEachRow} from "../../utils/WideBoxUtils";
 import Grid from "material-ui/Grid";
 import Typography from "material-ui/Typography";
-import {isElementWide, sortListToGetSameWidthEachRow} from "../../../utils/WideBoxUtils";
-import QuestionPreview = FrontEndQuestionModels.QuestionPreview;
-import {convertDateToString} from "../../../utils/DateUtils";
+import {CustomLink} from "../CustomLink";
+import {CustomCard} from "./CardComponent";
 
-export interface QuestionPreviewCardsComponentProps {
-    list: QuestionPreview[];
+export interface props {
+    list: (QuestionPreview|StoryPreview)[];
     label: string;
     trim?: boolean; // if there is a non fully populated trim the bottom row
     maxBlock?: number;
@@ -21,8 +21,7 @@ interface state {
     height: number;
 }
 
-export class QuestionPreviewCardsComponent extends React.Component<QuestionPreviewCardsComponentProps, state> {
-
+export class PreviewCardsComponent extends React.Component<props, state>{
     constructor(props) {
         super(props);
         this.state = {width: 0, height: 0};
@@ -41,11 +40,6 @@ export class QuestionPreviewCardsComponent extends React.Component<QuestionPrevi
         this.setState({width: window.innerWidth, height: window.innerHeight});
     };
 
-    prepareToLink = (id: string, title: string): string => {
-        title = encodeURIComponent(title).replace(/%20/g, '-');//title.replace(new RegExp(' ', 'g'), "-");
-        return Routes.question_by_id.replace(':id', id).replace(':name', title)
-    };
-
     render() {
         if (!this.props.list) return undefined;
         const bodyMargin = 16;
@@ -61,7 +55,7 @@ export class QuestionPreviewCardsComponent extends React.Component<QuestionPrevi
                         {list.map((e) => (
                             <Grid item key={e.element.title}>
                                 <div style={{display: "inline-block"}}>
-                                    <CustomLink to={this.prepareToLink(e.element._id, e.element.title)}>
+                                    <CustomLink to={e.element.toLink()}>
                                         <CustomCard
                                             title={e.element.title}
                                             content={e.element.content}

@@ -1,15 +1,15 @@
 import * as React from "react";
 import {connect} from "react-redux";
-import {StoryPreviews} from "./subcomponents/StoryPreviews";
 import {StoryActions} from "../../actions/StoryActions";
 import Button from "material-ui/Button";
 import {CustomLink} from "../../components/CustomLink";
 import {Routes} from "../../constants/Routes";
 import {AppStoreState} from "../../stores/AppStore";
 import {StoryHomeReducerState} from "../../reducers/StoryHomeReducer";
-import {RouteComponentProps, RouteProps} from "react-router";
+import {RouteComponentProps} from "react-router";
 import {ReducerStateStatus} from "../../constants/ReducerStateStatus";
 import {LoadingScreen} from "../../components/Animations/LoadingScreen";
+import {PreviewCardsComponent} from "../../components/CardComponent/PreviewCardsComponent";
 
 interface state {
     height: number;
@@ -36,8 +36,8 @@ export class StoryHomeComponent extends React.Component<props, state> {
                 {this.props.status === ReducerStateStatus.LOADING ?
                     <LoadingScreen/> :
                     <div>
-                        <StoryPreviews label="Featured" list={this.props.previews} maxBlock={4}/>
-                        <StoryPreviews label="My Stories" list={this.props.previews} maxBlock={4}/>
+                        <PreviewCardsComponent label="Featured" list={this.props.previews} maxBlock={4}/>
+                        <PreviewCardsComponent label="My Stories" list={this.props.previews} maxBlock={4}/>
 
                     </div>
                 }

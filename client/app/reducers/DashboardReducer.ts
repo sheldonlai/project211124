@@ -9,10 +9,12 @@ import Question = FrontEndQuestionModels.Question;
 import {FrontEndStoryModels} from "../models/StoryModels";
 import Story = FrontEndStoryModels.Story;
 import {DashboardActionTypes} from "../constants/DashboardActionTypes";
+import StoryPreview = FrontEndStoryModels.StoryPreview;
+import QuestionPreview = FrontEndQuestionModels.QuestionPreview;
 export interface DashboardReducerState {
     status: ReducerStateStatus;
-    stories: Story[];
-    questions: Question[];
+    stories: StoryPreview[];
+    questions: QuestionPreview[];
 }
 
 const initialState: DashboardReducerState = {

@@ -18,20 +18,12 @@ export class StoryApiControllerClass extends ApiController {
 
     getStoryPreviews(): AxiosPromise {
         return this.get(APIUrls.getStoryPreviews).then((response) => {
-            // TODO :
             let collection: StoryPreviewCollectionsDto = response.data;
             if (collection.recommendedPreviews.length > 0)
-                response.data.recommendedPreviews = collection.recommendedPreviews.map((story) => {
-                    let preview: StoryPreview = <any> {...story};
-                    preview.content = this.convertRawToText(story.content);
-                    return preview;
-                });
+                response.data.recommendedPreviews = collection.recommendedPreviews.map((story) =>
+                    new StoryPreview(story));
             if (collection.myStories.length > 0)
-                response.data.myStories = collection.myStories.map((story) => {
-                    let preview: StoryPreview = <any> {...story};
-                    preview.content = this.convertRawToText(story.content);
-                    return preview;
-                });
+                response.data.myStories = collection.myStories.map((story) => new StoryPreview(story));
 
             return response;
         });

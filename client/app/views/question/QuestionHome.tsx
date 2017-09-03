@@ -6,13 +6,13 @@ import {AppStoreState} from "../../stores/AppStore";
 import {QuestionActions} from "../../actions/QuestionActions";
 import {QuestionHomeReducerState} from "../../reducers/QuestionHomeReducer";
 import {ErrorReducerState} from "../../reducers/ErrorReducer";
-import {Card, CardActions, CardHeader, CardMedia, CardText, CardTitle} from "material-ui/Card";
+import {CardText, CardTitle} from "material-ui/Card";
 import {CustomLink} from "../../components/CustomLink";
 import Button from "material-ui/Button";
-import {QuestionPreviewCardsComponent} from "./subcomponents/QuestionPreviewCardsComponent";
 import Grid from "material-ui/Grid";
 import {LoadingScreen} from "../../components/Animations/LoadingScreen";
 import Typography from "material-ui/Typography";
+import {PreviewCardsComponent} from "../../components/CardComponent/PreviewCardsComponent";
 
 export interface QuestionViewProps extends QuestionHomeReducerState {
     loggedIn: boolean;
@@ -57,9 +57,9 @@ class QuestionHomeComponent extends Component<QuestionViewProps> {
                             {this.createQuestionButton()}
                         </Grid>
                     </Grid>
-                    <QuestionPreviewCardsComponent list={this.props.featuredQuestions}
+                    <PreviewCardsComponent list={this.props.featuredQuestions}
                                                    label="Featured" trim={false} maxBlock={4}/>
-                    <QuestionPreviewCardsComponent list={this.props.myQuestions} label="My Questions" maxBlock={4}/>
+                    <PreviewCardsComponent list={this.props.myQuestions} label="My Questions" maxBlock={4}/>
                 </Grid>
             </Grid>
         }

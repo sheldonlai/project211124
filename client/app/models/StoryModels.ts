@@ -3,6 +3,9 @@ import {UserDto} from "../../../server/dtos/auth/UserDto";
 import {StoryComment} from "../../../server/models/Story";
 import {PublicityStatus} from "../../../server/enums/PublicityStatus";
 import {CategoryTypeEnum} from "../../../server/enums/CategoryTypeEnum";
+import {Routes} from "../constants/Routes";
+import {StoryDto} from "../../../server/dtos/story/StoryDto";
+import {convertRawToText} from "../utils/DraftJsUtils";
 
 export namespace FrontEndStoryModels {
 
@@ -45,6 +48,24 @@ export namespace FrontEndStoryModels {
         views: number;
         createdUtc: Date;
         lastEditedUtc: Date;
+
+        constructor(dto: StoryDto) {
+            this.title = dto.title;
+            this._id = dto._id;
+            this.content = convertRawToText(dto.content);
+            this.author = dto.author;
+            this.tags = dto.tags;
+            this.upVotes = dto.upVotes;
+            this.views = dto.views;
+            this.createdUtc = dto.createdUtc;
+            this.lastEditedUtc = dto.lastEditedUtc;
+        }
+
+        toLink() {
+            let title = encodeURIComponent(this.title).replace(/%20/g, '-');
+            title = encodeURIComponent(title).replace(/%3F/g, '');
+            return Routes.story_by_id.replace(':id', this._id).replace(':name', title)
+        }
     }
 
 }
