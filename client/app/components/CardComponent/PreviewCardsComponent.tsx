@@ -3,7 +3,7 @@ import {FrontEndQuestionModels} from "../../models/QuestionModels";
 import QuestionPreview = FrontEndQuestionModels.QuestionPreview;
 import {FrontEndStoryModels} from "../../models/StoryModels";
 import StoryPreview = FrontEndStoryModels.StoryPreview;
-import {sortListToGetSameWidthEachRow} from "../../utils/WideBoxUtils";
+import {getLengthFromBoxes, sortListToGetSameWidthEachRow} from "../../utils/WideBoxUtils";
 import Grid from "material-ui/Grid";
 import Typography from "material-ui/Typography";
 import {CustomLink} from "../CustomLink";
@@ -41,18 +41,24 @@ export class PreviewCardsComponent extends React.Component<props, state>{
         this.setState({width: window.innerWidth, height: window.innerHeight});
     };
 
+    findOptimalMaxBlock = () => {
+
+    };
+
     render() {
-        if (!this.props.list) return undefined;
+        if (!this.props.list || this.props.list.length === 0) return null;
         const bodyMargin = 16;
         let width = this.state.width;
         let n = Math.floor((width - bodyMargin) / (250 + 16));
         n = n > this.props.maxBlock ? this.props.maxBlock: n;
         let list = sortListToGetSameWidthEachRow(this.props.list, n, this.props.trim);
+        let listLength = getLengthFromBoxes(list);
+        let maxWidth = (n > listLength)? 266 * listLength: n * 266;
         return (
             <Grid container justify="center">
-                <Grid item style={{marginTop: 16, width: n * 266}}>
+                <Grid item style={{marginTop: 16, width: maxWidth}}>
                     <Typography type="display2" style={{marginBottom: 10}}>{this.props.label}</Typography>
-                    <Grid container justify="center">
+                    <Grid container justify="flex-start">
                         {list.map((e) => (
                             <Grid item key={e.element.title}>
                                 <div style={{display: "inline-block"}}>

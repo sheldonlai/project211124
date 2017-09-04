@@ -39,10 +39,10 @@ const findSlimBoxFromReverse = (list: WidableObject[],index? : number, stopIndex
     return -1;
 };
 
-export const getLengthFromBoxes = (list: (QuestionPreview|StoryPreview)[]) => {
+export const getLengthFromBoxes = (list: (WidableObject)[]) => {
     let length = 0;
     for (let el of list){
-        length += isElementWide(el)? 2 : 1;
+        length += el.wide? 2 : 1;
     }
     return length;
 };
