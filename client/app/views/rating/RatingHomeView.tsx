@@ -16,6 +16,8 @@ import Input from "material-ui/Input/Input";
 import Icon from 'material-ui/Icon';
 import IconButton from 'material-ui/IconButton'
 import Typography from "material-ui/Typography";
+import TextField from 'material-ui/TextField';
+import {AdvancedSearchEditor} from './subcomponents/AdvancedSearchEditor'
 
 export class RatingHomeViewComponent extends React.Component<StateToProps & DispatchToProps, any> {
     constructor(props) {
@@ -39,25 +41,29 @@ export class RatingHomeViewComponent extends React.Component<StateToProps & Disp
 
     renderSearchBar = () => {
         const pos = {
-            padding: 10,
-            Position: 'relative',
-            left: 700,
+            Position: 'absolute',
+            left: 825,
             top: 0,
+        };
+        const search_pos = {
+            padding: 10,
+            Position: 'absolute',
+            left: 800,
+            top: 10,
         };
         return(
             <div>
-                <Input
+                <TextField
+                    label="Search..."
                     placeholder="Search..."
                     value = {this.state.searchString}
                     onChange = {this.onSearchStringChange}
                     style = {pos}
-                    inputProps={{
-                        'aria-label': 'Description',
-                    }}
                 />
-                <IconButton style = {{float: "right",}} onClick = {this.FindSimilarTeammates}>
+                <IconButton style = {search_pos} onClick = {this.FindSimilarTeammates}>
                     <Icon>search</Icon>
                 </IconButton>
+                <AdvancedSearchEditor/>
             </div>
         )
     }

@@ -4,18 +4,13 @@ import Menu, {MenuItem} from 'material-ui/Menu';
 import {ListItem, ListItemText} from 'material-ui/List';
 import Button from "material-ui/Button";
 import Typography from 'material-ui/Typography';
+import {ForumDto} from "../../../../server/dtos/sharedDtos/ForumDto";
+import TextField from 'material-ui/TextField';
 
 interface props {
-    data: DropDownFillInData[];
-    value: any;
-    placeholder?: string;
+    data: ForumDto[];
     onChange?: (element: any) => void;
     fullWidth? : boolean;
-
-}
-
-export interface DropDownFillInData {
-    text: string;
 }
 
 const defaultStyles: CSSProperties = {
@@ -38,6 +33,7 @@ export class DropDownForum extends React.Component<props, state> {
             anchorEl: undefined,
             open: false
         }
+        console.log(this.props.data);
     }
 
     button = undefined;
@@ -65,9 +61,6 @@ export class DropDownForum extends React.Component<props, state> {
     };
 
     render() {
-        let filter = this.props.data.filter((data) => JSON.stringify(data.value) == JSON.stringify(this.props.value));
-        let selected = filter.length ? filter[0] : undefined;
-        const placeholder = this.props.placeholder ? this.props.placeholder : "";
         let menuItemStyle = defaultStyles;
         let containerStyle: CSSProperties = {margin: "10px 0", width: 200};
         if (this.props.fullWidth === true) {
@@ -76,32 +69,15 @@ export class DropDownForum extends React.Component<props, state> {
         }
         const border: CSSProperties = {borderBottom: "lightgrey 1px solid"};
         return (
-            <div style={containerStyle}>
-                {placeholder && selected && <Typography type="caption">{placeholder}</Typography>}
-                <div style={{height: menuItemStyle.height}}>
-                    <Button style={{...menuItemStyle, ...border, textTransform: "none", paddingLeft: 0, fontWeight: 400}}
-                            onClick={this.handleClick}>
-                        {selected ? this.bodyContainer(selected.text) : this.bodyContainer("Select " + placeholder)}
-                    </Button>
-                </div>
-                <div ref="menuPlaceHolder" style={{height: 0, marginTop: 20, position: "fixed"}}/>
-                <Menu
-                    MenuListProps={{style: {padding: 0}}}
-                    anchorEl={this.state.anchorEl}
-                    open={this.state.open}
-                    onRequestClose={this.handleRequestClose}
-                >
-                    <MenuItem onClick={() => this.onSelectValue(undefined)} style={menuItemStyle}>
-                        {this.bodyContainer("Select " + placeholder)}
-                    </MenuItem>
-                    {this.props.data.map((data) => (
-                        <MenuItem key={typeof data.value === "object" ? data.value._id : data.value}
-                                  onClick={() => this.onSelectValue(data.value)} style={menuItemStyle}>
-                            {this.bodyContainer(data.text,
-                                selected && selected.value == data.value ? "accent" : undefined)}
-                        </MenuItem>
-                    ))}
-                </Menu>
+            <div>
+                {this.props.data.map((data) => {
+                    return <TextField
+                        key={data.FieldName}
+                        label={data.FieldName}
+                        placeholder={data.FieldName}
+                        multiline
+                    />
+                })}
             </div>
         )
     }
