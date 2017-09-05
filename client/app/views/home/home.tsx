@@ -7,6 +7,9 @@ import {RouteComponentProps} from "react-router";
 import {GridListTile, GridListTileBar} from 'material-ui/GridList';
 import {PreviewCardsComponent} from "../../components/CardComponent/PreviewCardsComponent";
 import Grid from "material-ui/Grid/Grid";
+import Typography from "material-ui/Typography/Typography";
+import {PRIMARY_COLOR} from "../router";
+import Icon from "material-ui/Icon/Icon";
 
 export class HomeComponent extends React.Component<props, any> {
 
@@ -22,7 +25,22 @@ export class HomeComponent extends React.Component<props, any> {
                 <PreviewCardsComponent list={this.props.hot} trim={true}
                                        label={"Popular"} maxBlock={4}>
                     <Grid container>
-                        dsfkjsdkfaj
+                        <Grid item>
+                            <Typography type="display1" style={{color: PRIMARY_COLOR}}>
+                                The site is currently under development
+                            </Typography>
+                            <Grid container>
+                                <Grid item xs={3}>
+                                    <Icon color="action" style={{fontSize: 120}}>build</Icon>
+                                </Grid>
+                                <Grid item xs={9}>
+                                    <Typography type="body1">
+                                        The site is currently under development, many of the features may change.
+                                    </Typography>
+                                </Grid>
+                            </Grid>
+
+                        </Grid>
                     </Grid>
                 </PreviewCardsComponent>
 

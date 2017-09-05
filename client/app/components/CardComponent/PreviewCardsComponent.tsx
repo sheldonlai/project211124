@@ -62,7 +62,7 @@ export class PreviewCardsComponent extends React.Component<props, state>{
                     {this.props.children}
                 </Grid>}
                 <Grid item style={{marginTop: 16, width: maxWidth}}>
-                    <Typography type="display2" style={{marginBottom: 10, color: PRIMARY_COLOR}}>
+                    <Typography type="display1" style={{marginBottom: 10, color: PRIMARY_COLOR}}>
                         {this.props.label}
                         </Typography>
                     <Grid container justify="flex-start">
