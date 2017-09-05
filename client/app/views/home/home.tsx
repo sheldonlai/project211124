@@ -6,6 +6,7 @@ import {DashboardReducerState} from "../../reducers/DashboardReducer";
 import {RouteComponentProps} from "react-router";
 import {GridListTile, GridListTileBar} from 'material-ui/GridList';
 import {PreviewCardsComponent} from "../../components/CardComponent/PreviewCardsComponent";
+import Grid from "material-ui/Grid/Grid";
 
 export class HomeComponent extends React.Component<props, any> {
 
@@ -17,20 +18,14 @@ export class HomeComponent extends React.Component<props, any> {
 
         return (
             <div>
-                <PreviewCardsComponent list={this.props.hot}
-                                       label={"Popular"} maxBlock={4} />
-                {/*<GridList cellHeight={200} spacing={1}>*/}
-                    {/*{this.props.questions.map(tile => (*/}
-                        {/*<GridListTile key={tile._id} cols={isElementWide(tile) ? 2 : 1} rows={isElementWide(tile)? 2 : 1}>*/}
 
-                            {/*<GridListTileBar*/}
-                                {/*title={tile.title}*/}
-                                {/*titlePosition="top"*/}
-                            {/*/>*/}
+                <PreviewCardsComponent list={this.props.hot} trim={true}
+                                       label={"Popular"} maxBlock={4}>
+                    <Grid container>
+                        dsfkjsdkfaj
+                    </Grid>
+                </PreviewCardsComponent>
 
-                        {/*</GridListTile>*/}
-                    {/*))}*/}
-                {/*</GridList>*/}
             </div>
         )
     }

@@ -9,6 +9,7 @@ import Typography from "material-ui/Typography";
 import {CustomLink} from "../CustomLink";
 import {CustomCard} from "./CardComponent";
 import {Preview} from "../../models/CommonModels";
+import {PRIMARY_COLOR} from "../../views/router";
 
 export interface props {
     list: Preview[];
@@ -56,8 +57,14 @@ export class PreviewCardsComponent extends React.Component<props, state>{
         let maxWidth = (n > listLength)? 266 * listLength: n * 266;
         return (
             <Grid container justify="center">
+                {this.props.children &&
                 <Grid item style={{marginTop: 16, width: maxWidth}}>
-                    <Typography type="display2" style={{marginBottom: 10}}>{this.props.label}</Typography>
+                    {this.props.children}
+                </Grid>}
+                <Grid item style={{marginTop: 16, width: maxWidth}}>
+                    <Typography type="display2" style={{marginBottom: 10, color: PRIMARY_COLOR}}>
+                        {this.props.label}
+                        </Typography>
                     <Grid container justify="flex-start">
                         {list.map((e) => (
                             <Grid item key={e.element.title}>
