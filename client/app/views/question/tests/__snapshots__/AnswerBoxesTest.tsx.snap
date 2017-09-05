@@ -1,0 +1,52 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`answer boxes tests render question box not logged in 1`] = `<div />`;
+
+exports[`answer boxes tests render question logged in 1`] = `
+<div>
+  <div
+    style={
+      Object {
+        "float": "right",
+        "marginTop": 5,
+      }
+    }
+  >
+    <button
+      className="MuiButtonBase-root-15 MuiButton-root-1 MuiButton-raised-8 MuiButton-fab-14 MuiButton-raisedPrimary-10"
+      disabled={false}
+      onBlur={[Function]}
+      onClick={[Function]}
+      onFocus={[Function]}
+      onKeyDown={[Function]}
+      onKeyUp={[Function]}
+      onMouseDown={[Function]}
+      onMouseLeave={[Function]}
+      onMouseUp={[Function]}
+      onTouchEnd={[Function]}
+      onTouchStart={[Function]}
+      role="button"
+      tabIndex="0"
+      type="button"
+    >
+      <span
+        className="MuiButton-label-3"
+      >
+        <svg
+          aria-hidden="true"
+          className="MuiSvgIcon-root-17"
+          focusable={false}
+          viewBox="0 0 24 24"
+        >
+          <path
+            d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"
+          />
+        </svg>
+      </span>
+      <span
+        className="MuiTouchRipple-root-18"
+      />
+    </button>
+  </div>
+</div>
+`;
