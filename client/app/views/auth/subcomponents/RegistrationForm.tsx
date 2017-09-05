@@ -17,8 +17,8 @@ import Typography from "material-ui/Typography";
 
 export interface RegistrationViewState {
     error: string;
-    usernameOK: boolean;
-    emailOK: boolean;
+    usernameOK: string;
+    emailOK: string;
     regRequest: RegistrationRequest;
     confirmPassword: string;
     passwordError: string;
@@ -32,12 +32,14 @@ export class RegistrationForm extends Component<RegistrationViewProps, Registrat
 
     apiController: CommonController;
 
+    charError = "Valid characters are lower and uppercase letter a-z, 0-9, - and _.";
+
     constructor(props) {
         super(props);
         this.state = {
             error: '',
-            usernameOK: true,
-            emailOK: true,
+            usernameOK: '',
+            emailOK: '',
             regRequest: new RegistrationRequest(),
             confirmPassword: '',
             passwordError: ''
@@ -69,22 +71,44 @@ export class RegistrationForm extends Component<RegistrationViewProps, Registrat
 
     checkEmailAvailability = () => {
         this.apiController.checkEmailAvailability(this.state.regRequest.email).then(() => {
-            this.setState({emailOK : true});
+            this.setState({emailOK : ''});
         }).catch(() => {
-            this.setState({emailOK : false});
+            this.setState({emailOK : 'Sorry, this email is being used.'});
         });
+    };
+
+    onUsernameBlur = () => {
+        let valid = this.state.regRequest.checkUsernameValidity();
+        if (!valid){
+            this.setState({usernameOK: 'The username has invalid character(s) in it.' + this.charError});
+        } else {
+            this.checkUserNameAvailability();
+        }
+    };
+
+    onEmailBlur = () => {
+        let valid = this.state.regRequest.checkEmailValidity();
+        if (!valid){
+            this.setState({usernameOK: 'The email has invalid character(s) in it.'});
+        } else {
+            this.checkEmailAvailability();
+        }
     };
 
     checkUserNameAvailability = () => {
         this.apiController.checkUserNameAvailability(this.state.regRequest.username).then(() => {
-            this.setState({usernameOK : true});
+            this.setState({usernameOK : ''});
         }).catch(() => {
-            this.setState({usernameOK : false});
+            this.setState({usernameOK : 'Sorry, this username is being used.'});
         });
     };
 
 
     submit = () => {
+        if (this.state.regRequest.username != this.state.confirmPassword) {
+            this.setState({passwordError: 'Password not matched'});
+            return;
+        }
         if (this.state.regRequest.password != this.state.confirmPassword) {
             this.setState({passwordError: 'Password not matched'});
             return;
@@ -113,10 +137,10 @@ export class RegistrationForm extends Component<RegistrationViewProps, Registrat
                 </Grid>
                 <Grid item style={width}>
                     <ErrorView errorTxt={this.state.error}/>
-                    { !this.state.emailOK &&
+                    { this.state.emailOK &&
                         <div style={{color: "red"}}>
                             <Typography type="body1" color="inherit">
-                                Sorry, this email is assigned to another account.
+                                {this.state.emailOK}
                             </Typography>
                         </div>
                     }
@@ -125,14 +149,14 @@ export class RegistrationForm extends Component<RegistrationViewProps, Registrat
                         onChange={this.updateEmail}
                         inputProps={EmailNameInputStyles}
                         style={width}
-                        onBlur={this.checkEmailAvailability}
+                        onBlur={this.onEmailBlur}
                     />
                 </Grid>
                 <Grid item style={width}>
-                    { !this.state.usernameOK &&
+                    { this.state.usernameOK &&
                     <div style={{color: "red"}}>
                         <Typography type="body1" color="inherit">
-                            Sorry, this username is being used.
+                            {this.state.usernameOK}
                         </Typography>
                     </div>
                     }
@@ -140,7 +164,7 @@ export class RegistrationForm extends Component<RegistrationViewProps, Registrat
                         label="Username"
                         onChange={this.updateUsername}
                         style={width}
-                        onBlur={this.checkUserNameAvailability}
+                        onBlur={this.onUsernameBlur}
                     /><br/>
                 </Grid>
                 <Grid item style={width}>

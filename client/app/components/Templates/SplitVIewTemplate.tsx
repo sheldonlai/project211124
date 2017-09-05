@@ -18,10 +18,10 @@ export class SplitVIewTemplate extends React.Component<props> {
 
     render() {
         return <Grid container justify="center" direction="row-reverse" style={this.props.style}>
-            <Grid item xs={12} md={3} lg={2}>
+            <Grid item xs={12} md={4} lg={2}>
                 {this.props.children[1]}
             </Grid>
-            <Grid item xs={12} md={8} lg={6}>
+            <Grid item xs={12} md={8} lg={8}>
                 {this.props.children[0]}
             </Grid>
         </Grid>

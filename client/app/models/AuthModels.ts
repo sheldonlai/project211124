@@ -30,5 +30,13 @@ export namespace FrontEndAuthModels {
             this.username = (username)? username : '';
             this.password = (password)? password : '';
         }
+
+        checkUsernameValidity() {
+            return /^[0-9a-zA-Z_]+$/.test(this.username);
+        };
+
+        checkEmailValidity() {
+            return /^[0-9a-zA-Z_.-@]+$/.test(this.email);
+        }
     }
 }

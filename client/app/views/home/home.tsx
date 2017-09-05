@@ -24,13 +24,13 @@ export class HomeComponent extends React.Component<props, any> {
 
                 <PreviewCardsComponent list={this.props.hot} trim={true}
                                        label={"Popular"} maxBlock={4}>
-                    <Grid container>
-                        <Grid item>
+                    <Grid container style={{width: "100%", height: "100%"}}>
+                        <Grid item xs={12}>
                             <Typography type="display1" style={{color: PRIMARY_COLOR}}>
                                 The site is currently under development
                             </Typography>
                             <Grid container>
-                                <Grid item xs={3}>
+                                <Grid item>
                                     <Icon color="action" style={{fontSize: 120}}>build</Icon>
                                 </Grid>
                                 <Grid item xs={9}>

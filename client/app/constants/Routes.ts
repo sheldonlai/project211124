@@ -16,8 +16,9 @@ export class Routes {
     static createStory = Routes.story + '/create';
     static story_by_id = Routes.story + '/:id/:name';
 
-
+    //profile
     static my_profile = "/my-profile";
+    static profile = "/profile/:username";
 
     // rating
     static rate_my_teammate = "/rating-my-teammate";
