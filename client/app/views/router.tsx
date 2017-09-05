@@ -78,6 +78,7 @@ export class App extends React.Component<any, any> {
                             <Route path={Routes.question} component={QuestionModule}/>
                             <Route path={Routes.story} component={StoryModule}/>
                             <Route exact path={Routes.my_profile} component={UserProfileView}/>
+                            <Route exact path={Routes.profile} component={UserProfileView}/>
                             <Route exact path={Routes.rate_my_teammate} component={RatingHomeView}/>
                             <Route exact path={Routes.create_teammate_record} component={CreateTeammateView}/>
                             <Route exact path={Routes.rating} component={RatingPageView}/>

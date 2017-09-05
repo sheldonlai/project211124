@@ -290,7 +290,7 @@ export class SharedCommentsComponent extends React.Component<CommentsComponentPr
                         }
                     </List>
                     {
-                        !this.state.newCommentMode &&
+                        !this.state.newCommentMode && this.props.user &&
                         <div style={{height: 36, marginBottom: 10}}>
                             <Button dense
                                     color="primary"
