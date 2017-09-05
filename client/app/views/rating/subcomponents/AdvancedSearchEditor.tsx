@@ -16,8 +16,10 @@ import {DisplayField} from "../../../components/Forms/DisplayField";
 import {CityDto} from "../../../../../server/dtos/location/CityDto";
 import {DropDownForum} from "../../../components/Forms/DropDownForum";
 import {ForumDto} from "../../../../../server/dtos/sharedDtos/ForumDto";
+import {TeammateLocationEditor} from "./TeammateLocationEditor";
 
 interface props {
+    
 }
 
 interface state {
@@ -28,7 +30,7 @@ interface state {
     city: CityDto;
 }
 
-let FieldNames: string[] = ['firstName', 'lastName', 'university', 'year', 'city'];
+let FieldNames: string[] = ['First Name', 'Laste Name', 'university', 'year', 'city'];
 
 export class AdvancedSearchEditor extends React.Component<props, state> {
     constructor(props) {

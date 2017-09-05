@@ -13,27 +13,17 @@ interface props {
     fullWidth? : boolean;
 }
 
-const defaultStyles: CSSProperties = {
+const textField = {
+    marginLeft: 10,
+    marginRight: 10,
     width: 200,
-    height: 35,
-    justifyContent: "flex-start"
 };
 
-interface state {
-    anchorEl: any;
-    open: boolean;
-}
-
 // Temporary component until Material UI finish implementing theirs
-export class DropDownForum extends React.Component<props, state> {
+export class DropDownForum extends React.Component<props> {
 
     constructor(props) {
         super(props);
-        this.state = {
-            anchorEl: undefined,
-            open: false
-        }
-        console.log(this.props.data);
     }
 
     button = undefined;
@@ -61,24 +51,18 @@ export class DropDownForum extends React.Component<props, state> {
     };
 
     render() {
-        let menuItemStyle = defaultStyles;
-        let containerStyle: CSSProperties = {margin: "10px 0", width: 200};
-        if (this.props.fullWidth === true) {
-            menuItemStyle.width = "100%";
-            containerStyle.width = "100%";
-        }
-        const border: CSSProperties = {borderBottom: "lightgrey 1px solid"};
         return (
-            <div>
+            <form noValidate>
                 {this.props.data.map((data) => {
                     return <TextField
+                        style={textField}
                         key={data.FieldName}
                         label={data.FieldName}
                         placeholder={data.FieldName}
-                        multiline
+                        margin="normal"
                     />
                 })}
-            </div>
+            </form>
         )
     }
 }
