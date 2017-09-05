@@ -24,6 +24,7 @@ export class RatingHomeViewComponent extends React.Component<StateToProps & Disp
         super(props);
         this.state = {
             searchString: "",
+            AdvancedSearch: false,
         };
     }
 
@@ -51,19 +52,28 @@ export class RatingHomeViewComponent extends React.Component<StateToProps & Disp
             left: 800,
             top: 10,
         };
+
         return(
             <div>
-                <TextField
-                    label="Search..."
-                    placeholder="Search..."
-                    value = {this.state.searchString}
-                    onChange = {this.onSearchStringChange}
-                    style = {pos}
-                />
-                <IconButton style = {search_pos} onClick = {this.FindSimilarTeammates}>
-                    <Icon>search</Icon>
-                </IconButton>
-                <AdvancedSearchEditor/>
+                <Grid container spacing={24}>
+                    <Grid item xs={12} sm={6}>
+                    </Grid>
+                    <Grid item xs={12} sm={6}>
+                    <TextField
+                        label="Search..."
+                        placeholder="Search..."
+                        value = {this.state.searchString}
+                        onChange = {this.onSearchStringChange}
+                    />
+                    <IconButton onClick={this.FindSimilarTeammates}>
+                        <Icon>search</Icon>
+                    </IconButton>
+                    <Typography type="caption" align="justify">
+                        Advanced
+                    </Typography>
+                    </Grid>
+                    <AdvancedSearchEditor/>
+                </Grid>
             </div>
         )
     }
