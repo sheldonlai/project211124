@@ -68,11 +68,15 @@ export class RatingHomeViewComponent extends React.Component<StateToProps & Disp
                     <IconButton onClick={this.FindSimilarTeammates}>
                         <Icon>search</Icon>
                     </IconButton>
-                    <Typography type="caption" align="justify">
+                    <Typography style={{cursor: "pointer"}} type="caption" align="justify" onClick={()=>this.setState({AdvancedSearch: !this.state.AdvancedSearch})}>
                         Advanced
                     </Typography>
                     </Grid>
-                    <AdvancedSearchEditor/>
+                    <Grid item xs={2}>
+                    </Grid>
+                    <Grid item sm={8}>
+                        {this.state.AdvancedSearch && <AdvancedSearchEditor/>}
+                    </Grid>
                 </Grid>
             </div>
         )
