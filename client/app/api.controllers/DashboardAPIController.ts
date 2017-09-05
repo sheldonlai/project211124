@@ -16,9 +16,15 @@ class DashboardAPIControllerClass extends ApiController {
     fetchDashboardData(): AxiosPromise {
         return this.get(APIUrls.FetchDashboard).then((res) => {
             let data: DashboardDto = res.data;
-            let stories = data.stories.map(story => new StoryPreview(story));
-            let questions = data.questions.map(question => new QuestionPreview(question));
-            res.data = {stories, questions};
+            let stories = data.stories.map(story => ({
+                score: story.score, object: new StoryPreview(story.object)
+            }));
+            let questions = data.questions.map(question => ({
+                score: question.score, object:new QuestionPreview(question.object)
+            }));
+            let sorted = stories.concat(questions).sort((a,b) => b.score - a.score);
+            console.log(sorted)
+            res.data = {hottest: sorted.map(e => e.object)};
             return res;
         });
     }

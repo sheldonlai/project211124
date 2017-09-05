@@ -1,10 +1,8 @@
-import {QuestionPreviewDto} from "../q&a/QuestionPreviewDto";
-import {StoryPreviewDto} from "../story/StoryPreviewDto";
-import {Question} from "../../models/Question";
-import {Story} from "../../models/Story";
+import {QuestionDto} from "../q&a/QuestionDto";
+import {StoryDto} from "../story/StoryDto";
+import {SearchScoreModel} from "../../models/Base/SearchScoreModel";
 
 export interface DashboardDto {
-    stories: Story[];
-    questions: Question[];
-
+    stories: SearchScoreModel<StoryDto>[];
+    questions: SearchScoreModel<QuestionDto>[];
 }

@@ -1,6 +1,3 @@
-
-
-
 import IconButton from "material-ui/IconButton/IconButton";
 import Toolbar from "material-ui/Toolbar/Toolbar";
 import Icon from "material-ui/Icon";

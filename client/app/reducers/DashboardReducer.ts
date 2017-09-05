@@ -11,16 +11,15 @@ import Story = FrontEndStoryModels.Story;
 import {DashboardActionTypes} from "../constants/DashboardActionTypes";
 import StoryPreview = FrontEndStoryModels.StoryPreview;
 import QuestionPreview = FrontEndQuestionModels.QuestionPreview;
+import {DashboardDto} from "../../../server/dtos/dashboard/DashboardDto";
 export interface DashboardReducerState {
     status: ReducerStateStatus;
-    stories: StoryPreview[];
-    questions: QuestionPreview[];
+    hot: (QuestionPreview|StoryPreview)[];
 }
 
 const initialState: DashboardReducerState = {
     status: ReducerStateStatus.LOADING,
-    stories: [],
-    questions: []
+    hot: []
 };
 
 const getLoadingState = (state: DashboardReducerState) => {
@@ -31,8 +30,7 @@ const getLoadingState = (state: DashboardReducerState) => {
 
 const getOkState = (state, data) => {
     state = {...state};
-    state.stories = data.stories;
-    state.questions = data.questions;
+    state.hot = data.hottest;
     return state;
 };
 

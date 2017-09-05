@@ -5,6 +5,8 @@ import Button from "material-ui/Button";
 import Typography from "material-ui/Typography";
 import {convertDateTimeToString, convertDateToString} from "../../utils/DateUtils";
 import {CSSProperties} from "react";
+import Paper from "material-ui/Paper/Paper";
+import {PRIMARY_COLOR} from "../../views/router";
 
 export interface CardComponentProps {
     title: string;
@@ -15,10 +17,12 @@ export interface CardComponentProps {
 }
 
 const cardStyle = {
-    height: 200,
+    height: 124,
     overflowY:"hidden",
     position: "relative",
     //background:"linear-gradient(transparent 150px, white)"
+    borderBottom : "#eee 1px solid",
+    // background : "#f9f9f9"
 };
 
 const shader : CSSProperties = {
@@ -27,7 +31,6 @@ const shader : CSSProperties = {
     position: "absolute",
     left: 0,
     top: 0,
-    background: "linear-gradient(transparent 100px, white 175px)",
 };
 
 export class CustomCard extends React.Component<CardComponentProps, any> {
@@ -46,23 +49,23 @@ export class CustomCard extends React.Component<CardComponentProps, any> {
         }
         return (
             <div>
-                <Card style={{width: width, ...cardStyle}}>
+                <Paper style={{width: width, ...cardStyle}} elevation={0}>
                     <div style={shader}/>
-                    <CardContent>
-                        <Typography type="headline" style={{fontSize: 18, lineHeight: "24px"}}>
-                            {this.props.title}
-                        </Typography>
-                        <Typography type="body1" style={{fontSize: 10}} color="secondary">
-                            {dateString}
-                        </Typography>
-                        <Typography type="body1"  style={{fontSize: 12, overflowY:"hidden", height: 150}}>
-                            {this.props.content}
-                        </Typography>
-                    </CardContent>
-                    <CardActions style={{position: "absolute", bottom: 0, right: 0, height: 36}}>
-                        <Button dense color="primary" onClick={this.props.onClick}>Read More</Button>
-                    </CardActions>
-                </Card>
+                    <div style={{height: 88, overflowY : "hidden"}}>
+                    <Typography type="headline" style={{fontSize: 18, lineHeight: "24px"}} >
+                        {this.props.title}
+                    </Typography>
+                    <Typography type="body1" style={{fontSize: 10}} color="secondary">
+                        {dateString}
+                    </Typography>
+                    <Typography type="body1" paragraph={true} noWrap={true} style={{fontSize: 12}}>
+                        {this.props.content}
+                    </Typography>
+                    </div>
+                    <div style={{height: 36, textAlign: "right"}}>
+                        <Button dense color="accent" onClick={this.props.onClick}>Read More</Button>
+                    </div>
+                </Paper>
             </div>
         );
     }

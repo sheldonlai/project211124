@@ -3,6 +3,7 @@ import {Document, Model, Types} from "mongoose";
 import {BaseModel} from "../models/Base/BaseModel";
 import {AppError} from "../errors/AppError";
 import {elasticSearchModel} from "../elasticSearch/ElasticSearchUtils";
+import {SearchScoreModel} from "../models/Base/SearchScoreModel";
 
 export interface IBaseRepository<T> {
     getAll(options?: SortLimitOptions): Promise<T[]>
@@ -12,7 +13,8 @@ export interface IBaseRepository<T> {
     create(obj: T): Promise<T>;
     update(obj: T): Promise<T>;
     deleteById(id: string | Types.ObjectId): Promise<T>;
-    search(query: any): Promise<T[]>
+    search(query: any): Promise<T[]>;
+    searchReturnWithScore(query): Promise<SearchScoreModel<T>[]>;
 }
 
 export interface SortLimitOptions {
@@ -104,6 +106,36 @@ export abstract class BaseRepository<T extends BaseModel, I extends Document & T
             return Promise.all(elements.map((record)=>this.applyAdditionalFunction(record)));
         }).then((array) => {
             return this.getModels(array);
+        })
+    }
+
+    searchReturnWithScore(query): Promise<SearchScoreModel<T>[]> {
+        let ids: any[];
+        let scores: any[];
+        return elasticSearchModel(this.model, query).then((results) => {
+            ids = [];
+            scores = [];
+            for (let i = 0; i < results.hits.hits.length; i ++){
+                let e = results.hits.hits[i];
+                ids.push(mongoose.Types.ObjectId(e._id));
+                scores.push(e._score);
+            }
+            return this.model.find({
+                '_id': { $in: ids}
+            }).lean().exec();
+        }).then((elements: T[]) => {
+            // re order the list
+            return Promise.all(elements.map((record)=>this.applyAdditionalFunction(record)));
+        }).then((array) => {
+            return this.getModels(array);
+        }).then((elements) => {
+            let newList = ids.map((id, index) => {
+                let element =  elements.find((record) => {
+                    return record._id.toString() === id.toString();
+                });
+                return new SearchScoreModel(scores[index],element);
+            });
+            return newList;
         })
     }
 

@@ -24,7 +24,7 @@ import {UserTypeEnum} from "../../../server/enums/UserTypeEnum";
 let questionLoader = require("bundle-loader?lazy&name=question!./question/QuestionRouter");
 let storyLoader = require("bundle-loader?lazy&name=story!./story/StoryRouter");
 let adminLoader = require("bundle-loader?lazy&name=admin!./admin/AdminRouter");
-
+export const PRIMARY_COLOR = deepOrange[500];
 let muiTheme = createMuiTheme({
     palette: createPalette({
         primary: deepOrange,

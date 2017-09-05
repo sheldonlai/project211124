@@ -3,11 +3,13 @@ import {BaseService} from "./BaseService";
 import {IQuestionRepository} from "../repositories/QuestionRepository";
 import {IStoryRepository} from "../repositories/StoryRepository";
 import {DashboardDto} from "../dtos/dashboard/DashboardDto";
-import {Story} from "../models/Story";
-import {Question} from "../models/Question";
+import * as _ from "lodash";
+import {SearchScoreModel} from "../models/Base/SearchScoreModel";
+import {StoryDto} from "../dtos/story/StoryDto";
+import {QuestionDto} from "../dtos/q&a/QuestionDto";
 
 export interface IDashboardService {
-    getHottestStoriesAndQuestions: () => Promise<DashboardDto>;
+    getHottestStoriesAndQuestions(): Promise<DashboardDto>;
 }
 
 export class DashboardService extends BaseService implements IDashboardService {
@@ -16,20 +18,39 @@ export class DashboardService extends BaseService implements IDashboardService {
         super();
     }
 
-    getHottestStoriesAndQuestions = (): Promise<DashboardDto> => {
+    getHottestStoriesAndQuestions(): Promise<DashboardDto> {
         let hotQuery = getHottestQuery();
         let promises = [];
-        promises.push(this.questionRepo.search(hotQuery));
-        promises.push(this.storyRepo.search(hotQuery));
+        promises.push(this.questionRepo.searchReturnWithScore(hotQuery));
+        promises.push(this.storyRepo.searchReturnWithScore(hotQuery));
         return Promise.all(promises).then((results) => {
-            let questions = results[0]
-            let stories = results[1];
+            let questions: SearchScoreModel<QuestionDto>[] = results[0].sort((a, b) => b.score - a.score);
+            let stories: SearchScoreModel<StoryDto>[] = results[1].sort((a, b) => b.score - a.score);
+            let i = 0;
+            let j = 0;
+            while (i + j < 10 && i + j < questions.length + stories.length) {
+                if (stories.length === j){
+                    // story list exhausted
+                    i++;
+                } else if (questions.length === i){
+                    // question list exhausted
+                    j++;
+                } else if (questions[i].score > stories[j].score) {
+                    // question score is higher than story
+                    i++;
+                } else {
+                    // story score is higher OR equal to question
+                    j++;
+                }
+            }
+            questions = questions.slice(0, i);
+            stories = stories.slice(0, j);
 
             return {
-                stories: stories,
-                questions: questions
+                questions,
+                stories
             };
-        })
+        });
 
     }
 }
