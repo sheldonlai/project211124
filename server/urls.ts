@@ -46,6 +46,7 @@ export class APIUrls {
 
     /* Profile */
     static updateProfile = "/update-profile";
+    static getProfile = "/get-profile/:id";
 
     /* Rate Your Teammate */
     static createTeammateRecord = "/create-teammate-record";
