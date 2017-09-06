@@ -296,7 +296,7 @@ export class SharedCommentsComponent extends React.Component<CommentsComponentPr
                         !this.state.newCommentMode && this.props.user &&
                         <div style={{height: 36}}>
                             <Button dense
-                                    color="primary"
+                                    color="accent"
                                     style={{float: "right"}}
                                     onClick={() => this.setState({newCommentMode: !this.state.newCommentMode})}>
                                 Comment

@@ -28,7 +28,10 @@ export const PRIMARY_COLOR = deepOrange[500];
 let muiTheme = createMuiTheme({
     palette: createPalette({
         primary: deepOrange,
-        accent: blueGrey,
+        accent: {
+            ...blueGrey,
+            A200: blueGrey[500]
+        },
     })
 });
 const QuestionModule = () => (

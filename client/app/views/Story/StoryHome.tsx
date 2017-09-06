@@ -30,13 +30,17 @@ export class StoryHomeComponent extends React.Component<props, state> {
     render() {
         return (
             <div>
-                <CustomLink to={Routes.createStory}>
-                    <Button>New Story</Button>
-                </CustomLink>
                 {this.props.status === ReducerStateStatus.LOADING ?
                     <LoadingScreen/> :
                     <div>
-                        <PreviewCardsComponent label="Featured" list={this.props.previews} maxBlock={4}/>
+
+                        <PreviewCardsComponent label="Featured" list={this.props.previews} maxBlock={4}>
+                            <div style={{width: "100%", textAlign: "right"}}>
+                                <CustomLink to={Routes.createStory}>
+                                    <Button>New Story</Button>
+                                </CustomLink>
+                            </div>
+                        </PreviewCardsComponent>
                         <PreviewCardsComponent label="My Stories" list={this.props.previews} maxBlock={4}/>
 
                     </div>

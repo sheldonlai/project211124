@@ -47,14 +47,16 @@ export class PreviewCardsComponent extends React.Component<props, state>{
     };
 
     render() {
+        const boxWidth = 266;
         if (!this.props.list || this.props.list.length === 0) return null;
         const bodyMargin = 16;
         let width = this.state.width;
-        let n = Math.floor((width - bodyMargin) / (250 + 16));
+        let n = Math.floor((width - bodyMargin) / boxWidth);
         n = n > this.props.maxBlock ? this.props.maxBlock: n;
         let list = sortListToGetSameWidthEachRow(this.props.list, n, this.props.trim);
         let listLength = getLengthFromBoxes(list);
-        let maxWidth = (n > listLength)? 266 * listLength: n * 266;
+        let maxWidth = (n > listLength)? boxWidth * listLength: n * boxWidth;
+        maxWidth += bodyMargin;
         return (
             <Grid container justify="center">
                 {this.props.children &&
