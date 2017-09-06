@@ -19,28 +19,25 @@ import {ForumDto} from "../../../../../server/dtos/sharedDtos/ForumDto";
 import {TeammateLocationEditor} from "./TeammateLocationEditor";
 
 interface props {
-    
 }
 
 interface state {
-    firstName: string;
-    lastName: string;
-    university: UniversityDto;
-    year: number;
-    city: CityDto;
 }
 
-let FieldNames: string[] = ['First Name', 'Laste Name', 'university', 'year', 'city'];
+let FieldNames: string[] = ['First Name', 'Middle Name', 'Laste Name'];
 
 export class AdvancedSearchEditor extends React.Component<props, state> {
     constructor(props) {
         super(props);
         this.state = {
-            firstName: undefined,
-            lastName: undefined,
-            university: undefined,
-            year: undefined,
-            city: undefined,
+            SearchTeammateObj: {
+                _id: undefined,
+                firstName: '',
+                lastName: '',
+                city: undefined,
+                university: undefined,
+                year: undefined,
+            },
         };
     }
 
@@ -51,6 +48,7 @@ export class AdvancedSearchEditor extends React.Component<props, state> {
                 <DropDownForum
                     data = {ForumVector}
                 />
+                <TeammateLocationEditor university={undefined} year={undefined} city={undefined}/>
             </div>
         )
     }
