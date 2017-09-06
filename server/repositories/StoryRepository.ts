@@ -65,9 +65,13 @@ export class StoryRepository extends BaseRepository<Story, IStory> implements IS
     protected applyRestriction(story: Story): Story {
         if (story.author) {
             delete story.author.local;
+            delete story.author.email;
+            delete story.author.role;
         }
         story.comments = story.comments.map((comment: StoryComment) => {
             delete comment.commentBy.local;
+            delete comment.commentBy.email;
+            delete comment.commentBy.role;
             return comment;
         });
         return story;

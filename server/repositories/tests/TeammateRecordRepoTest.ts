@@ -67,6 +67,8 @@ describe(testName, function () {
         expect(result.description).toBe(newTeammate.description);
         expect(result.ratings.length).toBe(1);
         expect(result.ratings[0].createdBy.local).toBeUndefined();
+        expect(result.ratings[0].createdBy.email).toBeUndefined();
+        expect(result.ratings[0].createdBy.role).toBeUndefined();
 
         let rating = result.ratings[0];
         rating.satisfied = false;

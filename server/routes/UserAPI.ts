@@ -14,6 +14,7 @@ export class UserAPI extends BaseAPI {
         this.router = Router();
         this.service = service;
         this.router.put(APIUrls.updateProfile, mustBeAuthenticated, this.updateProfile);
+        this.router.put(APIUrls.getProfile, this.getProfile);
 
     }
 
@@ -21,6 +22,13 @@ export class UserAPI extends BaseAPI {
         const user = req.body;
         const currentUser = req.user;
         const promise = this.service.updateUser(user, currentUser);
+        this.respondPromise(promise, res, next);
+    };
+
+    public getProfile = (req: AuthRequest, res: Response, next: NextFunction) => {
+        const user = req.body;
+        const username = req.params.username;
+        const promise = this.service.getUserProfile(user);
         this.respondPromise(promise, res, next);
     };
 

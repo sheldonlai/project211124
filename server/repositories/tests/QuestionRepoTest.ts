@@ -63,6 +63,9 @@ describe('QuestionRepoTest', function () {
         expect(question.content).toBeDefined();
         expect(question.title).toBe('QuestionRepoTest1');
         expect(question.lastEditedUtc).not.toEqual(dateTime);
+        expect(question.author.local).toBeUndefined();
+        expect(question.author.email).toBeUndefined();
+        expect(question.author.role).toBeUndefined();
     });
 
     it('should update', async function () {
@@ -90,12 +93,17 @@ describe('QuestionRepoTest', function () {
         prev_content = question.content;
         question.content = createRawDraftContentState('changed');
 
+        question = await questionRepo.update(question);
         // should not change
         expect(prev_content).toBeDefined();
         expect(question.content).not.toBe(prev_content);
         expect(question.title).toBe('QuestionRepoTestNew');
         expect(question.isPublished).toBe(true);
         expect(question.comments.length).toBe(1);
+        expect(question.comments[0].commentBy.local).toBeUndefined();
+        expect(question.comments[0].commentBy.email).toBeUndefined();
+        expect(question.comments[0].commentBy.role).toBeUndefined();
+
     });
 
     it('should get new question', async function () {

@@ -4,7 +4,7 @@ import {Editor} from "react-draft-wysiwyg";
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 
 const toolBarOptions = {
-    options: ['inline', 'blockType', 'list', 'textAlign', 'image', 'link', 'history'],
+    options: ['inline', 'blockType', 'list', 'textAlign', 'colorPicker', 'image', 'link', 'history'],
     inline: { inDropdown: true },
     blockType: {
         inDropdown: true,
@@ -13,7 +13,6 @@ const toolBarOptions = {
     list: { inDropdown: true },
     textAlign: { inDropdown: true },
     link: { inDropdown: true },
-    history: { inDropdown: true },
 };
 
 export class EditorFactory {
@@ -31,7 +30,7 @@ export class EditorFactory {
                         wrapperClassName="demo-wrapper"
                         editorClassName="demo-editor"
                         options={[]}
-                        toolbarStyle={{height: 0}}
+                        toolbarStyle={{display: "none"}}
                         editorStyle={style}
                         editorState={editorState}
                         onEditorStateChange={onChange}

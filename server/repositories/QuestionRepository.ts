@@ -5,6 +5,7 @@ import {UserQuestionVote, UserQuestionVoteModel} from "../models/UserQuestionVot
 import {isNullOrUndefined} from "util";
 import {AppError} from "../errors/AppError";
 import {ClientError} from "../errors/HttpStatus";
+import {removeUserRestrictedInfo} from "../utils/UserUtils";
 
 export interface IQuestionRepository extends IBaseRepository<Question> {
     getQuestionsByAuthor(user: User): Promise<Question[]>;
@@ -40,7 +41,7 @@ export class QuestionRepository extends BaseRepository<Question, IQuestion> impl
     }
 
     getQuestionsByAuthor(user: User): Promise<Question[]> {
-        return QuestionModel.find({author: user}).lean().exec()
+        return QuestionModel.find({author: user._id}).lean().exec()
             .then((questions: Question[]) => Promise.all(questions.map((q) => this.applyAdditionalFunction(q))))
             .then((question: Question[]) => {
                 return this.getModels(question);
@@ -60,15 +61,14 @@ export class QuestionRepository extends BaseRepository<Question, IQuestion> impl
     }
 
     protected applyRestriction(question: Question): Question {
-        if (question.author) {
-            delete question.author.local;
-        }
+        removeUserRestrictedInfo(question.author);
         question.comments = question.comments.map((comment: QuestionComment) => {
-            delete comment.commentBy.local;
+            removeUserRestrictedInfo(comment.commentBy);
             return comment;
         });
         return question;
     }
+
 
     protected applyAdditionalFunction(question: Question): Promise<Question> {
         if (isNullOrUndefined(question)){

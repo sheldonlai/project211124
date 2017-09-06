@@ -3,6 +3,7 @@ import {ITeammateRecord, TeammateRating, TeammateRecord, TeammateRecordModel} fr
 import {isNullOrUndefined} from "util";
 import {elasticSearchModel} from "../elasticSearch/ElasticSearchUtils";
 import * as mongoose from "mongoose";
+import {removeUserRestrictedInfo} from "../utils/UserUtils";
 
 export interface ITeammateRecordRepository extends IBaseRepository<TeammateRecord> {
     searchRecord (query): Promise<TeammateRecord[]>;
@@ -78,11 +79,9 @@ export class TeammateRecordRepository extends BaseRepository<TeammateRecord, ITe
     }
 
     protected applyRestriction(record: TeammateRecord): TeammateRecord {
-        if (record.createdBy) {
-            delete record.createdBy.local;
-        }
+        removeUserRestrictedInfo(record.createdBy);
         record.ratings = record.ratings.map((rating) => {
-            delete rating.createdBy.local;
+            removeUserRestrictedInfo(rating.createdBy)
             return rating;
         });
         return record;

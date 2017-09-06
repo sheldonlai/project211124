@@ -3,6 +3,7 @@ import {BaseRepository, IBaseRepository} from "./BaseRepository";
 import {Types} from "mongoose";
 import {QuestionComment} from "../models/Question";
 import {UserAnswerVote, UserAnswerVoteModel} from "../models/UserAnswerVote";
+import {removeUserRestrictedInfo} from "../utils/UserUtils";
 export interface IAnswerRepository extends IBaseRepository<Answer> {
     getByQuestionId(questionId: Types.ObjectId, sort?: any): Promise<Answer[]>;
     findOneAndUpdateVoteAnswer(userAnswerVote: UserAnswerVote): Promise<Answer>;
@@ -44,11 +45,9 @@ export class AnswerRepository extends BaseRepository<Answer, IAnswer> implements
     }
 
     protected applyRestriction(answer: Answer): Answer {
-        if (answer.author) {
-            delete answer.author.local;
-        }
+        removeUserRestrictedInfo(answer.author);
         answer.comments = answer.comments.map((comment: QuestionComment) => {
-            delete comment.commentBy.local;
+            removeUserRestrictedInfo(comment.commentBy);
             return comment;
         });
         return answer;
