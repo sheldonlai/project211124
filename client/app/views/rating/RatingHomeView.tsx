@@ -41,18 +41,6 @@ export class RatingHomeViewComponent extends React.Component<StateToProps & Disp
     };
 
     renderSearchBar = () => {
-        const pos = {
-            Position: 'absolute',
-            left: 825,
-            top: 0,
-        };
-        const search_pos = {
-            padding: 10,
-            Position: 'absolute',
-            left: 800,
-            top: 10,
-        };
-
         return(
             <div>
                 <Grid container spacing={24}>
