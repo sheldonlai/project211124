@@ -14,6 +14,7 @@ import {LoadingScreen} from "../Animations/LoadingScreen";
 import {convertDateTimeToString} from "../../utils/DateUtils";
 import Grid from "material-ui/Grid";
 import {USERNAME_COLOR} from "../../styles/Colors";
+import {AuthorLink} from "../RoutingComponents/AuthorLink";
 
 export interface CommentsComponentProps {
     comments: CommentDto[];
@@ -152,9 +153,7 @@ export class SharedCommentsComponent extends React.Component<CommentsComponentPr
                         {this.props.comments[index].commentContent}
                     </Typography>
                     {" – "}
-                    <Typography style={{display: "inline-block", color: USERNAME_COLOR}}>
-                        {this.props.comments[index].commentBy.username}
-                    </Typography>
+                    <AuthorLink username={this.props.comments[index].commentBy.username}/>
                     <Typography type="caption" style={{display: "inline-block", marginLeft: 5}}>
                         {convertDateTimeToString(this.props.comments[index].createdUtc)}
                     </Typography>
@@ -254,7 +253,6 @@ export class SharedCommentsComponent extends React.Component<CommentsComponentPr
         if (this.props.comments.length == 0)
             return undefined;
         let comments: CommentDto[] = this.props.comments.slice(0, this.state.showMaxComments);
-        //<div>Posted on {comment.createdUtc}</div>
         return <List>
             {comments.map((comment, index) => {
                 const showFooter = index != this.state.EditCommentIndex;

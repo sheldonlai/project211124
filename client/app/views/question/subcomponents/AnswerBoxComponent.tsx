@@ -26,9 +26,6 @@ export interface AnswerBoxComponentProps {
     resetAnswer?: () => void;
 }
 
-
-
-
 const paperStyle = {height: "100%", padding: 5};
 
 export class AnswerBoxComponent extends Component<AnswerBoxComponentProps & dispatch> {
@@ -55,8 +52,9 @@ export class AnswerBoxComponent extends Component<AnswerBoxComponentProps & disp
                                 {editable && !this.props.editMode &&
                                 <Button color="primary" onClick={this.props.onEditClick}>Edit</Button>}
                             </Grid>
+                            <Divider/>
                         </Grid>
-                        <Divider/>
+
                         <QAEditorComponent value={this.props.answer.content} onChange={this.onContentChange}
                                            onSubmit={this.props.onSubmit} readOnly={!this.props.editMode}
                                            style={{fontSize: 14}} reset={this.props.resetAnswer}
