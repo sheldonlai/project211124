@@ -2,7 +2,7 @@ import * as React from "react";
 import {connect} from "react-redux";
 import Grid from "material-ui/Grid";
 import Button from "material-ui/Button";
-import {CustomLink} from "../../components/CustomLink";
+import {CustomLink} from "../../components/RoutingComponents/CustomLink";
 import {Routes} from "../../constants/Routes";
 import {RatingActions} from "../../actions/RatingActions";
 import {AppStoreState} from "../../stores/AppStore";

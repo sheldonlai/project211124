@@ -1,4 +1,4 @@
-import {StoryActionTypes} from '../constants/StoryActionTypes';
+import {StoryActionTypes} from '../constants/action.types/StoryActionTypes';
 import {StoryApiController, StoryApiControllerClass} from '../api.controllers/StoryApiController';
 import {BaseActions} from "./BaseActions";
 import {AxiosResponse} from "axios";

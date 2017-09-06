@@ -1,6 +1,6 @@
 import * as React from "react";
 import Toolbar from "material-ui/Toolbar/Toolbar";
-import {CustomLink} from "../../components/CustomLink";
+import {CustomLink} from "../../components/RoutingComponents/CustomLink";
 import {Routes} from "../../constants/Routes";
 import Button from "material-ui/Button/Button";
 import Typography from "material-ui/Typography";

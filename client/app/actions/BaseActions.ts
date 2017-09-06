@@ -1,7 +1,7 @@
 /**
  * Created by SHELDON on 6/22/2017.
  */
-import {ErrorActionTypes} from "../constants/ErrorActionTypes";
+import {ErrorActionTypes} from "../constants/action.types/ErrorActionTypes";
 import {ClientError, HttpStatus} from "../../../server/errors/HttpStatus";
 
 export class BaseActions {

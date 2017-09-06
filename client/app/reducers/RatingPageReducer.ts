@@ -1,5 +1,5 @@
 import {ReducerStateStatus} from "../constants/ReducerStateStatus";
-import {RatingActionTypes} from "../constants/RatingActionTypes";
+import {RatingActionTypes} from "../constants/action.types/RatingActionTypes";
 import {TeammateRecordDto} from "../../../server/dtos/rating/TeammateRecordDto";
 
 export interface RatingPageReducerState {

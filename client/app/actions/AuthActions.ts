@@ -1,5 +1,5 @@
 
-import {AuthActionTypes} from '../constants/AuthActionTypes';
+import {AuthActionTypes} from '../constants/action.types/AuthActionTypes';
 import {CommonController} from '../api.controllers/CommonController';
 import {Routes} from '../constants/Routes';
 import {RouterController} from "../api.controllers/RouterController";

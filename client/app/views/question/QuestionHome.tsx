@@ -7,7 +7,7 @@ import {QuestionActions} from "../../actions/QuestionActions";
 import {QuestionHomeReducerState} from "../../reducers/QuestionHomeReducer";
 import {ErrorReducerState} from "../../reducers/ErrorReducer";
 import {CardText, CardTitle} from "material-ui/Card";
-import {CustomLink} from "../../components/CustomLink";
+import {CustomLink} from "../../components/RoutingComponents/CustomLink";
 import Button from "material-ui/Button";
 import Grid from "material-ui/Grid";
 import {LoadingScreen} from "../../components/Animations/LoadingScreen";

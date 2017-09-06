@@ -1,7 +1,7 @@
 import {ReducerStateStatus} from "../constants/ReducerStateStatus";
 import {CountryDto} from "../../../server/dtos/location/CountryDto";
 import {UniversityDto} from "../../../server/dtos/location/UniversityDto";
-import {LocationActionTypes} from "../constants/LocationActionTypes";
+import {LocationActionTypes} from "../constants/action.types/LocationActionTypes";
 
 export interface LocationDataReducerState {
     status : ReducerStateStatus;

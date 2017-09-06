@@ -1,14 +1,14 @@
-import {AuthActionTypes} from "../constants/AuthActionTypes";
+import {AuthActionTypes} from "../constants/action.types/AuthActionTypes";
 import {ReducerStateStatus} from "../constants/ReducerStateStatus";
 import {CommonController} from "../api.controllers/CommonController";
 import * as JwtDecode from 'jwt-decode';
-import {UserActionTypes} from "../constants/UserActionTypes";
+import {UserActionTypes} from "../constants/action.types/UserActionTypes";
 import {UserDto} from "../../../server/dtos/auth/UserDto";
 import {FrontEndQuestionModels} from "../models/QuestionModels";
 import Question = FrontEndQuestionModels.Question;
 import {FrontEndStoryModels} from "../models/StoryModels";
 import Story = FrontEndStoryModels.Story;
-import {DashboardActionTypes} from "../constants/DashboardActionTypes";
+import {DashboardActionTypes} from "../constants/action.types/DashboardActionTypes";
 import StoryPreview = FrontEndStoryModels.StoryPreview;
 import QuestionPreview = FrontEndQuestionModels.QuestionPreview;
 import {DashboardDto} from "../../../server/dtos/dashboard/DashboardDto";

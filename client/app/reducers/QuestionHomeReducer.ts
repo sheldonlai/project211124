@@ -1,5 +1,5 @@
 import {ReducerStateStatus} from "../constants/ReducerStateStatus";
-import {QuestionActionTypes} from "../constants/QuestionActionTypes";
+import {QuestionActionTypes} from "../constants/action.types/QuestionActionTypes";
 import {FrontEndQuestionModels} from "../models/QuestionModels";
 import QuestionPreview = FrontEndQuestionModels.QuestionPreview;
 import QuestionPreviewCollections = FrontEndQuestionModels.QuestionPreviewCollections;

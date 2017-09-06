@@ -1,7 +1,7 @@
 
 import {BaseActions} from "./BaseActions";
 import {CommonController} from "../api.controllers/CommonController";
-import {LocationActionTypes} from "../constants/LocationActionTypes";
+import {LocationActionTypes} from "../constants/action.types/LocationActionTypes";
 
 let apiController : CommonController = CommonController.getInstance();
 

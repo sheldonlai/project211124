@@ -4,7 +4,7 @@ import Snackbar from 'material-ui/Snackbar';
 import {connect} from "react-redux";
 import {AppStoreState} from "../stores/AppStore";
 import Slide from 'material-ui/transitions/Slide';
-import {ErrorActionTypes} from "../constants/ErrorActionTypes";
+import {ErrorActionTypes} from "../constants/action.types/ErrorActionTypes";
 import {ErrorObject} from "../reducers/ErrorReducer";
 
 export interface ErrorComponentProps {

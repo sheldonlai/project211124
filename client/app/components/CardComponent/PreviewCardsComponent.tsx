@@ -6,7 +6,7 @@ import StoryPreview = FrontEndStoryModels.StoryPreview;
 import {getLengthFromBoxes, sortListToGetSameWidthEachRow} from "../../utils/WideBoxUtils";
 import Grid from "material-ui/Grid";
 import Typography from "material-ui/Typography";
-import {CustomLink} from "../CustomLink";
+import {CustomLink} from "../RoutingComponents/CustomLink";
 import {CustomCard} from "./CardComponent";
 import {Preview} from "../../models/CommonModels";
 import {PRIMARY_COLOR} from "../../views/router";

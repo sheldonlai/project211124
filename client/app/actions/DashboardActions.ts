@@ -1,5 +1,5 @@
 import {BaseActions} from "./BaseActions";
-import {DashboardActionTypes} from "../constants/DashboardActionTypes";
+import {DashboardActionTypes} from "../constants/action.types/DashboardActionTypes";
 import {DashboardAPIController} from "../api.controllers/DashboardAPIController";
 
 

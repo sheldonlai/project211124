@@ -2,7 +2,7 @@
  * Created by SHELDON on 6/24/2017.
  */
 import {ReducerStateStatus} from "../constants/ReducerStateStatus";
-import {QuestionActionTypes} from "../constants/QuestionActionTypes";
+import {QuestionActionTypes} from "../constants/action.types/QuestionActionTypes";
 import {FrontEndQuestionModels} from "../models/QuestionModels";
 import QuestionPage = FrontEndQuestionModels.QuestionPage;
 import cloneQuestionPage = FrontEndQuestionModels.cloneQuestionPage;

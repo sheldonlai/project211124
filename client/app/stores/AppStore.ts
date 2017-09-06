@@ -12,6 +12,7 @@ import {RatingPageReducer, RatingPageReducerState} from "../reducers/RatingPageR
 import {StoryHomeReducer, StoryHomeReducerState} from "../reducers/StoryHomeReducer";
 import {StoryPageReducer, StoryPageReducerState} from "../reducers/StoryPageReducer";
 import {DashboardReducer, DashboardReducerState} from "../reducers/DashboardReducer";
+import {ProfileReducer, ProfileReducerState} from "../reducers/ProfileReducer";
 
 const loggerMiddleware = createLogger();
 const composeEnhancers = window['__REDUX_DEVTOOLS_EXTENSION_COMPOSE__'] || compose;
@@ -29,6 +30,7 @@ export interface AppStoreState {
     ratingPage: RatingPageReducerState;
     storyHome: StoryHomeReducerState;
     storyPage: StoryPageReducerState;
+    profile: ProfileReducerState,
 }
 
 const reducer = combineReducers({
@@ -43,7 +45,8 @@ const reducer = combineReducers({
     ratingHome: RatingHomeReducer,
     ratingPage: RatingPageReducer,
     storyHome: StoryHomeReducer,
-    storyPage: StoryPageReducer
+    storyPage: StoryPageReducer,
+    profile: ProfileReducer,
 });
 
 export const store = createStore(

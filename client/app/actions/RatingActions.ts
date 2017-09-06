@@ -2,7 +2,7 @@ import {BaseActions} from "./BaseActions";
 import {TeammateRecordDto} from "../../../server/dtos/rating/TeammateRecordDto";
 import {RatingApiController} from "../api.controllers/RatingApiController";
 import {TeammateRatingDto} from "../../../server/dtos/rating/TeammateRatingDto";
-import {RatingActionTypes} from "../constants/RatingActionTypes";
+import {RatingActionTypes} from "../constants/action.types/RatingActionTypes";
 import {RouterController} from "../api.controllers/RouterController";
 import {Routes} from "../constants/Routes";
 

@@ -1,4 +1,4 @@
-import {QuestionActionTypes} from '../constants/QuestionActionTypes';
+import {QuestionActionTypes} from '../constants/action.types/QuestionActionTypes';
 import {QuestionAPIController} from '../api.controllers/QuestionAPIController';
 import {BaseActions} from "./BaseActions";
 import {AxiosResponse} from "axios";

@@ -1,4 +1,4 @@
-import {AuthActionTypes} from "../constants/AuthActionTypes";
+import {AuthActionTypes} from "../constants/action.types/AuthActionTypes";
 import {ReducerStateStatus} from "../constants/ReducerStateStatus";
 
 export interface RegistrationReducerState {

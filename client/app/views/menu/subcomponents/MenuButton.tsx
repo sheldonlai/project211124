@@ -1,5 +1,5 @@
 import * as React from "react";
-import {CustomLink} from "../../../components/CustomLink";
+import {CustomLink} from "../../../components/RoutingComponents/CustomLink";
 import Button from "material-ui/Button/Button";
 import {menuButtonStyle} from "../MenuButtonStyles";
 

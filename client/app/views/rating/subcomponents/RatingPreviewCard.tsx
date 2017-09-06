@@ -1,5 +1,5 @@
 import * as React from "react";
-import {CustomLink} from "../../../components/CustomLink";
+import {CustomLink} from "../../../components/RoutingComponents/CustomLink";
 import Typography from "material-ui/Typography";
 import ReactStars from 'react-stars';
 import Card, {CardActions, CardContent} from 'material-ui/Card';

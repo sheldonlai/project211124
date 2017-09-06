@@ -1,5 +1,5 @@
 
-import {ErrorActionTypes} from "../constants/ErrorActionTypes";
+import {ErrorActionTypes} from "../constants/action.types/ErrorActionTypes";
 export interface ErrorReducerState {
     errors : ErrorObject[];
 }

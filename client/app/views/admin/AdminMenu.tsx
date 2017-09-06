@@ -4,7 +4,7 @@ import AppBar from 'material-ui/AppBar';
 import Tabs, { Tab } from 'material-ui/Tabs';
 import Icon from 'material-ui/Icon';
 import {AppStoreState} from "../../stores/AppStore";
-import {CustomLink} from "../../components/CustomLink";
+import {CustomLink} from "../../components/RoutingComponents/CustomLink";
 import {Routes} from "../../constants/Routes";
 
 interface state {

@@ -1,8 +1,8 @@
-import {AuthActionTypes} from "../constants/AuthActionTypes";
+import {AuthActionTypes} from "../constants/action.types/AuthActionTypes";
 import {ReducerStateStatus} from "../constants/ReducerStateStatus";
 import {CommonController} from "../api.controllers/CommonController";
 import * as JwtDecode from 'jwt-decode';
-import {UserActionTypes} from "../constants/UserActionTypes";
+import {UserActionTypes} from "../constants/action.types/UserActionTypes";
 import {UserDto} from "../../../server/dtos/auth/UserDto";
 export interface AuthReducerState {
     status: ReducerStateStatus;

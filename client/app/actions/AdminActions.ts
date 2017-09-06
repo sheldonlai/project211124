@@ -1,4 +1,4 @@
-import {AdminActionTypes} from "../constants/AdminActionTypes";
+import {AdminActionTypes} from "../constants/action.types/AdminActionTypes";
 import {AdminController} from "../api.controllers/AdminController";
 import {BaseActions} from "./BaseActions";
 import {DashboardSettingsDto} from "../../../server/dtos/admin/DashboardSettingsDto";

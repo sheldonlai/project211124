@@ -3,6 +3,7 @@ import * as React from "react";
 import Typography from "material-ui/Typography";
 import {convertDateTimeToString, convertDateToString} from "../../utils/DateUtils";
 import {USERNAME_COLOR} from "../../styles/Colors";
+import {AuthorLink} from "../RoutingComponents/AuthorLink";
 
 
 
@@ -23,9 +24,7 @@ export class FooterComponent extends React.Component<props> {
         return(
             <div style={{textAlign: "right", paddingTop: 5}}>
                 {" – "}
-                <Typography style={{color: USERNAME_COLOR , display: "inline-block"}}>
-                    {this.props.by}
-                </Typography>
+                <AuthorLink username={this.props.by}/>
                 <Typography type="caption" style={{display: "inline-block", marginLeft: 5 }}>
                     {this.props.date && <div>{this.dateConverter(this.props.date)}</div>}
                 </Typography>

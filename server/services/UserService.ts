@@ -7,7 +7,7 @@ import {removeUserRestrictedInfo} from "../utils/UserUtils";
 
 export interface IUserService {
     updateUser(user: UserDto, currentUser: User): Promise<{token: string}>;
-    getUserProfile(username): Promise<any>;
+    getUserProfile(username: string): Promise<any>;
 }
 
 export class UserService implements IUserService{
@@ -29,7 +29,8 @@ export class UserService implements IUserService{
     getUserProfile(username: string): Promise<any> {
         return this.userRepository.findOne({username: username}).then((user : User) => {
             // remove extra information from user
-            return removeUserRestrictedInfo(user);
+            removeUserRestrictedInfo(user);
+            return user;
         });
     }
 }

@@ -1,9 +1,9 @@
 import {ReducerStateStatus} from "../constants/ReducerStateStatus";
-import {RatingActionTypes} from "../constants/RatingActionTypes";
+import {RatingActionTypes} from "../constants/action.types/RatingActionTypes";
 import {TeammatePreviewDto} from "../../../server/dtos/rating/TeammatePreviewDto";
 import {FrontEndStoryModels} from "../models/StoryModels";
 import StoryPreview = FrontEndStoryModels.StoryPreview;
-import {StoryActionTypes} from "../constants/StoryActionTypes";
+import {StoryActionTypes} from "../constants/action.types/StoryActionTypes";
 
 export interface StoryHomeReducerState {
     status : ReducerStateStatus;
