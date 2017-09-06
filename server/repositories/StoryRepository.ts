@@ -5,10 +5,12 @@ import {AppError} from "../errors/AppError";
 import {ClientError} from "../errors/HttpStatus";
 import {UserStoryVote, UserStoryVoteModel} from "../models/UserStoryVote";
 import {User} from "../models/User";
+import {PublicityStatus} from "../enums/PublicityStatus";
 
 export interface IStoryRepository extends IBaseRepository<Story> {
     getStoryByTitle(title: string): Promise<Story>;
-    getStoriesByAuthor(user: User): Promise<Story[]>;
+
+    getStoriesByAuthor(user: User, type?: PublicityStatus): Promise<Story[]>;
     findOneAndUpdateVoteStory(userStoryVote: UserStoryVote): Promise<Story>;
     increaseViewCount(questionId: any) :Promise<any>;
 }
@@ -42,8 +44,11 @@ export class StoryRepository extends BaseRepository<Story, IStory> implements IS
             });
     }
 
-    getStoriesByAuthor(user: User): Promise<Story[]> {
-        return StoryModel.find({author: user}).lean().exec()
+    getStoriesByAuthor(user: User, type?: PublicityStatus): Promise<Story[]> {
+        let query = {author: user};
+        if (type)
+            query["publicityStatus"] = type;
+        return StoryModel.find(query).lean().exec()
             .then((stories: Story[]) => Promise.all(stories.map((q) => this.applyAdditionalFunction(q))))
             .then((question: Story[]) => {
                 return this.getModels(question);
