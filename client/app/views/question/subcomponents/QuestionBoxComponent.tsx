@@ -35,7 +35,7 @@ interface props extends QuestionBoxComponentProps, DispatchProps {
 
 }
 
-let paperStyle = {height: "100%", padding: 15};
+let paperStyle = {height: "100%", padding: 5};
 
 export class QuestionBoxComponent extends Component<props, {}> {
 

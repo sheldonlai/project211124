@@ -29,7 +29,7 @@ export interface AnswerBoxComponentProps {
 
 
 
-const paperStyle = {height: "100%", padding: 15};
+const paperStyle = {height: "100%", padding: 5};
 
 export class AnswerBoxComponent extends Component<AnswerBoxComponentProps & dispatch> {
 
@@ -47,37 +47,40 @@ export class AnswerBoxComponent extends Component<AnswerBoxComponentProps & disp
         const answer: Answer = {...this.props.answer};
         const editable = (this.props.user && this.props.user.username === answer.author.username);
         return (
-
-            <Paper style={{...paperStyle, marginBottom: 10}} elevation={1}>
-                <div>
-                    <Grid container justify="flex-end">
-                        <Grid item>
-                            {editable && !this.props.editMode &&
-                            <Button color="primary" onClick={this.props.onEditClick}>Edit</Button>}
+            <div>
+                <Paper style={{...paperStyle, marginBottom: 10, marginTop: 10}} elevation={1}>
+                    <div>
+                        <Grid container justify="flex-end">
+                            <Grid item>
+                                {editable && !this.props.editMode &&
+                                <Button color="primary" onClick={this.props.onEditClick}>Edit</Button>}
+                            </Grid>
                         </Grid>
-                    </Grid>
-                    <QAEditorComponent value={this.props.answer.content} onChange={this.onContentChange}
-                                       onSubmit={this.props.onSubmit} readOnly={!this.props.editMode}
-                                       style={{fontSize: 14}} reset={this.props.resetAnswer}
-                    />
-                    <Divider/>
-                    <SharedCommentsComponent comments={this.props.answer.comments}
-                                       user={this.props.user}
-                                       onCommentCreate={(c) => this.props.createComment(c, answer._id)}
-                                       onCommentUpdate={(c) => this.props.updateComment(c, answer._id)}
-                                       onCommentDelete={(c) => this.props.deleteComment(c, answer._id)}
-                    />
-                    <Divider/>
-                    <QuestionFooterComponent
-                        onUpVote={this.upVote}
-                        onDownVote={this.downVote}
-                        upVotes={answer.upVotes}
-                        downVotes={answer.downVotes}
-                        author={answer.author}
-                        createdUtc={answer.createdUtc}
-                    />
-                </div>
-            </Paper>
+                        <Divider/>
+                        <QAEditorComponent value={this.props.answer.content} onChange={this.onContentChange}
+                                           onSubmit={this.props.onSubmit} readOnly={!this.props.editMode}
+                                           style={{fontSize: 14}} reset={this.props.resetAnswer}
+                        />
+                        <Divider/>
+
+                        <QuestionFooterComponent
+                            onUpVote={this.upVote}
+                            onDownVote={this.downVote}
+                            upVotes={answer.upVotes}
+                            downVotes={answer.downVotes}
+                            author={answer.author}
+                            createdUtc={answer.createdUtc}
+                        />
+                    </div>
+                </Paper>
+                <SharedCommentsComponent comments={this.props.answer.comments}
+                                         user={this.props.user}
+                                         onCommentCreate={(c) => this.props.createComment(c, answer._id)}
+                                         onCommentUpdate={(c) => this.props.updateComment(c, answer._id)}
+                                         onCommentDelete={(c) => this.props.deleteComment(c, answer._id)}
+                />
+                <Divider/>
+            </div>
         )
     }
 }

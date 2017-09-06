@@ -114,10 +114,10 @@ export class SharedCommentsComponent extends React.Component<CommentsComponentPr
                             multiline rows={4}
                             value={this.state.commentContent}
                             fullWidth
+                            placeholder="Type your comment here"
                             onChange={this.onCommentChange}/>
                     </form>
                     <div style={{height: 36, margin: "4px 0px"}}>
-
                         <Button
                             dense
                             style={{float: "right"}}
@@ -251,25 +251,33 @@ export class SharedCommentsComponent extends React.Component<CommentsComponentPr
     };
 
     renderComments = () => {
+        if (this.props.comments.length == 0)
+            return undefined;
         let comments: CommentDto[] = this.props.comments.slice(0, this.state.showMaxComments);
         //<div>Posted on {comment.createdUtc}</div>
-        return comments.map((comment, index) => {
-            const showFooter = index != this.state.EditCommentIndex;
-            return (
-                <div key={comment.lastEditedUtc + comment.commentBy.username}
-                     style={{
-                         marginLeft: 15, paddingLeft: 10, minHeight: 28, marginBottom: 2,
-                         borderLeft: "1px lightblue solid", borderBottom: "1px #eeeeee solid"
-                     }}>
-                    <div>
-                        <div style={{display: "inline-block", width: "80%"}}>
-                            {this.renderCommentContent(index)}
+        return <List>
+            {comments.map((comment, index) => {
+                const showFooter = index != this.state.EditCommentIndex;
+                return (
+                    <div key={comment.lastEditedUtc + comment.commentBy.username}
+                         style={{
+                             marginLeft: 15, paddingLeft: 10, minHeight: 28, marginBottom: 2,
+                             borderLeft: "1px lightblue solid", borderBottom: "1px #eeeeee solid"
+                         }}>
+                        <div>
+                            <div style={{display: "inline-block", width: "80%"}}>
+                                {this.renderCommentContent(index)}
+                            </div>
+                            {this.renderCommentActions(comment.commentBy, index)}
                         </div>
-                        {this.renderCommentActions(comment.commentBy, index)}
                     </div>
-                </div>
-            )
-        });
+                )
+            })}
+            {   // show more comments button
+                this.props.comments.length > this.state.showMaxComments &&
+                <Button style={{width: "100%"}} onClick={this.onShowMore}>Show more comments</Button>
+            }
+        </List>
     };
 
     onShowMore = () => {
@@ -280,18 +288,13 @@ export class SharedCommentsComponent extends React.Component<CommentsComponentPr
         if (this.props.loading === true)
             return <LoadingScreen size={100} padding={50}/>
         return (
-            <Grid container justify="flex-end">
-                <Grid item xs={12} style={{paddingLeft: 15, paddingRight: 15, background: "white"}}>
-                    <List className={"Comments"}>
-                        {this.renderComments()}
-                        {
-                            this.props.comments.length > this.state.showMaxComments &&
-                            <Button style={{width: "100%"}} onClick={this.onShowMore}>Show more comments</Button>
-                        }
-                    </List>
+            <Grid container justify="flex-end" spacing={0} style={{paddingLeft: 10, paddingRight: 10}}>
+                <Grid item xs={12} style={{background: "white"}}>
+                    {this.renderComments()}
+
                     {
                         !this.state.newCommentMode && this.props.user &&
-                        <div style={{height: 36, marginBottom: 10}}>
+                        <div style={{height: 36}}>
                             <Button dense
                                     color="primary"
                                     style={{float: "right"}}
@@ -301,6 +304,7 @@ export class SharedCommentsComponent extends React.Component<CommentsComponentPr
                         </div>
                     }
                     {this.renderNewCommentBox()}
+                    <Divider light/>
                 </Grid>
             </Grid>
         );
