@@ -6,11 +6,12 @@ import {AppError} from "../errors/AppError";
 import {isNullOrUndefined} from "util";
 import {CategoryTypeEnum} from "../enums/CategoryTypeEnum";
 import {Story} from "../models/Story";
+import {QuestionDto} from "../dtos/q&a/QuestionDto";
 
 export interface IUserRepository extends IBaseRepository<User> {
     getByEmail(email: string): Promise<User>;
     getUserPreference(user: User): Promise<UserPreferences>;
-    updateQuestionVector(user: User, question: Question | Story): Promise<any>;
+    updateQuestionVector(user: User, question: QuestionDto| Question | Story): Promise<any>;
 }
 
 export class UserRepository extends BaseRepository<User, IUser> implements IUserRepository {

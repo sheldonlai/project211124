@@ -9,7 +9,7 @@ class ProfileApiControllerClass extends ApiController{
     fetchProfilePage (username: string) {
         return this.get(APIUrls.getProfile.replace(":username", username)).then(res => {
             // convert them into previews
-            res.data.stories = res.data.stories.map(story => new StoryPreview(story));
+            res.data.stories = res.data.stories.map(story => StoryPreview.fromStoryPreviewDto(story));
             res.data.questions = res.data.questions.map(question =>
                 QuestionPreview.fromQuestionPreviewDto(question));
             return res;

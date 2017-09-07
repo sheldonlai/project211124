@@ -7,6 +7,7 @@ import {Routes} from "../constants/Routes";
 import {StoryDto} from "../../../server/dtos/story/StoryDto";
 import {convertRawToText} from "../utils/DraftJsUtils";
 import {Preview} from "./CommonModels";
+import {StoryPreviewDto} from "../../../server/dtos/story/StoryPreviewDto";
 
 export namespace FrontEndStoryModels {
 
@@ -50,7 +51,10 @@ export namespace FrontEndStoryModels {
         createdUtc: Date;
         lastEditedUtc: Date;
 
-        constructor(dto: StoryDto) {
+        constructor(dto?: StoryDto) {
+            if (!dto)
+                return;
+            console.warn("This method is deprecated, please use StoryPreview.fromStoryPreviewDto instead.")
             this.title = dto.title;
             this._id = dto._id;
             this.content = convertRawToText(dto.content);
@@ -60,6 +64,14 @@ export namespace FrontEndStoryModels {
             this.views = dto.views;
             this.createdUtc = dto.createdUtc;
             this.lastEditedUtc = dto.lastEditedUtc;
+        }
+
+        static fromStoryPreviewDto(preview: StoryPreviewDto): StoryPreview{
+            let object = new StoryPreview();
+            for ( let key of Object.keys(preview)) {
+                object[key] = preview[key];
+            }
+            return object;
         }
 
         toLink() {

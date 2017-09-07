@@ -17,10 +17,10 @@ class DashboardAPIControllerClass extends ApiController {
         return this.get(APIUrls.FetchDashboard).then((res) => {
             let data: DashboardDto = res.data;
             let stories = data.stories.map(story => ({
-                score: story.score, object: new StoryPreview(story.object)
+                score: story.score, object: StoryPreview.fromStoryPreviewDto(story.object)
             }));
             let questions = data.questions.map(question => ({
-                score: question.score, object:new QuestionPreview(question.object)
+                score: question.score, object: QuestionPreview.fromQuestionPreviewDto(question.object)
             }));
             let sorted = stories.concat(questions).sort((a,b) => b.score - a.score);
             console.log(sorted)

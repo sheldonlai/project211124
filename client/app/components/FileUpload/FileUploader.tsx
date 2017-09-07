@@ -32,7 +32,7 @@ const styles: CSSProperties = {
     dialog: {
         width: 600,
         margin: 0,
-        padding:0,
+        padding: 0,
         overflow: 'hidden',
     },
     uploadContainer: {
@@ -55,13 +55,13 @@ const styles: CSSProperties = {
     message: {
         color: 'coral',
         textAlign: 'center',
-        display:    'table-cell',
+        display: 'table-cell',
         verticalAlign: 'middle',
     },
     bottomBar: {
-      borderTop: 1,
-      borderStyle: 'solid',
-      borderColor: '#e5e5e5',
+        borderTop: 1,
+        borderStyle: 'solid',
+        borderColor: '#e5e5e5',
     },
     buttonsWrapper: {
         marginLeft: 20,
@@ -114,7 +114,7 @@ export class FileUploader extends React.Component<FileUploaderProps, FileUploade
 
     /* Dialog header */
     handleChange = (event, index) => {
-        this.setState({ index: index });
+        this.setState({index: index});
     };
 
     /* Dialog Body */
@@ -122,7 +122,7 @@ export class FileUploader extends React.Component<FileUploaderProps, FileUploade
         return <table style={styles.uploadContainer}>
             <tbody>
             <tr>
-                <td >
+                <td>
                     <Dropzone
                         accept="image/jpeg, image/png"
                         style={styles.uploadInnerContainer}
@@ -139,30 +139,27 @@ export class FileUploader extends React.Component<FileUploaderProps, FileUploade
 
     renderGallery = () => {
         return <div style={styles.root}>
-            <Grid container style={styles.grid} gutter={40}>
+            <Grid container style={styles.grid} spacing={40}>
                 {this.state.filesInGallery.map((file, index) => (
                     <Grid item xs={4} key={index}>
                         <div>
-                            <Card onClick={(evt) => this.chooseFile(file, evt) }>
-                                <CardMedia>
-                                    <img src={file.fileURL}
-                                         alt={file.originalName}
-                                         style={styles.image}/>
-                                </CardMedia>
+                            <Card onClick={(evt) => this.chooseFile(file, evt)}>
+                                <CardMedia image={file.fileURL}/>
                                 <CardContent style={{padding: 0, textAlign: 'center'}}>
-                               <span style={{
-                                   color: '#222',
-                                   fontSize: 13,
-                                   width: '80%',
-                                   display: 'inline-block',
-                                   textAlign: 'center',
-                                   whiteSpace: 'nowrap',
-                                   fontFamily: 'Roboto,Arial,sans-serif',
-                                   overflow: 'hidden',
-                                   textOverflow: 'ellipsis'}}
-                               >
-                                   {file.originalName}
-                               </span>
+                                   <span style={{
+                                       color: '#222',
+                                       fontSize: 13,
+                                       width: '80%',
+                                       display: 'inline-block',
+                                       textAlign: 'center',
+                                       whiteSpace: 'nowrap',
+                                       fontFamily: 'Roboto,Arial,sans-serif',
+                                       overflow: 'hidden',
+                                       textOverflow: 'ellipsis'
+                                   }}
+                                   >
+                                       {file.originalName}
+                                   </span>
                                 </CardContent>
                             </Card>
                         </div>
@@ -191,14 +188,18 @@ export class FileUploader extends React.Component<FileUploaderProps, FileUploade
 
     onDrop = (files) => {
         let data = new FormData();
-        files.forEach((file: File)=> {
+        files.forEach((file: File) => {
             data.append("files", file);
         });
         let xhr = new XMLHttpRequest();
         xhr.addEventListener('progress', this.updateProgress, false);
         xhr.onreadystatechange = () => {
             if (xhr.readyState === 4) {
-                this.setState({uploadProgress: 100, index: 1, filesInGallery: xhr.response.concat(this.state.filesInGallery)});
+                this.setState({
+                    uploadProgress: 100,
+                    index: 1,
+                    filesInGallery: xhr.response.concat(this.state.filesInGallery)
+                });
             }
         };
 
@@ -237,12 +238,12 @@ export class FileUploader extends React.Component<FileUploaderProps, FileUploade
 
     onSelect = () => {
         this.props.onSelect(this.state.filesSelected, this.state.filesInGallery);
-        this.setState({ isDialogOpened: false, filesSelected: [] });
+        this.setState({isDialogOpened: false, filesSelected: []});
     };
 
     onCancel = () => {
         this.props.onCancel(this.state.filesInGallery);
-        this.setState({ isDialogOpened: false, filesSelected: [] });
+        this.setState({isDialogOpened: false, filesSelected: []});
     };
 
     render() {
@@ -252,13 +253,13 @@ export class FileUploader extends React.Component<FileUploaderProps, FileUploade
                     <div>
                         <Paper>
                             <Tabs
-                                index={this.state.index}
+                                value={this.state.index}
                                 onChange={this.handleChange}
                                 indicatorColor={"primary"}
                                 textColor={"primary"}
                             >
-                                <Tab label="Upload"  />
-                                <Tab label="Gallery" />
+                                <Tab label="Upload"/>
+                                <Tab label="Gallery"/>
                             </Tabs>
                         </Paper>
                     </div>
@@ -283,13 +284,13 @@ export class FileUploader extends React.Component<FileUploaderProps, FileUploade
                     <div>
                         <table style={styles.warningWrapper}>
                             <tbody>
-                                <tr>
-                                    <td >
+                            <tr>
+                                <td>
                                         <span style={styles.warningMessage}>File size cannot exceed 5mbs and must have extension
                                         .png, .jpg, or .pdf.
                                         </span>
-                                    </td>
-                                </tr>
+                                </td>
+                            </tr>
                             </tbody>
                         </table>
                     </div>

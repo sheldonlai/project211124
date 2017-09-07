@@ -21,9 +21,10 @@ export class StoryApiControllerClass extends ApiController {
             let collection: StoryPreviewCollectionsDto = response.data;
             if (collection.recommendedPreviews.length > 0)
                 response.data.recommendedPreviews = collection.recommendedPreviews.map((story) =>
-                    new StoryPreview(story));
+                    StoryPreview.fromStoryPreviewDto(story));
             if (collection.myStories.length > 0)
-                response.data.myStories = collection.myStories.map((story) => new StoryPreview(story));
+                response.data.myStories = collection.myStories.map((story) =>
+                    StoryPreview.fromStoryPreviewDto(story));
 
             return response;
         });

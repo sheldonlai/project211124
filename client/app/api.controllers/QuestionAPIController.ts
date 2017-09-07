@@ -38,12 +38,12 @@ export class QuestionAPIController extends ApiController {
             let new_data: QuestionPreviewCollections = {myQuestions: [], featuredQuestions: []};
             if (data.featuredQuestions.length > 0) {
                 new_data.featuredQuestions = data.featuredQuestions.map((preview) => {
-                    return new QuestionPreview(preview);
+                    return QuestionPreview.fromQuestionPreviewDto(preview);
                 });
             }
             if (data.myQuestions && data.myQuestions.length > 0) {
                 new_data.myQuestions = data.myQuestions.map((preview) => {
-                    return new QuestionPreview(preview);
+                    return QuestionPreview.fromQuestionPreviewDto(preview);
                 });
             }
             response.data = new_data;
