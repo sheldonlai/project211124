@@ -10,4 +10,5 @@ export class ProfileDto {
     points: number;
     stories: StoryDto[];
     questions: QuestionPreviewDto[];
+    createdAt: Date;
 }

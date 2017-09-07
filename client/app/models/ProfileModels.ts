@@ -11,6 +11,7 @@ export namespace FrontEndQuestionModels {
         university: UniversityDto;
         questions: Preview[];
         stories: Preview[];
+        createdAt: Date | string;
     }
 
 }

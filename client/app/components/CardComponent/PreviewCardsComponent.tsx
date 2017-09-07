@@ -24,7 +24,7 @@ interface state {
     height: number;
 }
 
-export class PreviewCardsComponent extends React.Component<props, state>{
+export class PreviewCardsComponent extends React.Component<props, state> {
     constructor(props) {
         super(props);
         this.state = {width: 0, height: 0};
@@ -47,18 +47,25 @@ export class PreviewCardsComponent extends React.Component<props, state>{
 
     };
 
+    renderBoxes = () => {
+
+    }
+
     render() {
         const boxWidth = 266;
-        if (!this.props.list || this.props.list.length === 0) return null;
         const bodyMargin = 16;
         let width = this.state.width;
         let n = Math.floor((width - bodyMargin) / boxWidth);
-        n = n > this.props.maxBlock ? this.props.maxBlock: n;
+        n = n > this.props.maxBlock ? this.props.maxBlock : n;
         let list = sortListToGetSameWidthEachRow(this.props.list, n, this.props.trim);
         let listLength = getLengthFromBoxes(list);
-        let maxWidth = (n > listLength)? boxWidth * listLength: n * boxWidth;
+        // if empty list set listlength to n
+        listLength = listLength > 0? listLength : n;
+
+        // determine what the maximum width is used for
+        let maxWidth = (n > listLength) ? boxWidth * listLength : n * boxWidth;
         maxWidth += bodyMargin;
-        const labelType = this.props.labelType? this.props.labelType: "display1";
+        const labelType = this.props.labelType ? this.props.labelType : "display1";
         return (
             <Grid container justify="center">
                 {this.props.children &&
@@ -68,23 +75,31 @@ export class PreviewCardsComponent extends React.Component<props, state>{
                 <Grid item style={{marginTop: 16, width: maxWidth}}>
                     <Typography type={labelType} style={{marginBottom: 10, color: PRIMARY_COLOR}}>
                         {this.props.label}
-                        </Typography>
-                    <Grid container justify="flex-start">
-                        {list.map((e) => (
-                            <Grid item key={e.element.title}>
-                                <div style={{display: "inline-block"}}>
-                                    <CustomLink to={e.element.toLink()}>
-                                        <CustomCard
-                                            title={e.element.title}
-                                            content={e.element.content}
-                                            date={e.element.createdUtc}
-                                            wide={n > 1 && e.wide}
-                                        />
-                                    </CustomLink>
-                                </div>
+                    </Typography>
+                    {
+                        !this.props.list || this.props.list.length === 0 ?
+                            <Typography type={'body1'}>
+                                There are currently no posts
+                            </Typography> :
+                            <Grid container justify="flex-start">
+                                {list.map((e) => (
+                                    <Grid item key={e.element.title}>
+                                        <div style={{display: "inline-block"}}>
+                                            <CustomLink to={e.element.toLink()}>
+                                                <CustomCard
+                                                    title={e.element.title}
+                                                    content={e.element.content}
+                                                    date={e.element.createdUtc}
+                                                    wide={n > 1 && e.wide}
+                                                />
+                                            </CustomLink>
+                                        </div>
+                                    </Grid>
+                                ))}
                             </Grid>
-                        ))}
-                    </Grid>
+                    }
+
+
                 </Grid>
             </Grid>
         );

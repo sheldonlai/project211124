@@ -11,4 +11,6 @@ export interface UserDto {
     company: string;
     country: CountryDto;
     points: number;
+    createdAt: Date;
+    updatedAt: Date;
 }

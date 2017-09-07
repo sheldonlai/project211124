@@ -11,6 +11,7 @@ import {LoadingScreen} from "../../components/Animations/LoadingScreen";
 import {PreviewCardsComponent} from "../../components/CardComponent/PreviewCardsComponent";
 import {FrontEndQuestionModels} from "../../models/ProfileModels";
 import ProfilePage = FrontEndQuestionModels.ProfilePage;
+import {convertDateTimeToString, convertDateToString} from "../../utils/DateUtils";
 
 interface state {
     error: string;
@@ -63,22 +64,22 @@ export class ProfileComponent extends React.Component<props, state> {
         return (
             <div style={{padding: "20px 0"}}>
                 <div>
-
-                    {this.fieldDisplay("display2", "username")}
-                    {this.fieldDisplay("body1", "company")}
-                    {/*<Typography type={"body1"}>*/}
-                        {/*{this.props.profile.country.name}*/}
-                    {/*</Typography>*/}
-                    {/*{this.fieldDisplay("body1", "university.name")}*/}
-                    {this.fieldDisplay("body1", "points")}
-
-                    <PreviewCardsComponent list={this.props.profile.stories} label={"Stories posted:"}/>
+                    <PreviewCardsComponent
+                        labelType={"headline"}
+                        list={this.props.profile.stories}
+                        label={"Stories posted:"}
+                        maxBlock={4}>
+                        {this.fieldDisplay("display2", "username")}
+                        {this.fieldDisplay("body1", "company")}
+                        <Typography type={"body1"}>
+                            Joined on : {convertDateToString(this.props.profile.createdAt)}
+                        </Typography>
+                        {this.fieldDisplay("body1", "points")}
+                    </PreviewCardsComponent>
                     <PreviewCardsComponent list={this.props.profile.questions}
+                                           maxBlock={4}
                                            labelType={"headline"}
                                            label={"Questions posted:"}/>
-                    <textarea
-                        style={{height: "500px", width: "100%"}}
-                        value={JSON.stringify(this.props.profile, null, 4)}/>
 
                 </div>
             </div>

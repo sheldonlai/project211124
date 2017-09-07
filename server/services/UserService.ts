@@ -42,6 +42,7 @@ export class UserService implements IUserService{
             points: 0,
             university: undefined,
             country: undefined,
+            createdAt: undefined,
         };
         let user: User = await this.userRepository.findOne({username: username});
 
@@ -50,6 +51,7 @@ export class UserService implements IUserService{
          dto.university = user.university;
          dto.country = user.country;
          dto.points = user.points;
+         dto.createdAt = user.createdAt;
          // right now fetch everything
          let stories: Story[] = await this.storyRepository.getStoriesByAuthor(user, PublicityStatus.PUBLIC);
 
