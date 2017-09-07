@@ -302,7 +302,10 @@ export class SharedCommentsComponent extends React.Component<CommentsComponentPr
                         </div>
                     }
                     {this.renderNewCommentBox()}
-                    <Divider light/>
+                    {
+                        this.props.user &&
+                        <Divider light/>
+                    }
                 </Grid>
             </Grid>
         );

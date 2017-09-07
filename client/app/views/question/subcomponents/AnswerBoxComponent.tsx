@@ -77,7 +77,6 @@ export class AnswerBoxComponent extends Component<AnswerBoxComponentProps & disp
                                          onCommentUpdate={(c) => this.props.updateComment(c, answer._id)}
                                          onCommentDelete={(c) => this.props.deleteComment(c, answer._id)}
                 />
-                <Divider/>
             </div>
         )
     }
