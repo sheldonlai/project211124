@@ -39,6 +39,7 @@ export class UserService implements IUserService{
             username: undefined,
             questions: [],
             stories: [],
+            points: 0,
             university: undefined,
             country: undefined,
         };
@@ -48,12 +49,14 @@ export class UserService implements IUserService{
          dto.username = user.username;
          dto.university = user.university;
          dto.country = user.country;
+         dto.points = user.points;
          // right now fetch everything
          let stories: Story[] = await this.storyRepository.getStoriesByAuthor(user, PublicityStatus.PUBLIC);
+
          dto.stories = stories;
 
          let questions: Question[] = await this.questionRepository.getQuestionsByAuthor(user);
-         dto.questions = questions;
+         dto.questions = questions.map(q=> Question.fromObject(q).toPreviewDto());
          return dto;
     }
 }

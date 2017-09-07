@@ -10,6 +10,7 @@ import {QuestionDto} from "../../../server/dtos/q&a/QuestionDto";
 import {convertRawToText} from "../utils/DraftJsUtils";
 import {Routes} from "../constants/Routes";
 import {Preview} from "./CommonModels";
+import {QuestionPreviewDto} from "../../../server/dtos/q&a/QuestionPreviewDto";
 
 export namespace FrontEndQuestionModels {
 
@@ -83,7 +84,11 @@ export namespace FrontEndQuestionModels {
         views: number;
         tags: any[];
 
-        constructor(dto: QuestionDto) {
+        constructor(dto?: QuestionDto) {
+            if (!dto){
+                return;
+            }
+            console.warn("this method is deprecated please use QuestionPreview.fromQuestionPreviewDto instead");
             this.title = dto.title;
             this._id = dto._id;
             this.content = convertRawToText(dto.content);
@@ -93,6 +98,14 @@ export namespace FrontEndQuestionModels {
             this.views = dto.views;
             this.createdUtc = dto.createdUtc;
             this.lastEditedUtc = dto.lastEditedUtc;
+        }
+
+        static fromQuestionPreviewDto(preview: QuestionPreviewDto): QuestionPreview{
+            let object = new QuestionPreview();
+            for ( let key of Object.keys(preview)) {
+                object[key] = preview[key];
+            }
+            return object;
         }
 
         toLink() {

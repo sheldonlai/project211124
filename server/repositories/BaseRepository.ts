@@ -2,7 +2,7 @@ import * as mongoose from "mongoose";
 import {Document, Model, Types} from "mongoose";
 import {BaseModel} from "../models/Base/BaseModel";
 import {AppError} from "../errors/AppError";
-import {elasticSearchModel} from "../elasticSearch/ElasticSearchUtils";
+import {elasticFullSearchModel, elasticSearchModel} from "../elasticSearch/ElasticSearchUtils";
 import {SearchScoreModel} from "../models/Base/SearchScoreModel";
 
 export interface IBaseRepository<T> {
@@ -92,6 +92,26 @@ export abstract class BaseRepository<T extends BaseModel, I extends Document & T
     search(query): Promise<T[]> {
         let ids: any[];
         return elasticSearchModel(this.model, query).then((results) => {
+            ids = results.hits.hits.map((obj) => mongoose.Types.ObjectId(obj._id));
+            return this.model.find({
+                '_id': { $in: ids}
+            }).lean().exec();
+        }).then((elements: T[]) => {
+            // re order the list
+            elements = ids.map((id) => {
+                return elements.find((record) => {
+                    return record._id.toString() === id.toString();
+                });
+            });
+            return Promise.all(elements.map((record)=>this.applyAdditionalFunction(record)));
+        }).then((array) => {
+            return this.getModels(array);
+        })
+    }
+
+    esSearch(query): Promise<T[]> {
+        let ids: any[];
+        return elasticFullSearchModel(this.model, query).then((results) => {
             ids = results.hits.hits.map((obj) => mongoose.Types.ObjectId(obj._id));
             return this.model.find({
                 '_id': { $in: ids}

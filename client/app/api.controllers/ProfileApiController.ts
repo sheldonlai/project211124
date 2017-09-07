@@ -10,7 +10,8 @@ class ProfileApiControllerClass extends ApiController{
         return this.get(APIUrls.getProfile.replace(":username", username)).then(res => {
             // convert them into previews
             res.data.stories = res.data.stories.map(story => new StoryPreview(story));
-            res.data.questions = res.data.questions.map(question => new QuestionPreview(question));
+            res.data.questions = res.data.questions.map(question =>
+                QuestionPreview.fromQuestionPreviewDto(question));
             return res;
         });
     }

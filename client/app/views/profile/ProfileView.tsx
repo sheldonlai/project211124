@@ -4,7 +4,6 @@ import {AppStoreState} from "../../stores/AppStore";
 import {UserDto} from "../../../../server/dtos/auth/UserDto";
 import {RouteComponentProps} from "react-router";
 import {Routes} from "../../constants/Routes";
-import {SplitVIewTemplate} from "../../components/Templates/SplitVIewTemplate";
 import {ReducerStateStatus} from "../../constants/ReducerStateStatus";
 import {ProfileActions} from "../../actions/ProfileActions";
 import Typography from "material-ui/Typography/Typography";
@@ -18,7 +17,7 @@ interface state {
     user: UserDto;
 }
 
-interface props extends StateToProps, DispatchToProps, RouteComponentProps<{username:string}>{
+interface props extends StateToProps, DispatchToProps, RouteComponentProps<{ username: string }> {
 
 }
 
@@ -33,13 +32,11 @@ export class ProfileComponent extends React.Component<props, state> {
     }
 
     componentWillMount() {
-        if (this.props.user && this.props.user.username === this.props.match.params.username){
+        if (this.props.user && this.props.user.username === this.props.match.params.username) {
             this.props.history.replace(Routes.my_profile);
             return;
         }
-        if (!this.props.profile) {
-            this.props.fetchProfile(this.props.match.params.username);
-        }
+        this.props.fetchProfile(this.props.match.params.username);
     }
 
     fieldDisplay = (type: string, key: string) => {
@@ -47,9 +44,9 @@ export class ProfileComponent extends React.Component<props, state> {
             return undefined;
         return (
             <div>
-                <Typography type="caption">
-                    {key}
-                </Typography>
+                {/*<Typography type="caption">*/}
+                {/*{key}*/}
+                {/*</Typography>*/}
 
                 <Typography type={type}>
                     {this.props.profile[key]}
@@ -65,25 +62,25 @@ export class ProfileComponent extends React.Component<props, state> {
             return <LoadingScreen/>;
         return (
             <div style={{padding: "20px 0"}}>
-                <SplitVIewTemplate>
-                    <div>
+                <div>
 
-                        {this.fieldDisplay("display1", "username")}
-                        {this.fieldDisplay("body1", "company")}
-                        {this.fieldDisplay("body1", "university")}
-                        {this.fieldDisplay("body1", "points")}
+                    {this.fieldDisplay("display2", "username")}
+                    {this.fieldDisplay("body1", "company")}
+                    {/*<Typography type={"body1"}>*/}
+                        {/*{this.props.profile.country.name}*/}
+                    {/*</Typography>*/}
+                    {/*{this.fieldDisplay("body1", "university.name")}*/}
+                    {this.fieldDisplay("body1", "points")}
 
-                        {/*<PreviewCardsComponent list={this.props.profile.stories} label={"stories"}/>*/}
-                        <PreviewCardsComponent list={this.props.profile.questions} label={"questions"}/>
-                        <textarea
-                            style={{height: "500px", width: "100%"}}
-                            value={JSON.stringify(this.props.profile, null, 4)} />
+                    <PreviewCardsComponent list={this.props.profile.stories} label={"Stories posted:"}/>
+                    <PreviewCardsComponent list={this.props.profile.questions}
+                                           labelType={"headline"}
+                                           label={"Questions posted:"}/>
+                    <textarea
+                        style={{height: "500px", width: "100%"}}
+                        value={JSON.stringify(this.props.profile, null, 4)}/>
 
-                    </div>
-                    <div>
-                        {/*TODO: add side view */}
-                    </div>
-                </SplitVIewTemplate>
+                </div>
             </div>
         );
     }
@@ -91,7 +88,7 @@ export class ProfileComponent extends React.Component<props, state> {
 
 interface StateToProps {
     user: UserDto;
-    profileStatus : ReducerStateStatus;
+    profileStatus: ReducerStateStatus;
     profile: ProfilePage;
 }
 
@@ -103,7 +100,7 @@ interface DispatchToProps {
 const mapStateToProps = (state: AppStoreState): StateToProps => ({
     user: state.auth.user,
     profile: state.profile.profile,
-    profileStatus : state.profile.status
+    profileStatus: state.profile.status
 });
 const mapDispatchToProps = (dispatch): DispatchToProps => ({
     fetchProfile: (username: string) => dispatch(ProfileActions.fetchUserProfile(username))

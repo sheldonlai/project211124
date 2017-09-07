@@ -14,6 +14,7 @@ import {PRIMARY_COLOR} from "../../views/router";
 export interface props {
     list: Preview[];
     label: string;
+    labelType?: string;
     trim?: boolean; // if there is a non fully populated trim the bottom row
     maxBlock?: number;
 }
@@ -57,6 +58,7 @@ export class PreviewCardsComponent extends React.Component<props, state>{
         let listLength = getLengthFromBoxes(list);
         let maxWidth = (n > listLength)? boxWidth * listLength: n * boxWidth;
         maxWidth += bodyMargin;
+        const labelType = this.props.labelType? this.props.labelType: "display1";
         return (
             <Grid container justify="center">
                 {this.props.children &&
@@ -64,7 +66,7 @@ export class PreviewCardsComponent extends React.Component<props, state>{
                     {this.props.children}
                 </Grid>}
                 <Grid item style={{marginTop: 16, width: maxWidth}}>
-                    <Typography type="display1" style={{marginBottom: 10, color: PRIMARY_COLOR}}>
+                    <Typography type={labelType} style={{marginBottom: 10, color: PRIMARY_COLOR}}>
                         {this.props.label}
                         </Typography>
                     <Grid container justify="flex-start">
