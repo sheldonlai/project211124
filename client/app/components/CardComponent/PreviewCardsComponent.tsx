@@ -69,8 +69,10 @@ export class PreviewCardsComponent extends React.Component<props, state> {
         return (
             <Grid container justify="center">
                 {this.props.children &&
-                <Grid item style={{marginTop: 16, width: maxWidth}}>
-                    {this.props.children}
+                <Grid item style={{marginTop: 16, width: "100%", textAlign: "center"}}>
+                    <div style={{width: maxWidth, margin: "auto"}}>
+                        {this.props.children}
+                    </div>
                 </Grid>}
                 <Grid item style={{marginTop: 16, width: maxWidth}}>
                     <Typography type={labelType} style={{marginBottom: 10, color: PRIMARY_COLOR}}>
@@ -78,8 +80,8 @@ export class PreviewCardsComponent extends React.Component<props, state> {
                     </Typography>
                     {
                         !this.props.list || this.props.list.length === 0 ?
-                            <Typography type={'body1'}>
-                                There are currently no posts
+                            <Typography type={'body1'} style={{color: "#898989"}}>
+                                There are nothing posted.
                             </Typography> :
                             <Grid container justify="flex-start">
                                 {list.map((e) => (
