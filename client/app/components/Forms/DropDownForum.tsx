@@ -39,12 +39,6 @@ export class DropDownForum extends React.Component<props> {
         this.setState({open: false});
     };
 
-    onSelectValue = (value: any) => {
-        if (this.props.onChange)
-            this.props.onChange(value);
-        this.setState({open: false});
-    };
-
     bodyContainer = (text: string, color?: string) => {
         color = color ? color : "default";
         return <Typography type="body1" color={color}>{text}</Typography>
@@ -59,6 +53,7 @@ export class DropDownForum extends React.Component<props> {
                         key={data.FieldName}
                         label={data.FieldName}
                         placeholder={data.FieldName}
+                        onChange={event => data.UpdateHandler(data.ActualFieldName, event.target.value)}
                         margin="normal"
                     />
                 })}

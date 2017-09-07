@@ -17,38 +17,38 @@ import {CityDto} from "../../../../../server/dtos/location/CityDto";
 import {DropDownForum} from "../../../components/Forms/DropDownForum";
 import {ForumDto} from "../../../../../server/dtos/sharedDtos/ForumDto";
 import {TeammateLocationEditor} from "./TeammateLocationEditor";
+import {TeammateRecordDto} from "../../../../../server/dtos/rating/TeammateRecordDto";
 
 interface props {
+    SearchTeammateObj: TeammateRecordDto,
+    UpdateSearchTeammateObj: (SearchTeammateObj: TeammateRecordDto) => void,
 }
 
 interface state {
 }
 
-let FieldNames: string[] = ['First Name', 'Middle Name', 'Laste Name'];
+let FieldNames = [{FieldName: 'First Name', ActualName:'firstName'}, {FieldName: 'Middle Name', ActualName: 'middleName'}, {FieldName: 'Last Name', ActualName: 'lastName'}];
 
 export class AdvancedSearchEditor extends React.Component<props, state> {
+    ForumVector:ForumDto[];
     constructor(props) {
         super(props);
-        this.state = {
-            SearchTeammateObj: {
-                _id: undefined,
-                firstName: '',
-                lastName: '',
-                city: undefined,
-                university: undefined,
-                year: undefined,
-            },
-        };
+        this.ForumVector = FieldNames.map((Field) => ({FieldName: Field.FieldName, ActualFieldName: Field.ActualName, UpdateHandler: this.UpdateHandler, value: undefined}));
     }
 
+    UpdateHandler = (key: string, element: any) => {
+        let tmpObj = {...this.props.SearchTeammateObj};
+        tmpObj[key] = element;
+        this.props.UpdateSearchTeammateObj(tmpObj);
+    };
+
     render() {
-        let ForumVector:ForumDto[] = FieldNames.map((Fieldname) => ({FieldName: Fieldname, value: undefined}))
         return (
             <div>
                 <DropDownForum
-                    data = {ForumVector}
+                    data = {this.ForumVector}
                 />
-                <TeammateLocationEditor university={undefined} year={undefined} city={undefined}/>
+                <TeammateLocationEditor university={this.props.SearchTeammateObj.university} year={this.props.SearchTeammateObj.year} city={this.props.SearchTeammateObj.city} onChange={this.UpdateHandler}/>
             </div>
         )
     }
