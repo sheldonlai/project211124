@@ -57,9 +57,12 @@ export class QuestionService extends BaseService implements IQuestionService {
         promises.push(this.questionRepository.getAll({sort: "-createdUtc", limit: 25}));
 
         return Promise.all(promises).then((result) => {
+            let featuredQuestions = result[0] ? result[0].map(q=> Question.fromObject(q).toPreviewDto()) : [];
+            let myQuestions = result[1] ? result[1].map(q=> Question.fromObject(q).toPreviewDto()) : [];
+
             return {
-                featuredQuestions: result[0] ? result[0] : [],
-                myQuestions: result[1] ? result[1] : []
+                featuredQuestions,
+                myQuestions
             };
         })
     }

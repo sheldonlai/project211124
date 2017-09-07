@@ -1,10 +1,11 @@
 import {ReducerStateStatus} from "../constants/ReducerStateStatus";
 import {ProfileActionTypes} from "../constants/action.types/ProfileActionTypes";
-import {UserDto} from "../../../server/dtos/auth/UserDto";
+import {FrontEndQuestionModels} from "../models/ProfileModels";
+import ProfilePage = FrontEndQuestionModels.ProfilePage;
 
 export interface ProfileReducerState {
     status : ReducerStateStatus;
-    profile: UserDto;
+    profile: ProfilePage;
 
 }
 
@@ -25,6 +26,7 @@ export const ProfileReducer = (state = initialState, action) : ProfileReducerSta
             return getLoadingState(state);
         case ProfileActionTypes.ProfileFetchOK:
             state = {...state};
+            state.status = ReducerStateStatus.DONE;
             state.profile = action.data;
             return state;
         case ProfileActionTypes.ProfileFetchErr:

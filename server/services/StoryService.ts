@@ -50,10 +50,14 @@ export class StoryService extends BaseService implements IStoryService {
         }
         promises.push(this.storyRepository.getAll({sort: "-createdUtc"}));
 
+
+
         return Promise.all(promises).then((result) => {
+            let recommendedPreviews = result[0] ? result[0].map(q=> Story.fromObject(q).toPreviewDto()) : [];
+            let myStories = result[1] ? result[1].map(q=> Story.fromObject(q).toPreviewDto()) : [];
             return {
-                recommendedPreviews: result[0] ? result[0] : [],
-                myStories: result[1] ? result[1] : []
+                recommendedPreviews,
+                myStories
             };
         })
     }

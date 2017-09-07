@@ -3,6 +3,7 @@ import {BaseModel} from './Base/BaseModel';
 import {Question, QuestionComment} from './Question';
 import {User, userSchema} from './User';
 import {RawDraftContentState} from "draft-js";
+import {QuestionDto} from "../dtos/q&a/QuestionDto";
 
 let mongoosastic = require("mongoosastic");
 
@@ -16,7 +17,7 @@ export class Answer extends BaseModel {
     createdUtc: Date;
     comments: QuestionComment[];
 
-    constructor(question: Question, content: RawDraftContentState, author: User, comments?: QuestionComment[]) {
+    constructor(question: Question|QuestionDto, content: RawDraftContentState, author: User, comments?: QuestionComment[]) {
         super();
         this.question = question;
         this.content = content;

@@ -17,6 +17,8 @@ export class User extends BaseModel {
     company: string;
     country: Country;
     points: number;
+    createdAt: Date;
+    updatedAt: Date;
 
     constructor(
         email: string, name: string, role: UserTypeEnum, local?: LocalProfile, facebook?: FacebookProfile

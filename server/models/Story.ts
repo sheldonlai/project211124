@@ -5,6 +5,8 @@ import {PublicityStatus} from "../enums/PublicityStatus";
 import {RawDraftContentState} from "draft-js";
 import {Tag, tagSchema} from "./Tags";
 import {CategoryTypeEnum} from "../enums/CategoryTypeEnum";
+import {DraftJsHelper} from "../utils/DraftJsHelper";
+import {StoryPreviewDto} from "../dtos/story/StoryPreviewDto";
 
 let mongoosastic = require("mongoosastic");
 
@@ -37,17 +39,39 @@ export class Story extends BaseModel {
     publicityStatus: PublicityStatus;
     category: CategoryTypeEnum;
 
-    constructor(title: string, content: RawDraftContentState, author: User, tags: any[], isPublished?: boolean,
+    constructor(title?: string, content?: RawDraftContentState, author?: User, tags?: any[], isPublished?: boolean,
                 publicityStatus?: PublicityStatus, category?: CategoryTypeEnum,) {
         super();
-        this.title = title;
-        this.content = content;
-        this.author = author;
-        this.tags = tags;
-        this.isPublished = isPublished ? isPublished : false;
-        this.publicityStatus = publicityStatus ? publicityStatus : PublicityStatus.PUBLIC;
-        this.views = 0;
-        this.category = category? category: CategoryTypeEnum.NOT_SPECIFIED;
+        if (title || content){
+            console.warn("Using constructor is deprecated please use Story.fromObject instead.")
+            this.title = title;
+            this.content = content;
+            this.author = author;
+            this.tags = tags;
+            this.isPublished = isPublished ? isPublished : false;
+            this.publicityStatus = publicityStatus ? publicityStatus : PublicityStatus.PUBLIC;
+            this.views = 0;
+            this.category = category? category: CategoryTypeEnum.NOT_SPECIFIED;
+        }
+    }
+
+    static fromObject(obj: Partial<Story>): Story {
+        let object = new Story();
+        for (let key of Object.keys(obj)) {
+            object[key] = obj[key]
+        }
+        return object;
+    }
+
+    toPreviewDto(): StoryPreviewDto {
+        let dto = {
+            _id: this._id,
+            title: this.title,
+            content: DraftJsHelper.convertRawToText(this.content),
+            author: this.author,
+            createdUtc: this.createdUtc,
+        };
+        return dto;
     }
 }
 

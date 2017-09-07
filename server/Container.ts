@@ -55,7 +55,11 @@ export class ServiceProvider {
         RepositoryProvider.FileUploadRecordRepository
     );
     static LocationService = new LocationService(RepositoryProvider.UniversityRepository);
-    static UserService = new UserService(RepositoryProvider.UserRepository);
+    static UserService = new UserService(
+        RepositoryProvider.UserRepository,
+        RepositoryProvider.StoryRepository,
+        RepositoryProvider.QuestionRepository
+    );
     static TeammateRecordService = new TeammateRecordService(RepositoryProvider.TeammateRecordRepository);
     static StoryService = new StoryService(
         RepositoryProvider.StoryRepository,

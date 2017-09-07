@@ -7,10 +7,12 @@ import {listNumericalEnumValues} from "../utils/EnumsUtil";
 import {RawDraftContentState} from "draft-js";
 import {Tag, tagSchema} from "./Tags";
 import {CategoryTypeEnum} from "../enums/CategoryTypeEnum";
+import {QuestionPreviewDto} from "../dtos/q&a/QuestionPreviewDto";
+import {DraftJsHelper} from "../utils/DraftJsHelper";
 
 let mongoosastic = require("mongoosastic");
 
-export class QuestionComment extends BaseModel{
+export class QuestionComment extends BaseModel {
     commentBy: User;
     commentContent: string;
     lastEditedUtc: Date;
@@ -45,7 +47,7 @@ export class Question extends BaseModel {
     difficulty: QuestionDifficulty;
     category: CategoryTypeEnum;
 
-    constructor(title: string, content: RawDraftContentState, author: User, tags: any[],
+    constructor(title?: string, content?: RawDraftContentState, author?: User, tags?: any[],
                 isPublished?: boolean, publicityStatus?: PublicityStatus,
                 difficulty?: QuestionDifficulty, category?: CategoryTypeEnum,) {
         super();
@@ -53,11 +55,30 @@ export class Question extends BaseModel {
         this.content = content;
         this.author = author;
         this.tags = tags;
-        this.category = category? category: CategoryTypeEnum.NOT_SPECIFIED;
+        this.category = category ? category : CategoryTypeEnum.NOT_SPECIFIED;
         this.isPublished = isPublished ? isPublished : false;
         this.publicityStatus = publicityStatus ? publicityStatus : PublicityStatus.PUBLIC;
         this.difficulty = difficulty;
         this.views = 0;
+    }
+
+    static fromObject(obj: Partial<Question>): Question {
+        let object = new Question();
+        for (let key of Object.keys(obj)) {
+            object[key] = obj[key]
+        }
+        return object;
+    }
+
+    toPreviewDto(): QuestionPreviewDto {
+        let dto = {
+            _id: this._id,
+            title: this.title,
+            content: DraftJsHelper.convertRawToText(this.content),
+            author: this.author,
+            createdUtc: this.createdUtc,
+        };
+        return dto;
     }
 }
 
@@ -112,7 +133,7 @@ const schema = new Schema({
     comments: [{
         commentBy: {type: Schema.Types.ObjectId, ref: 'user'},
         commentContent: {type: String, required: true, es_indexed: true},
-        createdUtc : {type: Date, default: Date.now},
+        createdUtc: {type: Date, default: Date.now},
         lastEditedUtc: {type: Date, default: Date.now}
     }],
     views: {type: Number, default: 0, es_indexed: true},
