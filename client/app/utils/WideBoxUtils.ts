@@ -59,7 +59,7 @@ export const spliceListByRow = (list: WidableObject[], numOfBoxPerRow: number, m
         if (length / numOfBoxPerRow === maxRow){
             break;
         }
-        length += list[i].wide? 2 : 1;
+        length += numOfBoxPerRow !== 1 && list[i].wide? 2 : 1;
     }
     list = list.splice(0, i);
     return list;

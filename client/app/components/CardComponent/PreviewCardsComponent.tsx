@@ -14,6 +14,7 @@ import {CustomCard} from "./CardComponent";
 import {Preview} from "../../models/CommonModels";
 import {PRIMARY_COLOR} from "../../views/router";
 import Button from "material-ui/Button/Button";
+import {RouterController} from "../../api.controllers/RouterController";
 
 export interface props {
     list: Preview[];
@@ -91,8 +92,10 @@ export class PreviewCardsComponent extends React.Component<props, state> {
                                 <Grid container justify="flex-start">
                                     {list.map((e) => (
                                         <Grid item key={e.element.title}>
-                                            <div style={{display: "inline-block"}}>
-                                                <CustomLink to={e.element.toLink()}>
+                                            <div
+                                                onClick={() => RouterController.history.push(e.element.toLink())}
+                                                style={{display: "inline-block", cursor: 'pointer'}}>
+                                                {/*onClick={() => RouterController.history.push(e.element.toLink())}*/}
                                                     <CustomCard
                                                         title={e.element.title}
                                                         authorName={e.element.author.username}
@@ -100,16 +103,15 @@ export class PreviewCardsComponent extends React.Component<props, state> {
                                                         date={e.element.createdUtc}
                                                         wide={n > 1 && e.wide}
                                                     />
-                                                </CustomLink>
                                             </div>
                                         </Grid>
                                     ))}
                                 </Grid>
                                 {
-                                    this.props.list.length !== list.length &&
+                                    this.props.list.length !== list.length && !this.props.trim &&
                                     <Button
                                         color="primary" style={{width: "100%"}}
-                                        onClick={() => this.setState({row : this.state.row + 1})}
+                                        onClick={() => this.setState({row : this.state.row *2})}
                                     >
                                         Show more
                                     </Button>

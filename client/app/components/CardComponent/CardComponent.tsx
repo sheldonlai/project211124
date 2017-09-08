@@ -9,6 +9,7 @@ import Paper from "material-ui/Paper/Paper";
 import {PRIMARY_COLOR} from "../../views/router";
 import Grid from "material-ui/Grid/Grid";
 import {AuthorLink} from "../RoutingComponents/AuthorLink";
+import {blueGrey} from "material-ui/colors";
 
 export interface CardComponentProps {
     title: string;
@@ -20,7 +21,7 @@ export interface CardComponentProps {
 }
 
 const cardStyle = {
-    height: 124,
+    height: 100,
     overflowY: "hidden",
     position: "relative",
     //background:"linear-gradient(transparent 150px, white)"
@@ -36,10 +37,17 @@ const shader: CSSProperties = {
     top: 0,
 };
 
-export class CustomCard extends React.Component<CardComponentProps, any> {
+interface state {
+    hover: boolean;
+}
+
+export class CustomCard extends React.Component<CardComponentProps, state> {
 
     constructor(props) {
         super(props);
+        this.state = {
+            hover : false
+        }
     }
 
     render() {
@@ -51,10 +59,14 @@ export class CustomCard extends React.Component<CardComponentProps, any> {
             console.error(err);
         }
         return (
-            <div>
-                <Paper style={{width: width, ...cardStyle}} elevation={0}>
+            <div
+                onMouseEnter={() => this.setState({hover: true})}
+                onMouseLeave={() => this.setState({hover: false})}
+            >
+                <Paper style={{width: width, ...cardStyle, background: this.state.hover? "#EEE" : "white"}}
+                       elevation={0}>
                     {/*<div style={shader}/>*/}
-                    <div style={{height: 88, overflowY: "hidden"}}>
+                    <div style={{height: 88, overflowY: "hidden", padding: 5}}>
                         <Typography type="headline" style={{fontSize: 18, fontWeight: 500, lineHeight: "20px"}}>
                             {this.props.title}
                         </Typography>
@@ -74,9 +86,6 @@ export class CustomCard extends React.Component<CardComponentProps, any> {
                         <Typography type="body1" paragraph={true} noWrap={true} style={{fontSize: 12}}>
                             {this.props.content}
                         </Typography>
-                    </div>
-                    <div style={{height: 36, textAlign: "right"}}>
-                        <Button dense color="accent" onClick={this.props.onClick}>Read More</Button>
                     </div>
                 </Paper>
             </div>
