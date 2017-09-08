@@ -52,6 +52,19 @@ export interface WidableObject {
     element: any;
 }
 
+export const spliceListByRow = (list: WidableObject[], numOfBoxPerRow: number, maxRow: number) => {
+    let length = 0;
+    let i = 0;
+    for (i; i < list.length; i ++){
+        if (length / numOfBoxPerRow === maxRow){
+            break;
+        }
+        length += list[i].wide? 2 : 1;
+    }
+    list = list.splice(0, i);
+    return list;
+};
+
 export const sortListToGetSameWidthEachRow = (list: any[], numOfBoxPerRow: number, trim?: boolean) :WidableObject[] => {
     let rList : WidableObject[] = list.map(e => ({wide: isElementWide(e), element: e}));
     if (numOfBoxPerRow <= 1){
