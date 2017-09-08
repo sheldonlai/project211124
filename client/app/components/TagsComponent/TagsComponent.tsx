@@ -49,7 +49,9 @@ export class TagsSelector extends Component<TagsSelectorProps, TagsSelectorState
             }
             let tags = this.props.selectedTags;
             tags.push(newTag);
-            if (this.props.tags)
+            if (tags.length > 5) {
+                this.setState({error: 'Tags cannot have more than 20 characters.'});
+            }
             this.props.onChange(tags);
             this.setState({tag: '', error: ''});
 
