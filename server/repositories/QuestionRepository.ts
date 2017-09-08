@@ -6,6 +6,7 @@ import {isNullOrUndefined} from "util";
 import {AppError} from "../errors/AppError";
 import {ClientError} from "../errors/HttpStatus";
 import {removeUserRestrictedInfo} from "../utils/UserUtils";
+import {Tag} from "../models/Tags";
 
 export interface IQuestionRepository extends IBaseRepository<Question> {
     getQuestionsByAuthor(user: User): Promise<Question[]>;
@@ -74,6 +75,7 @@ export class QuestionRepository extends BaseRepository<Question, IQuestion> impl
         if (isNullOrUndefined(question)){
             throw new AppError("Cannot find the specified question", ClientError.BAD_REQUEST)
         }
+        question.tags = <any>question.tags.map(q => q.tag);
         return UserQuestionVoteModel.find({question: question}).lean().exec()
             .then((userVote: UserQuestionVote[]) => {
                 const upVote = userVote.filter((userVote) => userVote.upVote == true).length;

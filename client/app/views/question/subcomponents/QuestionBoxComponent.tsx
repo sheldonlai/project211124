@@ -103,7 +103,7 @@ export class QuestionBoxComponent extends Component<props, {}> {
                                            style={{fontSize: 14}} reset={this.resetQuestion}
                         />
                         <div>
-                            <ChipListComponent chips={question.tags} keyName={"tag"}/>
+                            <ChipListComponent chips={question.tags}/>
                         </div>
                         <Divider/>
                         <QuestionFooterComponent
