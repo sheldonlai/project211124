@@ -68,6 +68,9 @@ export class QuestionService extends BaseService implements IQuestionService {
     }
 
     createQuestion(question: QuestionDto, currentUser: User): Promise<QuestionDto> {
+        if (question.tags.length > 5){
+            throw new AppError("You should have a maximum of 5 tags", ClientError.BAD_REQUEST);
+        }
         return this.tagRepository.getTags(question.tags).then((tags: ITag[]) => {
             let questionObject = new Question(
                 question.title, question.content, currentUser, tags,

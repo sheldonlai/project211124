@@ -24,25 +24,22 @@ import {FileUploader} from "../../components/FileUpload/FileUploader";
 import {EditorStateUtil} from "../../components/CustomEditor/EditorStateUtil";
 import {CategoryTypeEnum} from "../../../../server/enums/CategoryTypeEnum";
 import Question = FrontEndQuestionModels.Question;
+import {QuestionAPIController} from "../../api.controllers/QuestionAPIController";
 
 
-export interface CreateQuestionState {
-    title: string;
-    tags: string[];
-    isPublished: boolean;
-    content: string;
-    publicityStatus: PublicityStatus;
-    difficulty: QuestionDifficulty;
-    showFileUploadDialog: boolean;
-    filesUploaded: any[];
+export interface CreateQuestionState extends Question{
+    error: string;
 }
 
 interface props extends stateToProps, dispatchToProps, RouterProps{}
 
-class CreateQuestion extends Component<props, Question> {
+class CreateQuestion extends Component<props, CreateQuestionState> {
+
+    apiController;
     constructor(props) {
         super(props);
-        this.state = {...new Question()};
+        this.state = {...new Question(), error: ''};
+        this.apiController = QuestionAPIController.getInstance();
     }
 
     componentWillMount(){
@@ -65,8 +62,15 @@ class CreateQuestion extends Component<props, Question> {
 
     submit = () => {
         let postReq: Question = this.state;
+        if (!postReq.title){
+            this.setState({error: "Title cannot be empty"})
+            return;
+        }
+        if (!postReq.content.getCurrentContent().hasText()){
+            this.setState({error: "Content cannot be empty"})
+            return;
+        }
         this.props.createQuestion(postReq);
-        //
     };
 
     selectFieldChange = (event: any, index: number, value: any[]) => {
@@ -101,31 +105,38 @@ class CreateQuestion extends Component<props, Question> {
     };
 
     /* File Upload related methods */
-    insert = () => {
-        this.setState({showFileUploadDialog: true});
-    };
-
-    onFileUploadSelect = (filesSelected, filesUploaded) => {
-        let imageSrcs = filesSelected.map((f) => { return f.fileURL; });
-        let newEditorState = EditorStateUtil.insertImages(this.state.content, imageSrcs);
-        this.setState({showFileUploadDialog: false, content: newEditorState, filesUploaded: filesUploaded});
-    };
-
-    onFileUploadCancel = (files) => {
-        this.setState({showFileUploadDialog: false, filesUploaded: files});
-    };
+    // insert = () => {
+    //     this.setState({showFileUploadDialog: true});
+    // };
+    //
+    // onFileUploadSelect = (filesSelected, filesUploaded) => {
+    //     let imageSrcs = filesSelected.map((f) => { return f.fileURL; });
+    //     let newEditorState = EditorStateUtil.insertImages(this.state.content, imageSrcs);
+    //     this.setState({showFileUploadDialog: false, content: newEditorState, filesUploaded: filesUploaded});
+    // };
+    //
+    // onFileUploadCancel = (files) => {
+    //     this.setState({showFileUploadDialog: false, filesUploaded: files});
+    // };
 
     render() {
         const inputContainer = {paddingLeft: 20, paddingRight: 20};
         const input= {width: "100%"};
         return (
-            <Grid container justify="center">
+            <Grid container justify="center" style={{paddingTop: 20}}>
+                <Grid item xs={12}>
+                    <Typography type="body1" style={{width: "100%", textAlign: 'center', color: "red", fontSize: 18}}>
+                        {this.state.error}
+                    </Typography>
+                </Grid>
                 <Grid item xs={12}>
                     <Grid container style={inputContainer}>
                         <Grid item xs={12} md={6}>
                             <TextField
+                                error={this.state.error.indexOf("Title") !== -1}
                                 style={input}
                                 label="Title"
+                                required
                                 type="text"
                                 value={this.state.title}
                                 onChange={this.titleChange}
@@ -151,20 +162,21 @@ class CreateQuestion extends Component<props, Question> {
 
                         {this.difficultyMenu()}
 
-                        <Button raised onClick={this.insert}>
-                            Insert
-                        </Button>
-                        {this.state.showFileUploadDialog &&
-                            <FileUploader initialFiles={this.state.filesUploaded}
-                                          onSelect={this.onFileUploadSelect}
-                                          onCancel={this.onFileUploadCancel} />
-                        }
+                        {/*<Button raised onClick={this.insert}>*/}
+                            {/*Insert*/}
+                        {/*</Button>*/}
+                        {/*{this.state.showFileUploadDialog &&*/}
+                            {/*<FileUploader initialFiles={this.state.filesUploaded}*/}
+                                          {/*onSelect={this.onFileUploadSelect}*/}
+                                          {/*onCancel={this.onFileUploadCancel} />*/}
+                        {/*}*/}
 
 
                         <Grid item xs={12} md={12}>
                             <Typography type="caption" gutterBottom>Content :</Typography>
                             <CustomEditor value={this.state.content}
                                           onChange={this.contentChange}
+                                          style={{minHeight: 200}}
                             />
                         </Grid>
                     </Grid>

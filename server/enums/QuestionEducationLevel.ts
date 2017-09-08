@@ -5,7 +5,7 @@ export enum QuestionEducationLevel {
     NOT_SPECIFIED = <any> "NOT_SPECIFIED",
     SECONDARY = <any> "SECONDARY",
     UNIVERSITY = <any> "UNIVERSITY",
-    WORK = <any> "WORK"
+    OTHER = <any> "OTHER"
 }
 
 export enum DifficultyLevel {

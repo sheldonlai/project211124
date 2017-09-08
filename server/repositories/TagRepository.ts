@@ -14,7 +14,8 @@ export class TagRepository extends BaseRepository<Tag, ITag> implements ITagRepo
     getTags(tags: string[]): Promise<Tag[]> {
         tags = getUniqueArray(tags);
         let promises = [];
-        for (let tag of tags) {
+        for (let i in tags) {
+            let tag = tags[i].toLowerCase().slice(0, 21);
             promises.push(
                 TagModel.findOneAndUpdate({tag: tag}, {tag: tag}, {new: true, upsert: true}).exec()
             );

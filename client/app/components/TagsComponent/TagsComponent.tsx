@@ -4,6 +4,7 @@ import {createStyleSheet, withStyles} from 'material-ui/styles';
 import Grid from "material-ui/Grid";
 import TextField from "material-ui/TextField";
 import {ChipListComponent} from "../Forms/ChipListComponent";
+import Typography from "material-ui/Typography/Typography";
 
 export interface TagsSelectorProps {
     tags?: string[]; // used for suggestion
@@ -12,13 +13,15 @@ export interface TagsSelectorProps {
 }
 export interface TagsSelectorState {
     tag: string;
+    error: string;
 }
 export class TagsSelector extends Component<TagsSelectorProps, TagsSelectorState> {
 
     constructor(props) {
         super(props);
         this.state = {
-            tag : ''
+            tag : '',
+            error: ''
         }
     }
 
@@ -38,10 +41,18 @@ export class TagsSelector extends Component<TagsSelectorProps, TagsSelectorState
 
     submit = (event) => {
         if (event.key === "Enter"){
+
+            let newTag = this.state.tag.toLowerCase();
+            if (newTag.length > 20){
+                this.setState({error: 'Tags cannot have more than 20 characters.'});
+                return;
+            }
             let tags = this.props.selectedTags;
-            tags.push(this.state.tag);
+            tags.push(newTag);
+            if (this.props.tags)
             this.props.onChange(tags);
-            this.setState({tag: ''});
+            this.setState({tag: '', error: ''});
+
         }
     };
 
@@ -59,8 +70,9 @@ export class TagsSelector extends Component<TagsSelectorProps, TagsSelectorState
                         style={this.styles.chip}
                     />
                 </Grid>
+                <Typography type="caption" style={{color: "red"}}>{this.state.error}</Typography>
                 <TextField
-                    label="Add a Tag"
+                    label="Tag (enter to insert)"
                     type="text"
                     value={this.state.tag}
                     onChange={this.tagChange}
