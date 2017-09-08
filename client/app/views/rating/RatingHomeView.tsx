@@ -43,14 +43,9 @@ export class RatingHomeViewComponent extends React.Component<StateToProps & Disp
         this.apiController = RatingApiController.getInstance();
     }
 
-    searchForSimilarTeammate = (teammateRecordDto: TeammateRecordDto) => {
-        console.log(teammateRecordDto);
+    PreciseTeammateSearch = (teammateRecordDto: TeammateRecordDto) => {
         this.setState({lastSearched: Date.now(), loading: true});
-        this.apiController.searchForTeammate(teammateRecordDto).then((res) => {
-            this.setState({similarPreviews: res.data, loading: false});
-        }).catch((err) => {
-            console.error(err)
-        });
+        this.props.AdvancedSearch(teammateRecordDto);
     };
 
     componentWillMount() {
@@ -101,7 +96,7 @@ export class RatingHomeViewComponent extends React.Component<StateToProps & Disp
 
     FindSimilarTeammates = () => {
         if(this.state.AdvancedSearch){
-            this.searchForSimilarTeammate(this.state.SearchTeammateObj);
+            this.PreciseTeammateSearch(this.state.SearchTeammateObj);
         }
         else{
             let splittedStrings: string[] = this.state.searchString.split(" ");
@@ -163,11 +158,13 @@ export class RatingHomeViewComponent extends React.Component<StateToProps & Disp
 interface DispatchToProps {
     fetchRatingPreviews: () => void;
     BlurrySearch: (InputStrings: string[]) => void;
+    AdvancedSearch: (TeammateObj: TeammateRecordDto) => void;
 }
 
 const mapDispatchToProps = (dispatch): DispatchToProps => ({
     fetchRatingPreviews: () => dispatch(RatingActions.getTeammateRecordPreview()),
     BlurrySearch: (InputStrings: string[]) => dispatch(RatingActions.BlurrySearch(InputStrings)),
+    AdvancedSearch: (TeammateObj: TeammateRecordDto) => dispatch(RatingActions.AdvancedTeammateSearch(TeammateObj)),
 });
 
 interface StateToProps {

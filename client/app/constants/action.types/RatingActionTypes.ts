@@ -15,6 +15,10 @@ export enum RatingActionTypes {
     BlurrySearchPreviewOK = <any> "BlurrySearchPreviewOK",
     BlurrySearchPreviewError = <any> "BlurrySearchPreviewError",
 
+    AdvancedSearchPreviewRequest = <any> "AdvancedSearchPreviewRequest",
+    AdvancedSearchPreviewOK = <any> "AdvancedSearchPreviewOK",
+    AdvancedSearchPreviewError = <any> "AdvancedSearchPreviewError",
+
     GetTeammateRecordRequest = <any> "GetTeammateRecordRequest",
     GetTeammateRecordOK = <any> "GetTeammateRecordOK",
     GetTeammateRecordError = <any> "GetTeammateRecordError",

@@ -43,6 +43,10 @@ export class RatingApiController extends ApiController{
         return this.post(APIUrls.searchForTeammate, teammateRecordDto);
     }
 
+    public PreciseTeammateSearch(SearchTeammateDto: TeammateRecordDto): AxiosPromise{
+        return this.post(APIUrls.PreciseTeammateSearch, SearchTeammateDto);
+    }
+
     public BlurryTeammateSearch(InputStrings: string[]): AxiosPromise{
         return this.post(APIUrls.BlurryTeammateSearch, InputStrings);
     }

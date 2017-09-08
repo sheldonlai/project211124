@@ -59,7 +59,6 @@ export class CreateTeammateViewComponent extends React.Component<props, state> {
     }
 
     searchForSimilarTeammate = (teammateRecordDto: TeammateRecordDto) => {
-        console.log(teammateRecordDto);
         this.setState({lastSearched: Date.now(), loading: true});
         this.apiController.searchForTeammate(teammateRecordDto).then((res) => {
             this.setState({similarPreviews: res.data, loading: false});

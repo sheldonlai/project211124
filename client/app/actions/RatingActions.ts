@@ -110,7 +110,20 @@ export class RatingActions extends BaseActions {
         }
     }
 
-
+    static AdvancedTeammateSearch(TeammateObj: TeammateRecordDto){
+        return function(dispatch){
+            dispatch({
+                type: RatingActionTypes.AdvancedSearchPreviewRequest,
+            });
+            apiController.PreciseTeammateSearch(TeammateObj).then((res) => {
+                dispatch({
+                    type: RatingActionTypes.AdvancedSearchPreviewOK,
+                    data: res.data,
+                });
+            }).catch((err) =>
+                RatingActions.handleError(dispatch, err, RatingActionTypes.AdvancedSearchPreviewError));
+        }
+    }
 
 
 }

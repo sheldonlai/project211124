@@ -35,6 +35,15 @@ export const RatingHomeReducer = (state = initialState, action) : RatingHomeRedu
             state = {...state};
             state.status = ReducerStateStatus.DONE;
             state.previews = action.data;
+            return state;
+
+        case RatingActionTypes.AdvancedSearchPreviewRequest:
+            return getLoadingState(state);
+        case RatingActionTypes.AdvancedSearchPreviewOK:
+            state = {...state};
+            state.status = ReducerStateStatus.DONE;
+            state.previews = action.data;
+            return state;
 
         default:
             return state;

@@ -20,6 +20,7 @@ export class TeammateRatingAPI extends BaseAPI {
         this.router.put(APIUrls.editRating, mustBeAuthenticated, this.editTeammateRating);
         this.router.post(APIUrls.searchForTeammate, this.searchForSimilarRecord);
         this.router.post(APIUrls.BlurryTeammateSearch, this.BlurryTeammateSearch);
+        this.router.post(APIUrls.PreciseTeammateSearch, this.PreciseTeammateSearch);
     }
 
     public createTeammateRecord = (req: AuthRequest, res: Response, next: NextFunction) => {
@@ -64,10 +65,17 @@ export class TeammateRatingAPI extends BaseAPI {
         this.respondPromise(promise, res, next);
     };
 
+    public PreciseTeammateSearch = (req: AuthRequest, res: Response, next: NextFunction) => {
+      const currentUser = req.user;
+      const SearchTeammateDto: TeammateRecordDto = req.body;
+      const promise = this.service.PreciseTeammateSearch(SearchTeammateDto);
+      this.respondPromise(promise, res, next);
+    };
+
     public BlurryTeammateSearch = (req: AuthRequest, res: Response, next: NextFunction) => {
         const InputStrings: string[] = req.body;
         const promise = this.service.BlurryTeammateSearch(InputStrings);
         this.respondPromise(promise, res, next);
-    }
+    };
 
 }

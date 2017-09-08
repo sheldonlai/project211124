@@ -57,6 +57,7 @@ export class APIUrls {
 
     static searchForTeammate = "/search-teammate";
     static BlurryTeammateSearch = "/blurry-teammate-search";
+    static PreciseTeammateSearch = "/precise-teammate-search";
 
     /* Story */
     static getStoryPreviews = "/story-previews";
