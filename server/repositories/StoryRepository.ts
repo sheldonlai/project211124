@@ -6,6 +6,7 @@ import {ClientError} from "../errors/HttpStatus";
 import {UserStoryVote, UserStoryVoteModel} from "../models/UserStoryVote";
 import {User} from "../models/User";
 import {PublicityStatus} from "../enums/PublicityStatus";
+import {Tag} from "../models/Tags";
 
 export interface IStoryRepository extends IBaseRepository<Story> {
     getStoryByTitle(title: string): Promise<Story>;
@@ -86,6 +87,7 @@ export class StoryRepository extends BaseRepository<Story, IStory> implements IS
         if (isNullOrUndefined(story)){
             throw new AppError("Cannot find the specified question", ClientError.BAD_REQUEST)
         }
+        story.tags = (<Tag[]> story.tags).map((q) => q.tag);
         return UserStoryVoteModel.find({story: story}).lean().exec()
             .then((userVote: UserStoryVote[]) => {
                 const upVote = userVote.filter((userVote) => userVote.upVote == true).length;

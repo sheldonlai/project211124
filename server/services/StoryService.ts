@@ -17,23 +17,30 @@ import * as _ from "lodash";
 
 export interface IStoryService {
     getStoryPreview(user?: User): Promise<StoryPreviewCollectionsDto>;
+
     createStory(story: StoryDto, user: User): Promise<StoryDto>;
+
     getStoryByID(name: string, user?: User): Promise<StoryDto>;
+
     getUserStories(currentUser: User): Promise<StoryDto[]>;
+
     updateStory(story: StoryDto, user: User): Promise<StoryDto>;
+
     upVoteStory(storyId: string, user: User): Promise<StoryDto>;
+
     downVoteStory(storyId: string, user: User): Promise<StoryDto>;
+
     createComment(comment: CommentDto, storyId: string, user: User): Promise<StoryDto>;
+
     updateComment(comment: CommentDto, storyId: string, user: User): Promise<StoryDto>;
+
     deleteComment(comment: CommentDto, storyId: string, user: User): Promise<StoryDto>;
 }
 
 export class StoryService extends BaseService implements IStoryService {
-    constructor(
-        private storyRepository: IStoryRepository,
-        private tagRepository: ITagRepository,
-        private userRepository: IUserRepository,
-    ) {
+    constructor(private storyRepository: IStoryRepository,
+                private tagRepository: ITagRepository,
+                private userRepository: IUserRepository,) {
         super();
     }
 
@@ -41,7 +48,7 @@ export class StoryService extends BaseService implements IStoryService {
         let promises = [];
         if (user) {
             let preferences = await this.userRepository.getUserPreference(user);
-            preferences = preferences.question_pref?  preferences: new UserPreferences();
+            preferences = preferences.question_pref ? preferences : new UserPreferences();
             promises.push(this.storyRepository.search(getQuestionsQueryByPreference(preferences)));
             promises.push((this.storyRepository.getStoriesByAuthor(user)));
         } else {
@@ -51,10 +58,9 @@ export class StoryService extends BaseService implements IStoryService {
         promises.push(this.storyRepository.getAll({sort: "-createdUtc"}));
 
 
-
         return Promise.all(promises).then((result) => {
-            let recommendedPreviews = result[0] ? result[0].map(q=> Story.fromObject(q).toPreviewDto()) : [];
-            let myStories = result[1] ? result[1].map(q=> Story.fromObject(q).toPreviewDto()) : [];
+            let recommendedPreviews = result[0] ? result[0].map(q => Story.fromObject(q).toPreviewDto()) : [];
+            let myStories = result[1] ? result[1].map(q => Story.fromObject(q).toPreviewDto()) : [];
             return {
                 recommendedPreviews,
                 myStories
@@ -78,7 +84,7 @@ export class StoryService extends BaseService implements IStoryService {
                 // TODO: some kind of logging
                 console.log("increased view");
             });
-            if (user){
+            if (user) {
                 this.userRepository.updateQuestionVector(user, story).then(() => {
                     // TODO: some kind of logging
                     console.log("Updated Story Vector");
@@ -95,20 +101,32 @@ export class StoryService extends BaseService implements IStoryService {
 
     }
 
-    updateStory(storyDto: StoryDto, user: User): Promise<StoryDto> {
-        return this.storyRepository.getById(storyDto._id).then((storyFound: Story) => {
-            this.checkPermissionForModification(storyDto, storyFound, user);
+    async updateStory(storyDto: StoryDto, user: User): Promise<StoryDto> {
+        let storyFound = await this.storyRepository.getById(storyDto._id);
+        this.checkPermissionForModification(storyDto, storyFound, user);
 
-            // editable fields
-            storyFound.content = storyDto.content;
-            storyFound.title = storyDto.title;
-            storyFound.publicityStatus = storyDto.publicityStatus;
-            storyFound.category = storyDto.category;
-            storyFound.lastEditedUtc = new Date();
+        // editable fields
+        storyFound.content = storyDto.content;
+        storyFound.title = storyDto.title;
+        storyFound.publicityStatus = storyDto.publicityStatus;
+        storyFound.category = storyDto.category;
+        storyFound.lastEditedUtc = new Date();
 
-            return this.storyRepository.update(storyFound)
-                .then((story)=> this.storyRepository.getById(story._id));
-        });
+        //update tags
+        if (storyDto.tags.length <= 5) {
+            if (_.intersection(storyDto.tags, storyFound.tags).length !== storyDto.tags.length) {
+                storyFound.tags = await this.tagRepository.getTags(storyDto.tags);
+            } else {
+                // delete the tags if possible
+                delete storyFound.tags;
+            }
+        } else {
+            throw new AppError("You cannot hae more than 5 tags.", ClientError.BAD_REQUEST);
+        }
+
+        return this.storyRepository.update(storyFound)
+            .then((story) => this.storyRepository.getById(story._id));
+
     }
 
     upVoteStory(storyId: string, user: User): Promise<StoryDto> {
@@ -121,12 +139,12 @@ export class StoryService extends BaseService implements IStoryService {
 
     voteHelper(storyId: string, user: User, up: boolean) {
         let vote = new UserStoryVote(user._id, storyId, up);
-        return this.storyRepository.findOneAndUpdateVoteStory(vote).then((story: Story)  => {
+        return this.storyRepository.findOneAndUpdateVoteStory(vote).then((story: Story) => {
             return story;
         });
     }
 
-    createComment(comment: CommentDto, storyId: string, user: User): Promise<StoryDto>{
+    createComment(comment: CommentDto, storyId: string, user: User): Promise<StoryDto> {
         return this.storyRepository.getById(storyId).then((storyFound: Story) => {
             let now = new Date();
             comment.createdUtc = now;
@@ -138,14 +156,14 @@ export class StoryService extends BaseService implements IStoryService {
         });
     }
 
-    updateComment(comment: CommentDto, storyId: string, user: User): Promise<StoryDto>{
+    updateComment(comment: CommentDto, storyId: string, user: User): Promise<StoryDto> {
         return this.storyRepository.getById(storyId).then((storyFound: Story) => {
             const commentIndex = _.findIndex(storyFound.comments, (c) => c._id.toString() === comment._id);
             const commentFound = storyFound.comments[commentIndex];
-            if(!commentFound.commentBy._id.equals(user._id)){
+            if (!commentFound.commentBy._id.equals(user._id)) {
                 throw new AppError("You are not the owner of this story!", ClientError.UNAUTHORIZED);
             }
-            else{
+            else {
                 let now = new Date();
                 delete storyFound.comments[commentIndex].createdUtc;
                 storyFound.comments[commentIndex].lastEditedUtc = now;
@@ -155,11 +173,11 @@ export class StoryService extends BaseService implements IStoryService {
         })
     }
 
-    deleteComment(comment: CommentDto, storyId: string, user: User): Promise<StoryDto>{
+    deleteComment(comment: CommentDto, storyId: string, user: User): Promise<StoryDto> {
         return this.storyRepository.getById(storyId).then((storyFound: Story) => {
             const commentIndex = _.findIndex(storyFound.comments, (c) => c._id.toString() === comment._id);
             const commentFound = storyFound.comments[commentIndex];
-            if(!commentFound.commentBy._id.equals(user._id)){
+            if (!commentFound.commentBy._id.equals(user._id)) {
                 throw new AppError("You are not the owner of this story!", ClientError.UNAUTHORIZED);
             } else {
                 storyFound.comments.splice(commentIndex, 1);

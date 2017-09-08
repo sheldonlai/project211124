@@ -35,7 +35,7 @@ export class Question extends BaseModel {
     title: string;
     content: RawDraftContentState;
     author: User;
-    tags: Tag[];
+    tags: Tag[]| string[];
     upVotes: number;
     downVotes: number;
     views: number;

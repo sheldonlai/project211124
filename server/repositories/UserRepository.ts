@@ -43,11 +43,20 @@ export class UserRepository extends BaseRepository<User, IUser> implements IUser
                 p.question_pref = p.question_pref? p.question_pref: {tags_vec: {}, cat_vec: {}};
                 let prevValues = p.question_pref.tags_vec;
                 for (let tag of question.tags) {
-                    let value = prevValues[tag.tag];
-                    if (isNullOrUndefined(value)) {
-                        prevValues[tag.tag] = this.getAdditionAmount(value);
+                    if (typeof tag !== "string"){
+                        let value = prevValues[tag.tag];
+                        if (isNullOrUndefined(value)) {
+                            prevValues[tag.tag] = this.getAdditionAmount(value);
+                        } else {
+                            prevValues[tag.tag] = value + this.getAdditionAmount(value);
+                        }
                     } else {
-                        prevValues[tag.tag] = value + this.getAdditionAmount(value);
+                        let value = prevValues[tag];
+                        if (isNullOrUndefined(value)) {
+                            prevValues[tag] = this.getAdditionAmount(value);
+                        } else {
+                            prevValues[tag] = value + this.getAdditionAmount(value);
+                        }
                     }
                 }
 

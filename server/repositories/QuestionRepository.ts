@@ -75,7 +75,7 @@ export class QuestionRepository extends BaseRepository<Question, IQuestion> impl
         if (isNullOrUndefined(question)){
             throw new AppError("Cannot find the specified question", ClientError.BAD_REQUEST)
         }
-        question.tags = <any>question.tags.map(q => q.tag);
+        question.tags = (<Tag[]> question.tags).map((q) => q.tag);
         return UserQuestionVoteModel.find({question: question}).lean().exec()
             .then((userVote: UserQuestionVote[]) => {
                 const upVote = userVote.filter((userVote) => userVote.upVote == true).length;

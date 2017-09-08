@@ -22,24 +22,31 @@ import * as _ from "lodash";
 
 export interface IQuestionService {
     getQuestionPreview(user?: User): Promise<QuestionPreviewCollectionsDto>;
+
     createQuestion(question: QuestionDto, user: User): Promise<QuestionDto>;
+
     getQuestionPageByID(name: string, user?: User): Promise<QuestionPageDto>;
+
     getUserQuestions(currentUser: User): Promise<QuestionDto[]>;
+
     updateQuestion(question: QuestionDto, user: User): Promise<QuestionDto>;
+
     upVoteQuestion(questionId: string, user: User): Promise<QuestionDto>;
+
     downVoteQuestion(questionId: string, user: User): Promise<QuestionDto>;
+
     createComment(comment: CommentDto, questionId: string, user: User): Promise<QuestionDto>;
+
     updateComment(comment: CommentDto, questionId: string, user: User): Promise<QuestionDto>;
+
     deleteComment(comment: CommentDto, questionId: string, user: User): Promise<QuestionDto>;
 }
 
 export class QuestionService extends BaseService implements IQuestionService {
-    constructor(
-        private questionRepository: IQuestionRepository,
-        private answerRepository: IAnswerRepository,
-        private tagRepository: ITagRepository,
-        private userRepository: IUserRepository,
-        ) {
+    constructor(private questionRepository: IQuestionRepository,
+                private answerRepository: IAnswerRepository,
+                private tagRepository: ITagRepository,
+                private userRepository: IUserRepository,) {
         super();
     }
 
@@ -47,7 +54,7 @@ export class QuestionService extends BaseService implements IQuestionService {
         let promises = [];
         if (user) {
             let preferences = await this.userRepository.getUserPreference(user);
-            preferences = preferences.question_pref?  preferences: new UserPreferences();
+            preferences = preferences.question_pref ? preferences : new UserPreferences();
             promises.push(this.questionRepository.search(getQuestionsQueryByPreference(preferences)));
             promises.push((this.questionRepository.getQuestionsByAuthor(user)));
         } else {
@@ -57,8 +64,8 @@ export class QuestionService extends BaseService implements IQuestionService {
         promises.push(this.questionRepository.getAll({sort: "-createdUtc", limit: 25}));
 
         return Promise.all(promises).then((result) => {
-            let featuredQuestions = result[0] ? result[0].map(q=> Question.fromObject(q).toPreviewDto()) : [];
-            let myQuestions = result[1] ? result[1].map(q=> Question.fromObject(q).toPreviewDto()) : [];
+            let featuredQuestions = result[0] ? result[0].map(q => Question.fromObject(q).toPreviewDto()) : [];
+            let myQuestions = result[1] ? result[1].map(q => Question.fromObject(q).toPreviewDto()) : [];
 
             return {
                 featuredQuestions,
@@ -68,7 +75,7 @@ export class QuestionService extends BaseService implements IQuestionService {
     }
 
     createQuestion(question: QuestionDto, currentUser: User): Promise<QuestionDto> {
-        if (question.tags.length > 5){
+        if (question.tags.length > 5) {
             throw new AppError("You should have a maximum of 5 tags", ClientError.BAD_REQUEST);
         }
         return this.tagRepository.getTags(question.tags).then((tags: ITag[]) => {
@@ -94,7 +101,7 @@ export class QuestionService extends BaseService implements IQuestionService {
                 // TODO: some kind of logging
                 console.log("increased view");
             }).catch(err => console.error(err));
-            if (user){
+            if (user) {
                 this.userRepository.updateQuestionVector(user, questionPage.question).then(() => {
                     // TODO: some kind of logging
                     console.log("Updated Question Vector");
@@ -111,23 +118,36 @@ export class QuestionService extends BaseService implements IQuestionService {
 
     }
 
-    updateQuestion(questionDto: QuestionDto, user: User): Promise<QuestionDto> {
-        return this.questionRepository.getById(questionDto._id).then((questionFound: Question) => {
-            this.checkPermissionForModification(questionDto, questionFound, user);
+    async updateQuestion(questionDto: QuestionDto, user: User): Promise<QuestionDto> {
+        let questionFound = await this.questionRepository.getById(questionDto._id);
+        this.checkPermissionForModification(questionDto, questionFound, user);
 
-            // editable fields
-            questionFound.content = questionDto.content;
-            questionFound.title = questionDto.title;
-            questionFound.publicityStatus = questionDto.publicityStatus;
-            questionFound.difficulty = questionDto.difficulty;
-            questionFound.category = questionDto.category;
+        // remove populated field
 
-            // update last edited utc
-            questionFound.lastEditedUtc = new Date();
+        // editable fields
+        questionFound.content = questionDto.content;
+        questionFound.title = questionDto.title;
+        questionFound.publicityStatus = questionDto.publicityStatus;
+        questionFound.difficulty = questionDto.difficulty;
+        questionFound.category = questionDto.category;
 
-            return this.questionRepository.update(questionFound)
-                .then((question)=> this.questionRepository.getById(question._id));
-        });
+        //update tags
+        if (questionDto.tags.length <= 5) {
+            if (_.intersection(questionDto.tags, questionFound.tags).length !== questionDto.tags.length){
+                questionFound.tags = await this.tagRepository.getTags(questionDto.tags);
+            } else {
+                // delete the tags if possible
+                delete questionFound.tags;
+            }
+        } else {
+            throw new AppError("You cannot hae more than 5 tags.", ClientError.BAD_REQUEST);
+        }
+
+        // update last edited utc
+        questionFound.lastEditedUtc = new Date();
+
+        return this.questionRepository.update(questionFound)
+            .then((question) => this.questionRepository.getById(question._id));
     }
 
     upVoteQuestion(questionId: string, user: User): Promise<QuestionDto> {
@@ -140,12 +160,12 @@ export class QuestionService extends BaseService implements IQuestionService {
 
     voteHelper(questionId: string, user: User, up: boolean) {
         let vote = new UserQuestionVote(user._id, questionId, up);
-        return this.questionRepository.findOneAndUpdateVoteQuestion(vote).then((question: Question)  => {
+        return this.questionRepository.findOneAndUpdateVoteQuestion(vote).then((question: Question) => {
             return question;
         });
     }
 
-    createComment(comment: CommentDto, questionId: string, user: User){
+    createComment(comment: CommentDto, questionId: string, user: User) {
         return this.questionRepository.getById(questionId).then((questionFound: Question) => {
             let now = new Date();
             comment.createdUtc = now;
@@ -157,28 +177,28 @@ export class QuestionService extends BaseService implements IQuestionService {
         });
     }
 
-    updateComment(c: CommentDto, questionId: string, user: User){
+    updateComment(c: CommentDto, questionId: string, user: User) {
         return this.questionRepository.getById(questionId).then((questionFound: Question) => {
-            let commentIndx = _.findIndex(questionFound.comments,comment => comment._id == c._id);
-            if(questionFound.comments[commentIndx].commentBy.username != user.username ||
-            !questionFound.comments[commentIndx].commentBy._id.equals(user._id)){
+            let commentIndx = _.findIndex(questionFound.comments, comment => comment._id == c._id);
+            if (questionFound.comments[commentIndx].commentBy.username != user.username ||
+                !questionFound.comments[commentIndx].commentBy._id.equals(user._id)) {
                 throw new AppError("You are not the owner of this question!", ClientError.UNAUTHORIZED);
             }
-            else{
+            else {
                 questionFound.comments[commentIndx] = c;
                 return this.questionRepository.update(questionFound);
             }
         })
     }
 
-    deleteComment(c: CommentDto, questionId: string, user: User){
+    deleteComment(c: CommentDto, questionId: string, user: User) {
         return this.questionRepository.getById(questionId).then((questionFound: Question) => {
             let commentIndx = _.findIndex(questionFound.comments, comment => comment._id == c._id);
-            if(questionFound.comments[commentIndx].commentBy.username != user.username ||
-                !questionFound.comments[commentIndx].commentBy._id.equals(user._id)){
+            if (questionFound.comments[commentIndx].commentBy.username != user.username ||
+                !questionFound.comments[commentIndx].commentBy._id.equals(user._id)) {
                 throw new AppError("You are not the owner of this question!", ClientError.UNAUTHORIZED);
             }
-            else{
+            else {
                 questionFound.comments.splice(commentIndx, 1);
                 return this.questionRepository.update(questionFound);
             }

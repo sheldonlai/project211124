@@ -89,7 +89,7 @@ export class StoryPage extends React.Component<props, { edit: boolean }> {
                 </Paper>
                 <div>
                     <Typography type="headline">Tags</Typography>
-                    <ChipListComponent chips={this.props.story.tags} keyName={"tag"}/>
+                    <ChipListComponent chips={this.props.story.tags} />
                 </div>
             </SplitVIewTemplate>
 
@@ -98,7 +98,6 @@ export class StoryPage extends React.Component<props, { edit: boolean }> {
 
     editor() {
         let story: Story = {...this.props.story};
-        story.tags = story.tags.map((tag) => tag.tag);
         return (
             <SplitVIewTemplate>
                 <StoryEditor story={story} onSubmit={this.props.updateStory} onCancel={this.onCancel}/>

@@ -41,16 +41,16 @@ export class TagsSelector extends Component<TagsSelectorProps, TagsSelectorState
 
     submit = (event) => {
         if (event.key === "Enter"){
-
             let newTag = this.state.tag.toLowerCase();
             if (newTag.length > 20){
                 this.setState({error: 'Tags cannot have more than 20 characters.'});
                 return;
             }
-            let tags = this.props.selectedTags;
+            let tags = [...this.props.selectedTags];
             tags.push(newTag);
             if (tags.length > 5) {
-                this.setState({error: 'Tags cannot have more than 20 characters.'});
+                this.setState({error: 'You cannot have more than 5 tags.'});
+                return;
             }
             this.props.onChange(tags);
             this.setState({tag: '', error: ''});
