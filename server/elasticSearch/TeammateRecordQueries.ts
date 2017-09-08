@@ -55,48 +55,68 @@ export const PreciseSearch = (firstName: string, lastName: string, university: U
 
     let query = ({
         "bool":{
-            "minimum_should_match": "80%",
+            "minimum_should_match": "50%",
         }
     });
 
-    let mustArray: any[] = [];
+    let shouldArray: any[] = [];
     if(firstName){
-        mustArray.push({"prefix": {"firstName": firstName}});
+        shouldArray.push({"prefix": {"firstName": firstName}});
         //mustArray.push({"match": {"firstName": firstName}});
+        shouldArray.push({"fuzzy": {
+            "firstName": {
+                "value": firstName,
+                "fuzziness": 2,
+            }
+        }});
     }
     if(middleName){
-        mustArray.push({"prefix": {"middleName": middleName}});
+        shouldArray.push({"prefix": {"middleName": middleName}});
         //mustArray.push({"match": {"middleName": middleName}});
+        shouldArray.push({"fuzzy": {
+            "middleName": {
+                "value": firstName,
+                "fuzziness": 2,
+            }
+        }});
     }
     if(lastName){
-        mustArray.push({"prefix": {"lastName": lastName}});
+        shouldArray.push({"prefix": {"lastName": lastName}});
         //mustArray.push({"match": {"lastName": lastName}});
+        shouldArray.push({"fuzzy": {
+            "lastName": {
+                "value": firstName,
+                "fuzziness": 2,
+            }
+        }});
     }
     if(description){
-        mustArray.push({"prefix": {"description": description}});
+        shouldArray.push({"prefix": {"description": description}});
         //mustArray.push({"match": {"description": description}});
     }
     if(university){
-        mustArray.push({
+        shouldArray.push({
             "match": {
                 "university.name": {
                     "query": university.name,
                     "operator": "and"
-                }
+                },
+                "boost": 0.5,
             }
         })
     }
     if(year){
-        mustArray.push({
+        shouldArray.push({
             "range":{
                 "year":{
                     "gte": year,
                     "lte": year,
-                }
+                },
+                "boost": 0.5,
             }
         })
     }
-    query.bool["must"] = mustArray;
+    query.bool["should"] = shouldArray;
     console.log(JSON.stringify(query));
     return query;
 };
