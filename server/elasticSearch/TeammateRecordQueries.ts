@@ -75,7 +75,7 @@ export const PreciseSearch = (firstName: string, lastName: string, university: U
         //mustArray.push({"match": {"middleName": middleName}});
         shouldArray.push({"fuzzy": {
             "middleName": {
-                "value": firstName,
+                "value": middleName,
                 "fuzziness": 2,
             }
         }});
@@ -85,13 +85,18 @@ export const PreciseSearch = (firstName: string, lastName: string, university: U
         //mustArray.push({"match": {"lastName": lastName}});
         shouldArray.push({"fuzzy": {
             "lastName": {
-                "value": firstName,
+                "value": lastName,
                 "fuzziness": 2,
             }
         }});
     }
     if(description){
-        shouldArray.push({"prefix": {"description": description}});
+        shouldArray.push({"match": {
+            "description": {
+                "query": description,
+                "operator": "and",
+            }
+        }});
         //mustArray.push({"match": {"description": description}});
     }
     if(university){

@@ -27,7 +27,7 @@ interface props {
 interface state {
 }
 
-let FieldNames = [{FieldName: 'First Name', ActualName:'firstName'}, {FieldName: 'Middle Name', ActualName: 'middleName'}, {FieldName: 'Last Name', ActualName: 'lastName'}];
+let FieldNames = [{FieldName: 'First Name', ActualName:'firstName'}, {FieldName: 'Middle Name', ActualName: 'middleName'}, {FieldName: 'Last Name', ActualName: 'lastName'}, {FieldName: 'Description', ActualName: 'description'}];
 
 export class AdvancedSearchEditor extends React.Component<props, state> {
     ForumVector:ForumDto[];

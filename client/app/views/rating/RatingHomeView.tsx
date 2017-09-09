@@ -37,8 +37,7 @@ export class RatingHomeViewComponent extends React.Component<StateToProps & Disp
             },
             searchString: "",
             AdvancedSearch: false,
-            lastSearched: 0,
-            loading: false,
+            KeyTerms: [],
         };
         this.apiController = RatingApiController.getInstance();
     }
@@ -53,7 +52,7 @@ export class RatingHomeViewComponent extends React.Component<StateToProps & Disp
     }
 
     recordRow = (preview: TeammatePreviewDto, index: number) => {
-        return (<RatingPreviewCard preview={preview} key={index}/>);
+        return (<RatingPreviewCard preview={preview} key={index} KeyTerms={this.state.KeyTerms}/>);
     };
 
     onSearchStringChange = (event) => {
@@ -61,7 +60,8 @@ export class RatingHomeViewComponent extends React.Component<StateToProps & Disp
     };
 
     UpdateSearchTeammateObj = (obj) => {
-        this.setState({SearchTeammateObj: obj});
+        let Splitter: string[] = obj.description.split(" ");
+        this.setState({SearchTeammateObj: obj, KeyTerms: Splitter});
     };
 
     renderSearchBar = () => {

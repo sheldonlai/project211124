@@ -9,9 +9,11 @@ import {convertEnumStringToViewString} from "../../../utils/utils";
 import {UniversityYearEnum} from "../../../../../server/enums/UniversityYearEnum";
 import {SatisfactionComponent} from "../../../components/Satisfaction/SatisfactionComponent";
 import {DistributionBar} from "../../../components/Satisfaction/DistributionBar";
+import {SentenceStringBolder} from "../../../components/SentenceStringBolder";
 
 interface props {
     preview: TeammatePreviewDto;
+    KeyTerms?: string[];
 }
 
 export class RatingPreviewCard extends React.Component<props>{
@@ -37,6 +39,7 @@ export class RatingPreviewCard extends React.Component<props>{
                                 </Typography>
                             </div>
                         }
+                        {this.props.KeyTerms && this.props.preview.description && <SentenceStringBolder KeyTerms={this.props.KeyTerms} InputSentence={this.props.preview.description}/>}
                     </CardContent>
                 </Card>
             </CustomLink>

@@ -70,7 +70,6 @@ export class TeammateRecordService extends BaseService implements ITeammateRecor
 
     PreciseTeammateSearch(TeammateObj: SearchTeammateDto): Promise<TeammatePreviewDto[]> {
         let query = PreciseSearch(TeammateObj.firstName, TeammateObj.lastName, TeammateObj.university, TeammateObj.year, TeammateObj.middleName, TeammateObj.description);
-        console.log(JSON.stringify(query));
         return this.teammateRecordRepo.searchRecord(query).then((teammates) =>
             teammates.map((teammate) => {
                 return this.convertTeammateToPreview(teammate)
@@ -148,6 +147,7 @@ export class TeammateRecordService extends BaseService implements ITeammateRecor
             lastName: teammate.lastName,
             averageRating: avgRating,
             university: teammate.university,
+            description: teammate.description,
             year: teammate.year,
             city: teammate.city
         }
