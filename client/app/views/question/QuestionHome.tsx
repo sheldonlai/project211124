@@ -102,6 +102,7 @@ class QuestionHomeComponent extends Component<QuestionViewProps, state> {
             return (
                 <Grid container justify="center">
                     <Grid item xs={12} style={{textAlign: "center"}}>
+                        {this.renderSearchBar()}
                         <Typography type="headline">
                             There are currently no ratings available.
                         </Typography>
@@ -117,11 +118,12 @@ class QuestionHomeComponent extends Component<QuestionViewProps, state> {
                 </Grid>
             )
         } else {
-            return <Grid container spacing={0}>
+            return <Grid container spacing={0} justify="center">
                 <Grid item xs={12} style={{maxWidth: 1082}}>
                     <PreviewCardsComponent list={this.props.featuredQuestions} maxRow={2}
                                            labelType={"headline"}
                                            label="Featured" trim={false} maxBlock={4}>
+                        {this.renderSearchBar()}
                         <Grid container justify="flex-end" direction="column" style={{width: "100%"}}>
                             <Grid item style={{paddding: 5}}>
                                 <Typography type="display1" style={{color: PRIMARY_COLOR}}>
@@ -156,7 +158,6 @@ class QuestionHomeComponent extends Component<QuestionViewProps, state> {
         }
         return (
             <div>
-                {this.renderSearchBar()}
                 {this.mainContent()}
             </div>
         )

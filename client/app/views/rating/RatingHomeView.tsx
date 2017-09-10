@@ -123,11 +123,9 @@ export class RatingHomeViewComponent extends React.Component<StateToProps & Disp
     render() {
         return (
             <div style={{padding: 10}}>
-                {this.renderSearchBar()}
                 <Grid container justify="center" direction="row-reverse">
-                    <Grid item xs={12} md={3} lg={2}>
-                    </Grid>
-                    <Grid item xs={12} md={8} lg={6}>
+                    <Grid item xs={12} md={10} lg={8}>
+                        {this.renderSearchBar()}
                         <div>
                             {
                                 this.props.loggedIn &&
