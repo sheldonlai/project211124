@@ -20,4 +20,6 @@ export interface TeammateRecordDto {
     year?: UniversityYearEnum;
     city?: City;
     ratings: TeammateRatingDto[];
+    createdAt?: Date;
+    updatedAt?: Date;
 }

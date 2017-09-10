@@ -21,6 +21,9 @@ import {RatingBox, RatingBoxView} from "./subcomponents/RatingBox";
 import {isNullOrUndefined} from "util";
 import {SatisfactionComponent} from "../../components/Satisfaction/SatisfactionComponent";
 import {DistributionBar} from "../../components/Satisfaction/DistributionBar";
+import {UniversityYearEnum} from "../../../../server/enums/UniversityYearEnum";
+import {convertEnumStringToViewString, getExpectedYearEnum} from "../../utils/utils";
+import {convertDateToString} from "../../utils/DateUtils";
 
 interface DispatchToProps {
     fetchTeammateRecord: (id: string) => void;
@@ -96,7 +99,7 @@ export class RatingViewComponent extends React.Component<props, state> {
     getAverageRating() {
         let sum = 0;
         for (let rating of this.props.ratingPage.ratings) {
-            sum += rating.satisfied? 1 : 0;
+            sum += rating.satisfied ? 1 : 0;
         }
         return sum / this.props.ratingPage.ratings.length;
     }
@@ -110,64 +113,87 @@ export class RatingViewComponent extends React.Component<props, state> {
 
     render() {
         const record = this.state.record;
+        if (this.props.ratingPageStatus === ReducerStateStatus.LOADING || isNullOrUndefined(record))
+            return <LoadingScreen/>;
+        const estimatedYear = getExpectedYearEnum(record.year, record.createdAt);
         return (
             <div style={{padding: 10}}>
                 <SplitVIewTemplate>
-                    {
-                        this.props.ratingPageStatus === ReducerStateStatus.LOADING || isNullOrUndefined(record)?
-                            <LoadingScreen/> :
-                            <div>
-                                <Grid container justify="flex-end">
-                                    <Grid item xs={12}>
-                                        <Paper style={{padding: 20}}>
-                                            <Typography type="display3" style={{textTransform: "capitalize"}}>
-                                                {record.firstName + " " + record.lastName}
-                                            </Typography>
-                                            <Typography type="caption">
-                                                Average Rating
-                                            </Typography>
-                                            <SatisfactionComponent readonly={true} satisfy={undefined}/>
-                                            <DistributionBar faction={this.getAverageRating()} />
-                                            <TeammateLocationEditor
-                                                university={record.university}
-                                                year={record.year}
-                                                city={record.city}
-                                                editable={false}
-                                            />
-                                            <Typography type="caption">
-                                                Description
-                                            </Typography>
-                                            <Typography type="body1">
-                                                {record.description}
-                                            </Typography>
-                                        </Paper>
-                                    </Grid>
+                    <div>
+                        <Grid container justify="flex-end">
+                            <Grid item xs={12}>
+                                <Paper style={{padding: 20}}>
+                                    <Typography type="display3" style={{textTransform: "capitalize"}}>
+                                        {record.firstName + " " + record.lastName}
+                                    </Typography>
+                                    <Typography type="caption">
+                                        Average Rating
+                                    </Typography>
+                                    <SatisfactionComponent readonly={true} satisfy={undefined}/>
+                                    <DistributionBar faction={this.getAverageRating()}/>
+                                    <Typography type="headline" gutterBottom>
+                                        {record.university.name}
+                                    </Typography>
+                                    <Typography type="caption">
+                                        Year level when created
+                                    </Typography>
+                                    <Typography type="body1" gutterBottom>
+                                        {
+                                            convertEnumStringToViewString(UniversityYearEnum[record.year])
+                                        }
+                                    </Typography>
+                                    <Typography type="caption">
+                                        Created on
+                                    </Typography>
+                                    <Typography type="body1" gutterBottom>
+                                        {
+                                            convertDateToString(record.createdAt)
+                                        }
+                                    </Typography>
                                     {
-                                        record.ratings.map((e) => {
-                                            return <RatingBoxView
-                                                key={e._id ? e._id : "new"}
-                                                user={this.props.user}
-                                                rating={e}
-                                                onRatingChange={this.updateRating}
-                                                recordId={record._id}
-                                                onCancel={this.CancelRatingsEdit}
-                                            />
-                                        })
-                                    }
-                                    {
-                                        !isNullOrUndefined(this.props.user) &&
-                                        record.ratings.filter((e) =>
-                                            e.createdBy._id === this.props.user._id).length < 1 &&
-                                        <div onClick={this.addRating}
-                                             style={{float: 'right', marginTop: 5}}>
-                                            <Button fab color="primary">
-                                                <AddIcon/>
-                                            </Button>
+                                        estimatedYear !== record.year &&
+                                        <div>
+                                            <Typography>
+                                                Estimated current year level
+                                            </Typography>
+                                            <Typography type="body1" gutterBottom>
+                                                {
+                                                    convertEnumStringToViewString(
+                                                        UniversityYearEnum[estimatedYear]
+                                                    )
+                                                }
+                                            </Typography>
                                         </div>
                                     }
-                                </Grid>
-                            </div>
-                    }
+
+                                </Paper>
+                            </Grid>
+                            {
+                                record.ratings.map((e) => {
+                                    return <RatingBoxView
+                                        key={e._id ? e._id : "new"}
+                                        user={this.props.user}
+                                        rating={e}
+                                        onRatingChange={this.updateRating}
+                                        recordId={record._id}
+                                        onCancel={this.CancelRatingsEdit}
+                                    />
+                                })
+                            }
+                            {
+                                !isNullOrUndefined(this.props.user) &&
+                                record.ratings.filter((e) =>
+                                    e.createdBy._id === this.props.user._id).length < 1 &&
+                                <div onClick={this.addRating}
+                                     style={{float: 'right', marginTop: 5}}>
+                                    <Button fab color="primary">
+                                        <AddIcon/>
+                                    </Button>
+                                </div>
+                            }
+                        </Grid>
+                    </div>
+
                     <div/>
                 </SplitVIewTemplate>
             </div>

@@ -21,9 +21,10 @@ export class Routes {
     static profile = "/profile/:username";
 
     // rating
-    static rate_my_teammate = "/rating-my-teammate";
-    static create_teammate_record = "/create-teammate-record";
-    static rating = "/rating/:id";
+    static people = "/people";
+    static people_new = "/people-new";
+    static create_teammate_record = "/people/create-record";
+    static rating = "/people-view/:id";
 
     // admin
     static admin = '/admin';

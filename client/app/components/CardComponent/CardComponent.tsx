@@ -26,7 +26,9 @@ const cardStyle = {
     position: "relative",
     //background:"linear-gradient(transparent 150px, white)"
     borderBottom: "#eee 1px solid",
-    // background : "#f9f9f9"
+    borderRight: "#eee 1px solid",
+    // background : "#f9f9f9",
+
 };
 
 const shader: CSSProperties = {
@@ -51,7 +53,9 @@ export class CustomCard extends React.Component<CardComponentProps, state> {
     }
 
     render() {
-        const width = this.props.wide ? 500 + 16 : 250;
+        let width = this.props.wide ? 500 + 16 : 250;
+        // account border right
+        width--;
         let dateString;
         try {
             dateString = convertDateToString(this.props.date);

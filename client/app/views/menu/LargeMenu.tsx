@@ -81,7 +81,8 @@ export class LargeMenu extends React.Component<props> {
                     </CustomLink>
                     {MenuButton("Questions", Routes.question)}
                     {MenuButton("Stories", Routes.story)}
-                    {MenuButton("Teammate", Routes.rate_my_teammate)}
+                    {MenuButton("People", Routes.people)}
+                    {MenuButton("People new", Routes.people_new)}
                 </div>
                 <div>
                     {this.buttons()}

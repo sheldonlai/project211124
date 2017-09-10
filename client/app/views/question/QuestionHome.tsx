@@ -20,6 +20,7 @@ import {RawDraftContentState} from "draft-js";
 import {UserDto} from "../../../../server/dtos/auth/UserDto";
 import {QuestionDifficulty} from "../../../../server/models/Question";
 import {CategoryTypeEnum} from "../../../../server/enums/CategoryTypeEnum";
+import {PRIMARY_COLOR} from "../router";
 
 export interface QuestionViewProps extends QuestionHomeReducerState {
     loggedIn: boolean;
@@ -92,12 +93,14 @@ class QuestionHomeComponent extends Component<QuestionViewProps, state> {
     };
 
     BlurryQuestionSearch = () => {
-        
+
     }
 
     createQuestionButton = () => {
         if (this.props.loggedIn)
-            return <CustomLink to={Routes.createQuestion}><Button>Make new question</Button></CustomLink>;
+            return <CustomLink to={Routes.createQuestion}>
+                <Button color="accent" style={{fontSize: 18}}>Make new question</Button>
+            </CustomLink>;
         return undefined;
     };
 
@@ -122,8 +125,8 @@ class QuestionHomeComponent extends Component<QuestionViewProps, state> {
                 </Grid>
             )
         } else {
-            return (
-                <Grid container spacing={24}>
+            return <Grid container justify="center">
+                <Grid item xs={12} style={{maxWidth: 1082}}>
                     <Grid item xs={6} sm={3}>
                         {this.renderSearchBar()}
                     </Grid>
@@ -132,17 +135,37 @@ class QuestionHomeComponent extends Component<QuestionViewProps, state> {
                         {this.createQuestionButton()}
                     </Grid>
                     <PreviewCardsComponent list={this.props.featuredQuestions} maxRow={2}
-                                           label="Featured" trim={false} maxBlock={4}/>
+                                           labelType={"headline"}
+                                           label="Featured" trim={false} maxBlock={4}>
+                        <Grid container justify="flex-end" direction="column" style={{width: "100%"}}>
+                            <Grid item style={{paddding: 5}}>
+                                <Typography type="display1" style={{color: PRIMARY_COLOR}}>
+                                    Question
+                                </Typography>
+                                <Typography type="body1" color="secondary" style={{textAlign: "left"}}>
+                                    This module is build for people to ask questions, answer just about anything. With
+                                    categories to choose from, and addition tags to latch onto the posts, post should
+                                    able to be recognized and searched easily.
+                                </Typography>
+                            </Grid>
+                            <Grid item>
+                                {
+                                    this.props.loggedIn &&
+                                    this.createQuestionButton()
+                                }
+                            </Grid>
+                        </Grid>
+                    </PreviewCardsComponent>
                     <PreviewCardsComponent list={this.props.myQuestions} maxRow={2}
+                                           labelType={"headline"}
                                            label="My Questions" maxBlock={4}/>
                 </Grid>
-            )
+            </Grid>
         }
     };
 
 
     render() {
-        this.renderSearchBar();
         if (this.props.featuredQuestions.length == 0) {
             return <LoadingScreen/>
         }

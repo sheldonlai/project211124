@@ -15,6 +15,7 @@ import {CommentsComponent} from "./CommentsComponent";
 import Answer = FrontEndQuestionModels.Answer;
 import cloneAnswer = FrontEndQuestionModels.cloneAnswer;
 import {SharedCommentsComponent} from "../../../components/Comments/SharedCommentsComponent";
+import Icon from "material-ui/Icon/Icon";
 
 export interface AnswerBoxComponentProps {
     onAnswerChange: (answer: Answer) => void;
@@ -26,7 +27,7 @@ export interface AnswerBoxComponentProps {
     resetAnswer?: () => void;
 }
 
-const paperStyle = {height: "100%", padding: 5};
+const paperStyle = {height: "100%", padding: 5,};
 
 export class AnswerBoxComponent extends Component<AnswerBoxComponentProps & dispatch> {
 
@@ -44,8 +45,8 @@ export class AnswerBoxComponent extends Component<AnswerBoxComponentProps & disp
         const answer: Answer = {...this.props.answer};
         const editable = (this.props.user && this.props.user.username === answer.author.username);
         return (
-            <div>
-                <Paper style={{...paperStyle, marginBottom: 10, marginTop: 10}} elevation={1}>
+            <div style={{ marginLeft: "40px", }}>
+                <Paper style={{...paperStyle, marginBottom: 10, marginTop: 10, position: "relative"}} elevation={1}>
                     <div>
                         <Grid container justify="flex-end">
                             <Grid item>
@@ -60,7 +61,6 @@ export class AnswerBoxComponent extends Component<AnswerBoxComponentProps & disp
                                            style={{fontSize: 14}} reset={this.props.resetAnswer}
                         />
                         <Divider/>
-
                         <QuestionFooterComponent
                             onUpVote={this.upVote}
                             onDownVote={this.downVote}
@@ -70,6 +70,12 @@ export class AnswerBoxComponent extends Component<AnswerBoxComponentProps & disp
                             createdUtc={answer.createdUtc}
                         />
                     </div>
+                    <Grid container align={"center"}
+                          style={{position: "absolute", left: -40 ,top: 0, height: "100%"}}>
+                        <Grid item>
+                            <Icon style={{fontSize: 40}}>check</Icon>
+                        </Grid>
+                    </Grid>
                 </Paper>
                 <SharedCommentsComponent comments={this.props.answer.comments}
                                          user={this.props.user}

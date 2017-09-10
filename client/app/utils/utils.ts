@@ -1,5 +1,6 @@
 import {CSSProperties} from "react";
 import {DropDownSelectData} from "../components/Forms/DropDownSelect";
+import {UniversityYearEnum} from "../../../server/enums/UniversityYearEnum";
 export const listNumericalEnumValues = (enumObj : any): number[] => {
     return Object.keys(enumObj).map(k => enumObj[k]).filter(e => typeof e === "number");
 };
@@ -22,6 +23,34 @@ export const mapFieldsOnToObject = (object: any, fields: any) : any => {
         }
     }
     return object;
+};
+
+export const getExpectedYearEnum = (e: UniversityYearEnum, date: Date| string):UniversityYearEnum  => {
+    if (e === UniversityYearEnum.GRADUATE_STUDIES || e === UniversityYearEnum.GRADUATED){
+        return e;
+    }
+    if (typeof date === "string"){
+        date = new Date(date);
+    }
+
+    let regSchoolYear = getSchoolYear(date);
+    let thisSchoolYear = getSchoolYear(new Date());
+    let difference = thisSchoolYear - regSchoolYear;
+    let index = e + difference >= 4 ? UniversityYearEnum.GRADUATED : e + difference;
+    console.log(index)
+    let en = UniversityYearEnum[UniversityYearEnum[index]];
+    console.log(en)
+    return en;
+};
+
+const getSchoolYear = function (date: Date): number {
+    let schoolYear;
+    if (date.getMonth() >= 8){
+        schoolYear = date.getFullYear()
+    } else {
+        schoolYear = date.getFullYear() - 1
+    }
+    return schoolYear;
 };
 
 export const convertEnumStringToViewString = (key: string) => {

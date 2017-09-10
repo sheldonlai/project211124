@@ -5,10 +5,10 @@ import Question = FrontEndQuestionModels.Question;
 import QuestionPreview = FrontEndQuestionModels.QuestionPreview;
 import StoryPreview = FrontEndStoryModels.StoryPreview;
 
-const wordsThreshold = 200;
+const charThreshold = 40;
 
 export const isElementWide = (element : QuestionPreview|StoryPreview) => {
-    return element.content && element.content.length > wordsThreshold
+    return element.title && element.title.length > charThreshold
 };
 
 

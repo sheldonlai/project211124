@@ -107,6 +107,7 @@ export class StoryEditor extends React.Component<props, state>{
                             <Grid item xs={12} md={12}>
                                 <Typography type="caption" gutterBottom>Content :</Typography>
                                 <CustomEditor value={this.state.content}
+                                              style={{minHeight: 200}}
                                               onChange={(c) => this.updateStoryField('content', c)}
                                 />
                             </Grid>

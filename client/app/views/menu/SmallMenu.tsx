@@ -46,7 +46,7 @@ export class SmallMenu extends React.Component<props> {
                     <div>
                         {MenuButton("Questions", Routes.question, true)}
                         {MenuButton("Stories", Routes.story, true)}
-                        {MenuButton("Teammate", Routes.rate_my_teammate, true)}
+                        {MenuButton("People", Routes.people, true)}
 
                         {
                             this.props.user ?

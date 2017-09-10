@@ -69,10 +69,10 @@ export class PreviewCardsComponent extends React.Component<props, state> {
 
         // determine what the maximum width is used for
         let maxWidth = (n > listLength) ? boxWidth * listLength : n * boxWidth;
-        maxWidth += bodyMargin;
+        // maxWidth += bodyMargin;
         const labelType = this.props.labelType ? this.props.labelType : "display1";
         return (
-            <Grid container justify="center">
+            <Grid container justify="center" spacing={8}>
                 {this.props.children &&
                 <Grid item style={{marginTop: 16, width: "100%", textAlign: "center"}}>
                     <div style={{width: maxWidth, margin: "auto"}}>
@@ -80,7 +80,7 @@ export class PreviewCardsComponent extends React.Component<props, state> {
                     </div>
                 </Grid>}
                 <Grid item style={{marginTop: 16, width: maxWidth}}>
-                    <Typography type={labelType} style={{marginBottom: 10, color: PRIMARY_COLOR}}>
+                    <Typography type={labelType} color="secondary" style={{marginBottom: 10, color: PRIMARY_COLOR}}>
                         {this.props.label}
                     </Typography>
                     {

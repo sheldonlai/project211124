@@ -93,7 +93,7 @@ export class AnswerBoxesComponent extends Component<props, AnswerBoxesComponentS
 
     render() {
         return (
-            <div>
+            <div style={{position: "relative"}}>
                 <Prompt
                     when={this.state.editAnswer}
                     message={location => (

@@ -21,6 +21,7 @@ import {RegistrationView} from "./auth/RegistrationView";
 import {AppStoreState} from "../stores/AppStore";
 import {UserTypeEnum} from "../../../server/enums/UserTypeEnum";
 import {ProfileView} from "./profile/ProfileView";
+import {PeopleHomeView} from "./rating/PeopleHome";
 
 let questionLoader = require("bundle-loader?lazy&name=question!./question/QuestionRouter");
 let storyLoader = require("bundle-loader?lazy&name=story!./story/StoryRouter");
@@ -83,7 +84,8 @@ export class App extends React.Component<any, any> {
                             <Route path={Routes.story} component={StoryModule}/>
                             <Route exact path={Routes.my_profile} component={UserProfileView}/>
                             <Route exact path={Routes.profile} component={ProfileView}/>
-                            <Route exact path={Routes.rate_my_teammate} component={RatingHomeView}/>
+                            <Route exact path={Routes.people} component={RatingHomeView}/>
+                            <Route exact path={Routes.people_new} component={PeopleHomeView}/>
                             <Route exact path={Routes.create_teammate_record} component={CreateTeammateView}/>
                             <Route exact path={Routes.rating} component={RatingPageView}/>
                             <Route path={Routes.admin} component={AdminModule} />
