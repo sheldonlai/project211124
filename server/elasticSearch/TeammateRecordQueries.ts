@@ -138,26 +138,30 @@ export const BlurrySearch = (InputStrings: string[]) => {
 
     let shouldArray: any[] = [];
     InputStrings.forEach((inputString) => {
-        shouldArray.push({
-            "prefix": {
-                "firstName": inputString,
+        shouldArray.push({"fuzzy": {
+            "firstName": {
+                "value": inputString,
+                "fuzziness": 2,
             }
-        });
-        shouldArray.push({
-            "prefix": {
-                "middleName": inputString,
+        }});
+        shouldArray.push({"fuzzy": {
+            "middleName": {
+                "value": inputString,
+                "fuzziness": 2,
             }
-        });
-        shouldArray.push({
-            "prefix": {
-                "lastName": inputString,
+        }});
+        shouldArray.push({"fuzzy": {
+            "lastName": {
+                "value": inputString,
+                "fuzziness": 2,
             }
-        });
-        shouldArray.push({
-            "prefix": {
-                "description": inputString,
+        }});
+        shouldArray.push({"fuzzy": {
+            "description": {
+                "value": inputString,
+                "fuzziness": 2,
             }
-        });
+        }});
     });
     query.bool["should"] = shouldArray;
     console.log(JSON.stringify(query));

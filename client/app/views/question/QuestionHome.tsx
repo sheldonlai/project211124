@@ -87,7 +87,7 @@ class QuestionHomeComponent extends Component<QuestionViewProps, state> {
 
     BlurryQuestionSearch = () => {
 
-    }
+    };
 
     createQuestionButton = () => {
         if (this.props.loggedIn)
