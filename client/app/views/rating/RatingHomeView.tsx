@@ -12,7 +12,6 @@ import {ReducerStateStatus} from "../../constants/ReducerStateStatus";
 import {LoadingScreen} from "../../components/Animations/LoadingScreen";
 import {RatingPreviewCard} from "./subcomponents/RatingPreviewCard";
 import {TeammateRecordDto} from "../../../../server/dtos/rating/TeammateRecordDto";
-import Input from "material-ui/Input/Input";
 import Icon from 'material-ui/Icon';
 import IconButton from 'material-ui/IconButton'
 import Typography from "material-ui/Typography";
