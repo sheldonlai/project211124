@@ -18,9 +18,12 @@ import Typography from "material-ui/Typography";
 import TextField from 'material-ui/TextField';
 import {AdvancedSearchEditor} from './subcomponents/AdvancedSearchEditor'
 import {RatingApiController} from "../../api.controllers/RatingApiController";
+import Input from "material-ui/Input/Input";
+import {SearchBarComponent} from "../../components/SearchBar/SearchBarComponent";
 
 export class RatingHomeViewComponent extends React.Component<StateToProps & DispatchToProps, any> {
     private apiController: RatingApiController;
+
     constructor(props) {
         super(props);
         this.state = {
@@ -64,29 +67,21 @@ export class RatingHomeViewComponent extends React.Component<StateToProps & Disp
     };
 
     renderSearchBar = () => {
-        return(
+        return (
             <div>
+                <SearchBarComponent
+                    value={this.state.SearchString}
+                    onChange={this.onSearchStringChange}
+                    onSearch={this.FindSimilarTeammates}
+                    onAdvanceSearch={() => this.setState({AdvancedSearch: !this.state.AdvancedSearch})}
+                />
                 <Grid container spacing={24}>
-                    <Grid item xs={12} sm={6}>
-                    </Grid>
-                    <Grid item xs={12} sm={6}>
-                    <TextField
-                        label="Search..."
-                        placeholder="Search..."
-                        value = {this.state.searchString}
-                        onChange = {this.onSearchStringChange}
-                    />
-                    <IconButton onClick={this.FindSimilarTeammates}>
-                        <Icon>search</Icon>
-                    </IconButton>
-                    <Typography style={{cursor: "pointer"}} type="caption" align="justify" onClick={()=>this.setState({AdvancedSearch: !this.state.AdvancedSearch})}>
-                        Advanced
-                    </Typography>
-                    </Grid>
                     <Grid item xs={2}>
                     </Grid>
                     <Grid item sm={8}>
-                        {this.state.AdvancedSearch && <AdvancedSearchEditor SearchTeammateObj={this.state.SearchTeammateObj} UpdateSearchTeammateObj={this.UpdateSearchTeammateObj}/>}
+                        {this.state.AdvancedSearch &&
+                        <AdvancedSearchEditor SearchTeammateObj={this.state.SearchTeammateObj}
+                                              UpdateSearchTeammateObj={this.UpdateSearchTeammateObj}/>}
                     </Grid>
                 </Grid>
             </div>
@@ -94,10 +89,10 @@ export class RatingHomeViewComponent extends React.Component<StateToProps & Disp
     }
 
     FindSimilarTeammates = () => {
-        if(this.state.AdvancedSearch){
+        if (this.state.AdvancedSearch) {
             this.PreciseTeammateSearch(this.state.SearchTeammateObj);
         }
-        else{
+        else {
             let splittedStrings: string[] = this.state.searchString.split(" ");
             this.props.BlurrySearch(splittedStrings);
         }
@@ -142,9 +137,8 @@ export class RatingHomeViewComponent extends React.Component<StateToProps & Disp
                             }
                             {
                                 this.props.ratingPreviewStatus === ReducerStateStatus.LOADING ?
-                                    <LoadingScreen/>:
+                                    <LoadingScreen/> :
                                     this.mainContent()
-
                             }
                         </div>
                     </Grid>

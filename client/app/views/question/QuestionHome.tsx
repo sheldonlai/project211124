@@ -15,12 +15,13 @@ import Typography from "material-ui/Typography";
 import {PreviewCardsComponent} from "../../components/CardComponent/PreviewCardsComponent";
 import Icon from 'material-ui/Icon';
 import IconButton from 'material-ui/IconButton'
-import TextField from 'material-ui/TextField';
 import {RawDraftContentState} from "draft-js";
 import {UserDto} from "../../../../server/dtos/auth/UserDto";
 import {QuestionDifficulty} from "../../../../server/models/Question";
 import {CategoryTypeEnum} from "../../../../server/enums/CategoryTypeEnum";
 import {PRIMARY_COLOR} from "../router";
+import Input from "material-ui/Input/Input";
+import {SearchBarComponent} from "../../components/SearchBar/SearchBarComponent";
 
 export interface QuestionViewProps extends QuestionHomeReducerState {
     loggedIn: boolean;
@@ -30,12 +31,12 @@ export interface QuestionViewProps extends QuestionHomeReducerState {
 
 interface state {
     SearchQuestionObj: {
-        _id : string,
-        title : string,
+        _id: string,
+        title: string,
         author: UserDto,
-        content : RawDraftContentState,
+        content: RawDraftContentState,
         //createdUtc: Date;
-        tags : any[],
+        tags: any[],
         difficulty: QuestionDifficulty,
         category: CategoryTypeEnum,
     };
@@ -44,21 +45,21 @@ interface state {
 }
 
 class QuestionHomeComponent extends Component<QuestionViewProps, state> {
-    constructor(props){
+    constructor(props) {
         super(props);
         this.state = {
-          SearchQuestionObj: {
-              _id : "",
-            title : "",
-            author: undefined,
-            content : undefined,
-            //createdUtc: Date;
-            tags : [],
-            difficulty: undefined,
-            category: undefined,
-          },
-          AdvancedSearch: false,
-          SearchString: "",
+            SearchQuestionObj: {
+                _id: "",
+                title: "",
+                author: undefined,
+                content: undefined,
+                //createdUtc: Date;
+                tags: [],
+                difficulty: undefined,
+                category: undefined,
+            },
+            AdvancedSearch: false,
+            SearchString: "",
         };
     }
 
@@ -68,22 +69,14 @@ class QuestionHomeComponent extends Component<QuestionViewProps, state> {
     }
 
     renderSearchBar = () => {
-        return(
+        return (
             <div>
-                <Grid>
-                    <TextField
-                        label="Search..."
-                        placeholder="Search..."
-                        value = {this.state.SearchString}
-                        onChange = {this.UpdateSearchString}
-                    />
-                    <IconButton>
-                        <Icon>search</Icon>
-                    </IconButton>
-                </Grid>
-                <Typography style={{cursor: "pointer"}} type="caption" align="justify" onClick={()=>this.setState({AdvancedSearch: !this.state.AdvancedSearch})}>
-                    Advanced
-                </Typography>
+                <SearchBarComponent
+                    value={this.state.SearchString}
+                    onChange={this.UpdateSearchString}
+                    onAdvanceSearch={() => this.setState({AdvancedSearch: !this.state.AdvancedSearch})}
+                    onSearch={() => {}}
+                />
             </div>
         )
     };
@@ -108,7 +101,6 @@ class QuestionHomeComponent extends Component<QuestionViewProps, state> {
         if (this.props.featuredQuestions.length < 1 && this.props.myQuestions.length < 1) {
             return (
                 <Grid container justify="center">
-                    {this.renderSearchBar()}
                     <Grid item xs={12} style={{textAlign: "center"}}>
                         <Typography type="headline">
                             There are currently no ratings available.
@@ -125,15 +117,8 @@ class QuestionHomeComponent extends Component<QuestionViewProps, state> {
                 </Grid>
             )
         } else {
-            return <Grid container justify="center">
+            return <Grid container spacing={0}>
                 <Grid item xs={12} style={{maxWidth: 1082}}>
-                    <Grid item xs={6} sm={3}>
-                        {this.renderSearchBar()}
-                    </Grid>
-                    <Grid item xs={12} sm={6}></Grid>
-                    <Grid item xs={6} sm={3}>
-                        {this.createQuestionButton()}
-                    </Grid>
                     <PreviewCardsComponent list={this.props.featuredQuestions} maxRow={2}
                                            labelType={"headline"}
                                            label="Featured" trim={false} maxBlock={4}>
@@ -171,6 +156,7 @@ class QuestionHomeComponent extends Component<QuestionViewProps, state> {
         }
         return (
             <div>
+                {this.renderSearchBar()}
                 {this.mainContent()}
             </div>
         )
