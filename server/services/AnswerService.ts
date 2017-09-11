@@ -9,6 +9,7 @@ import {UserAnswerVote} from "../models/UserAnswerVote";
 import {CommentDto} from "../dtos/q&a/CommentDto";
 import {ClientError} from "../errors/HttpStatus";
 import _ = require("lodash");
+import {QuestionRepository} from "../repositories/QuestionRepository";
 
 export interface IAnswerService {
     createAnswer(user: User, answer: AnswerDto): Promise<AnswerDto>;
@@ -18,13 +19,14 @@ export interface IAnswerService {
     createAnswerComment(comment: CommentDto, answerId: string, user: User): Promise<AnswerDto>;
     updateAnswerComment(comment: CommentDto, answerId: string, user: User): Promise<AnswerDto>;
     deleteAnswerComment(comment: CommentDto, answerId: string, user: User): Promise<AnswerDto>;
+    markAnswerAsCorrect(answer: Answer, user: User): Promise<AnswerDto[]>;
 }
 
 export class AnswerService extends BaseService implements IAnswerService {
 
     private answerRepository: IAnswerRepository;
 
-    constructor(answerRepository: IAnswerRepository) {
+    constructor(answerRepository: IAnswerRepository, private questionRepository: QuestionRepository) {
         super();
 
         this.answerRepository = answerRepository;
@@ -87,6 +89,27 @@ export class AnswerService extends BaseService implements IAnswerService {
             answerFound.comments[commentIndx].lastEditedUtc = now;
             return this.answerRepository.update(answerFound);
         })
+    }
+
+    async markAnswerAsCorrect(answer: Answer, user: User): Promise<AnswerDto[]> {
+        let answerFound = await this.answerRepository.getById(answer._id);
+        let question = await this.questionRepository.getById(answer.question);
+        if (question.author._id != user._id){
+            throw new AppError("You are not authorized to perform this action");
+        }
+        let otherAnswers: Answer[] = await this.answerRepository.getByQuestionId(answer.question);
+        let promises = [];
+        for (let a of otherAnswers){
+            if (a.correct && a._id != answerFound._id){
+                a.correct = false;
+                promises.push(this.answerRepository.update(a));
+            }
+        }
+        answerFound.correct = true;
+        promises.push(this.answerRepository.update(answerFound));
+        await Promise.all(promises);
+        // TODO: choose what to  return
+        return await this.answerRepository.getByQuestionId(answer.question);
     }
 
     deleteAnswerComment(comment: CommentDto, answerId: string, user: User){

@@ -16,6 +16,7 @@ export class Answer extends BaseModel {
     lastEditedUtc: Date;
     createdUtc: Date;
     comments: QuestionComment[];
+    correct?: boolean;
 
     constructor(question: Question|QuestionDto, content: RawDraftContentState, author: User, comments?: QuestionComment[]) {
         super();
@@ -45,7 +46,8 @@ const schema = new Schema({
         commentContent: {type: String, required: true, es_indexed: true},
         lastEditedUtc: {type: Date, default: Date.now},
         createdUtc: {type: Date, default: Date.now}
-    }]
+    }],
+    correct: {type: Boolean, default: false},
 });
 
 const autoPopulateUsers = function (next) {

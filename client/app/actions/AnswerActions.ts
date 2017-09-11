@@ -43,6 +43,17 @@ export class AnswerActions extends BaseActions {
         }
     }
 
+    static markAnswerAsCorrect(answer: Answer): any {
+        return function (dispatch){
+            dispatch({
+                type: QuestionActionTypes.MarkAnswerAsCorrectReq
+            })
+            apiController.markAnswerAsCorrect(answer).then((res) => {
+                dispatch({data: res.data, type: QuestionActionTypes.MarkAnswerAsCorrectReq });
+            }).catch((err) => AnswerActions.handleError(dispatch, QuestionActionTypes.MarkAnswerAsCorrectErr))
+        }
+    }
+
     static upVoteAnswer(answer: Answer): (dispatch: any) => void {
         return function (dispatch) {
             apiController.upVoteAnswer(answer).then((response) => {

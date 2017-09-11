@@ -53,5 +53,11 @@ export enum QuestionActionTypes {
 
     QuestionPageError = <any> "QuestionPageError",
 
-    QuestionEditorStateChange = <any> "QuestionEditorStateChange"
+    QuestionEditorStateChange = <any> "QuestionEditorStateChange",
+
+    MarkAnswerAsCorrectReq = <any> "MarkAnswerAsCorrectReq",
+    MarkAnswerAsCorrectOK = <any> "MarkAnswerAsCorrectOK",
+    MarkAnswerAsCorrectErr = <any> "MarkAnswerAsCorrectErr",
+
+
 }

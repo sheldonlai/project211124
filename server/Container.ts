@@ -49,7 +49,8 @@ export class ServiceProvider {
         RepositoryProvider.TagRepository,
         RepositoryProvider.UserRepository);
     static AnswerService = new AnswerService(
-        RepositoryProvider.AnswerRepository
+        RepositoryProvider.AnswerRepository,
+        RepositoryProvider.QuestionRepository
     );
     static FileSystemService = new FileSystemService(
         RepositoryProvider.FileUploadRecordRepository

@@ -40,6 +40,8 @@ export class APIUrls {
     static UpdateAnswerComment = "/update-answer-comment/:id";
     static DeleteAnswerComment = "/delete-answer-comment/:id";
 
+    static MarkAnswerAsCorrect = "/answer-correct";
+
     /* Utils */
     static getCountries = "/get-countries";
     static getUniversitiesByCountry = "/university/:country";
@@ -72,5 +74,7 @@ export class APIUrls {
     /* Admin*/
     static SetDashboardSettings = "/set-dashboard-settings";
     static GetDashboardSettings = "/get-dashboard-settings";
+
+
 
 }

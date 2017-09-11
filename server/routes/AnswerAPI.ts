@@ -22,6 +22,7 @@ export class AnswerAPI extends BaseAPI {
         this.router.put(APIUrls.CreateAnswerComment, mustBeAuthenticated, this.CreateComment);
         this.router.put(APIUrls.UpdateAnswerComment, mustBeAuthenticated, this.UpdateComment);
         this.router.put(APIUrls.DeleteAnswerComment, mustBeAuthenticated, this.DeleteComment);
+        this.router.put(APIUrls.DeleteAnswerComment, mustBeAuthenticated, this.MarkAnswerAsCorrect);
     }
 
     public CreateAnswer = (req: AuthRequest, res: Response, next: NextFunction) => {
@@ -68,10 +69,18 @@ export class AnswerAPI extends BaseAPI {
     };
 
     public DeleteComment = (req: AuthRequest, res: Response, next: NextFunction) => {
-        let answerId: string = req.body.answerId;
+        let answerId: string = req.params.id;
         let user: User = req.user;
         let comment = req.body;
         let result = this.service.deleteAnswerComment(comment, answerId, user);
         this.respondPromise(result, res, next);
     };
+
+    public MarkAnswerAsCorrect = (req: AuthRequest, res: Response, next: NextFunction) => {
+        let answer = req.body;
+        let user: User = req.user;
+        let result = this.service.markAnswerAsCorrect(answer, user);
+        this.respondPromise(result, res, next);
+    };
+
 }

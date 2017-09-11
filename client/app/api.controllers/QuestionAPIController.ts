@@ -24,10 +24,10 @@ export class QuestionAPIController extends ApiController {
     }
 
     private constructor() {
+        super();
         if (QuestionAPIController._instance) {
             throw new Error("Error: Instantiation failed: Use AuthService.getInstance() instead of new.");
         }
-        super();
         QuestionAPIController._instance = this;
     }
 
@@ -94,25 +94,25 @@ export class QuestionAPIController extends ApiController {
     createAnswerComment(comment: CommentDto, answerId: string) {
         return this.put(APIUrls.CreateAnswerComment.replace(":id", answerId), comment)
             .then((response: AxiosResponse) => {
-            response.data = this.convertDtoToAnswer(response.data);
-            return response;
-        });
+                response.data = this.convertDtoToAnswer(response.data);
+                return response;
+            });
     }
 
     updateAnswerComment(comment: CommentDto, answerId: string) {
         return this.put(APIUrls.UpdateAnswerComment.replace(":id", answerId), comment)
             .then((response: AxiosResponse) => {
-            response.data = this.convertDtoToAnswer(response.data);
-            return response;
-        });
+                response.data = this.convertDtoToAnswer(response.data);
+                return response;
+            });
     }
 
     DeleteAnswerComment(comment: CommentDto, answerId: string) {
         return this.put(APIUrls.DeleteAnswerComment.replace(":id", answerId), comment)
             .then((response: AxiosResponse) => {
-            response.data = this.convertDtoToAnswer(response.data);
-            return response;
-        })
+                response.data = this.convertDtoToAnswer(response.data);
+                return response;
+            })
     }
 
     fetchQuestionByID(id: string): AxiosPromise {
@@ -143,6 +143,10 @@ export class QuestionAPIController extends ApiController {
 
     downVoteAnswer(answer: Answer): AxiosPromise {
         return this.answerPutApiHelper(APIUrls.DownVoteAnswer, answer);
+    }
+
+    markAnswerAsCorrect = (answer: Answer) => {
+        return this.answerPutApiHelper(APIUrls.MarkAnswerAsCorrect, answer);
     }
 
     // Helpers
