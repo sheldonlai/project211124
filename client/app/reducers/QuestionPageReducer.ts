@@ -34,6 +34,7 @@ const getErrorState = (state: QuestionPageReducerState, action: any) => {
 };
 
 const getOKState = (questionPage: QuestionPage) => {
+    sortAnswers(questionPage.answers);
     return {
         status: ReducerStateStatus.DONE,
         questionPage: questionPage,
@@ -61,6 +62,19 @@ const getUpdatedStateForAnswer = (answer : Answer, state: QuestionPageReducerSta
     state.questionPage = cloneQuestionPage(state.questionPage);
     state.questionPage.answers = state.questionPage.answers.map(a => a._id == answer._id? answer: a);
     return getOKState(state.questionPage);
+};
+
+const sortAnswers = (answers: Answer[]) => {
+  answers = answers.sort((a, b) => {
+      if (a.correct) {
+          return -1;
+      } else if (b.correct) {
+          return 1
+      } else {
+          return (b.upVotes - b.downVotes) - (a.upVotes - a.downVotes);
+      }
+  });
+  return answers;
 };
 
 export const QuestionPageReducer = (state = initialState, action): QuestionPageReducerState => {
@@ -160,6 +174,12 @@ export const QuestionPageReducer = (state = initialState, action): QuestionPageR
         case QuestionActionTypes.DownVoteAnswer:
             return getUpdatedStateForAnswer(action.data, state);
 
+        case QuestionActionTypes.MarkAnswerAsCorrectReq:
+            return state;
+        case QuestionActionTypes.MarkAnswerAsCorrectOK:
+            state.questionPage = cloneQuestionPage(state.questionPage);
+            state.questionPage.answers = sortAnswers(action.data);
+            return getOKState(state.questionPage);
         default:
             return state;
     }

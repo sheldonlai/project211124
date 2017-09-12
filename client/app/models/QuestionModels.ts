@@ -62,6 +62,7 @@ export namespace FrontEndQuestionModels {
         lastEditedUtc: Date;
         createdUtc: Date;
         comments: CommentDto[];
+        correct?: boolean;
 
         constructor(questionId: string, author: UserDto) {
             this.question = questionId;

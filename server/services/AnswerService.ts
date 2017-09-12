@@ -94,7 +94,7 @@ export class AnswerService extends BaseService implements IAnswerService {
     async markAnswerAsCorrect(answer: Answer, user: User): Promise<AnswerDto[]> {
         let answerFound = await this.answerRepository.getById(answer._id);
         let question = await this.questionRepository.getById(answer.question);
-        if (question.author._id != user._id){
+        if (question.author._id.toString() !== user._id.toString()){
             throw new AppError("You are not authorized to perform this action");
         }
         let otherAnswers: Answer[] = await this.answerRepository.getByQuestionId(answer.question);

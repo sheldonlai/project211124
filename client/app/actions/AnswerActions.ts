@@ -49,7 +49,7 @@ export class AnswerActions extends BaseActions {
                 type: QuestionActionTypes.MarkAnswerAsCorrectReq
             })
             apiController.markAnswerAsCorrect(answer).then((res) => {
-                dispatch({data: res.data, type: QuestionActionTypes.MarkAnswerAsCorrectReq });
+                dispatch({data: res.data, type: QuestionActionTypes.MarkAnswerAsCorrectOK });
             }).catch((err) => AnswerActions.handleError(dispatch, QuestionActionTypes.MarkAnswerAsCorrectErr))
         }
     }

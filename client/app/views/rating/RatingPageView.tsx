@@ -153,7 +153,7 @@ export class RatingViewComponent extends React.Component<props, state> {
                                     {
                                         estimatedYear !== record.year &&
                                         <div>
-                                            <Typography>
+                                            <Typography type="caption">
                                                 Estimated current year level
                                             </Typography>
                                             <Typography type="body1" gutterBottom>

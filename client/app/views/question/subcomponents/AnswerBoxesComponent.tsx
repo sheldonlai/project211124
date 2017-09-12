@@ -112,6 +112,7 @@ export class AnswerBoxesComponent extends Component<props, AnswerBoxesComponentS
                                        key={key}
                                        onEditClick={() => this.onEditClick(answer)}
                                        resetAnswer={this.resetAnswers}
+                                       onMarkAnswerAsCorrect={() => this.props.markAnswerAsCorrect(answer)}
                         />
                     )
                 })}
@@ -136,6 +137,7 @@ interface  StateToProps {
 interface DispatchToProps {
     editAnswer: (answer: Answer) => void;
     addAnswer: (answer: Answer) => void;
+    markAnswerAsCorrect: (answer: Answer) => void;
 }
 
 const mapStateToProps = (state: AppStoreState): StateToProps => ({
@@ -147,6 +149,7 @@ const mapStateToProps = (state: AppStoreState): StateToProps => ({
 const mapDispatchToProps = (dispatch): DispatchToProps => ({
     editAnswer: (answer: Answer) => dispatch(AnswerActions.updateAnswer(answer)),
     addAnswer: (answer: Answer) => dispatch(AnswerActions.createAnswer(answer)),
+    markAnswerAsCorrect: (answer: Answer) => dispatch(AnswerActions.markAnswerAsCorrect(answer)),
 });
 
 export const AnswerBoxesView = connect<StateToProps, DispatchToProps, any>(

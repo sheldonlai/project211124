@@ -16,8 +16,10 @@ import Answer = FrontEndQuestionModels.Answer;
 import cloneAnswer = FrontEndQuestionModels.cloneAnswer;
 import {SharedCommentsComponent} from "../../../components/Comments/SharedCommentsComponent";
 import Icon from "material-ui/Icon/Icon";
+import {AppStoreState} from "../../../stores/AppStore";
+import {PRIMARY_COLOR} from "../../router";
 
-export interface AnswerBoxComponentProps {
+export interface AnswerBoxComponentProps{
     onAnswerChange: (answer: Answer) => void;
     onSubmit: () => void;
     onEditClick: () => void;
@@ -25,11 +27,12 @@ export interface AnswerBoxComponentProps {
     answer: Answer;
     editMode: boolean;
     resetAnswer?: () => void;
+    onMarkAnswerAsCorrect: () => void;
 }
 
 const paperStyle = {height: "100%", padding: 5,};
 
-export class AnswerBoxComponent extends Component<AnswerBoxComponentProps & dispatch> {
+export class AnswerBoxComponent extends Component<AnswerBoxComponentProps & dispatch & stateToProps> {
 
     onContentChange = (editorState) => {
         let answer = cloneAnswer(this.props.answer);
@@ -50,6 +53,10 @@ export class AnswerBoxComponent extends Component<AnswerBoxComponentProps & disp
                     <div>
                         <Grid container justify="flex-end">
                             <Grid item>
+                                {this.props.user._id === this.props.questionAuthor._id && !this.props.editMode &&
+                                <Button color="primary" onClick={this.props.onMarkAnswerAsCorrect}>
+                                    Mark as Correct
+                                </Button>}
                                 {editable && !this.props.editMode &&
                                 <Button color="primary" onClick={this.props.onEditClick}>Edit</Button>}
                             </Grid>
@@ -70,12 +77,13 @@ export class AnswerBoxComponent extends Component<AnswerBoxComponentProps & disp
                             createdUtc={answer.createdUtc}
                         />
                     </div>
+                    {answer.correct &&
                     <Grid container align={"center"}
-                          style={{position: "absolute", left: -40 ,top: 0, height: "100%"}}>
+                          style={{position: "absolute", left: -40 ,top: 0, height: "100%", width:40}}>
                         <Grid item>
-                            <Icon style={{fontSize: 40}}>check</Icon>
+                            <Icon style={{fontSize: 40, color: PRIMARY_COLOR}}>check</Icon>
                         </Grid>
-                    </Grid>
+                    </Grid>}
                 </Paper>
                 <SharedCommentsComponent comments={this.props.answer.comments}
                                          user={this.props.user}
@@ -96,6 +104,14 @@ interface dispatch {
     deleteComment: (comment: CommentDto, answerId: string) => void;
 }
 
+interface stateToProps {
+    questionAuthor: UserDto;
+}
+
+const mapStateToProps = (state: AppStoreState): stateToProps => ({
+    questionAuthor : state.questionPage.questionPage.question.author
+});
+
 const mapDispatchToProps = (dispatch): dispatch => ({
     upVote: (answer: Answer) => dispatch(AnswerActions.upVoteAnswer(answer)),
     downVote: (answer: Answer) => dispatch(AnswerActions.downVoteAnswer(answer)),
@@ -104,7 +120,7 @@ const mapDispatchToProps = (dispatch): dispatch => ({
     deleteComment: (comment: CommentDto, answerId: string) => dispatch(AnswerActions.deleteComment(comment, answerId)),
 });
 
-export const AnswerBoxView = connect<void, dispatch, AnswerBoxComponentProps>(
-    undefined,
+export const AnswerBoxView = connect<stateToProps, dispatch, AnswerBoxComponentProps>(
+    mapStateToProps,
     mapDispatchToProps
 )(AnswerBoxComponent);

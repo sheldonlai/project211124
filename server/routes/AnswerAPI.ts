@@ -22,7 +22,7 @@ export class AnswerAPI extends BaseAPI {
         this.router.put(APIUrls.CreateAnswerComment, mustBeAuthenticated, this.CreateComment);
         this.router.put(APIUrls.UpdateAnswerComment, mustBeAuthenticated, this.UpdateComment);
         this.router.put(APIUrls.DeleteAnswerComment, mustBeAuthenticated, this.DeleteComment);
-        this.router.put(APIUrls.DeleteAnswerComment, mustBeAuthenticated, this.MarkAnswerAsCorrect);
+        this.router.put(APIUrls.MarkAnswerAsCorrect, mustBeAuthenticated, this.MarkAnswerAsCorrect);
     }
 
     public CreateAnswer = (req: AuthRequest, res: Response, next: NextFunction) => {

@@ -146,8 +146,11 @@ export class QuestionAPIController extends ApiController {
     }
 
     markAnswerAsCorrect = (answer: Answer) => {
-        return this.answerPutApiHelper(APIUrls.MarkAnswerAsCorrect, answer);
-    }
+        return this.put(APIUrls.MarkAnswerAsCorrect, answer).then((response: AxiosResponse) => {
+            response.data = response.data.map( e => this.convertDtoToAnswer(e));
+            return response;
+        });
+    };
 
     // Helpers
 
