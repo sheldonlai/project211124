@@ -75,6 +75,10 @@ export class APIUrls {
     static SetDashboardSettings = "/set-dashboard-settings";
     static GetDashboardSettings = "/get-dashboard-settings";
 
+    /* Notification */
+    static NotificationFetch = "/fetch-notifications";
+
+
 
 
 }
