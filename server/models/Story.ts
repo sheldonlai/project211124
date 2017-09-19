@@ -7,6 +7,7 @@ import {Tag, tagSchema} from "./Tags";
 import {CategoryTypeEnum} from "../enums/CategoryTypeEnum";
 import {DraftJsHelper} from "../utils/DraftJsHelper";
 import {StoryPreviewDto} from "../dtos/story/StoryPreviewDto";
+import {FileUploadRecord} from "./FileUploadRecord";
 
 let mongoosastic = require("mongoosastic");
 
@@ -38,6 +39,7 @@ export class Story extends BaseModel {
     comments: StoryComment[];
     publicityStatus: PublicityStatus;
     category: CategoryTypeEnum;
+    previewImage?: FileUploadRecord;
 
     constructor(title?: string, content?: RawDraftContentState, author?: User, tags?: any[], isPublished?: boolean,
                 publicityStatus?: PublicityStatus, category?: CategoryTypeEnum,) {
@@ -115,11 +117,12 @@ const storySchema = new Schema({
     views: {type: Number, default: 0, es_indexed: true},
     lastEditedUtc: {type: Date, default: Date.now, es_indexed: true},
     createdUtc: {type: Date, default: Date.now, es_indexed: true},
+    previewImage: {type: Schema.Types.ObjectId, ref: 'fileUploadRecord'}
 });
 
 
 const autoPopulateUsers = function (next) {
-    this.populate(['author', "comments.commentBy", "tags"]);
+    this.populate(['author', "comments.commentBy", "tags", "previewImage"]);
     next();
 };
 
