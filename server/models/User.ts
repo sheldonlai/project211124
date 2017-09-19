@@ -1,10 +1,11 @@
-import {model, Schema, Document} from "mongoose";
+import {model, Schema, Document, Types} from "mongoose";
 import {UserTypeEnum} from "../enums/UserTypeEnum";
 import {BaseModel} from './Base/BaseModel';
 import {AppError} from "../errors/AppError";
 import {University, UniversityModel, universitySchema} from "./LocationModels/Universities";
 import {Country, CountryModel, CountrySchema} from "./LocationModels/Country";
 import * as mongoosastic from "mongoosastic";
+import {isString} from "util";
 
 export class User extends BaseModel {
     email: string;
