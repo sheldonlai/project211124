@@ -9,6 +9,7 @@ import {QuestionEditorReducerState} from "../reducers/QuestionEditorReducer";
 import {RouterController} from "../api.controllers/RouterController";
 import {Routes} from "../constants/Routes";
 import {CommentDto} from "../../../server/dtos/q&a/CommentDto";
+import {QuestionDto} from "../../../server/dtos/q&a/QuestionDto";
 
 let apiController: QuestionAPIController = QuestionAPIController.getInstance();
 
@@ -138,11 +139,23 @@ export class QuestionActions extends BaseActions {
         }
     }
 
+    static BlurrySearch(inputStrings: string[]){
+        return (dispatch) => {
+            apiController.blurryQuestinoSearch(inputStrings).then(res => {
+                dispatch({
+                    type: QuestionActionTypes.BlurrySearchOK,
+                    data: res.data
+                }).catch(err =>{
+                    QuestionActions.handleError(dispatch, err, QuestionActionTypes.BlurrySearchError)
+                })
+            })
+        }
+    }
+
     static changeQuestionEditorState(state: QuestionEditorReducerState) {
         return {
             type: QuestionActionTypes.QuestionEditorStateChange,
             data: state
         };
     }
-
 }

@@ -59,5 +59,9 @@ export enum QuestionActionTypes {
     MarkAnswerAsCorrectOK = <any> "MarkAnswerAsCorrectOK",
     MarkAnswerAsCorrectErr = <any> "MarkAnswerAsCorrectErr",
 
+    BlurrySearchOK = <any> "BlurrySearchOK",
+    BlurrySearchError = <any> "BlurrySearchError",
 
+    AdvancedSearchOk = <any> "AdvancedSearchOK",
+    AdvancedSearchError = <any> "AdvancedSearchError",
 }

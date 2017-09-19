@@ -42,6 +42,9 @@ export class APIUrls {
 
     static MarkAnswerAsCorrect = "/answer-correct";
 
+    static blurryQuestionSearch = "/blurry-teammate-search";
+    static preciseQuestionSearch = "/precise-teammate-search";
+
     /* Utils */
     static getCountries = "/get-countries";
     static getUniversitiesByCountry = "/university/:country";

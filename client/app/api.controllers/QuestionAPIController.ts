@@ -145,6 +145,10 @@ export class QuestionAPIController extends ApiController {
         return this.answerPutApiHelper(APIUrls.DownVoteAnswer, answer);
     }
 
+    blurryQuestinoSearch(inputStrings: string[]): AxiosPromise {
+        return this.post(APIUrls.blurryQuestionSearch, inputStrings);
+    }
+
     markAnswerAsCorrect = (answer: Answer) => {
         return this.put(APIUrls.MarkAnswerAsCorrect, answer).then((response: AxiosResponse) => {
             response.data = response.data.map( e => this.convertDtoToAnswer(e));
