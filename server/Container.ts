@@ -17,9 +17,14 @@ import {TeammateRecordService} from "./services/TeammateRecordService";
 import {TeammateRecordRepository} from "./repositories/TeammateRecordRepository";
 import {StoryRepository} from "./repositories/StoryRepository";
 import {StoryService} from "./services/StoryService";
+import {INotificationRepository, NotificationRepository} from "./repositories/NotificationRepository";
+import {ISubscriptionRepository, SubscriptionRepository} from "./repositories/SubcriptionRepository";
+import {INotificationService, NotificationService} from "./services/NotificationService";
+import {ISubscriptionService, SubscriptionService} from "./services/SubscriptionService";
 import {DashboardViewRepository} from "./repositories/DashboardViewRepository";
 import {AdminService} from "./services/AdminService";
 import {DashboardService} from "./services/DashboardService";
+import {SubscriptionConversions} from "./conversions/SubscriptionConversions";
 
 export class RepositoryProvider {
     static AnswerRepository = new AnswerRepository();
@@ -32,6 +37,12 @@ export class RepositoryProvider {
     static TeammateRecordRepository = new TeammateRecordRepository();
     static StoryRepository = new StoryRepository();
     static DashboardViewRepository = new DashboardViewRepository();
+    static NotificationRepository: INotificationRepository= new NotificationRepository();
+    static SubscriptionRepository: ISubscriptionRepository = new SubscriptionRepository();
+}
+
+export class ConversionsProvider {
+    static SubscriptionConversions: SubscriptionConversions = new SubscriptionConversions()
 }
 
 export class ServiceProvider {
@@ -66,6 +77,13 @@ export class ServiceProvider {
         RepositoryProvider.StoryRepository,
         RepositoryProvider.TagRepository,
         RepositoryProvider.UserRepository
+    );
+    static NotificationService: INotificationService = new NotificationService(
+        RepositoryProvider.NotificationRepository
+    );
+    static SubscriptionService: ISubscriptionService = new SubscriptionService(
+        RepositoryProvider.SubscriptionRepository,
+        ServiceProvider.NotificationService
     );
     static AdminService = new AdminService(RepositoryProvider.DashboardViewRepository);
     static DashboardService = new DashboardService(

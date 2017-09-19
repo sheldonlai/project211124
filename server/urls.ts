@@ -71,6 +71,19 @@ export class APIUrls {
     static UpVoteStory = "/up-vote-story";
     static DownVoteStory = "/down-vote-story";
 
+    /* Notification */
+    static getNotificationsByUser = "/notifications";
+    static notificationSeen = "/notification/seen/:id";
+    static deleteNotification = "/notification/delete/:id";
+
+    /* Subscription */
+    static subscribe = "/subscription/subscribe";
+    static unsubscribe = "/subscription/unsubscribe/:id";
+    static getSubscribers = "/subscription/subscribers";
+    static getSubscribees = "/subscription/subscribees";
+    static getBySubscribeeType = "/subscription/subscribees/:type";
+    static getByID = "/subscription/get/:id";
+
     /* Admin*/
     static SetDashboardSettings = "/set-dashboard-settings";
     static GetDashboardSettings = "/get-dashboard-settings";

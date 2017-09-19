@@ -4,15 +4,17 @@ import {BaseModel} from "../models/Base/BaseModel";
 import {AppError} from "../errors/AppError";
 import {elasticFullSearchModel, elasticSearchModel} from "../elasticSearch/ElasticSearchUtils";
 import {SearchScoreModel} from "../models/Base/SearchScoreModel";
+import {isNullOrUndefined} from "util";
 
 export interface IBaseRepository<T> {
     getAll(options?: SortLimitOptions): Promise<T[]>
     getById(id: string | Types.ObjectId): Promise<T>;
+    exists(query: any): Promise<boolean>;
     findOne(query: any): Promise<T>;
     filter(query: any): Promise<T[]>
     create(obj: T): Promise<T>;
     update(obj: T): Promise<T>;
-    deleteById(id: string | Types.ObjectId): Promise<T>;
+    deleteById(id: Types.ObjectId): Promise<T>;
     search(query: any): Promise<T[]>;
     searchReturnWithScore(query): Promise<SearchScoreModel<T>[]>;
 }
@@ -50,6 +52,10 @@ export abstract class BaseRepository<T extends BaseModel, I extends Document & T
         })
     }
 
+    exists(query: any): Promise<boolean> {
+        return this.model.findOne(query).lean().exec().then((res: T) => isNullOrUndefined(res));
+    }
+
     findOne(query: any): Promise<T> { // Seems weird to throw exception if its not found
         return this.model.findOne(query).lean().exec()
             .then((res: T) => this.applyAdditionalFunction(res))
@@ -81,7 +87,7 @@ export abstract class BaseRepository<T extends BaseModel, I extends Document & T
         });
     }
 
-    deleteById(id: string | Types.ObjectId): Promise<T> {
+    deleteById(id: Types.ObjectId): Promise<T> {
         return this.model.findByIdAndRemove(id).exec()
             .then((res: T) => this.applyAdditionalFunction(res))
             .then((res: I) => {
