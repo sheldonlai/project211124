@@ -27,6 +27,7 @@ export interface QuestionViewProps extends QuestionHomeReducerState {
     loggedIn: boolean;
     globalError: ErrorReducerState;
     fetchQuestion: () => void;
+    blurrySearch: (inputStrings: string[]) => void;
 }
 
 interface state {
@@ -75,7 +76,10 @@ class QuestionHomeComponent extends Component<QuestionViewProps, state> {
                     value={this.state.SearchString}
                     onChange={this.UpdateSearchString}
                     onAdvanceSearch={() => this.setState({AdvancedSearch: !this.state.AdvancedSearch})}
-                    onSearch={() => {}}
+                    onSearch={() => {
+                        let split = this.state.SearchString.split(' ');
+                        this.props.blurrySearch(split);
+                    }}
                 />
             </div>
         )
@@ -171,6 +175,7 @@ export const QuestionHomePage = connect(
         ...state.questionHome
     }),
     (dispatch) => ({
-        fetchQuestion: () => dispatch(QuestionActions.getQuestionPreviews())
+        fetchQuestion: () => dispatch(QuestionActions.getQuestionPreviews()),
+        blurrySearch: (inputStrings: string[]) => dispatch(QuestionActions.BlurrySearch(inputStrings)),
     })
 )(QuestionHomeComponent);

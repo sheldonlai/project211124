@@ -18,6 +18,7 @@ import {IUserRepository} from "../repositories/UserRepository";
 import {getQuestionsQueryByPreference} from "../elasticSearch/QuestionQueries";
 import {UserPreferences} from "../models/UserPerferences";
 import * as _ from "lodash";
+import {BlurrySearch} from "../elasticSearch/QuestionQueries"
 
 
 export interface IQuestionService {
@@ -40,6 +41,8 @@ export interface IQuestionService {
     updateComment(comment: CommentDto, questionId: string, user: User): Promise<QuestionDto>;
 
     deleteComment(comment: CommentDto, questionId: string, user: User): Promise<QuestionDto>;
+
+    blurrySearch(inputStrings: string[]): Promise<QuestionDto[]>;
 }
 
 export class QuestionService extends BaseService implements IQuestionService {
@@ -203,6 +206,11 @@ export class QuestionService extends BaseService implements IQuestionService {
                 return this.questionRepository.update(questionFound);
             }
         })
+    }
+
+    blurrySearch(inputStrings: string[]){
+        let query = BlurrySearch(inputStrings);
+        return this.questionRepository.search(query);
     }
 
     private checkPermissionForModification = (questionDto: QuestionDto, questionObj: Question, currentUser: User) => {

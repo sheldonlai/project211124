@@ -63,4 +63,30 @@ export const getQuestionsQueryByPreference = (userPreference: UserPreferences) =
     return sampleQuery;
 };
 
+export const BlurrySearch = (InputStrings: string[]) => {
+    if(InputStrings.length == 0){
+        return {"match_none": {}}
+    }
+    let query = ({
+        "bool":{
+            "minimum_should_match": 1,
+        }
+    });
+
+    let shouldArray: any[] = [];
+    InputStrings.forEach((inputString) => {
+        shouldArray.push({"fuzzy": {
+            "title": {
+                "value": inputString,
+                "fuzziness": 2,
+            }
+        }});
+        shouldArray.push({"term": {"content": inputString}});
+        shouldArray.push({"term": {"tags": inputString}});
+    });
+    query.bool["should"] = shouldArray;
+    console.log(JSON.stringify(query));
+    return query;
+};
+
 
