@@ -6,7 +6,6 @@ import * as Dropzone from "react-dropzone";
 import Tabs, {Tab} from "material-ui/Tabs";
 import Paper from "material-ui/Paper";
 import {TableBody, TableCell, TableHead, TableRow} from "material-ui/Table";
-import {createStyleSheet, withStyles} from "material-ui/styles";
 import Dialog from "material-ui/Dialog";
 import Grid from "material-ui/Grid";
 import Card, {CardActions, CardContent, CardHeader, CardMedia} from "material-ui/Card";
@@ -144,7 +143,8 @@ export class FileUploader extends React.Component<FileUploaderProps, FileUploade
                     <Grid item xs={4} key={index}>
                         <div>
                             <Card onClick={(evt) => this.chooseFile(file, evt)}>
-                                <CardMedia image={file.fileURL}/>
+                                {/* TODO : card media image={file.fileURL}*/}
+                                <CardMedia />
                                 <CardContent style={{padding: 0, textAlign: 'center'}}>
                                    <span style={{
                                        color: '#222',

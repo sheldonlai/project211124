@@ -11,6 +11,7 @@ import {convertRawToText} from "../utils/DraftJsUtils";
 import {Routes} from "../constants/Routes";
 import {Preview} from "./CommonModels";
 import {QuestionPreviewDto} from "../../../server/dtos/q&a/QuestionPreviewDto";
+import {FileUploadRecordDto} from "../../../server/dtos/sharedDtos/FIleUploadRecordDto";
 
 export namespace FrontEndQuestionModels {
 
@@ -32,6 +33,7 @@ export namespace FrontEndQuestionModels {
         filesUploaded?: any[];
         views: number;
         category: CategoryTypeEnum;
+        previewImage: FileUploadRecordDto;
 
         constructor() {
             this.title = '';

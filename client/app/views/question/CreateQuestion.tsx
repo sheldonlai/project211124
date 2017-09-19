@@ -12,7 +12,6 @@ import {CustomEditor} from "../../components/CustomEditor/CustomEditor";
 import {EditorState} from "draft-js";
 import {FrontEndQuestionModels} from "../../models/QuestionModels";
 import Grid from "material-ui/Grid";
-import {createStyleSheet, withStyles} from "material-ui/styles";
 import {TagsSelector} from "../../components/TagsComponent/TagsComponent";
 import Typography from "material-ui/Typography";
 import {DropDownSelect} from "../../components/Forms/DropDownSelect";
@@ -20,11 +19,10 @@ import {getDropDownDataFromStringEnum} from "../../utils/utils";
 import {QuestionDifficultyMenu} from "./subcomponents/QuestionDifficultyMenu";
 import {RouterProps} from "react-router";
 import {Routes} from "../../constants/Routes";
-import {FileUploader} from "../../components/FileUpload/FileUploader";
-import {EditorStateUtil} from "../../components/CustomEditor/EditorStateUtil";
 import {CategoryTypeEnum} from "../../../../server/enums/CategoryTypeEnum";
 import Question = FrontEndQuestionModels.Question;
 import {QuestionAPIController} from "../../api.controllers/QuestionAPIController";
+import {SimpleUploader} from "../../components/FileUpload/SimpleUploader";
 
 
 export interface CreateQuestionState extends Question{
@@ -161,15 +159,7 @@ class CreateQuestion extends Component<props, CreateQuestionState> {
                         </Grid>
 
                         {this.difficultyMenu()}
-
-                        {/*<Button raised onClick={this.insert}>*/}
-                            {/*Insert*/}
-                        {/*</Button>*/}
-                        {/*{this.state.showFileUploadDialog &&*/}
-                            {/*<FileUploader initialFiles={this.state.filesUploaded}*/}
-                                          {/*onSelect={this.onFileUploadSelect}*/}
-                                          {/*onCancel={this.onFileUploadCancel} />*/}
-                        {/*}*/}
+                        <SimpleUploader onFieldUploaded={(file) => this.setState({previewImage: file})} />
 
 
                         <Grid item xs={12} md={12}>
@@ -182,7 +172,7 @@ class CreateQuestion extends Component<props, CreateQuestionState> {
                     </Grid>
                     <Grid container justify="flex-end" style={inputContainer}>
                         <Grid item>
-                            <Button raised label="Make Post" onClick={this.submit}>
+                            <Button raised onClick={this.submit}>
                                 Make Post
                             </Button>
                         </Grid>

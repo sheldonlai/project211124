@@ -1,7 +1,7 @@
 import {FileAccessType} from "../../enums/FileAccessType";
 import {UserDto} from "../auth/UserDto";
 
-export interface FIleUploadRecordDto {
+export interface FileUploadRecordDto {
     _id: string;
     uploadedBy: UserDto;
     accessType: FileAccessType;
