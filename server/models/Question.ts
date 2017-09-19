@@ -9,6 +9,7 @@ import {Tag, tagSchema} from "./Tags";
 import {CategoryTypeEnum} from "../enums/CategoryTypeEnum";
 import {QuestionPreviewDto} from "../dtos/q&a/QuestionPreviewDto";
 import {DraftJsHelper} from "../utils/DraftJsHelper";
+import {FileUploadRecord} from "./FileUploadRecord";
 
 let mongoosastic = require("mongoosastic");
 
@@ -46,6 +47,7 @@ export class Question extends BaseModel {
     publicityStatus: PublicityStatus;
     difficulty: QuestionDifficulty;
     category: CategoryTypeEnum;
+    previewImage?: FileUploadRecord;
 
     constructor(title?: string, content?: RawDraftContentState, author?: User, tags?: any[],
                 isPublished?: boolean, publicityStatus?: PublicityStatus,
@@ -70,6 +72,7 @@ export class Question extends BaseModel {
         return object;
     }
 
+
     toPreviewDto(): QuestionPreviewDto {
         let dto = {
             _id: this._id,
@@ -80,6 +83,7 @@ export class Question extends BaseModel {
         };
         return dto;
     }
+
 }
 
 
@@ -139,12 +143,12 @@ const schema = new Schema({
     views: {type: Number, default: 0, es_indexed: true},
     upVotes: {type: Number},
     downVotes: {type: Number},
-
+    previewImage: {type: Schema.Types.ObjectId, ref: 'fileUploadRecord'}
 });
 
 
 const autoPopulateUsers = function (next) {
-    this.populate(['author', "comments.commentBy", "tags"]);
+    this.populate(['author', "comments.commentBy", "tags", "previewImage"]);
     next();
 };
 
