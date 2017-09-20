@@ -32,7 +32,7 @@ export interface QuestionDifficulty {
     difficultyLevel: DifficultyLevel;
 }
 
-export class Question extends BaseModel {
+export class  Question extends BaseModel {
     title: string;
     content: RawDraftContentState;
     author: User;
