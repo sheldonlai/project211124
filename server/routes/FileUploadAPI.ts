@@ -47,7 +47,7 @@ export class FileUploadAPI extends BaseAPI {
             next(new AppError("You can only upload one preview image.", ClientError.BAD_REQUEST));
             return;
         }
-        let result = this.service.saveUploadedFile(files[0], req.user);
+        let result = this.service.savePreviewImage(files[0], req.user);
         this.respondPromise(result, res, next);
     };
 
