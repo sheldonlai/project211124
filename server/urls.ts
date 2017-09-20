@@ -17,6 +17,7 @@ export class APIUrls {
 
     /* upload */
     static Upload = "/upload";
+    static PreviewImageUpload = "/upload/preview-image";
 
     /* Question & Answer */
     static CreateQuestion = "/create-question";

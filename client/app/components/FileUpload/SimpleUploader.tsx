@@ -82,7 +82,7 @@ export class SimpleUploader extends React.Component<props, state> {
             return <Button raised style={{textTransform: "none"}} onClick={() => this.setState({open: true})}>
                 Upload
             </Button>
-        return <Dialog open={this.state.open} maxWidth="md">
+        return <Dialog open={this.state.open} maxWidth="md" onRequestClose={() => this.setState({open: false})}>
             <DialogTitle>{"Uploader"}</DialogTitle>
                 <div style={{width: 500}}>
                     {
@@ -97,6 +97,7 @@ export class SimpleUploader extends React.Component<props, state> {
                             <tr>
                                 <td>
                                     <Dropzone
+                                        multiple={false}
                                         accept="image/jpeg, image/png"
                                         maxSize={60000000}
                                         style={dropZoneStyle}
