@@ -66,7 +66,8 @@ export class SimpleUploader extends React.Component<props, state> {
                     file: xhr.response,
                     open: false
                 });
-                this.props.onFieldUploaded(xhr.response);
+                console.log(xhr.response);
+                this.props.onFieldUploaded(xhr.response[0]);
             }
         };
 

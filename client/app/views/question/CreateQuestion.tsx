@@ -23,6 +23,7 @@ import {CategoryTypeEnum} from "../../../../server/enums/CategoryTypeEnum";
 import Question = FrontEndQuestionModels.Question;
 import {QuestionAPIController} from "../../api.controllers/QuestionAPIController";
 import {SimpleUploader} from "../../components/FileUpload/SimpleUploader";
+import {PreviewImageDisplay} from "../../components/Images/PreviewImageDisplay";
 
 
 export interface CreateQuestionState extends Question{
@@ -160,7 +161,10 @@ class CreateQuestion extends Component<props, CreateQuestionState> {
 
                         {this.difficultyMenu()}
                         <SimpleUploader onFieldUploaded={(file) => this.setState({previewImage: file})} />
-
+                        {
+                            this.state.previewImage &&
+                                <PreviewImageDisplay file={this.state.previewImage}/>
+                        }
 
                         <Grid item xs={12} md={12}>
                             <Typography type="caption" gutterBottom>Content :</Typography>
