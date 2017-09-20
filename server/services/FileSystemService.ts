@@ -139,7 +139,7 @@ export class FileSystemService extends BaseService implements IFileSystemService
         let uploadedTime: Date = new Date();
 
         let filePath: string = path.join(__dirname, '..', '..', 'static', 'media', fileName);
-        return this.saveFile(image.toBuffer(), fileName);
+        return image.toBuffer().then((buffer) => this.saveFile(buffer, fileName));
     }
 
     private checkPath(path): Promise<any> {
