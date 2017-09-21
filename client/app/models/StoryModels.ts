@@ -40,6 +40,7 @@ export namespace FrontEndStoryModels {
     }
 
     export class StoryPreview implements Preview{
+
         _id: string;
         title: string;
         content: string;
@@ -50,6 +51,7 @@ export namespace FrontEndStoryModels {
         views: number;
         createdUtc: Date;
         lastEditedUtc: Date;
+        category: CategoryTypeEnum;
 
         constructor(dto?: StoryDto) {
             if (!dto)

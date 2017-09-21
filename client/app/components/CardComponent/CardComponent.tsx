@@ -10,15 +10,17 @@ import {PRIMARY_COLOR} from "../../views/router";
 import Grid from "material-ui/Grid/Grid";
 import {AuthorLink} from "../RoutingComponents/AuthorLink";
 import {blueGrey} from "material-ui/colors";
+import {CategoryTypeEnum} from "../../../../server/enums/CategoryTypeEnum";
 
 export interface CardComponentProps {
     title: string;
     date: Date;
-    authorName?:string;
+    authorName?: string;
     content: string;
     onClick?: () => void;
     wide?: boolean;
     img?: string;
+    category?: CategoryTypeEnum;
 }
 
 const cardStyle = {
@@ -50,7 +52,7 @@ export class CustomCard extends React.Component<CardComponentProps, state> {
     constructor(props) {
         super(props);
         this.state = {
-            hover : false
+            hover: false
         }
     }
 
@@ -69,17 +71,27 @@ export class CustomCard extends React.Component<CardComponentProps, state> {
                 onMouseEnter={() => this.setState({hover: true})}
                 onMouseLeave={() => this.setState({hover: false})}
             >
-                <Paper style={{width: width, ...cardStyle, background: this.state.hover? "#EEE" : "white"}}
+                <Paper style={{width: width, ...cardStyle, background: this.state.hover ? "#EEE" : "white"}}
                        elevation={0}>
                     {/*<div style={shader}/>*/}
-                    {this.props.img && <img src={this.props.img}
-                                            style={{
-                                                height: 289.6875,
-                                                opacity: this.state.hover? 0.6: 1
-                                            }}
-                    />}
+                    {
+                        this.props.img &&
+                        <img src={this.props.img}
+                             style={{
+                                 height: 289.6875,
+                                 opacity: this.state.hover ? 0.6 : 1
+                             }}
+                        />}
+                    {
+                        this.props.category && !this.props.img &&
+                        <Typography type="display1" style={
+                            {fontSize: 200, height: "100%", lineHeight: "100%", textAlign: "center"}
+                        }>
+                            ?
+                        </Typography>
+                    }
                     <div style={{
-                        width: "100%", overflowY: "hidden", position:"absolute", bottom: 0,
+                        width: "100%", overflowY: "hidden", position: "absolute", bottom: 0,
                         background: "rgba(255,255,255,0.8)",
                     }}>
                         <Typography type="headline" style={{fontSize: 18, fontWeight: 500, lineHeight: "20px"}}>

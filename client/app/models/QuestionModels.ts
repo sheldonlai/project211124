@@ -75,6 +75,7 @@ export namespace FrontEndQuestionModels {
     }
 
     export class QuestionPreview implements Preview{
+
         _id : string;
         title : string;
         author: UserDto;
@@ -86,6 +87,7 @@ export namespace FrontEndQuestionModels {
         downVotes: number;
         views: number;
         tags: any[];
+        category: CategoryTypeEnum;
 
         constructor(dto?: QuestionDto) {
             if (!dto){

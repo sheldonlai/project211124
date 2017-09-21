@@ -71,6 +71,7 @@ export class Story extends BaseModel {
             title: this.title,
             content: DraftJsHelper.convertRawToText(this.content),
             author: this.author,
+            category: this.category,
             createdUtc: this.createdUtc,
             img: this.previewImage? this.previewImage.fileURL: undefined
         };

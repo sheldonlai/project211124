@@ -78,6 +78,7 @@ export class  Question extends BaseModel {
             _id: this._id,
             title: this.title,
             content: DraftJsHelper.convertRawToText(this.content),
+            category: this.category,
             author: this.author,
             createdUtc: this.createdUtc,
             img: this.previewImage? this.previewImage.fileURL: undefined
