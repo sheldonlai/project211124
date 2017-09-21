@@ -6,7 +6,8 @@ To simplify learning in universities by allowing students to share different top
 ### Requirements
 Make sure npm and node is installed.\
 We use node-gyp for some components make sure python 2.7 and c++ compiler is present\
-
+Install elastic search and run it on localhost:9200 \
+Have node 8.4.x or above
 #### Mac OSX:
 1. should be installed with xcode
 
@@ -28,7 +29,5 @@ We use node-gyp for some components make sure python 2.7 and c++ compiler is pre
 make sure all tests pass before you commit by typing: \
 `npm test`\
 all tests should pass and they should be running concurrently. 
-### requirements
-Install elastic search and run it on localhost:9200 \
-Have node 6.x.x or above
+
 
