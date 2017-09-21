@@ -2,8 +2,20 @@
 
 ### Objective:
 To simplify learning in universities by allowing students to share different topics and guides with each other.
+
+### Requirements
+Make sure npm and node is installed.\
+We use node-gyp for some components make sure python 2.7 and c++ compiler is present\
+
+#### Mac OSX:
+1. should be installed with xcode
+
+#### Windows:
+1. open windows powershell as an administrator and type:\
+`npm install --global --production windows-build-tools`
+   
 ### Build:
-Make sure npm and node is installed.
+
 1. Go to root directory and type:\
 `npm install`
 1. To build the server type: (note: you might need typescript to be installed globally or reference the .bin inside node_modules)\

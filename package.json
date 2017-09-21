@@ -87,7 +87,6 @@
     "react-dom": "^15.6.1",
     "react-draft-wysiwyg": "^1.10.8",
     "react-dropzone": "^3.13.3",
-    "react-redux": "^5.0.6",
     "react-router-dom": "^4.1.2",
     "react-star-rating": "^1.4.2",
     "react-stars": "^2.1.0",
