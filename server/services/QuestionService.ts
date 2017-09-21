@@ -215,7 +215,6 @@ export class QuestionService extends BaseService implements IQuestionService {
             let results = questions.map(question => {
                 return Question.fromObject(question).toPreviewDto();
             });
-            //let myQuestions = result[1] ? result[1].map(q => Question.fromObject(q).toPreviewDto()) : [];
             return results;
         })
     }

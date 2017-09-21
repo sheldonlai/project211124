@@ -22,6 +22,8 @@ import {CategoryTypeEnum} from "../../../../server/enums/CategoryTypeEnum";
 import {PRIMARY_COLOR} from "../router";
 import Input from "material-ui/Input/Input";
 import {SearchBarComponent} from "../../components/SearchBar/SearchBarComponent";
+import {AdvancedSearchEditor} from "./subcomponents/AdvancedSearchEditor";
+import {QuestionDto} from "../../../../server/dtos/q&a/QuestionDto";
 
 export interface QuestionViewProps extends QuestionHomeReducerState {
     loggedIn: boolean;
@@ -57,7 +59,7 @@ class QuestionHomeComponent extends Component<QuestionViewProps, state> {
                 //createdUtc: Date;
                 tags: [],
                 difficulty: undefined,
-                category: undefined,
+                category: undefined,h
             },
             AdvancedSearch: false,
             SearchString: "",
@@ -68,6 +70,10 @@ class QuestionHomeComponent extends Component<QuestionViewProps, state> {
         if ((this.props.featuredQuestions.length === 0 || this.props.lastUpdated - Date.now() < 1000))
             this.props.fetchQuestion();
     }
+
+    updateSearchObj = (SearchQuestionObj: QuestionDto) => {
+
+    };
 
     renderSearchBar = () => {
         return (
@@ -81,6 +87,15 @@ class QuestionHomeComponent extends Component<QuestionViewProps, state> {
                         this.props.blurrySearch(split);
                     }}
                 />
+                <Grid container spacing={24}>
+                    <Grid item xs={2}>
+                    </Grid>
+                    <Grid item sm={8}>
+                        {this.state.AdvancedSearch &&
+                        <AdvancedSearchEditor SearchQuestionObj={this.state.SearchQuestionObj}
+                                              UpdateQuestionObj={this.updateSearchObj}/>}
+                    </Grid>
+                </Grid>
             </div>
         )
     };
