@@ -11,6 +11,7 @@ import Grid from "material-ui/Grid/Grid";
 import {AuthorLink} from "../RoutingComponents/AuthorLink";
 import {blueGrey} from "material-ui/colors";
 import {CategoryTypeEnum} from "../../../../server/enums/CategoryTypeEnum";
+import {CategoryDisplay} from "../Images/CateogryDisplay";
 
 export interface CardComponentProps {
     title: string;
@@ -23,7 +24,7 @@ export interface CardComponentProps {
     category?: CategoryTypeEnum;
 }
 
-const cardStyle = {
+const cardStyle: CSSProperties = {
     height: 289.6875,
     overflowY: "hidden",
     overflowX: "hidden",
@@ -71,7 +72,7 @@ export class CustomCard extends React.Component<CardComponentProps, state> {
                 onMouseEnter={() => this.setState({hover: true})}
                 onMouseLeave={() => this.setState({hover: false})}
             >
-                <Paper style={{width: width, ...cardStyle, background: this.state.hover ? "#EEE" : "white"}}
+                <Paper style={{width: width, ...cardStyle, backgroundColor: this.state.hover ? "#EEE" : "white"}}
                        elevation={0}>
                     {/*<div style={shader}/>*/}
                     {
@@ -83,16 +84,12 @@ export class CustomCard extends React.Component<CardComponentProps, state> {
                              }}
                         />}
                     {
-                        this.props.category && !this.props.img &&
-                        <Typography type="display1" style={
-                            {fontSize: 200, height: "100%", lineHeight: "100%", textAlign: "center"}
-                        }>
-                            ?
-                        </Typography>
+                        !this.props.img &&
+                        <CategoryDisplay hover={this.state.hover} category={this.props.category} height={289.6875} />
                     }
                     <div style={{
                         width: "100%", overflowY: "hidden", position: "absolute", bottom: 0,
-                        background: "rgba(255,255,255,0.8)",
+                        background: "rgba(255,255,255,0.8)", height: 90
                     }}>
                         <Typography type="headline" style={{fontSize: 18, fontWeight: 500, lineHeight: "20px"}}>
                             {this.props.title}
