@@ -59,7 +59,7 @@ class QuestionHomeComponent extends Component<QuestionViewProps, state> {
                 //createdUtc: Date;
                 tags: [],
                 difficulty: undefined,
-                category: undefined,h
+                category: undefined,
             },
             AdvancedSearch: false,
             SearchString: "",
