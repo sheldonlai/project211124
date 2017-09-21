@@ -69,7 +69,8 @@ export class QuestionService extends BaseService implements IQuestionService {
 
         return Promise.all(promises).then((result) => {
             let featuredQuestions = result[0] ? result[0].map(q => Question.fromObject(q).toPreviewDto()) : [];
-            let myQuestions = result[1] ? result[1].map(q => Question.fromObject(q).toPreviewDto()) : [];
+            let myQuestions = result[1] ? result[1].map(q => Question.fromObject(q).toPreviewDto())
+                .sort((a,b) => b.createdUtc - a.createdUtc) : [];
 
             return {
                 featuredQuestions,
@@ -87,6 +88,7 @@ export class QuestionService extends BaseService implements IQuestionService {
                 question.title, question.content, currentUser, tags,
                 question.isPublished, question.publicityStatus, question.difficulty, question.category
             );
+            questionObject.previewImage = question.previewImage;
             return this.questionRepository.create(questionObject);
         })
     }
@@ -134,7 +136,7 @@ export class QuestionService extends BaseService implements IQuestionService {
         questionFound.publicityStatus = questionDto.publicityStatus;
         questionFound.difficulty = questionDto.difficulty;
         questionFound.category = questionDto.category;
-
+        questionFound.previewImage = questionDto.previewImage;
         //update tags
         if (questionDto.tags.length <= 5) {
             if (_.intersection(questionDto.tags, questionFound.tags).length !== questionDto.tags.length){

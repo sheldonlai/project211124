@@ -7,6 +7,7 @@ export interface Preview {
     content: string;
     createdUtc: Date;
     author: UserDto;
+    img? : string;
     toLink : () => string;
 }
 

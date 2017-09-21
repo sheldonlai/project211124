@@ -25,6 +25,8 @@ import {QuestionAPIController} from "../../api.controllers/QuestionAPIController
 import {SimpleUploader} from "../../components/FileUpload/SimpleUploader";
 import {PreviewImageDisplay} from "../../components/Images/PreviewImageDisplay";
 import {APIUrls} from "../../../../server/urls";
+import {CustomCard} from "../../components/CardComponent/CardComponent";
+import {DraftJsHelper} from "../../../../server/utils/DraftJsHelper";
 
 
 export interface CreateQuestionState extends Question{
@@ -166,7 +168,14 @@ class CreateQuestion extends Component<props, CreateQuestionState> {
                         />
                         {
                             this.state.previewImage &&
-                                <PreviewImageDisplay file={this.state.previewImage}/>
+                            <div>
+                                <CustomCard title={this.state.title}
+                                        content={DraftJsHelper.convertEditorStateToText(this.state.content)}
+                                        date={new Date()}
+                                        wide
+                                        img={this.state.previewImage.fileURL}
+                                />
+                            </div>
                         }
 
                         <Grid item xs={12} md={12}>

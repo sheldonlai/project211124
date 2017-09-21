@@ -18,11 +18,13 @@ export interface CardComponentProps {
     content: string;
     onClick?: () => void;
     wide?: boolean;
+    img?: string;
 }
 
 const cardStyle = {
-    height: 100,
+    height: 289.6875,
     overflowY: "hidden",
+    overflowX: "hidden",
     position: "relative",
     //background:"linear-gradient(transparent 150px, white)"
     borderBottom: "#eee 1px solid",
@@ -70,7 +72,16 @@ export class CustomCard extends React.Component<CardComponentProps, state> {
                 <Paper style={{width: width, ...cardStyle, background: this.state.hover? "#EEE" : "white"}}
                        elevation={0}>
                     {/*<div style={shader}/>*/}
-                    <div style={{height: 88, overflowY: "hidden", padding: 5}}>
+                    {this.props.img && <img src={this.props.img}
+                                            style={{
+                                                height: 289.6875,
+                                                opacity: this.state.hover? 0.6: 1
+                                            }}
+                    />}
+                    <div style={{
+                        width: "100%", overflowY: "hidden", position:"absolute", bottom: 0,
+                        background: "rgba(255,255,255,0.8)",
+                    }}>
                         <Typography type="headline" style={{fontSize: 18, fontWeight: 500, lineHeight: "20px"}}>
                             {this.props.title}
                         </Typography>

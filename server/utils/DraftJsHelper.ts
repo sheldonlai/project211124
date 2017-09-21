@@ -18,4 +18,9 @@ export class DraftJsHelper {
         let content = editorState.getCurrentContent();
         return convertToRaw(content);
     };
+
+    static convertEditorStateToText = function(editorState: EditorState): string {
+        let content = editorState.getCurrentContent();
+        return content.getPlainText();
+    };
 }

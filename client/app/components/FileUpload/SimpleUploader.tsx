@@ -87,7 +87,8 @@ export class SimpleUploader extends React.Component<props, state> {
             return <Button raised style={{textTransform: "none"}} onClick={() => this.setState({open: true})}>
                 Upload
             </Button>
-        return <Dialog open={this.state.open} maxWidth="md" onRequestClose={() => this.setState({open: false})}>
+        return <Dialog open={this.state.open} maxWidth="md" onRequestClose={() =>
+            this.setState({open: false, uploadProgress: 0})}>
             <DialogTitle>{"Uploader"}</DialogTitle>
                 <div style={{width: 500}}>
                     {

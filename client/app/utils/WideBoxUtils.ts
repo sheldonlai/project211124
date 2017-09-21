@@ -4,11 +4,12 @@ import {FrontEndQuestionModels} from "../models/QuestionModels";
 import Question = FrontEndQuestionModels.Question;
 import QuestionPreview = FrontEndQuestionModels.QuestionPreview;
 import StoryPreview = FrontEndStoryModels.StoryPreview;
+import {Preview} from "../models/CommonModels";
 
 const charThreshold = 40;
 
-export const isElementWide = (element : QuestionPreview|StoryPreview) => {
-    return element.title && element.title.length > charThreshold
+export const isElementWide = (element : Preview) => {
+    return element.title && element.title.length > charThreshold || element.img !== undefined;
 };
 
 

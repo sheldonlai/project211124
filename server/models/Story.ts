@@ -72,6 +72,7 @@ export class Story extends BaseModel {
             content: DraftJsHelper.convertRawToText(this.content),
             author: this.author,
             createdUtc: this.createdUtc,
+            img: this.previewImage? this.previewImage.fileURL: undefined
         };
         return dto;
     }

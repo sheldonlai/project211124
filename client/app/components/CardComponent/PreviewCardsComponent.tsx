@@ -101,6 +101,7 @@ export class PreviewCardsComponent extends React.Component<props, state> {
                                                         authorName={e.element.author.username}
                                                         content={e.element.content}
                                                         date={e.element.createdUtc}
+                                                        img={e.element.img}
                                                         wide={n > 1 && e.wide}
                                                     />
                                             </div>

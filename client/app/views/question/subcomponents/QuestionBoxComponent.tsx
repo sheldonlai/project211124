@@ -23,6 +23,11 @@ import {QuestionFooterComponent} from "./QuestionFooterComponent";
 import {QuestionEditorReducerState} from "../../../reducers/QuestionEditorReducer";
 import {CommentDto} from "../../../../../server/dtos/q&a/CommentDto";
 import {SharedCommentsComponent} from "../../../components/Comments/SharedCommentsComponent";
+import {SimpleUploader} from "../../../components/FileUpload/SimpleUploader";
+import {APIUrls} from "../../../../../server/urls";
+import {CustomCard} from "../../../components/CardComponent/CardComponent";
+import {DraftJsHelper} from "../../../../../server/utils/DraftJsHelper";
+import {FileUploadRecordDto} from "../../../../../server/dtos/sharedDtos/FIleUploadRecordDto";
 
 interface QuestionBoxComponentProps {
     user: UserDto; // current user
@@ -48,6 +53,12 @@ export class QuestionBoxComponent extends Component<props, {}> {
     onContentChange = (editorState) => {
         let question = cloneQuestion(this.props.questionEditorState);
         question.content = editorState;
+        this.props.changeQuestionEditorState({edit: this.props.edit, question});
+    };
+
+    onImageChange = (file: FileUploadRecordDto) => {
+        let question = cloneQuestion(this.props.questionEditorState);
+        question.previewImage = file;
         this.props.changeQuestionEditorState({edit: this.props.edit, question});
     };
 
@@ -98,6 +109,25 @@ export class QuestionBoxComponent extends Component<props, {}> {
                     {editButton}
                     <Divider/>
                     <div>
+                        {
+                            this.props.edit&&
+                            <div>
+                                <SimpleUploader onFieldUploaded={this.onImageChange}
+                                                url={APIUrls.PreviewImageUpload}
+                                />
+                                {
+                                    question.previewImage &&
+                                    <div>
+                                        <CustomCard title={question.title}
+                                                    content={DraftJsHelper.convertEditorStateToText(question.content)}
+                                                    date={new Date()}
+                                                    wide
+                                                    img={question.previewImage.fileURL}
+                                        />
+                                    </div>
+                                }
+                            </div>
+                        }
                         <QAEditorComponent value={question.content} onChange={this.onContentChange}
                                            onSubmit={this.onSubmit} readOnly={!this.props.edit}
                                            style={{fontSize: 14}} reset={this.resetQuestion}

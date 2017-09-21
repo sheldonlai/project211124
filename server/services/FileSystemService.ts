@@ -1,7 +1,3 @@
-/**
- * Created by SHELDON on 6/21/2017.
- */
-
 import * as fs from "fs";
 import * as mime from "mime";
 import * as path from "path";
@@ -16,8 +12,7 @@ import {FileAccessType} from "../enums/FileAccessType";
 import {IFileUploadRecordRepository} from "../repositories/FileUploadRecordRepository";
 import {BaseService} from "./BaseService";
 import {User} from "../models/User";
-import sharp from "sharp";
-import {dirname} from "path";
+import * as sharp from "sharp";
 
 
 const fileType = require('file-type');
@@ -114,7 +109,7 @@ export class FileSystemService extends BaseService implements IFileSystemService
         let uploadedTime: Date = new Date();
         let newFileName: string = StringUtils.genRandomString(10) + '_' +
             uploadedTime.getTime() + '.' + mime.getExtension(file.mimetype);
-        return this.saveScaledImage(file,newFileName, 500).then((fileURL) => {
+        return this.saveScaledImage(file,newFileName, 515).then((fileURL) => {
             let fileUploadRecord: FileUploadRecord = new FileUploadRecord(
                 user,
                 FileAccessType.PUBLIC,
@@ -132,12 +127,9 @@ export class FileSystemService extends BaseService implements IFileSystemService
 
     // returen fileUrl
     saveScaledImage(file: Express.Multer.File, fileName:string, width: number, height?: number): Promise<string> {
-        let image =  sharp(file)
+        let image =  sharp(file.buffer)
             .resize(width, height)
-            .crop(sharp.strategy.entropy);
-
-        let uploadedTime: Date = new Date();
-
+            .crop(sharp.strategy.attention);
         let filePath: string = path.join(__dirname, '..', '..', 'static', 'media', fileName);
         return image.toBuffer().then((buffer) => this.saveFile(buffer, fileName));
     }
