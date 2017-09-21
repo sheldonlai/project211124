@@ -64,7 +64,7 @@ export class FileSystemService extends BaseService implements IFileSystemService
         /* Step 3. Write the file to disk(should upload to S3 instead). */
         let uploadedTime: Date = new Date();
         let newFileName: string = StringUtils.genRandomString(10) + '_' +
-            uploadedTime.getTime() + '.' + mime.extension(file.mimetype);
+            uploadedTime.getTime() + '.' + mime.getExtension(file.mimetype);
         let filePath: string = path.join(__dirname, '..', '..', 'static', 'media', newFileName);
         let folderPath = path.dirname(filePath);
         let fileURL: string = '/media/' + newFileName;
@@ -113,7 +113,7 @@ export class FileSystemService extends BaseService implements IFileSystemService
         /* Step 3. Write the file to disk(should upload to S3 instead). */
         let uploadedTime: Date = new Date();
         let newFileName: string = StringUtils.genRandomString(10) + '_' +
-            uploadedTime.getTime() + '.' + mime.extension(file.mimetype);
+            uploadedTime.getTime() + '.' + mime.getExtension(file.mimetype);
         return this.saveScaledImage(file,newFileName, 500).then((fileURL) => {
             let fileUploadRecord: FileUploadRecord = new FileUploadRecord(
                 user,

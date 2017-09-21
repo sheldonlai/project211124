@@ -46,7 +46,7 @@ function diskStorage(): multer.StorageEngine {
                 cb(null, localStoragePath);
             },
             filename: function(req, file, cb) {
-                cb(null, StringUtils.genRandomString(10) + '_' + Date.now() + '.' + mime.extension(file.mimetype));
+                cb(null, StringUtils.genRandomString(10) + '_' + Date.now() + '.' + mime.getExtension(file.mimetype));
             }
         }
     );

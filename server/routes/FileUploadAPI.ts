@@ -23,7 +23,7 @@ export class FileUploadAPI extends BaseAPI {
         this.service = service;
         this.router = Router();
         this.router.post(APIUrls.Upload, mustBeAuthenticated, this.storeFileInMemory, this.saveFiles);
-        this.router.post(APIUrls.PreviewImageUpload, mustBeAuthenticated, this.storeFileInMemory, this.saveFiles);
+        this.router.post(APIUrls.PreviewImageUpload, mustBeAuthenticated, this.storeFileInMemory, this.savePreviewImage);
 
     }
 

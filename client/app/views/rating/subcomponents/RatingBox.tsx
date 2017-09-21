@@ -1,7 +1,5 @@
 import * as React from "react";
-import ReactStars from 'react-stars';
 import Typography from "material-ui/Typography";
-import {CardActions, CardContent} from 'material-ui/Card';
 import {TeammateRatingDto} from "../../../../../server/dtos/rating/TeammateRatingDto";
 import Paper from "material-ui/Paper";
 import Divider from "material-ui/Divider";
@@ -14,7 +12,6 @@ import Grid from "material-ui/Grid";
 import {AppStoreState} from "../../../stores/AppStore";
 import {ReducerStateStatus} from "../../../constants/ReducerStateStatus";
 import {SatisfactionComponent} from "../../../components/Satisfaction/SatisfactionComponent";
-import {convertDateTimeToString, convertDateToString} from "../../../utils/DateUtils";
 import {FooterComponent} from "../../../components/Footer/FooterComponent";
 
 interface props {

@@ -9,8 +9,10 @@ import CircularProgress from "material-ui/Progress/CircularProgress";
 import DialogTitle from "material-ui/Dialog/DialogTitle";
 import DialogContent from "material-ui/Dialog/DialogContent";
 import DialogContentText from "material-ui/Dialog/DialogContentText";
+import {APIUrls} from "../../../../server/urls";
 
 interface props {
+    url?: string;
     onFieldUploaded: (file: FileUploadRecordDto) => void;
 }
 
@@ -46,6 +48,7 @@ export class SimpleUploader extends React.Component<props, state> {
     updateProgress = (evt) => {
         if (evt.lengthComputable) {
             let percentComplete = Math.floor((evt.loaded / evt.total) * 100);
+            console.log(percentComplete);
             this.setState({uploadProgress: percentComplete});
         } else {
             this.setState({uploadProgress: 1});
@@ -61,18 +64,20 @@ export class SimpleUploader extends React.Component<props, state> {
         xhr.addEventListener('progress', this.updateProgress, false);
         xhr.onreadystatechange = () => {
             if (xhr.readyState === 4) {
+                let file = Array.isArray(xhr.response)? xhr.response[0]: xhr.response;
                 this.setState({
                     uploadProgress: 0,
-                    file: xhr.response,
+                    file: file,
                     open: false
                 });
-                console.log(xhr.response);
-                this.props.onFieldUploaded(xhr.response[0]);
+                this.props.onFieldUploaded(file);
             }
         };
 
         xhr.responseType = "json";
-        xhr.open('post', '/api/upload', true);
+        let url = this.props.url? this.props.url: APIUrls.Upload;
+        url = '/api' + url;
+        xhr.open('post', url, true);
         xhr.setRequestHeader("Authorization", "Token " + localStorage.getItem(Config.tokenKey));
         xhr.send(data);
     };

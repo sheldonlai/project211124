@@ -24,6 +24,7 @@ import Question = FrontEndQuestionModels.Question;
 import {QuestionAPIController} from "../../api.controllers/QuestionAPIController";
 import {SimpleUploader} from "../../components/FileUpload/SimpleUploader";
 import {PreviewImageDisplay} from "../../components/Images/PreviewImageDisplay";
+import {APIUrls} from "../../../../server/urls";
 
 
 export interface CreateQuestionState extends Question{
@@ -160,7 +161,9 @@ class CreateQuestion extends Component<props, CreateQuestionState> {
                         </Grid>
 
                         {this.difficultyMenu()}
-                        <SimpleUploader onFieldUploaded={(file) => this.setState({previewImage: file})} />
+                        <SimpleUploader onFieldUploaded={(file) => this.setState({previewImage: file})}
+                                        url={APIUrls.PreviewImageUpload}
+                        />
                         {
                             this.state.previewImage &&
                                 <PreviewImageDisplay file={this.state.previewImage}/>
