@@ -1,4 +1,5 @@
 import {UserPreferences} from "../models/UserPerferences";
+import {QuestionDto} from "../dtos/q&a/QuestionDto";
 
 export const getQuestionsQueryByPreference = (userPreference: UserPreferences) => {
 
@@ -63,7 +64,7 @@ export const getQuestionsQueryByPreference = (userPreference: UserPreferences) =
     return sampleQuery;
 };
 
-export const BlurrySearch = (InputStrings: string[]) => {
+export const blurrySearch = (InputStrings: string[]) => {
     if(InputStrings.length == 0){
         return {"match_none": {}}
     }
@@ -81,11 +82,37 @@ export const BlurrySearch = (InputStrings: string[]) => {
                 "fuzziness": 2,
             }
         }});
-        shouldArray.push({"term": {"content": inputString}});
-        shouldArray.push({"term": {"tags": inputString}});
+        shouldArray.push({"match": {"content.blocks.text": inputString}});
+        shouldArray.push({"match": {"tags.tag": inputString}});
     });
     query.bool["should"] = shouldArray;
     console.log(JSON.stringify(query));
+    return query;
+};
+
+export const preciseSearch = (searchObject: QuestionDto) => {
+    if(!searchObject.title && !searchObject.author && !searchObject.content && !searchObject.tags && !searchObject.category){
+        return {"match_none": {}};
+    }
+
+    let query = ({
+        "bool":{
+            "minimum_should_match": "50%",
+        }
+    });
+
+    let shouldArray: any[] = [];
+    if(searchObject.title){
+        shouldArray.push({
+            "fuzzy": {
+                "value": searchObject.title,
+                "fuzziness": 2,
+            }
+        });
+        shouldArray.push({"match": {"title": searchObject.title}});
+    }
+
+
     return query;
 };
 

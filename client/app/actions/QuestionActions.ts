@@ -142,10 +142,6 @@ export class QuestionActions extends BaseActions {
     static BlurrySearch(inputStrings: string[]){
         return (dispatch) => {
             apiController.blurryQuestinoSearch(inputStrings).then(res => {
-                res.data.map(question => {
-                    console.log(question);
-                    return question;
-                });
                 dispatch({
                     type: QuestionActionTypes.BlurrySearchOK,
                     data: res.data
