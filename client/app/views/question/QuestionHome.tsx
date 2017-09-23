@@ -24,25 +24,18 @@ import Input from "material-ui/Input/Input";
 import {SearchBarComponent} from "../../components/SearchBar/SearchBarComponent";
 import {AdvancedSearchEditor} from "./subcomponents/AdvancedSearchEditor";
 import {QuestionDto} from "../../../../server/dtos/q&a/QuestionDto";
+import {SearchQuestionQuery} from "../../../../server/models/Question"
 
 export interface QuestionViewProps extends QuestionHomeReducerState {
     loggedIn: boolean;
     globalError: ErrorReducerState;
     fetchQuestion: () => void;
     blurrySearch: (inputStrings: string[]) => void;
+    preciseSearch: (searchQuestionObject: SearchQuestionQuery) => void;
 }
 
 interface state {
-    SearchQuestionObj: {
-        _id: string,
-        title: string,
-        author: UserDto,
-        content: RawDraftContentState,
-        //createdUtc: Date;
-        tags: any[],
-        difficulty: QuestionDifficulty,
-        category: CategoryTypeEnum,
-    };
+    searchQuestionObj: SearchQuestionQuery,
     AdvancedSearch: boolean;
     SearchString: string;
 }
@@ -51,7 +44,7 @@ class QuestionHomeComponent extends Component<QuestionViewProps, state> {
     constructor(props) {
         super(props);
         this.state = {
-            SearchQuestionObj: {
+            searchQuestionObj: {
                 _id: "",
                 title: "",
                 author: undefined,
@@ -71,8 +64,9 @@ class QuestionHomeComponent extends Component<QuestionViewProps, state> {
             this.props.fetchQuestion();
     }
 
-    updateSearchObj = (SearchQuestionObj: QuestionDto) => {
-
+    updateSearchObj = (searchQuestionObj: SearchQuestionQuery) => {
+        let obj = {...searchQuestionObj};
+        this.setState({searchQuestionObj: obj});
     };
 
     renderSearchBar = () => {
@@ -83,8 +77,13 @@ class QuestionHomeComponent extends Component<QuestionViewProps, state> {
                     onChange={this.UpdateSearchString}
                     onAdvanceSearch={() => this.setState({AdvancedSearch: !this.state.AdvancedSearch})}
                     onSearch={() => {
-                        let split = this.state.SearchString.split(' ');
-                        this.props.blurrySearch(split);
+                        if(this.state.AdvancedSearch){
+                            this.props.preciseSearch(this.state.searchQuestionObj);
+                        }
+                        else{
+                            let split = this.state.SearchString.split(' ');
+                            this.props.blurrySearch(split);
+                        }
                     }}
                 />
                 <Grid container spacing={24}>
@@ -92,7 +91,7 @@ class QuestionHomeComponent extends Component<QuestionViewProps, state> {
                     </Grid>
                     <Grid item sm={8}>
                         {this.state.AdvancedSearch &&
-                        <AdvancedSearchEditor SearchQuestionObj={this.state.SearchQuestionObj}
+                        <AdvancedSearchEditor SearchQuestionObj={this.state.searchQuestionObj}
                                               UpdateQuestionObj={this.updateSearchObj}/>}
                     </Grid>
                 </Grid>
@@ -102,10 +101,6 @@ class QuestionHomeComponent extends Component<QuestionViewProps, state> {
 
     UpdateSearchString = (event) => {
         this.setState({SearchString: event.target.value});
-    };
-
-    BlurryQuestionSearch = () => {
-
     };
 
     createQuestionButton = () => {
@@ -191,6 +186,7 @@ export const QuestionHomePage = connect(
     }),
     (dispatch) => ({
         fetchQuestion: () => dispatch(QuestionActions.getQuestionPreviews()),
-        blurrySearch: (inputStrings: string[]) => dispatch(QuestionActions.BlurrySearch(inputStrings)),
+        blurrySearch: (inputStrings: string[]) => dispatch(QuestionActions.blurrySearch(inputStrings)),
+        preciseSearch: (searchQuestionObject: QuestionDto) => dispatch(QuestionActions.preciseSearch(searchQuestionObject)),
     })
 )(QuestionHomeComponent);

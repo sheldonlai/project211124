@@ -25,6 +25,7 @@ export class QuestionAPI extends BaseAPI {
         this.router.put(APIUrls.UpdateQuestionComment, mustBeAuthenticated, this.updateComment);
         this.router.put(APIUrls.DeleteQuestionComment, mustBeAuthenticated, this.deleteComment);
         this.router.post(APIUrls.blurryQuestionSearch, maybeAuthenticated, this.blurrySearch);
+        this.router.post(APIUrls.preciseQuestionSearch, maybeAuthenticated, this.preciseSearch);
     }
 
     public getQuestionPreviews = (req: AuthRequest, res: Response, next: NextFunction) => {
@@ -97,5 +98,11 @@ export class QuestionAPI extends BaseAPI {
         this.respondPromise(result, res, next);
     }
 
-
+    public preciseSearch = (req: AuthRequest, res: Response, next: NextFunction) => {
+        let id = req.params.id;
+        let searchObject = req.body;
+        let user: User = req.user;
+        let result = this.service.preciseSearch(searchObject);
+        this.respondPromise(result, res, next);
+    }
 }

@@ -57,6 +57,15 @@ export const QuestionHomeReducer = (state = initialState, action) : QuestionHome
                 lastUpdated: state.lastUpdated,
                 error: ''
             };
+        case QuestionActionTypes.PreciseSearchOK:
+            return {
+                status: ReducerStateStatus.DONE,
+                featuredQuestions: action.data,
+                myQuestions: state.myQuestions,
+                lastUpdated: state.lastUpdated,
+                error: ''
+            };
+
         default:
             return state;
     }

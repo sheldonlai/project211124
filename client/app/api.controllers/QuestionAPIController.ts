@@ -149,6 +149,10 @@ export class QuestionAPIController extends ApiController {
         return this.post(APIUrls.blurryQuestionSearch, inputStrings);
     }
 
+    preciseSearch(searchQuestionObject: QuestionDto): AxiosPromise {
+        return this.post(APIUrls.preciseQuestionSearch, searchQuestionObject);
+    }
+
     markAnswerAsCorrect = (answer: Answer) => {
         return this.put(APIUrls.MarkAnswerAsCorrect, answer).then((response: AxiosResponse) => {
             response.data = response.data.map( e => this.convertDtoToAnswer(e));
