@@ -111,8 +111,17 @@ export const preciseSearch = (searchObject: QuestionDto) => {
         });
         shouldArray.push({"match": {"title": searchObject.title}});
     }
-
-
+    if(searchObject.content){
+        shouldArray.push({"match":{"content.blocks.text": searchObject.content}});
+    }
+    if(searchObject.author){
+        shouldArray.push({"match":{"author.username": searchObject.author}});
+    }
+    //Implement later
+    //if(searchObject.tags)
+    if(searchObject.category){
+        shouldArray.push({"match": {"category": searchObject.category}});
+    }
     return query;
 };
 
