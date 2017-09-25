@@ -17,6 +17,7 @@ export default class StringUtils {
         /** return required number of characters */
     }
 
+    // TODO: switch to bcrypt
     /**
      * hash string 'str' with sha512.
      * @function

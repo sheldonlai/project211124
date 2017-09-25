@@ -18,4 +18,8 @@ export class NotificationRepository
         return this.filter({ recipient: user._id } );
     }
 
+    applyAdditionalFunction(n: Notification) {
+        return Notification.fromObject(n);
+    }
+
 }

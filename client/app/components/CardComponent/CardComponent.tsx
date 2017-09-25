@@ -1,15 +1,11 @@
 import * as React from "react";
-import {createStyleSheet, withStyles} from "material-ui/styles";
-import Card, {CardActions, CardContent} from "material-ui/Card";
-import Button from "material-ui/Button";
-import Typography from "material-ui/Typography";
-import {convertDateTimeToString, convertDateToString} from "../../utils/DateUtils";
 import {CSSProperties} from "react";
+import {createStyleSheet} from "material-ui/styles";
+import Typography from "material-ui/Typography";
+import {convertDateToString} from "../../utils/DateUtils";
 import Paper from "material-ui/Paper/Paper";
-import {PRIMARY_COLOR} from "../../views/router";
 import Grid from "material-ui/Grid/Grid";
 import {AuthorLink} from "../RoutingComponents/AuthorLink";
-import {blueGrey} from "material-ui/colors";
 import {CategoryTypeEnum} from "../../../../server/enums/CategoryTypeEnum";
 import {CategoryDisplay} from "../Images/CateogryDisplay";
 

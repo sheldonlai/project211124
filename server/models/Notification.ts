@@ -22,6 +22,14 @@ export class Notification extends BaseModel {
         this.sendAt = new Date;
     }
 
+    static fromObject(obj: Partial<Notification>): Notification {
+        let object = new Notification(undefined, undefined);
+        for (let key of Object.keys(obj)) {
+            object[key] = obj[key]
+        }
+        return object;
+    }
+
     getMessage(): string {
         return (<NotifiableEntity>this.notifiableEntity).buildMessage(<User>this.recipient);
     }

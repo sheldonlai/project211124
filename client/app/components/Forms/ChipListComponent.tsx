@@ -1,7 +1,7 @@
 import * as React from 'react';
-import {withStyles, createStyleSheet} from 'material-ui/styles';
+import {Component} from 'react';
+import {createStyleSheet} from 'material-ui/styles';
 import Chip from 'material-ui/Chip';
-import {Component} from "react";
 
 export interface ChipListComponentProps {
     keyName?: string
