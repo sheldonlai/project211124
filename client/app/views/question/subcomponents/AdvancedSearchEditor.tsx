@@ -4,17 +4,18 @@ import {DisplayField} from "../../../components/Forms/DisplayField";
 import {DropDownForum} from "../../../components/Forms/DropDownForum";
 import {ForumDto} from "../../../../../server/dtos/sharedDtos/ForumDto";
 import {QuestionDto} from "../../../../../server/dtos/q&a/QuestionDto";
+import {SearchQuestionQuery} from "../../../../../server/models/Question"
 
 interface props {
-    SearchQuestionObj: Object,
-    UpdateQuestionObj: (SearchQuestionObj: Object) => void,
+    SearchQuestionObj: SearchQuestionQuery,
+    UpdateQuestionObj: (searchQuestionObj: SearchQuestionQuery) => void,
 }
 
 interface state {
 }
 
 /*
- SearchQuestionObj: {
+ searchQuestionObj: {
  _id: "",
  title: "",
  author: undefined,

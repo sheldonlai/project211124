@@ -10,6 +10,7 @@ import {CategoryTypeEnum} from "../enums/CategoryTypeEnum";
 import {QuestionPreviewDto} from "../dtos/q&a/QuestionPreviewDto";
 import {DraftJsHelper} from "../utils/DraftJsHelper";
 import {FileUploadRecord} from "./FileUploadRecord";
+import {UserDto} from "../dtos/auth/UserDto";
 
 let mongoosastic = require("mongoosastic");
 
@@ -161,6 +162,17 @@ schema.plugin(mongoosastic, {
         {path: 'tags', select: 'tag'},
     ]
 });
+
+export interface SearchQuestionQuery {
+    _id: string,
+    title: string,
+    author: UserDto,
+    content: RawDraftContentState,
+    //createdUtc: Date;
+    tags: any[],
+    difficulty: QuestionDifficulty,
+    category: CategoryTypeEnum,
+}
 
 export const QuestionModel = model<IQuestion>('question', schema);
 

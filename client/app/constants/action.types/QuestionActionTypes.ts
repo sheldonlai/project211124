@@ -62,6 +62,9 @@ export enum QuestionActionTypes {
     BlurrySearchOK = <any> "BlurrySearchOK",
     BlurrySearchError = <any> "BlurrySearchError",
 
+    PreciseSearchOK = <any> "PreciseSearchOK",
+    PreciseSearchError = <any> "PreciseSearchError",
+
     AdvancedSearchOk = <any> "AdvancedSearchOK",
     AdvancedSearchError = <any> "AdvancedSearchError",
 }

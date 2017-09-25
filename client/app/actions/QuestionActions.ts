@@ -139,19 +139,28 @@ export class QuestionActions extends BaseActions {
         }
     }
 
-    static BlurrySearch(inputStrings: string[]){
+    static blurrySearch(inputStrings: string[]){
         return (dispatch) => {
             apiController.blurryQuestinoSearch(inputStrings).then(res => {
-                res.data.map(question => {
-                    console.log(question);
-                    return question;
-                });
                 dispatch({
                     type: QuestionActionTypes.BlurrySearchOK,
                     data: res.data
                 })
             }).catch(err =>
                     QuestionActions.handleError(dispatch, err, QuestionActionTypes.BlurrySearchError)
+            )
+        }
+    }
+
+    static preciseSearch(searchQuestionObject: QuestionDto){
+        return (dispatch) => {
+            apiController.preciseSearch(searchQuestionObject).then(res => {
+                dispatch({
+                    type: QuestionActionTypes.PreciseSearchOK,
+                    data: res.data
+                })
+            }).catch(err =>
+                    QuestionActions.handleError(dispatch, err, QuestionActionTypes.PreciseSearchError)
             )
         }
     }
