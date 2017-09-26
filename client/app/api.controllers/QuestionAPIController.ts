@@ -146,7 +146,17 @@ export class QuestionAPIController extends ApiController {
     }
 
     blurryQuestinoSearch(inputStrings: string[]): AxiosPromise {
-        return this.post(APIUrls.blurryQuestionSearch, inputStrings);
+        return this.post(APIUrls.blurryQuestionSearch, inputStrings).then(response => {
+            let data: any[] = response.data;
+            let new_data: any[] = [];
+            if(data.length > 0){
+                new_data = data.map(preview => {
+                    return QuestionPreview.fromQuestionPreviewDto(preview);
+                })
+            }
+            response.data = new_data;
+            return response;
+        })
     }
 
     preciseSearch(searchQuestionObject: QuestionDto): AxiosPromise {

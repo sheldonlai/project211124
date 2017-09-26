@@ -18,6 +18,7 @@ import {RatingPreviewCard} from "./subcomponents/RatingPreviewCard";
 import {LoadingScreen} from "../../components/Animations/LoadingScreen";
 import {RouterController} from "../../api.controllers/RouterController";
 import {Routes} from "../../constants/Routes";
+import {CustomLink} from "../../components/RoutingComponents/CustomLink";
 
 interface state {
     teammateObj: TeammateRecordDto;
@@ -151,8 +152,16 @@ export class CreateTeammateViewComponent extends React.Component<props, state> {
                                 city={teammate.city}
                                 onChange={this.updateObj}
                             />
-                            <Grid container justify="flex-end">
-                                <Grid item>
+                            <Grid container spacing={24}>
+                                <Grid item xs>
+                                    <CustomLink to={Routes.people}>
+                                        <Button style={{margin: "10px 0px"}}>
+                                            Cancel
+                                        </Button>
+                                    </CustomLink>
+                                </Grid>
+                                <Grid item xs={6}></Grid>
+                                <Grid item xs>
                                     <Button style={{margin: "10px 0px"}} onClick={this.onSubmit}>
                                         Submit
                                     </Button>

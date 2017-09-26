@@ -43,8 +43,8 @@ export class APIUrls {
 
     static MarkAnswerAsCorrect = "/answer-correct";
 
-    static blurryQuestionSearch = "/blurry-teammate-search";
-    static preciseQuestionSearch = "/precise-teammate-search";
+    static blurryQuestionSearch = "/blurry-question-search";
+    static preciseQuestionSearch = "/precise-question-search";
 
     /* Utils */
     static getCountries = "/get-countries";
