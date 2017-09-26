@@ -80,18 +80,28 @@ export class AdvancedSearchEditor extends React.Component<props, state> {
     render() {
         return (
             <div>
-                <DropDownForum
-                    data = {this.ForumVector}
-                />
-                <DropDownSelect
-                    placeholder="Category"
-                    data={getDropDownDataFromStringEnum(CategoryTypeEnum)}
-                    onChange={this.onCategoryChange}
-                    value={this.state.category}
-                />
-                <TagsSelector selectedTags={this.state.tags} onChange={this.updateTags}/>
-                <QuestionDifficultyMenu difficulty={this.state.difficulty}
-                                        onDifficultyChange={this.onDifficultyChange}/>
+                <Grid container spacing={24}>
+                    <Grid item xs={12}>
+                        <DropDownForum
+                            data = {this.ForumVector}
+                        />
+                    </Grid>
+                    <Grid item sm={4}>
+                        <DropDownSelect
+                            placeholder="Category"
+                            data={getDropDownDataFromStringEnum(CategoryTypeEnum)}
+                            onChange={this.onCategoryChange}
+                            value={this.state.category}
+                        />
+                    </Grid>
+                    <Grid item sm={4}>
+                        <TagsSelector selectedTags={this.state.tags} onChange={this.updateTags}/>
+                    </Grid>
+                    <Grid item sm={4}>
+                        <QuestionDifficultyMenu difficulty={this.state.difficulty}
+                                                onDifficultyChange={this.onDifficultyChange}/>
+                    </Grid>
+                </Grid>
             </div>
         )
     }
