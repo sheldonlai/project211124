@@ -1,5 +1,6 @@
 import {UserPreferences} from "../models/UserPerferences";
 import {QuestionDto} from "../dtos/q&a/QuestionDto";
+import {DifficultyLevel, QuestionEducationLevel} from "../enums/QuestionEducationLevel";
 
 export const getQuestionsQueryByPreference = (userPreference: UserPreferences) => {
 
@@ -91,7 +92,10 @@ export const blurrySearch = (InputStrings: string[]) => {
 };
 
 export const preciseSearch = (searchObject: QuestionDto) => {
-    if(!searchObject.title && !searchObject.author && !searchObject.content && !searchObject.tags && !searchObject.category){
+    if(!searchObject.title && !searchObject.author && !searchObject.content
+        && !searchObject.tags && !searchObject.category
+        && searchObject.difficulty.difficultyLevel == DifficultyLevel.NOT_SPECIFIED
+        && searchObject.difficulty.educationLevel == QuestionEducationLevel.NOT_SPECIFIED){
         return {"match_none": {}};
     }
 
@@ -105,8 +109,10 @@ export const preciseSearch = (searchObject: QuestionDto) => {
     if(searchObject.title){
         shouldArray.push({
             "fuzzy": {
-                "value": searchObject.title,
-                "fuzziness": 2,
+                "title": {
+                    "value": searchObject.title,
+                    "fuzziness": 2,
+                }
             }
         });
         shouldArray.push({"match": {"title": searchObject.title}});
@@ -117,11 +123,22 @@ export const preciseSearch = (searchObject: QuestionDto) => {
     if(searchObject.author){
         shouldArray.push({"match":{"author.username": searchObject.author}});
     }
-    //Implement later
-    //if(searchObject.tags)
+    if(searchObject.tags.length > 0){
+        searchObject.tags.forEach(tag => {
+            shouldArray.push({"match": {"tags.tag": tag}});
+        })
+    }
     if(searchObject.category){
         shouldArray.push({"match": {"category": searchObject.category}});
     }
+    if(searchObject.difficulty.educationLevel != QuestionEducationLevel.NOT_SPECIFIED){
+        shouldArray.push({"match": {"difficulty.educationLevel": searchObject.difficulty.educationLevel}});
+    }
+    if(searchObject.difficulty.difficultyLevel != DifficultyLevel.NOT_SPECIFIED){
+        shouldArray.push({"match": {"difficulty.difficultyLevel": searchObject.difficulty.difficultyLevel}});
+    }
+    query.bool["should"] = shouldArray;
+    console.log(JSON.stringify(query));
     return query;
 };
 

@@ -154,6 +154,7 @@ export class QuestionActions extends BaseActions {
 
     static preciseSearch(searchQuestionObject: QuestionDto){
         return (dispatch) => {
+            console.log(searchQuestionObject);
             apiController.preciseSearch(searchQuestionObject).then(res => {
                 dispatch({
                     type: QuestionActionTypes.PreciseSearchOK,
