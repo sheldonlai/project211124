@@ -2,6 +2,7 @@ import {QuestionComment, QuestionDifficulty} from "../../models/Question";
 import {UserDto} from "../auth/UserDto";
 import {RawDraftContentState} from "draft-js";
 import {RecruitmentCommentDto} from "./RecruitmentCommenDto";
+import {University} from "../../models/LocationModels/Universities";
 
 enum RecruitStatus {
     Open,

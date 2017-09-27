@@ -10,24 +10,24 @@ import {TeammatePreviewDto} from "../../../../server/dtos/rating/TeammatePreview
 import {CardActions, CardContent} from 'material-ui/Card';
 import {ReducerStateStatus} from "../../constants/ReducerStateStatus";
 import {LoadingScreen} from "../../components/Animations/LoadingScreen";
-import {RatingPreviewCard} from "./subcomponents/RatingPreviewCard";
+import {RatingPreviewCard} from "../rating/subcomponents/RatingPreviewCard";
 import {TeammateRecordDto} from "../../../../server/dtos/rating/TeammateRecordDto";
 import Input from "material-ui/Input/Input";
 import Icon from 'material-ui/Icon';
 import IconButton from 'material-ui/IconButton'
 import Typography from "material-ui/Typography";
 import TextField from 'material-ui/TextField';
-import {AdvancedSearchEditor} from './subcomponents/AdvancedSearchEditor'
+import {AdvancedSearchEditor} from '../rating/subcomponents/AdvancedSearchEditor'
 import {RatingApiController} from "../../api.controllers/RatingApiController";
 import Tabs from "material-ui/Tabs/Tabs";
 import Tab from "material-ui/Tabs/Tab";
-import {RatingHomeView} from "./RatingHomeView";
+import {RatingHomeView} from "../rating/RatingHomeView";
 
 interface state {
     tab: number;
 }
 
-export class RatingHomeViewComponent extends React.Component<StateToProps & DispatchToProps, state> {
+export class RecruitmentHomeComponent extends React.Component<StateToProps & DispatchToProps, state> {
     private apiController: RatingApiController;
 
     constructor(props) {
@@ -84,7 +84,7 @@ const mapStateToProps = (state: AppStoreState): StateToProps => ({
     loggedIn: state.auth.loggedIn,
 });
 
-export const PeopleHomeView = connect<StateToProps, DispatchToProps, any>(
+export const RecruitmentHomeView = connect<StateToProps, DispatchToProps, any>(
     mapStateToProps,
     mapDispatchToProps
-)(RatingHomeViewComponent);
+)(RecruitmentHomeComponent);

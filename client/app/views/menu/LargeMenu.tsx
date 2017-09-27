@@ -82,7 +82,7 @@ export class LargeMenu extends React.Component<props> {
                     {MenuButton("Questions", Routes.question)}
                     {MenuButton("Stories", Routes.story)}
                     {MenuButton("People", Routes.people)}
-                    {MenuButton("People new", Routes.people_new)}
+                    {MenuButton("Recruitment", Routes.recruitment)}
                 </div>
                 <div>
                     {this.buttons()}

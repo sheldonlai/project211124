@@ -22,13 +22,14 @@ export class Routes {
 
     // rating
     static people = "/people";
-    static people_new = "/people-new";
     static create_teammate_record = "/people/create-record";
     static rating = "/people-view/:id";
+
+    // recruitment
+    static recruitment = "/recruitment";
 
     // admin
     static admin = '/admin';
     static admin_dashboard = '/admin/dashboard';
     static admin_teammate = '/admin/teammate';
-
 }

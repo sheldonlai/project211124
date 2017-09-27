@@ -42,11 +42,11 @@ export class Recruitment extends BaseModel{
         public title: string,
         public content: string,
         public recruitStatus: RecruitStatus,
-        public university?: University,
-        public courseDifficulty?: QuestionDifficulty,
         public createdBy: User,
         public createdAt: Date,
         public updatedAt: Date,
+        public university?: University,
+        public courseDifficulty?: QuestionDifficulty,
     ){
         super();
         this.comments = [];
@@ -89,7 +89,7 @@ const schema = new Schema({
     },
     comments: [
         {
-            request: {type: String, enum: Objeect.keys(RequestToJoin), default: RequestToJoin.NOT_SPECIFIED},
+            request: {type: String, enum: Object.keys(RequestToJoin), default: RequestToJoin.NOT_SPECIFIED},
             comment: {type: String},
             createdBy: {type: Schema.Types.ObjectId, ref: 'user'},
             createdAt: {type: Date, default: Date.now()},
