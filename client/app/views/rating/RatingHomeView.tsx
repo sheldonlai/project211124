@@ -16,7 +16,7 @@ import Icon from 'material-ui/Icon';
 import IconButton from 'material-ui/IconButton'
 import Typography from "material-ui/Typography";
 import TextField from 'material-ui/TextField';
-import {AdvancedSearchEditor} from './subcomponents/AdvancedSearchEditor'
+import {TeammateAdvancedSearchEditor} from './subcomponents/TeammateAdvancedSearchEditor'
 import {RatingApiController} from "../../api.controllers/RatingApiController";
 import Input from "material-ui/Input/Input";
 import {SearchBarComponent} from "../../components/SearchBar/SearchBarComponent";
@@ -80,8 +80,8 @@ export class RatingHomeViewComponent extends React.Component<StateToProps & Disp
                     </Grid>
                     <Grid item sm={8}>
                         {this.state.AdvancedSearch &&
-                        <AdvancedSearchEditor SearchTeammateObj={this.state.SearchTeammateObj}
-                                              UpdateSearchTeammateObj={this.UpdateSearchTeammateObj}/>}
+                        <TeammateAdvancedSearchEditor SearchTeammateObj={this.state.SearchTeammateObj}
+                                                      UpdateSearchTeammateObj={this.UpdateSearchTeammateObj}/>}
                     </Grid>
                 </Grid>
             </div>

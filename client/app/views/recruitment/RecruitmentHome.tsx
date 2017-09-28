@@ -17,7 +17,7 @@ import Icon from 'material-ui/Icon';
 import IconButton from 'material-ui/IconButton'
 import Typography from "material-ui/Typography";
 import TextField from 'material-ui/TextField';
-import {AdvancedSearchEditor} from '../rating/subcomponents/AdvancedSearchEditor'
+import {TeammateAdvancedSearchEditor} from '../rating/subcomponents/TeammateAdvancedSearchEditor'
 import {RatingApiController} from "../../api.controllers/RatingApiController";
 import Tabs from "material-ui/Tabs/Tabs";
 import Tab from "material-ui/Tabs/Tab";

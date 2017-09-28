@@ -14,16 +14,15 @@ interface state {
 
 let FieldNames = [{FieldName: 'First Name', ActualName:'firstName'}, {FieldName: 'Middle Name', ActualName: 'middleName'}, {FieldName: 'Last Name', ActualName: 'lastName'}, {FieldName: 'Description', ActualName: 'description'}];
 
-export class AdvancedSearchEditor extends React.Component<props, state> {
+export class TeammateAdvancedSearchEditor extends React.Component<props, state> {
     ForumVector:ForumDto[];
     constructor(props) {
         super(props);
-        // TODO : fix This
         this.ForumVector = FieldNames.map((Field) => (
             {
                 FieldName: Field.FieldName, ActualFieldName:
-            Field.ActualName, UpdateHandler: this.UpdateHandler, value: undefined
-            })) as any;
+            Field.ActualName, updateHandler: this.UpdateHandler, value: undefined
+            }));
     }
 
     UpdateHandler = (key: string, element: any) => {

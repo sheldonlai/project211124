@@ -38,7 +38,7 @@ let FieldNames : any = [{FieldName: 'Question Title', ActualName:'title'},
     {FieldName: 'Author', ActualName: 'author'},
     {FieldName: 'Question Content', ActualName: 'content'}];
 
-export class AdvancedSearchEditor extends React.Component<props, state> {
+export class QuestionAdvancedSearchEditor extends React.Component<props, state> {
     ForumVector:ForumDto[];
     constructor(props) {
         super(props);
@@ -50,12 +50,11 @@ export class AdvancedSearchEditor extends React.Component<props, state> {
                 difficultyLevel: DifficultyLevel.NOT_SPECIFIED,
             },
         };
-        // TODO : fix this please
         this.ForumVector = FieldNames.map((Field) =>
             ({
                 FieldName: Field.FieldName, ActualFieldName:
                 Field.ActualName, updateHandler: this.UpdateHandler, value: undefined
-            })) as any;
+            }));
     }
 
     UpdateHandler = (key: string, element: any) => {

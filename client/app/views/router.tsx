@@ -20,7 +20,7 @@ import {AppStoreState} from "../stores/AppStore";
 import {UserTypeEnum} from "../../../server/enums/UserTypeEnum";
 import {ProfileView} from "./profile/ProfileView";
 import {RecruitmentHomeView} from "./recruitment/RecruitmentHome";
-//import {CreateRecruitmentView} from "./recruitment/CreateRecruitmentView"
+import {CreateRecruitmentView} from "./recruitment/CreateRecruitmentView"
 
 let questionLoader = require("bundle-loader?lazy&name=question!./question/QuestionRouter");
 let storyLoader = require("bundle-loader?lazy&name=story!./story/StoryRouter");
@@ -88,6 +88,7 @@ export class App extends React.Component<any, any> {
                             <Route exact path={Routes.rating} component={RatingPageView}/>
                             <Route exact path={Routes.recruitment} component={RecruitmentHomeView}/>
                             <Route path={Routes.admin} component={AdminModule} />
+                            <Route exact path={Routes.create_recruitment} component={CreateRecruitmentView}/>
                         </div>
                     </Router>
                 </Provider>
@@ -95,7 +96,3 @@ export class App extends React.Component<any, any> {
         )
     }
 }
-
-/*
- <Route exact path={Routes.create_recruitment} component={CreateRecruitmentView}/>
- */

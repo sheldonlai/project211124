@@ -15,7 +15,7 @@ import {PreviewCardsComponent} from "../../components/CardComponent/PreviewCards
 import {SearchQuestionQuery} from "../../../../server/models/Question";
 import {PRIMARY_COLOR} from "../router";
 import {SearchBarComponent} from "../../components/SearchBar/SearchBarComponent";
-import {AdvancedSearchEditor} from "./subcomponents/AdvancedSearchEditor";
+import {QuestionAdvancedSearchEditor} from "./subcomponents/AdvancedSearchEditor";
 import {QuestionDto} from "../../../../server/dtos/q&a/QuestionDto";
 
 export interface QuestionViewProps extends QuestionHomeReducerState {
@@ -83,8 +83,8 @@ class QuestionHomeComponent extends Component<QuestionViewProps, state> {
                     </Grid>
                     <Grid item sm={8}>
                         {this.state.AdvancedSearch &&
-                        <AdvancedSearchEditor SearchQuestionObj={this.state.searchQuestionObj}
-                                              UpdateQuestionObj={this.updateSearchObj}/>}
+                        <QuestionAdvancedSearchEditor SearchQuestionObj={this.state.searchQuestionObj}
+                                                      UpdateQuestionObj={this.updateSearchObj}/>}
                     </Grid>
                 </Grid>
             </div>
