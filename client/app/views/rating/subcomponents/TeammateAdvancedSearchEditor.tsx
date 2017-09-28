@@ -21,7 +21,7 @@ export class TeammateAdvancedSearchEditor extends React.Component<props, state> 
         this.ForumVector = FieldNames.map((Field) => (
             {
                 FieldName: Field.FieldName, ActualFieldName:
-            Field.ActualName, updateHandler: this.UpdateHandler, value: undefined
+            Field.ActualName, value: undefined
             }));
     }
 
@@ -36,6 +36,7 @@ export class TeammateAdvancedSearchEditor extends React.Component<props, state> 
             <div>
                 <DropDownForum
                     data = {this.ForumVector}
+                    updateHandler={this.UpdateHandler}
                 />
                 <TeammateLocationEditor university={this.props.SearchTeammateObj.university}
                                         year={this.props.SearchTeammateObj.year}

@@ -10,6 +10,7 @@ import {PropTypes} from "material-ui";
 
 interface props {
     data: ForumDto[];
+    updateHandler: (key: string, value: any) => void;
     onChange?: (element: any) => void;
     fullWidth? : boolean;
 }
@@ -55,8 +56,8 @@ export class DropDownForum extends React.Component<props> {
                         label={data.FieldName}
                         placeholder={data.FieldName}
                         onChange={(event: any) => {
-
-                            return data.updateHandler(data.ActualFieldName, event.target.value)
+                            return this.props.updateHandler(data.ActualFieldName, event.target.value)
+                            //return data.updateHandler(data.ActualFieldName, event.target.value)
                         }}
                         margin="normal"
                     />

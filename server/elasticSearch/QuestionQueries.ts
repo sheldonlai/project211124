@@ -1,6 +1,7 @@
 import {UserPreferences} from "../models/UserPerferences";
 import {QuestionDto} from "../dtos/q&a/QuestionDto";
 import {DifficultyLevel, QuestionEducationLevel} from "../enums/QuestionEducationLevel";
+import {CategoryTypeEnum} from "../enums/CategoryTypeEnum";
 
 export const getQuestionsQueryByPreference = (userPreference: UserPreferences) => {
 
@@ -128,7 +129,7 @@ export const preciseSearch = (searchObject: QuestionDto) => {
             shouldArray.push({"match": {"tags.tag": tag}});
         })
     }
-    if(searchObject.category){
+    if(searchObject.category != CategoryTypeEnum.NOT_SPECIFIED){
         shouldArray.push({"match": {"category": searchObject.category}});
     }
     if(searchObject.difficulty.educationLevel != QuestionEducationLevel.NOT_SPECIFIED){

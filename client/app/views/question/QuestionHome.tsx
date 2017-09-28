@@ -15,8 +15,10 @@ import {PreviewCardsComponent} from "../../components/CardComponent/PreviewCards
 import {SearchQuestionQuery} from "../../../../server/models/Question";
 import {PRIMARY_COLOR} from "../router";
 import {SearchBarComponent} from "../../components/SearchBar/SearchBarComponent";
-import {QuestionAdvancedSearchEditor} from "./subcomponents/AdvancedSearchEditor";
+import {QuestionAdvancedSearchEditor} from "./subcomponents/QuestionAdvancedSearchEditor";
 import {QuestionDto} from "../../../../server/dtos/q&a/QuestionDto";
+import {DifficultyLevel, QuestionEducationLevel} from "../../../../server/enums/QuestionEducationLevel";
+import {CategoryTypeEnum} from "../../../../server/enums/CategoryTypeEnum";
 
 export interface QuestionViewProps extends QuestionHomeReducerState {
     loggedIn: boolean;
@@ -41,10 +43,12 @@ class QuestionHomeComponent extends Component<QuestionViewProps, state> {
                 title: "",
                 author: undefined,
                 content: undefined,
-                //createdUtc: Date;
                 tags: [],
-                difficulty: undefined,
-                category: undefined,
+                category: CategoryTypeEnum.NOT_SPECIFIED,
+                difficulty: {
+                    educationLevel: QuestionEducationLevel.NOT_SPECIFIED,
+                    difficultyLevel: DifficultyLevel.NOT_SPECIFIED,
+                },
             },
             AdvancedSearch: false,
             SearchString: "",

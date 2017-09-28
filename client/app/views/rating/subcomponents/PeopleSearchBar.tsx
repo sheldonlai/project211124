@@ -31,7 +31,7 @@ export class AdvancedSearchEditor extends React.Component<props, state> {
     ForumVector:ForumDto[];
     constructor(props) {
         super(props);
-        this.ForumVector = FieldNames.map((Field) => ({FieldName: Field.FieldName, ActualFieldName: Field.ActualName, UpdateHandler: this.UpdateHandler, value: undefined}));
+        this.ForumVector = FieldNames.map((Field) => ({FieldName: Field.FieldName, ActualFieldName: Field.ActualName, value: undefined}));
     }
 
     UpdateHandler = (key: string, element: any) => {
@@ -45,6 +45,7 @@ export class AdvancedSearchEditor extends React.Component<props, state> {
             <div>
                 <DropDownForum
                     data = {this.ForumVector}
+                    updateHandler={this.UpdateHandler}
                 />
                 <TeammateLocationEditor university={this.props.SearchTeammateObj.university} year={this.props.SearchTeammateObj.year} city={this.props.SearchTeammateObj.city} onChange={this.UpdateHandler}/>
             </div>

@@ -53,7 +53,7 @@ export class QuestionAdvancedSearchEditor extends React.Component<props, state> 
         this.ForumVector = FieldNames.map((Field) =>
             ({
                 FieldName: Field.FieldName, ActualFieldName:
-                Field.ActualName, updateHandler: this.UpdateHandler, value: undefined
+                Field.ActualName, value: undefined
             }));
     }
 
@@ -76,7 +76,7 @@ export class QuestionAdvancedSearchEditor extends React.Component<props, state> 
     onCategoryChange = (category: CategoryTypeEnum) => {
         this.setState({category: category});
         this.UpdateHandler("category", category);
-    }
+    };
 
     render() {
         return (
@@ -85,6 +85,7 @@ export class QuestionAdvancedSearchEditor extends React.Component<props, state> 
                     <Grid item xs={12}>
                         <DropDownForum
                             data = {this.ForumVector}
+                            updateHandler={this.UpdateHandler}
                         />
                     </Grid>
                     <Grid item sm={4}>
