@@ -18,6 +18,8 @@ enum RecruitStatus {
 enum RequestToJoin{
     Yes,
     No,
+    Joined,
+    Denied,
     NOT_SPECIFIED,
 }
 
@@ -38,6 +40,7 @@ export class RecruitmentComment{
 export class Recruitment extends BaseModel{
     comments: RecruitmentComment[];
     groupMates: User[];
+    views: number;
     constructor(
         public title: string,
         public content: string,
@@ -51,6 +54,7 @@ export class Recruitment extends BaseModel{
         super();
         this.comments = [];
         this.groupMates = [];
+        this.views = 0;
     }
 }
 
@@ -99,6 +103,7 @@ const schema = new Schema({
     groupMates: [
         {type: Schema.Types.ObjectId, ref: 'user'}
     ],
+    views: {type: Number, default: 0},
 },{
     timestamps: true
 });
@@ -116,4 +121,4 @@ schema.plugin(mongoosastic, {
     ]
 });
 
-export const TeammateRecordModel = model<IRecruitment>('recruitment', schema);
+export const RecruitmentModel = model<IRecruitment>('recruitment', schema);

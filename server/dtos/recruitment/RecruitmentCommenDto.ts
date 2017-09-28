@@ -3,6 +3,8 @@ import {UserDto} from "../auth/UserDto";
 enum RequestToJoin{
     Yes,
     No,
+    Joined,
+    Denied,
     NOT_SPECIFIED,
 }
 

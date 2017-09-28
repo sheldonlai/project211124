@@ -1,6 +1,5 @@
 import * as React from "react";
 import {CSSProperties} from "react";
-import {createStyleSheet} from "material-ui/styles";
 import Typography from "material-ui/Typography";
 import {convertDateToString} from "../../utils/DateUtils";
 import Paper from "material-ui/Paper/Paper";

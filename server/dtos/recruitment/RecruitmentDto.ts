@@ -4,13 +4,15 @@ import {RawDraftContentState} from "draft-js";
 import {RecruitmentCommentDto} from "./RecruitmentCommenDto";
 import {University} from "../../models/LocationModels/Universities";
 
-enum RecruitStatus {
+export enum RecruitStatus {
     Open,
     Close,
     NOT_SPECIFIED,
 }
 
 export interface RecruitmentDto{
+    _id: string;
+    title: string;
     comments: RecruitmentCommentDto[];
     content: RawDraftContentState;
     recruitStatus: RecruitStatus;

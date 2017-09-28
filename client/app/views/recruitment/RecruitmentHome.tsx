@@ -55,6 +55,12 @@ export class RecruitmentHomeComponent extends React.Component<StateToProps & Dis
                 </Tabs>
                 {this.state.tab === 0 && 'Item Two'}
                 {this.state.tab === 1 && <RatingHomeView />}
+                <br/>
+                <CustomLink to={Routes.create_recruitment}>
+                    <Button style={{margin: "10px 0px"}}>
+                        RECRUIT TEAMMATE
+                    </Button>
+                </CustomLink>
             </div>
         )
     }
