@@ -1,6 +1,5 @@
 import * as React from 'react';
 import {Component} from 'react';
-import {createStyleSheet, withStyles} from 'material-ui/styles';
 import Grid from "material-ui/Grid";
 import TextField from "material-ui/TextField";
 import {ChipListComponent} from "../Forms/ChipListComponent";

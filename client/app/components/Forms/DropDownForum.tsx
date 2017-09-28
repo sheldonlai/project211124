@@ -6,6 +6,7 @@ import Button from "material-ui/Button";
 import Typography from 'material-ui/Typography';
 import {ForumDto} from "../../../../server/dtos/sharedDtos/ForumDto";
 import TextField from 'material-ui/TextField';
+import {PropTypes} from "material-ui";
 
 interface props {
     data: ForumDto[];
@@ -39,7 +40,7 @@ export class DropDownForum extends React.Component<props> {
         this.setState({open: false});
     };
 
-    bodyContainer = (text: string, color?: string) => {
+    bodyContainer = (text: string, color?: PropTypes.Color | 'secondary') => {
         color = color ? color : "default";
         return <Typography type="body1" color={color}>{text}</Typography>
     };
@@ -53,7 +54,10 @@ export class DropDownForum extends React.Component<props> {
                         key={data.FieldName}
                         label={data.FieldName}
                         placeholder={data.FieldName}
-                        onChange={event => data.UpdateHandler(data.ActualFieldName, event.target.value)}
+                        onChange={(event: any) => {
+
+                            return data.updateHandler(data.ActualFieldName, event.target.value)
+                        }}
                         margin="normal"
                     />
                 })}

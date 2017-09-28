@@ -7,7 +7,7 @@ import Typography from "material-ui/Typography/Typography";
 
 interface props {
     value: string;
-    onChange: (event: Event) => void;
+    onChange: (event) => void;
     onAdvanceSearch : () => void;
     onSearch: () => void;
 }
@@ -16,7 +16,6 @@ export class SearchBarComponent extends React.Component<props> {
     render() {
         return <div style={{position: "relative", width: "100%"}}>
             <Input
-                label="Search..."
                 placeholder="Search..."
                 style={{width: "calc(100% - 48px)", fontSize: 24}}
                 value={this.props.value}

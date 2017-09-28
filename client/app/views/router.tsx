@@ -1,11 +1,9 @@
 import * as React from "react";
 import {createMuiTheme, MuiThemeProvider} from "material-ui/styles";
-import createPalette from "material-ui/styles/palette";
 import {Route, Router} from "react-router";
 import {Home} from "./home/home";
 import {LoginPage} from "./auth/LoginView";
 import {Routes} from "../constants/Routes";
-import {RegistrationPage} from "./auth/subcomponents/RegistrationForm";
 import {RouterController} from "../api.controllers/RouterController";
 import {connect, Provider} from "react-redux";
 import {MenuView} from "./menu/Menu";
@@ -29,13 +27,13 @@ let storyLoader = require("bundle-loader?lazy&name=story!./story/StoryRouter");
 let adminLoader = require("bundle-loader?lazy&name=admin!./admin/AdminRouter");
 export const PRIMARY_COLOR = deepOrange[500];
 let muiTheme = createMuiTheme({
-    palette: createPalette({
+    palette: {
         primary: deepOrange,
         accent: {
             ...blueGrey,
             A200: blueGrey[500]
         },
-    })
+    }
 });
 const QuestionModule = () => (
     <Bundle load={questionLoader}>

@@ -76,7 +76,8 @@ export class StoryEditor extends React.Component<props, state>{
                                     label="Title"
                                     type="text"
                                     value={this.state.title}
-                                    onChange={(event) => this.updateStoryField('title', event.target.value)}
+                                    onChange={(event) =>
+                                        this.updateStoryField('title', (event.target as HTMLInputElement).value)}
                                 />
                             </Grid>
                             <Grid item xs={12} md={12}>

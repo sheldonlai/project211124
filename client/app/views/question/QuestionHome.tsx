@@ -6,25 +6,17 @@ import {AppStoreState} from "../../stores/AppStore";
 import {QuestionActions} from "../../actions/QuestionActions";
 import {QuestionHomeReducerState} from "../../reducers/QuestionHomeReducer";
 import {ErrorReducerState} from "../../reducers/ErrorReducer";
-import {CardText, CardTitle} from "material-ui/Card";
 import {CustomLink} from "../../components/RoutingComponents/CustomLink";
 import Button from "material-ui/Button";
 import Grid from "material-ui/Grid";
 import {LoadingScreen} from "../../components/Animations/LoadingScreen";
 import Typography from "material-ui/Typography";
 import {PreviewCardsComponent} from "../../components/CardComponent/PreviewCardsComponent";
-import Icon from 'material-ui/Icon';
-import IconButton from 'material-ui/IconButton'
-import {RawDraftContentState} from "draft-js";
-import {UserDto} from "../../../../server/dtos/auth/UserDto";
-import {QuestionDifficulty} from "../../../../server/models/Question";
-import {CategoryTypeEnum} from "../../../../server/enums/CategoryTypeEnum";
+import {SearchQuestionQuery} from "../../../../server/models/Question";
 import {PRIMARY_COLOR} from "../router";
-import Input from "material-ui/Input/Input";
 import {SearchBarComponent} from "../../components/SearchBar/SearchBarComponent";
 import {AdvancedSearchEditor} from "./subcomponents/AdvancedSearchEditor";
 import {QuestionDto} from "../../../../server/dtos/q&a/QuestionDto";
-import {SearchQuestionQuery} from "../../../../server/models/Question"
 
 export interface QuestionViewProps extends QuestionHomeReducerState {
     loggedIn: boolean;

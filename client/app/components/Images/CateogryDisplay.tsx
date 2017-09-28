@@ -2,8 +2,7 @@ import * as React from "react";
 import {CategoryTypeEnum} from "../../../../server/enums/CategoryTypeEnum";
 import Icon from "material-ui/Icon/Icon";
 import Typography from "material-ui/Typography/Typography";
-import {blueGrey, cyan, deepOrange, lightGreen, lightWhite, pink, red, teal} from "material-ui/colors";
-import {PRIMARY_COLOR} from "../../views/router";
+import {blueGrey, cyan, deepOrange, teal} from "material-ui/colors";
 
 interface props {
     category: CategoryTypeEnum;

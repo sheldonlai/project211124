@@ -12,6 +12,8 @@ import {PreviewCardsComponent} from "../../components/CardComponent/PreviewCards
 import {FrontEndQuestionModels} from "../../models/ProfileModels";
 import ProfilePage = FrontEndQuestionModels.ProfilePage;
 import {convertDateTimeToString, convertDateToString} from "../../utils/DateUtils";
+import {PropTypes} from "material-ui";
+import {TypographyType} from "../../models/MaterialUITypes";
 
 interface state {
     error: string;
@@ -40,7 +42,7 @@ export class ProfileComponent extends React.Component<props, state> {
         this.props.fetchProfile(this.props.match.params.username);
     }
 
-    fieldDisplay = (type: string, key: string) => {
+    fieldDisplay = (type: TypographyType, key: string) => {
         if (!this.props.profile[key])
             return undefined;
         return (

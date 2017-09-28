@@ -117,7 +117,8 @@ export class RatingBox extends React.Component<props & DispatchToProps& StateToP
                                 multiline
                                 rows={3}
                                 fullWidth
-                                onChange={(event) => this.onRatingChange("comment", event.target.value)}
+                                onChange={(event) =>
+                                    this.onRatingChange("comment", (event.target as HTMLInputElement).value)}
                             /> :
                             <Typography type="body1" style={{minHeight: 60}}>
                                 {rating.comment}

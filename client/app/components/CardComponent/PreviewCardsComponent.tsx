@@ -70,7 +70,7 @@ export class PreviewCardsComponent extends React.Component<props, state> {
         // determine what the maximum width is used for
         let maxWidth = (n > listLength) ? boxWidth * listLength : n * boxWidth;
         // maxWidth += bodyMargin;
-        const labelType = this.props.labelType ? this.props.labelType : "display1";
+        const labelType : any = this.props.labelType ? this.props.labelType : "display1";
         return (
             <Grid container justify="center" spacing={8}>
                 {this.props.children &&

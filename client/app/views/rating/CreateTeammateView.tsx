@@ -115,7 +115,8 @@ export class CreateTeammateViewComponent extends React.Component<props, state> {
                             <TextField
                                 label="First name"
                                 value={teammate.firstName}
-                                onChange={(event) => this.updateObj("firstName", event.target.value)}
+                                onChange={(event) =>
+                                    this.updateObj("firstName", (event.target as HTMLInputElement).value)}
                                 onBlur={() => this.searchForSimilarTeammate(this.state.teammateObj)}
                                 inputProps={NamesInputStyles}
                                 style={nameStyle}
@@ -123,7 +124,8 @@ export class CreateTeammateViewComponent extends React.Component<props, state> {
                             <TextField
                                 label="Last name"
                                 value={teammate.lastName}
-                                onChange={(event) => this.updateObj("lastName", event.target.value)}
+                                onChange={(event) =>
+                                    this.updateObj("lastName", (event.target as HTMLInputElement).value)}
                                 onBlur={() => this.searchForSimilarTeammate(this.state.teammateObj)}
                                 inputProps={NamesInputStyles}
                                 style={nameStyle}
@@ -143,7 +145,8 @@ export class CreateTeammateViewComponent extends React.Component<props, state> {
                                 multiline
                                 rows={3}
                                 fullWidth
-                                onChange={(event) => this.updateObj("description", event.target.value)}
+                                onChange={(event) =>
+                                    this.updateObj("description", (event.target as HTMLInputElement).value)}
                                 style={textFieldMargin}
                             /><br/>
                             <TeammateLocationEditor

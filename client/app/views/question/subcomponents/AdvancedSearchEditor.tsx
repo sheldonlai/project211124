@@ -1,9 +1,6 @@
 import * as React from "react";
-import Typography from "material-ui/Typography";
-import {DisplayField} from "../../../components/Forms/DisplayField";
 import {DropDownForum} from "../../../components/Forms/DropDownForum";
 import {ForumDto} from "../../../../../server/dtos/sharedDtos/ForumDto";
-import {QuestionDto} from "../../../../../server/dtos/q&a/QuestionDto";
 import {QuestionDifficulty, SearchQuestionQuery} from "../../../../../server/models/Question"
 import {TagsSelector} from "../../../components/TagsComponent/TagsComponent";
 import {CategoryTypeEnum} from "../../../../../server/enums/CategoryTypeEnum";
@@ -37,7 +34,7 @@ interface state {
  }
 */
 
-let FieldNames = [{FieldName: 'Question Title', ActualName:'title'},
+let FieldNames : any = [{FieldName: 'Question Title', ActualName:'title'},
     {FieldName: 'Author', ActualName: 'author'},
     {FieldName: 'Question Content', ActualName: 'content'}];
 
@@ -53,7 +50,12 @@ export class AdvancedSearchEditor extends React.Component<props, state> {
                 difficultyLevel: DifficultyLevel.NOT_SPECIFIED,
             },
         };
-        this.ForumVector = FieldNames.map((Field) => ({FieldName: Field.FieldName, ActualFieldName: Field.ActualName, UpdateHandler: this.UpdateHandler, value: undefined}));
+        // TODO : fix this please
+        this.ForumVector = FieldNames.map((Field) =>
+            ({
+                FieldName: Field.FieldName, ActualFieldName:
+                Field.ActualName, updateHandler: this.UpdateHandler, value: undefined
+            })) as any;
     }
 
     UpdateHandler = (key: string, element: any) => {

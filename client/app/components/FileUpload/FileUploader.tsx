@@ -144,7 +144,7 @@ export class FileUploader extends React.Component<FileUploaderProps, FileUploade
                         <div>
                             <Card onClick={(evt) => this.chooseFile(file, evt)}>
                                 {/* TODO : card media image={file.fileURL}*/}
-                                <CardMedia />
+                                <CardMedia image={file.fileURL}/>
                                 <CardContent style={{padding: 0, textAlign: 'center'}}>
                                    <span style={{
                                        color: '#222',

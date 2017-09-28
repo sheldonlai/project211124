@@ -18,7 +18,7 @@ export class ErrorView extends Component<ErrorViewProps, any> {
             )
         } else {
             return (
-                <div></div>
+                <div/>
             )
         }
 

@@ -32,7 +32,7 @@ export class ErrorComponent extends React.Component<ErrorComponentProps, any>{
                 open={this.props.errors.length < 1}
                 transition={<Slide direction={'left'} />}
                 onRequestClose={this.handleRequestClose}
-                contentProps={{
+                SnackbarContentProps={{
                     'aria-describedby': 'message-id',
                 }}
                 message={<span id="message-id">{this.props.errors[0]}</span>}

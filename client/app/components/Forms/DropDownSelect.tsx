@@ -1,9 +1,9 @@
 import * as React from 'react';
 import {CSSProperties} from 'react';
 import Menu, {MenuItem} from 'material-ui/Menu';
-import {ListItem, ListItemText} from 'material-ui/List';
 import Button from "material-ui/Button";
 import Typography from 'material-ui/Typography';
+import {MaterialUIColor} from "../../models/MaterialUITypes";
 
 interface props {
     data: DropDownSelectData[];
@@ -59,7 +59,7 @@ export class DropDownSelect extends React.Component<props, state> {
         this.setState({open: false});
     };
 
-    bodyContainer = (text: string, color?: string) => {
+    bodyContainer = (text: string, color?: MaterialUIColor) => {
         color = color ? color : "default";
         return <Typography type="body1" color={color}>{text}</Typography>
     };
