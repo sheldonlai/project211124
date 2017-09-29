@@ -4,6 +4,7 @@ import {BaseActions} from "./BaseActions";
 import {RecruitmentDto} from "../../../server/dtos/recruitment/RecruitmentDto";
 import {RecruitmentActionTypes} from "../constants/action.types/RecruitmentActionTypes";
 import {RouterController} from "../api.controllers/RouterController";
+import {RecruitmentConverter} from "../../../server/utils/RecruitmentConverter";
 
 let apiController: RecruitmentAPIController = RecruitmentAPIController.getInstance();
 
@@ -14,13 +15,13 @@ export class RecruitmentActions extends BaseActions{
             dispatch({
                 type: RecruitmentActionTypes.CreateRecruitmentRequest
             });
-            apiController.createRecruitment(recruitmentObj).thne(res => {
+            apiController.createRecruitment(RecruitmentConverter.dtoToModel(recruitmentObj)).then(res => {
                 dispatch({
                     type: RecruitmentActionTypes.CreateRecruitmentOK,
                     data: res.data
                 });
                 RouterController.history.push(":id", res.data._id);
-            }).catch(err => RecruitmentActions.handleError(dispatch, err, RecruitmentActiontypes.CreateRecruitmentError));
+            }).catch(err => RecruitmentActions.handleError(dispatch, err, RecruitmentActionTypes.CreateRecruitmentError));
         }
     }
 }

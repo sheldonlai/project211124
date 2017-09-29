@@ -35,6 +35,7 @@ export class RecruitmentService extends BaseService implements IRecruitmentServi
                  updatedAt: recruitmentObj.updatedAt,
                  comments: recruitmentObj.comments,
                  groupMates: recruitmentObj.groupMates,
+                 views: recruitmentObj.views,
              };
              return recruitmentDto;
         });

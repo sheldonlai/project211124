@@ -18,4 +18,5 @@ export interface RecruitmentDto{
     createdAt: Date;
     updatedAt: Date;
     groupMates: UserDto[];
+    views: number;
 }

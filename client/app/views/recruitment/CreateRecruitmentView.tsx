@@ -17,13 +17,14 @@ import {QuestionDifficultyMenu} from "../question/subcomponents/QuestionDifficul
 import {QuestionDifficulty} from "../../../../server/models/Question";
 import {CustomEditor} from "../../components/CustomEditor/CustomEditor";
 import {EditorState} from "draft-js";
+import {RecruitmentActions} from "../../actions/RecruitmentActions";
 
 export interface CreateRecruitmentState{
     error: string;
     recruitmentObj: RecruitmentDto;
-};
+}
 
-interface props extends stateToProps, dispatchToProps, RouterProps{}
+interface props extends stateToProps, dispatchToProps{}
 
 class CreateRecruitment extends Component<props, CreateRecruitmentState> {
     constructor(props){
@@ -43,6 +44,7 @@ class CreateRecruitment extends Component<props, CreateRecruitmentState> {
             createdAt: undefined,
             updatedAt: undefined,
             groupMates: [],
+            views: 0,
         };
         this.state = {
             error: '',
@@ -121,9 +123,12 @@ interface stateToProps {
 }
 
 interface dispatchToProps {
-    //createRecruitment: (recruitment: Recruitment) => void;
+    createRecruitment: (recruitment: RecruitmentDto) => void;
 }
 
-export const CreateRecruitmentView = (connect(
+export const CreateRecruitmentView = (connect<stateToProps, dispatchToProps, any>(
     (state: AppStoreState) => ({loggedIn: state.auth.loggedIn}),
+    (dispatch) => ({
+        createRecruitment: (recruitment: RecruitmentDto) => dispatch(RecruitmentActions.createRecruitment(recruitment))
+    })
 ))(CreateRecruitment);

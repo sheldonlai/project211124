@@ -5,12 +5,15 @@ import {BaseModel} from "./Base/BaseModel";
 import {User, userSchema} from "./User";
 import {UniversityYearEnum} from "../enums/UniversityYearEnum";
 import {listNumericalEnumValues} from "../utils/EnumsUtil";
-import * as mongoosastic from "mongoosastic";
 import {QuestionDifficulty} from "./Question";
 import {DifficultyLevel, QuestionEducationLevel} from "../enums/QuestionEducationLevel";
 import {RecruitStatus} from "../enums/RecruitmentStatusEnum";
 import {RecruitmentRequestEnum} from "../enums/RecruitmentRequestEnum";
 import {RawDraftContentState} from "draft-js";
+import {RecruitmentDto} from "../dtos/recruitment/RecruitmentDto";
+import {DraftJsHelper} from "../utils/DraftJsHelper";
+
+let mongoosastic = require("mongoosastic");
 
 export class RecruitmentComment{
     _id: any;
@@ -19,7 +22,7 @@ export class RecruitmentComment{
     createdBy: User;
     createdAt: Date;
     updatedAt: Date;
-    // TODO: add year and semester
+    // TODO: add year and semester, tags
     constructor(score: boolean, comment:string, createdBy: User){
         this.request = RecruitmentRequestEnum.NOT_SPECIFIED;
         this.comment = comment;
