@@ -22,8 +22,8 @@ interface updateObject {
 interface props {
 
     university: UniversityDto;
-    year: number;
     city: City;
+    year?: number;
     editable?: boolean;
     onChange?: (key:string, value: any) => void;
 }
@@ -99,6 +99,9 @@ class TeammateLocationEditorComponent extends React.Component<combinedProps, sta
         }
         return (
             <div>
+                <Typography type="body2">
+                    Locate your insitution
+                </Typography>
                 <DropDownSelect
                     data={countries}
                     value={this.state.country}
@@ -115,12 +118,15 @@ class TeammateLocationEditorComponent extends React.Component<combinedProps, sta
                             fullWidth
                             onChange={(uni)=> this.updateAcademicInfo("university", uni)}
                         />
-                        <DropDownSelect
-                            data={years}
-                            value={this.props.year}
-                            placeholder="Year"
-                            onChange={(uni) => this.updateAcademicInfo("year", uni)}
-                        />
+                        {
+                            this.props.year &&
+                            <DropDownSelect
+                                data={years}
+                                value={this.props.year}
+                                placeholder="Year"
+                                onChange={(uni) => this.updateAcademicInfo("year", uni)}
+                            />
+                        }
                     </div>
                 }
             </div>

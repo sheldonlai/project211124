@@ -4,11 +4,19 @@ import {RouterProps} from "react-router";
 import {Recruitment} from "../../../../server/models/Recruitment";
 import {connect} from "react-redux";
 import {AppStoreState} from "../../stores/AppStore";
-import {RecruitmentDto, RecruitStatus} from "../../../../server/dtos/recruitment/RecruitmentDto";
+import {RecruitmentDto} from "../../../../server/dtos/recruitment/RecruitmentDto";
 import {DifficultyLevel, QuestionEducationLevel} from "../../../../server/enums/QuestionEducationLevel";
 import Typography from "material-ui/Typography";
 import Grid from "material-ui/Grid";
 import TextField from "material-ui/TextField";
+import {DropDownSelect} from "../../components/Forms/DropDownSelect";
+import {getDropDownDataFromStringEnum} from "../../utils/utils";
+import {RecruitStatus} from "../../../../server/enums/RecruitmentStatusEnum";
+import {TeammateLocationEditor} from "../rating/subcomponents/TeammateLocationEditor";
+import {QuestionDifficultyMenu} from "../question/subcomponents/QuestionDifficultyMenu";
+import {QuestionDifficulty} from "../../../../server/models/Question";
+import {CustomEditor} from "../../components/CustomEditor/CustomEditor";
+import {EditorState} from "draft-js";
 
 export interface CreateRecruitmentState{
     error: string;
@@ -24,8 +32,8 @@ class CreateRecruitment extends Component<props, CreateRecruitmentState> {
             _id: '',
             comments: [],
             title: '',
-            content: undefined,
-            recruitStatus: RecruitStatus.NOT_SPECIFIED,
+            content: EditorState.createEmpty(),
+            recruitStatus: RecruitStatus.OPEN,
             university: undefined,
             courseDifficulty: {
                 educationLevel: QuestionEducationLevel.NOT_SPECIFIED,
@@ -59,16 +67,48 @@ class CreateRecruitment extends Component<props, CreateRecruitmentState> {
                             {this.state.error}
                         </Typography>
                     </Grid>
-                    <Grid item xs={12} md={6}>
-                        <TextField
-                            error={this.state.error.indexOf("Title") !== -1}
-                            style={input}
-                            label="Title"
-                            required
-                            type="text"
-                            value={this.state.recruitmentObj.title}
-                            onChange={(event: any) => {this.updateObj('title', event.target.value)}}
-                        />
+                    <Grid container style={inputContainer}>
+                        <Grid item xs={12} md={6}>
+                            <TextField
+                                error={this.state.error.indexOf("Title") !== -1}
+                                style={input}
+                                label="Title"
+                                required
+                                type="text"
+                                value={this.state.recruitmentObj.title}
+                                onChange={(event: any) => {this.updateObj('title', event.target.value)}}
+                            />
+                        </Grid>
+                        <Grid item xs={12}>
+                            <DropDownSelect
+                                placeholder={"Recruit Status"}
+                                data={getDropDownDataFromStringEnum(RecruitStatus)}
+                                onChange={(status) => this.updateObj("recruitStatus", status)}
+                                value={this.state.recruitmentObj.recruitStatus}
+                            />
+                        </Grid>
+                        <Grid item xs={12}>
+                            <TeammateLocationEditor
+                                university={this.state.recruitmentObj.university}
+                                city={undefined}
+                                onChange={this.updateObj}
+                            />
+                        </Grid>
+                        <Grid item xs={12}>
+                            <QuestionDifficultyMenu
+                                difficulty={this.state.recruitmentObj.courseDifficulty}
+                                onDifficultyChange={(diff: QuestionDifficulty) => this.updateObj("courseDifficulty", diff)}
+                            />
+                        </Grid>
+                        <Grid item xs={12} md={12}>
+                            <Typography type="caption" gutterBottom>Content :</Typography>
+                            <CustomEditor value={this.state.recruitmentObj.content}
+                                          onChange={(content: EditorState) => {
+                                              this.updateObj("content", content)
+                                          }}
+                                          style={{minHeight: 200}}
+                            />
+                        </Grid>
                     </Grid>
                 </Grid>
             </div>

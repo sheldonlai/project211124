@@ -19,6 +19,7 @@ import {LoadingScreen} from "../../components/Animations/LoadingScreen";
 import {RouterController} from "../../api.controllers/RouterController";
 import {Routes} from "../../constants/Routes";
 import {CustomLink} from "../../components/RoutingComponents/CustomLink";
+import {UniversityYearEnum} from "../../../../server/enums/UniversityYearEnum";
 
 interface state {
     teammateObj: TeammateRecordDto;
@@ -45,7 +46,7 @@ export class CreateTeammateViewComponent extends React.Component<props, state> {
             description: '',
             city: undefined,
             university: undefined,
-            year: undefined,
+            year: UniversityYearEnum.NOT_SPECIFIED,
             ratings: []
         };
         this.state = {

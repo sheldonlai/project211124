@@ -75,6 +75,9 @@ export class APIUrls {
     static UpVoteStory = "/up-vote-story";
     static DownVoteStory = "/down-vote-story";
 
+    /* Recruitment */
+    static createRecruitment = "/create-recruitment"
+
     /* Notification */
     static getNotificationsByUser = "/notifications";
     static notificationSeen = "/notification/seen/:id";
@@ -94,8 +97,6 @@ export class APIUrls {
 
     /* Notification */
     static NotificationFetch = "/fetch-notifications";
-
-
 
 
 }

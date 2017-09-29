@@ -24,13 +24,17 @@ import {RecruitmentDto} from "../dtos/recruitment/RecruitmentDto";
 import {Recruitment} from "../models/Recruitment";
 
 
-export interface IQuestionService {
-
+export interface IRecruitmentService {
+    createRecruitment(recruitment: RecruitmentDto, user: User): Promise<RecruitmentDto>;
 }
 
-export class QuestionService extends BaseService implements IQuestionService {
+export class RecruitmentService extends BaseService implements IRecruitmentService {
     constructor() {
         super();
+    }
+
+    createRecruitment(recruitment: RecruitmentDto, user: User): Promise<RecruitmentDto> {
+
     }
 
     private checkPermissionForModification = (recruitmentDto: RecruitmentDto, recruitmentObj: Recruitment, currentUser: User) => {

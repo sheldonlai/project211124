@@ -8,30 +8,20 @@ import {listNumericalEnumValues} from "../utils/EnumsUtil";
 import * as mongoosastic from "mongoosastic";
 import {QuestionDifficulty} from "./Question";
 import {DifficultyLevel, QuestionEducationLevel} from "../enums/QuestionEducationLevel";
-
-enum RecruitStatus {
-    Open,
-    Close,
-    NOT_SPECIFIED,
-}
-
-enum RequestToJoin{
-    Yes,
-    No,
-    Joined,
-    Denied,
-    NOT_SPECIFIED,
-}
+import {RecruitStatus} from "../enums/RecruitmentStatusEnum";
+import {RecruitmentRequestEnum} from "../enums/RecruitmentRequestEnum";
+import {RawDraftContentState} from "draft-js";
 
 export class RecruitmentComment{
     _id: any;
-    request: RequestToJoin;
+    request: RecruitmentRequestEnum;
     comment: string;
     createdBy: User;
     createdAt: Date;
     updatedAt: Date;
+    // TODO: add year and semester
     constructor(score: boolean, comment:string, createdBy: User){
-        this.request = RequestToJoin.NOT_SPECIFIED;
+        this.request = RecruitmentRequestEnum.NOT_SPECIFIED;
         this.comment = comment;
         this.createdBy = createdBy;
     }
@@ -40,18 +30,21 @@ export class RecruitmentComment{
 export class Recruitment extends BaseModel{
     comments: RecruitmentComment[];
     groupMates: User[];
+    createdBy: User;
+    createdAt: Date;
+    updatedAt: Date;
     views: number;
     constructor(
         public title: string,
-        public content: string,
+        public content: RawDraftContentState,
         public recruitStatus: RecruitStatus,
         public createdBy: User,
-        public createdAt: Date,
-        public updatedAt: Date,
         public university?: University,
         public courseDifficulty?: QuestionDifficulty,
     ){
         super();
+        this.createdAt = new Date(Date.now());
+        this.updatedAt = new Date(Date.now());
         this.comments = [];
         this.groupMates = [];
         this.views = 0;
@@ -93,7 +86,7 @@ const schema = new Schema({
     },
     comments: [
         {
-            request: {type: String, enum: Object.keys(RequestToJoin), default: RequestToJoin.NOT_SPECIFIED},
+            request: {type: String, enum: Object.keys(RecruitmentRequestEnum), default: RecruitmentRequestEnum.NOT_SPECIFIED},
             comment: {type: String},
             createdBy: {type: Schema.Types.ObjectId, ref: 'user'},
             createdAt: {type: Date, default: Date.now()},

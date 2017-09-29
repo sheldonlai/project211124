@@ -1,16 +1,9 @@
 import {UserDto} from "../auth/UserDto";
-
-enum RequestToJoin{
-    Yes,
-    No,
-    Joined,
-    Denied,
-    NOT_SPECIFIED,
-}
+import {RecruitmentRequestEnum} from "../../enums/RecruitmentRequestEnum";
 
 export interface RecruitmentCommentDto{
     _id: any;
-    request: RequestToJoin;
+    request: RecruitmentRequestEnum;
     comment: string;
     createdBy: UserDto;
     createdAt: Date;

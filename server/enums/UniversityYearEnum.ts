@@ -4,5 +4,6 @@ export enum UniversityYearEnum{
     YEAR_3,
     YEAR_4,
     GRADUATE_STUDIES,
-    GRADUATED
+    GRADUATED,
+    NOT_SPECIFIED,
 }
