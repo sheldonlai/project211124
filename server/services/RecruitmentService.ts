@@ -1,27 +1,11 @@
-import {IQuestionRepository} from "../repositories/QuestionRepository";
-import {IAnswerRepository} from "../repositories/AnswerRepository";
-import {QuestionDto} from "../dtos/q&a/QuestionDto";
-import {AnswerDto} from "../dtos/q&a/AnswerDto";
-import {Question, QuestionComment} from "../models/Question";
 import {User} from "../models/User";
-import {QuestionPageDto} from "../dtos/q&a/QuestionPageDto";
-import {Answer} from "../models/Answer";
 import {AppError} from "../errors/AppError";
 import {BaseService} from "./BaseService";
-import {QuestionPreviewCollectionsDto} from "../dtos/q&a/QuestionPreviewCollectionsDto";
-import {ClientError, HttpStatus} from "../errors/HttpStatus";
-import {ITagRepository} from "../repositories/TagRepository";
-import {ITag} from "../models/Tags";
-import {UserQuestionVote} from "../models/UserQuestionVote";
-import {CommentDto} from "../dtos/q&a/CommentDto"
-import {IUserRepository} from "../repositories/UserRepository";
-import {getQuestionsQueryByPreference} from "../elasticSearch/QuestionQueries";
-import {UserPreferences} from "../models/UserPerferences";
 import * as _ from "lodash";
-import {blurrySearch, preciseSearch} from "../elasticSearch/QuestionQueries"
-import {QuestionPreviewDto} from "../dtos/q&a/QuestionPreviewDto";
 import {RecruitmentDto} from "../dtos/recruitment/RecruitmentDto";
 import {Recruitment} from "../models/Recruitment";
+import {IRecruitmentRepository} from "../repositories/RecruitmentRepository";
+import {DraftJsHelper} from "../utils/DraftJsHelper";
 
 
 export interface IRecruitmentService {
@@ -29,12 +13,31 @@ export interface IRecruitmentService {
 }
 
 export class RecruitmentService extends BaseService implements IRecruitmentService {
-    constructor() {
+    constructor(
+        private recruitmentRepository: IRecruitmentRepository,
+    ) {
         super();
     }
 
     createRecruitment(recruitment: RecruitmentDto, user: User): Promise<RecruitmentDto> {
-
+        let recruitmentObject = new Recruitment(recruitment.title, DraftJsHelper.convertEditorStateToRaw(recruitment.content), recruitment.recruitStatus,
+                                                recruitment.createdBy, recruitment.university, recruitment.courseDifficulty);
+        return this.recruitmentRepository.create(recruitmentObject).then(recruitmentObj => {
+             let recruitmentDto: RecruitmentDto = {
+                 _id: recruitmentObj._id,
+                 title: recruitmentObj.title,
+                 content: DraftJsHelper.convertRawToEditorState(recruitmentObj.content),
+                 recruitStatus: recruitmentObj.recruitStatus,
+                 university: recruitmentObj.university,
+                 courseDifficulty: recruitmentObj.courseDifficulty,
+                 createdAt: recruitmentObj.createdAt,
+                 createdBy: recruitmentObj.createdBy,
+                 updatedAt: recruitmentObj.updatedAt,
+                 comments: recruitmentObj.comments,
+                 groupMates: recruitmentObj.groupMates,
+             };
+             return recruitmentDto;
+        });
     }
 
     private checkPermissionForModification = (recruitmentDto: RecruitmentDto, recruitmentObj: Recruitment, currentUser: User) => {

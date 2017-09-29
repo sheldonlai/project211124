@@ -96,7 +96,7 @@ export class QuestionAPI extends BaseAPI {
         let user: User = req.user;
         let result = this.service.blurrySearch(inputStrings);
         this.respondPromise(result, res, next);
-    }
+    };
 
     public preciseSearch = (req: AuthRequest, res: Response, next: NextFunction) => {
         let id = req.params.id;
@@ -104,5 +104,5 @@ export class QuestionAPI extends BaseAPI {
         let user: User = req.user;
         let result = this.service.preciseSearch(searchObject);
         this.respondPromise(result, res, next);
-    }
+    };
 }

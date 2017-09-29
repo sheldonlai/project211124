@@ -30,7 +30,6 @@ export class RecruitmentComment{
 export class Recruitment extends BaseModel{
     comments: RecruitmentComment[];
     groupMates: User[];
-    createdBy: User;
     createdAt: Date;
     updatedAt: Date;
     views: number;
