@@ -6,6 +6,7 @@ import {User, userSchema} from "./User";
 import {UniversityYearEnum} from "../enums/UniversityYearEnum";
 import {listNumericalEnumValues} from "../utils/EnumsUtil";
 import * as mongoosastic from "mongoosastic";
+import {esClient} from "../esClient";
 
 export interface AcademicInfo {
     university: University,
@@ -89,7 +90,8 @@ schema.plugin(mongoosastic, {
     populate: [
         {path: 'university', select: 'name'},
         {path: 'createdBy', select: 'username'}
-    ]
+    ],
+    esClient
 });
 
 export const TeammateRecordModel = model<ITeammateRecord>('teammateRecord', schema);

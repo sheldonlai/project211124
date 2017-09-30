@@ -12,6 +12,7 @@ import {RecruitmentRequestEnum} from "../enums/RecruitmentRequestEnum";
 import {RawDraftContentState} from "draft-js";
 import {RecruitmentDto} from "../dtos/recruitment/RecruitmentDto";
 import {DraftJsHelper} from "../utils/DraftJsHelper";
+import {esClient} from "../esClient";
 
 let mongoosastic = require("mongoosastic");
 
@@ -113,7 +114,8 @@ schema.plugin(mongoosastic, {
     populate: [
         {path: 'university', select: 'name'},
         {path: 'createdBy', select: 'username'}
-    ]
+    ],
+    esClient
 });
 
 export const RecruitmentModel = model<IRecruitment>('recruitment', schema);

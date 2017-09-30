@@ -62,6 +62,7 @@
     "cookie-parser": "^1.4.3",
     "css-loader": "^0.28.4",
     "draft-js": "^0.10.1",
+    "elasticsearch": "^13.3.1",
     "express": "^4.15.4",
     "file-loader": "^0.11.2",
     "file-type": "^5.2.0",

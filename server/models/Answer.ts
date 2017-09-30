@@ -4,6 +4,7 @@ import {Question, QuestionComment} from './Question';
 import {User, userSchema} from './User';
 import {RawDraftContentState} from "draft-js";
 import {QuestionDto} from "../dtos/q&a/QuestionDto";
+import {esClient} from "../esClient";
 
 let mongoosastic = require("mongoosastic");
 
@@ -59,7 +60,8 @@ schema.pre('findOne', autoPopulateUsers).pre('find', autoPopulateUsers);
 schema.plugin(mongoosastic, {
     populate: [
         {path: 'author', select: 'username'}
-    ]
+    ],
+    esClient
 });
 
 export const AnswerModel = model<IAnswer>('answer', schema);

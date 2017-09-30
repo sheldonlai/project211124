@@ -11,6 +11,7 @@ import {QuestionPreviewDto} from "../dtos/q&a/QuestionPreviewDto";
 import {DraftJsHelper} from "../utils/DraftJsHelper";
 import {FileUploadRecord} from "./FileUploadRecord";
 import {UserDto} from "../dtos/auth/UserDto";
+import {esClient} from "../esClient";
 
 let mongoosastic = require("mongoosastic");
 
@@ -160,7 +161,8 @@ schema.plugin(mongoosastic, {
     populate: [
         {path: 'author', select: 'username'},
         {path: 'tags', select: 'tag'},
-    ]
+    ],
+    esClient
 });
 
 export interface SearchQuestionQuery {

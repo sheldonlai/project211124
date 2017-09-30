@@ -8,6 +8,7 @@ import {CategoryTypeEnum} from "../enums/CategoryTypeEnum";
 import {DraftJsHelper} from "../utils/DraftJsHelper";
 import {StoryPreviewDto} from "../dtos/story/StoryPreviewDto";
 import {FileUploadRecord} from "./FileUploadRecord";
+import {esClient} from "../esClient";
 
 let mongoosastic = require("mongoosastic");
 
@@ -133,7 +134,8 @@ storySchema.plugin(mongoosastic, {
     populate: [
         {path: 'author', select: 'username'},
         {path: 'tags', select: 'tag'},
-    ]
+    ],
+    esClient
 });
 
 export const StoryModel = model<IStory>('story', storySchema);

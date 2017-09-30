@@ -6,6 +6,7 @@ import {University, UniversityModel, universitySchema} from "./LocationModels/Un
 import {Country, CountryModel, CountrySchema} from "./LocationModels/Country";
 import * as mongoosastic from "mongoosastic";
 import {isString} from "util";
+import {esClient} from "../esClient";
 
 export class User extends BaseModel {
     email: string;
@@ -108,7 +109,8 @@ userSchema.plugin(mongoosastic, {
     populate: [
         {path: "university", select: "name"},
         {path: "country", select: "name"},
-    ]
+    ],
+    esClient
 });
 
 export const UserModel = model<IUser>('user', userSchema);
