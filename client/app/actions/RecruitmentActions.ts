@@ -1,10 +1,8 @@
-import {Recruitment} from "../../../server/models/Recruitment";
 import {RecruitmentAPIController} from "../api.controllers/RecruitmentAPIController";
 import {BaseActions} from "./BaseActions";
 import {RecruitmentDto} from "../../../server/dtos/recruitment/RecruitmentDto";
 import {RecruitmentActionTypes} from "../constants/action.types/RecruitmentActionTypes";
 import {RouterController} from "../api.controllers/RouterController";
-import {RecruitmentConverter} from "../../../server/utils/RecruitmentConverter";
 
 let apiController: RecruitmentAPIController = RecruitmentAPIController.getInstance();
 
@@ -15,7 +13,7 @@ export class RecruitmentActions extends BaseActions{
             dispatch({
                 type: RecruitmentActionTypes.CreateRecruitmentRequest
             });
-            apiController.createRecruitment(RecruitmentConverter.dtoToModel(recruitmentObj)).then(res => {
+            apiController.createRecruitment(recruitmentObj).then(res => {
                 dispatch({
                     type: RecruitmentActionTypes.CreateRecruitmentOK,
                     data: res.data

@@ -18,6 +18,9 @@ import {QuestionDifficulty} from "../../../../server/models/Question";
 import {CustomEditor} from "../../components/CustomEditor/CustomEditor";
 import {EditorState} from "draft-js";
 import {RecruitmentActions} from "../../actions/RecruitmentActions";
+import {Routes} from "../../constants/Routes";
+import Button from "material-ui/Button";
+import {CustomLink} from "../../components/RoutingComponents/CustomLink";
 
 export interface CreateRecruitmentState{
     error: string;
@@ -56,6 +59,10 @@ class CreateRecruitment extends Component<props, CreateRecruitmentState> {
         let obj = {...this.state.recruitmentObj};
         obj[key] = value;
         this.setState({recruitmentObj: obj});
+    };
+
+    onSubmit = () => {
+      this.props.createRecruitment(this.state.recruitmentObj);
     };
 
     render(){
@@ -110,6 +117,21 @@ class CreateRecruitment extends Component<props, CreateRecruitmentState> {
                                           }}
                                           style={{minHeight: 200}}
                             />
+                        </Grid>
+                    </Grid>
+                    <Grid container spacing={24}>
+                        <Grid item xs>
+                            <CustomLink to={Routes.recruitment}>
+                                <Button style={{margin: "10px 0px"}}>
+                                    Cancel
+                                </Button>
+                            </CustomLink>
+                        </Grid>
+                        <Grid item xs={6}></Grid>
+                        <Grid item xs>
+                            <Button style={{margin: "10px 0px"}} onClick={this.onSubmit}>
+                                Submit
+                            </Button>
                         </Grid>
                     </Grid>
                 </Grid>
