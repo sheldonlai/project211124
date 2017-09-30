@@ -1,6 +1,6 @@
 import * as React from "react";
 import {Component} from "react";
-import {RouterProps} from "react-router";
+import {RouteComponentProps, RouterProps} from "react-router";
 import {Recruitment} from "../../../../server/models/Recruitment";
 import {connect} from "react-redux";
 import {AppStoreState} from "../../stores/AppStore";
@@ -24,7 +24,7 @@ export interface CreateRecruitmentState{
     recruitmentObj: RecruitmentDto;
 }
 
-interface props extends stateToProps, dispatchToProps{}
+interface props extends stateToProps, dispatchToProps, RouteComponentProps<any>{}
 
 class CreateRecruitment extends Component<props, CreateRecruitmentState> {
     constructor(props){
@@ -126,7 +126,7 @@ interface dispatchToProps {
     createRecruitment: (recruitment: RecruitmentDto) => void;
 }
 
-export const CreateRecruitmentView = (connect<stateToProps, dispatchToProps, any>(
+export const CreateRecruitmentView = (connect<stateToProps, dispatchToProps, RouteComponentProps<any>>(
     (state: AppStoreState) => ({loggedIn: state.auth.loggedIn}),
     (dispatch) => ({
         createRecruitment: (recruitment: RecruitmentDto) => dispatch(RecruitmentActions.createRecruitment(recruitment))
