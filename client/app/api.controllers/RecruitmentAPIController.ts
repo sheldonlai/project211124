@@ -1,7 +1,8 @@
 import {ApiController} from "./ApiController";
-import {Recruitment} from "../../../server/models/Recruitment";
 import {AxiosPromise} from "axios";
 import {APIUrls} from "../../../server/urls";
+import {RecruitmentDto} from "../../../server/dtos/recruitment/RecruitmentDto";
+
 export class RecruitmentAPIController extends ApiController{
     public static _instance: RecruitmentAPIController = new RecruitmentAPIController();
 
@@ -17,7 +18,7 @@ export class RecruitmentAPIController extends ApiController{
         RecruitmentAPIController._instance = this;
     }
 
-    createRecruitment(recruitment: Recruitment): AxiosPromise {
-        return this.put(APIUrls.createRecruitment, recruitment);
+    createRecruitment(recruitment: RecruitmentDto): AxiosPromise {
+        return this.post(APIUrls.createRecruitment, recruitment);
     }
 }
