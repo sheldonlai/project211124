@@ -30,7 +30,7 @@ if (cluster.isMaster && !devMode ) {
     let server = http.createServer(app);
     let io = socketio(server);
     let socketIoController = new SocketIOController(io);
-    let port: number = 3000;
+    let port: number = 8080;
 
     server.listen(port, function () {
         let host = server.address().address;
