@@ -69,8 +69,8 @@ export class Recruitment extends BaseModel{
 export interface IRecruitment extends Recruitment, Document {}
 
 const schema = new Schema({
-    title: {type: String, es_indexed: true},
-    content: {type: String, es_indexed: true},
+    title: {type: String, required: true, es_indexed: true},
+    content: {type: Schema.Types.Mixed, required: true, es_indexed: true},
     recruitStatus: {
         type: String,
         enum: Object.keys(RecruitStatus),

@@ -21,7 +21,7 @@ export class RecruitmentService extends BaseService implements IRecruitmentServi
 
     createRecruitment(recruitment: RecruitmentDto, user: User): Promise<RecruitmentDto> {
         let recruitmentObject = new Recruitment(recruitment.title, recruitment.content, recruitment.recruitStatus,
-                                                recruitment.createdBy, recruitment.university, recruitment.courseDifficulty);
+                                                user, recruitment.university, recruitment.courseDifficulty);
         return this.recruitmentRepository.create(recruitmentObject).then(recruitmentObj => {
             console.log(recruitmentObj);
              /*let recruitmentDto: RecruitmentDto = {
