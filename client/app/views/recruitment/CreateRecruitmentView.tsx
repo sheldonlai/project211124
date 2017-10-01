@@ -21,6 +21,7 @@ import {RecruitmentActions} from "../../actions/RecruitmentActions";
 import {Routes} from "../../constants/Routes";
 import Button from "material-ui/Button";
 import {CustomLink} from "../../components/RoutingComponents/CustomLink";
+import {DraftJsHelper} from "../../../../server/utils/DraftJsHelper";
 
 export interface CreateRecruitmentState{
     error: string;
@@ -36,7 +37,7 @@ class CreateRecruitment extends Component<props, CreateRecruitmentState> {
             _id: '',
             comments: [],
             title: '',
-            content: EditorState.createEmpty(),
+            content: DraftJsHelper.convertEditorStateToRaw(EditorState.createEmpty()),
             recruitStatus: RecruitStatus.OPEN,
             university: undefined,
             courseDifficulty: {
@@ -111,9 +112,9 @@ class CreateRecruitment extends Component<props, CreateRecruitmentState> {
                         </Grid>
                         <Grid item xs={12} md={12}>
                             <Typography type="caption" gutterBottom>Content :</Typography>
-                            <CustomEditor value={this.state.recruitmentObj.content}
+                            <CustomEditor value={DraftJsHelper.convertRawToEditorState(this.state.recruitmentObj.content)}
                                           onChange={(content: EditorState) => {
-                                              this.updateObj("content", content)
+                                              this.updateObj("content", DraftJsHelper.convertEditorStateToRaw(content))
                                           }}
                                           style={{minHeight: 200}}
                             />

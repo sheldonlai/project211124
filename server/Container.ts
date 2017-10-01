@@ -25,6 +25,8 @@ import {DashboardViewRepository} from "./repositories/DashboardViewRepository";
 import {AdminService} from "./services/AdminService";
 import {DashboardService} from "./services/DashboardService";
 import {SubscriptionConversions} from "./conversions/SubscriptionConversions";
+import {IRecruitmentRepository, RecruitmentRepository} from "./repositories/RecruitmentRepository";
+import {RecruitmentService} from "./services/RecruitmentService";
 
 export class RepositoryProvider {
     static AnswerRepository = new AnswerRepository();
@@ -39,6 +41,7 @@ export class RepositoryProvider {
     static DashboardViewRepository = new DashboardViewRepository();
     static NotificationRepository: INotificationRepository= new NotificationRepository();
     static SubscriptionRepository: ISubscriptionRepository = new SubscriptionRepository();
+    static RecruitmentRepository: IRecruitmentRepository = new RecruitmentRepository();
 }
 
 export class ConversionsProvider {
@@ -89,6 +92,8 @@ export class ServiceProvider {
     static DashboardService = new DashboardService(
         RepositoryProvider.QuestionRepository,
         RepositoryProvider.StoryRepository
-    )
-
+    );
+    static RecruitmentService = new RecruitmentService(
+        RepositoryProvider.RecruitmentRepository
+    );
 }

@@ -24,7 +24,7 @@ export class RecruitmentRepository extends BaseRepository<Recruitment, IRecruitm
         recruitment.updatedAt = undefined;
         return super.create(recruitment).then((recruitment: Recruitment) => {
             return this.getById(recruitment._id);
-        })
+        });
     }
 
     update(recruitment: Recruitment): Promise<Recruitment> {

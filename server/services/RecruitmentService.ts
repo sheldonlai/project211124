@@ -20,10 +20,11 @@ export class RecruitmentService extends BaseService implements IRecruitmentServi
     }
 
     createRecruitment(recruitment: RecruitmentDto, user: User): Promise<RecruitmentDto> {
-        let recruitmentObject = new Recruitment(recruitment.title, DraftJsHelper.convertEditorStateToRaw(recruitment.content), recruitment.recruitStatus,
+        let recruitmentObject = new Recruitment(recruitment.title, recruitment.content, recruitment.recruitStatus,
                                                 recruitment.createdBy, recruitment.university, recruitment.courseDifficulty);
         return this.recruitmentRepository.create(recruitmentObject).then(recruitmentObj => {
-             let recruitmentDto: RecruitmentDto = {
+            console.log(recruitmentObj);
+             /*let recruitmentDto: RecruitmentDto = {
                  _id: recruitmentObj._id,
                  title: recruitmentObj.title,
                  content: DraftJsHelper.convertRawToEditorState(recruitmentObj.content),
@@ -36,8 +37,8 @@ export class RecruitmentService extends BaseService implements IRecruitmentServi
                  comments: recruitmentObj.comments,
                  groupMates: recruitmentObj.groupMates,
                  views: recruitmentObj.views,
-             };
-             return recruitmentDto;
+             };*/
+             return recruitmentObj;
         });
     }
 

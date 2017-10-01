@@ -32,20 +32,32 @@ export class RecruitmentComment{
 }
 
 export class Recruitment extends BaseModel{
+    title: string;
+    content: RawDraftContentState;
+    recruitStatus: RecruitStatus;
+    createdBy: User;
+    university: University;
+    courseDifficulty: QuestionDifficulty;
     comments: RecruitmentComment[];
     groupMates: User[];
     createdAt: Date;
     updatedAt: Date;
     views: number;
     constructor(
-        public title: string,
-        public content: RawDraftContentState,
-        public recruitStatus: RecruitStatus,
-        public createdBy: User,
-        public university?: University,
-        public courseDifficulty?: QuestionDifficulty,
+        title: string,
+        content: RawDraftContentState,
+        recruitStatus: RecruitStatus,
+        createdBy: User,
+        university?: University,
+        courseDifficulty?: QuestionDifficulty,
     ){
         super();
+        this.title = title;
+        this.content = content;
+        this.recruitStatus = recruitStatus;
+        this.createdBy = createdBy;
+        this.university = university;
+        this.courseDifficulty = courseDifficulty;
         this.createdAt = new Date(Date.now());
         this.updatedAt = new Date(Date.now());
         this.comments = [];

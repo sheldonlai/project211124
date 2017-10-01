@@ -29,6 +29,7 @@ import compression = require('compression');
 import {StoryAPI} from "./routes/StoryAPI";
 import {AdminAPI} from "./routes/AdminAPI";
 import {SubscriptionAPI} from "./routes/SubscriptionAPI";
+import {RecruitmentAPI} from "./routes/RecruitmentAPI";
 export class Server {
     public app: express.Application;
     private config;
@@ -122,6 +123,8 @@ export class Server {
         routes.push(new StoryAPI(ServiceProvider.StoryService));
 
         routes.push(new AdminAPI(ServiceProvider.AdminService));
+
+        routes.push(new RecruitmentAPI(ServiceProvider.RecruitmentService));
 
         routes.forEach((route) => this.app.use('/api',route.router));
 

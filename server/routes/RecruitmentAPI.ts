@@ -14,7 +14,7 @@ export class RecruitmentAPI extends BaseAPI{
         super();
         this.router = Router();
         this.service = service;
-        this.router.post(APIUrls.createRecruitment, mustBeAuthenticated, this.createRecruitment)
+        this.router.post(APIUrls.createRecruitment, mustBeAuthenticated, this.createRecruitment);
     }
 
     public createRecruitment = (req: AuthRequest, res: Response, next: NextFunction) => {

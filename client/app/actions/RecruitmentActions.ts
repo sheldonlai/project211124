@@ -9,6 +9,7 @@ let apiController: RecruitmentAPIController = RecruitmentAPIController.getInstan
 export class RecruitmentActions extends BaseActions{
 
     static createRecruitment(recruitmentObj: RecruitmentDto){
+        console.log(recruitmentObj);
         return function (dispatch){
             dispatch({
                 type: RecruitmentActionTypes.CreateRecruitmentRequest

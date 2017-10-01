@@ -61,7 +61,7 @@ export abstract class BaseRepository<T extends BaseModel, I extends Document & T
             .then((res: T) => this.applyAdditionalFunction(res))
             .then((res: T) => {
             return this.getModel(res);
-        })
+        });
     }
 
     filter(query: any): Promise<T[]> {
@@ -75,8 +75,11 @@ export abstract class BaseRepository<T extends BaseModel, I extends Document & T
         return this.model.create(obj)
             .then((res: T) => this.applyAdditionalFunction(res))
             .then((res: I) => {
-            return this.getModel(res);
-        })
+                return this.getModel(res);
+            }).catch(err => {
+                console.log(err);
+                return obj;
+            })
     }
 
     update(obj: T): Promise<T> {

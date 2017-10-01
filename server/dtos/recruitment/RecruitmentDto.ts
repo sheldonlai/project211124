@@ -10,7 +10,7 @@ export interface RecruitmentDto{
     _id: string;
     title: string;
     comments: RecruitmentCommentDto[];
-    content: EditorState;
+    content: RawDraftContentState;
     recruitStatus: RecruitStatus;
     university?: University;
     courseDifficulty?: QuestionDifficulty;
