@@ -105,10 +105,6 @@ export class RegistrationForm extends Component<RegistrationViewProps, Registrat
 
 
     submit = () => {
-        if (this.state.regRequest.username != this.state.confirmPassword) {
-            this.setState({passwordError: 'Password not matched'});
-            return;
-        }
         if (this.state.regRequest.password != this.state.confirmPassword) {
             this.setState({passwordError: 'Password not matched'});
             return;
