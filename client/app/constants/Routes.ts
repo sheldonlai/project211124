@@ -28,6 +28,7 @@ export class Routes {
     // recruitment
     static recruitment = "/recruitment";
     static create_recruitment = "/recruitment/create-recruitment";
+    static recruitment_by_id = Routes.recruitment + '/:id/:name';
 
     // admin
     static admin = '/admin';

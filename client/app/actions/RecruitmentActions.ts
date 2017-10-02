@@ -3,6 +3,7 @@ import {BaseActions} from "./BaseActions";
 import {RecruitmentDto} from "../../../server/dtos/recruitment/RecruitmentDto";
 import {RecruitmentActionTypes} from "../constants/action.types/RecruitmentActionTypes";
 import {RouterController} from "../api.controllers/RouterController";
+import {Routes} from "../constants/Routes";
 
 let apiController: RecruitmentAPIController = RecruitmentAPIController.getInstance();
 
@@ -19,7 +20,7 @@ export class RecruitmentActions extends BaseActions{
                     type: RecruitmentActionTypes.CreateRecruitmentOK,
                     data: res.data
                 });
-                RouterController.history.push(":id", res.data._id);
+                RouterController.history.push(Routes.recruitment_by_id.replace(":id", res.data._id));
             }).catch(err => RecruitmentActions.handleError(dispatch, err, RecruitmentActionTypes.CreateRecruitmentError));
         }
     }
