@@ -21,6 +21,7 @@ import {UserTypeEnum} from "../../../server/enums/UserTypeEnum";
 import {ProfileView} from "./profile/ProfileView";
 import {RecruitmentHomeView} from "./recruitment/RecruitmentHome";
 import {CreateRecruitmentView} from "./recruitment/CreateRecruitmentView";
+import {RecruitmentPageView} from "./recruitment/RecruitmentPage";
 
 let questionLoader = require("bundle-loader?lazy&name=question!./question/QuestionRouter");
 let storyLoader = require("bundle-loader?lazy&name=story!./story/StoryRouter");
@@ -89,6 +90,7 @@ export class App extends React.Component<any, any> {
                             <Route exact path={Routes.recruitment} component={RecruitmentHomeView}/>
                             <Route path={Routes.admin} component={AdminModule} />
                             <Route exact path={Routes.create_recruitment} component={CreateRecruitmentView}/>
+                            <Route exact path={Routes.recruitment_by_id} component={RecruitmentPageView}/>
                         </div>
                     </Router>
                 </Provider>

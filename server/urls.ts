@@ -76,7 +76,8 @@ export class APIUrls {
     static DownVoteStory = "/down-vote-story";
 
     /* Recruitment */
-    static createRecruitment = "/create-recruitment"
+    static createRecruitment = "/create-recruitment";
+    static fetchRecruitmentPage = "/fetch-recruitment/:id";
 
     /* Notification */
     static getNotificationsByUser = "/notifications";

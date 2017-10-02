@@ -21,4 +21,8 @@ export class RecruitmentAPIController extends ApiController{
     createRecruitment(recruitment: RecruitmentDto): AxiosPromise {
         return this.post(APIUrls.createRecruitment, recruitment);
     }
+
+    fetchRecruitmentPage(id: string): AxiosPromise {
+        return this.get(APIUrls.fetchRecruitmentPage.replace(":id", id));
+    }
 }
