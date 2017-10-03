@@ -10,6 +10,7 @@ import {DraftJsHelper} from "../utils/DraftJsHelper";
 
 export interface IRecruitmentService {
     createRecruitment(recruitment: RecruitmentDto, user: User): Promise<RecruitmentDto>;
+    fetchRecruitmentPage(recruitmentId: string): Promise<RecruitmentDto>;
 }
 
 export class RecruitmentService extends BaseService implements IRecruitmentService {
@@ -23,23 +24,12 @@ export class RecruitmentService extends BaseService implements IRecruitmentServi
         let recruitmentObject = new Recruitment(recruitment.title, recruitment.content, recruitment.recruitStatus,
                                                 user, recruitment.university, recruitment.courseDifficulty);
         return this.recruitmentRepository.create(recruitmentObject).then(recruitmentObj => {
-            console.log(recruitmentObj);
-             /*let recruitmentDto: RecruitmentDto = {
-                 _id: recruitmentObj._id,
-                 title: recruitmentObj.title,
-                 content: DraftJsHelper.convertRawToEditorState(recruitmentObj.content),
-                 recruitStatus: recruitmentObj.recruitStatus,
-                 university: recruitmentObj.university,
-                 courseDifficulty: recruitmentObj.courseDifficulty,
-                 createdAt: recruitmentObj.createdAt,
-                 createdBy: recruitmentObj.createdBy,
-                 updatedAt: recruitmentObj.updatedAt,
-                 comments: recruitmentObj.comments,
-                 groupMates: recruitmentObj.groupMates,
-                 views: recruitmentObj.views,
-             };*/
              return recruitmentObj;
         });
+    }
+
+    fetchRecruitmentPage(recruitmentId: string): Promise<RecruitmentDto> {
+        return this.recruitmentRepository.getById(recruitmentId);
     }
 
     private checkPermissionForModification = (recruitmentDto: RecruitmentDto, recruitmentObj: Recruitment, currentUser: User) => {

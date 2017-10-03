@@ -25,16 +25,37 @@ interface DispatchToProps{
 interface props extends StateToProps, DispatchToProps, RouteComponentProps<{ id: string }>{}
 
 interface state{
-
+    recruitment: RecruitmentDto;
+    edit: boolean;
 }
 
 export class RecruitmentPageComponent extends React.Component<props, state>{
     constructor(props){
         super();
+        this.state = {
+            recruitment: undefined,
+            edit: false,
+        }
+    }
+
+    componentWillMount() {
+        const id = this.props.match.params.id;
+        if (!id)
+            console.error("No id is specified");
+        if(!this.props.recruitmentInfo || this.props.recruitmentInfo._id != id || Date.now() - this.props.lastUpdated > 1000)
+            this.props.fetchRecruitment(id);
+        else if (this.props.recruitmentInfo._id != id)
+            this.setState({recruitment: {...this.props.recruitmentInfo}});
+    }
+
+    componentWillReceiveProps(nextProps: props) {
+        if (this.props.lastUpdated !== nextProps.lastUpdated) {
+            this.setState({recruitment: {...nextProps.recruitmentInfo}, edit: false});
+        }
     }
 
     render(){
-
+        console.log(this.state.recruitment);
         return(
             <div>
 
