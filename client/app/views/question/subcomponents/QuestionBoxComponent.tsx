@@ -84,6 +84,7 @@ export class QuestionBoxComponent extends Component<props, {}> {
     };
 
     render() {
+        console.log(this.props.question);
         const question: Question = {...this.props.questionEditorState};
         const editable = this.props.user && (this.props.user.username === question.author.username);
         let editButton;

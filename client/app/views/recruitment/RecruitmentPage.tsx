@@ -7,6 +7,9 @@ import {ReducerStateStatus} from "../../constants/ReducerStateStatus";
 import {UserDto} from "../../../../server/dtos/auth/UserDto";
 import {RecruitmentDto} from "../../../../server/dtos/recruitment/RecruitmentDto";
 import {RecruitmentActions} from "../../actions/RecruitmentActions";
+import {RecruitmentBoxComponent, RecruitmentBoxView} from "./subcomponents/RecruitmentBoxComponent";
+import {LoadingScreen} from "../../components/Animations/LoadingScreen";
+import {CommentBoxView} from "./subcomponents/CommentBoxComponent";
 
 
 interface RecruitmentPageProps extends RouteComponentProps<{id: string}>{}
@@ -32,6 +35,7 @@ interface state{
 export class RecruitmentPageComponent extends React.Component<props, state>{
     constructor(props){
         super();
+
         this.state = {
             recruitment: undefined,
             edit: false,
@@ -55,10 +59,13 @@ export class RecruitmentPageComponent extends React.Component<props, state>{
     }
 
     render(){
-        console.log(this.state.recruitment);
+        if(this.props.pageStatus == ReducerStateStatus.LOADING){
+            return (<LoadingScreen/>)
+        }
         return(
-            <div>
-
+            <div style={{padding: 10}}>
+                <RecruitmentBoxView/>
+                <CommentBoxView/>
             </div>
         )
     }

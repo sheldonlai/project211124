@@ -79,7 +79,7 @@ export class CustomCard extends React.Component<CardComponentProps, state> {
                              }}
                         />}
                     {
-                        !this.props.img &&
+                        !this.props.img && this.props.category &&
                         <CategoryDisplay hover={this.state.hover} category={this.props.category} height={289.6875} />
                     }
                     <div style={{
