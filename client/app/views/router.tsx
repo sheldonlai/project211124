@@ -23,9 +23,11 @@ import {RecruitmentHomeView} from "./recruitment/RecruitmentHome";
 import {CreateRecruitmentView} from "./recruitment/CreateRecruitmentView";
 import {RecruitmentPageView} from "./recruitment/RecruitmentPage";
 
-let questionLoader = require("bundle-loader?lazy&name=question!./question/QuestionRouter");
-let storyLoader = require("bundle-loader?lazy&name=story!./story/StoryRouter");
-let adminLoader = require("bundle-loader?lazy&name=admin!./admin/AdminRouter");
+
+/*
+ *  Theme creator
+ *  */
+
 export const PRIMARY_COLOR = deepOrange[500];
 let muiTheme = createMuiTheme({
     palette: {
@@ -36,6 +38,14 @@ let muiTheme = createMuiTheme({
         },
     }
 });
+
+/*
+* Lazy Loaders
+* */
+let questionLoader = require("bundle-loader?lazy&name=question!./question/QuestionRouter");
+let storyLoader = require("bundle-loader?lazy&name=story!./story/StoryRouter");
+let adminLoader = require("bundle-loader?lazy&name=admin!./admin/AdminRouter");
+
 const QuestionModule = () => (
     <Bundle load={questionLoader}>
         {(mod) => (

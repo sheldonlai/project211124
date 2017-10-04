@@ -1,6 +1,7 @@
 import createBrowserHistory from 'history/createBrowserHistory';
 /**
- * Created by SHELDON on 6/6/2017.
+ * RouterController is used to control the routing in React Router v4
+ * Please read the documentation of history in React Router for more information
  */
 
 export class RouterController {

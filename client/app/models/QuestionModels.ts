@@ -13,6 +13,11 @@ import {Preview} from "./CommonModels";
 import {QuestionPreviewDto} from "../../../server/dtos/q&a/QuestionPreviewDto";
 import {FileUploadRecordDto} from "../../../server/dtos/sharedDtos/FIleUploadRecordDto";
 
+
+/*
+*  Front end models should be inside the namespace of FontEnd ____ Models
+* */
+
 export namespace FrontEndQuestionModels {
 
     export class Question {

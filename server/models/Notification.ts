@@ -2,6 +2,7 @@ import {Document, model, Schema, Types} from "mongoose";
 import {User} from "./User";
 import {BaseModel} from "./Base/BaseModel";
 import {NotifiableEntity} from "./NotificableEntity";
+import {NotificationDto} from "../dtos/notification/NotificationDto";
 
 export class Notification extends BaseModel {
     recipient: Types.ObjectId | User;
@@ -32,6 +33,10 @@ export class Notification extends BaseModel {
 
     getMessage(): string {
         return (<NotifiableEntity>this.notifiableEntity).buildMessage(<User>this.recipient);
+    }
+
+    toDto(): NotificationDto {
+        return undefined;
     }
 }
 

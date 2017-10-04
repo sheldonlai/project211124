@@ -3,7 +3,10 @@ import axios from 'axios';
 import {AxiosPromise, AxiosError} from 'axios';
 import {Config} from '../constants/configs';
 
-
+/*
+* Classes extending this Api Controllers should be converting Dto to Prototypes and Prototypes to Dtos
+* if necessary.
+* */
 
 export class ApiController {
 
