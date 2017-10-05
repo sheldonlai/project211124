@@ -19,12 +19,12 @@ let mongoosastic = require("mongoosastic");
 export class RecruitmentComment{
     _id: any;
     request: RecruitmentRequestEnum;
-    comment: string;
+    comment: RawDraftContentState;
     createdBy: User;
     createdAt: Date;
     updatedAt: Date;
     // TODO: add year and semester, tags
-    constructor(score: boolean, comment:string, createdBy: User){
+    constructor(score: boolean, comment:RawDraftContentState, createdBy: User){
         this.request = RecruitmentRequestEnum.NOT_SPECIFIED;
         this.comment = comment;
         this.createdBy = createdBy;
@@ -102,7 +102,7 @@ const schema = new Schema({
     comments: [
         {
             request: {type: String, enum: Object.keys(RecruitmentRequestEnum), default: RecruitmentRequestEnum.NOT_SPECIFIED},
-            comment: {type: String},
+            comment: {type: Schema.Types.Mixed},
             createdBy: {type: Schema.Types.ObjectId, ref: 'user'},
             createdAt: {type: Date, default: Date.now()},
             updatedAt: {type: Date, default: Date.now()},

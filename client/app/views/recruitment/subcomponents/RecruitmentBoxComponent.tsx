@@ -30,7 +30,6 @@ export class RecruitmentBoxComponent extends Component<props, {}> {
         let recruitment: RecruitmentDto = {...this.props.recruitmentInfo};
         console.log(recruitment);
         return (
-            <div>
                 <Paper style={paperStyle} elevation={0}>
                     <div>
                         <CustomCard title={recruitment.title}
@@ -40,7 +39,6 @@ export class RecruitmentBoxComponent extends Component<props, {}> {
                         />
                     </div>
                 </Paper>
-            </div>
         )
     }
 }

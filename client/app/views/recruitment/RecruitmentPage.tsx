@@ -9,7 +9,8 @@ import {RecruitmentDto} from "../../../../server/dtos/recruitment/RecruitmentDto
 import {RecruitmentActions} from "../../actions/RecruitmentActions";
 import {RecruitmentBoxComponent, RecruitmentBoxView} from "./subcomponents/RecruitmentBoxComponent";
 import {LoadingScreen} from "../../components/Animations/LoadingScreen";
-import {CommentBoxView} from "./subcomponents/CommentBoxComponent";
+import {CommentBoxesView} from "./subcomponents/CommentBoxesComponent";
+import Grid from "material-ui/Grid";
 
 
 interface RecruitmentPageProps extends RouteComponentProps<{id: string}>{}
@@ -64,8 +65,14 @@ export class RecruitmentPageComponent extends React.Component<props, state>{
         }
         return(
             <div style={{padding: 10}}>
-                <RecruitmentBoxView/>
-                <CommentBoxView/>
+                <Grid container direction="column" justify="center">
+                    <Grid item>
+                        <RecruitmentBoxView/>
+                    </Grid>
+                    <Grid item>
+                        <CommentBoxesView/>
+                    </Grid>
+                </Grid>
             </div>
         )
     }

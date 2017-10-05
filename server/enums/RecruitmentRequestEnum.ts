@@ -5,3 +5,8 @@ export enum RecruitmentRequestEnum{
     DENIED = <any> "DENIED",
     NOT_SPECIFIED = <any> "NOT_SPECIFIED",
 }
+
+export enum UserRequestEnum{
+    YES = <any> "YES",
+    NO = <any> "NO",
+}
