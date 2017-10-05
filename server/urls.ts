@@ -79,6 +79,8 @@ export class APIUrls {
     static createRecruitment = "/create-recruitment";
     static fetchRecruitmentPage = "/fetch-recruitment/:id";
 
+    static addRecruitmentComment = "/add-recruitment-comment";
+
     /* Notification */
     static getNotificationsByUser = "/notifications";
     static notificationSeen = "/notification/seen/:id";

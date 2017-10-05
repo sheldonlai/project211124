@@ -16,12 +16,14 @@ import Divider from "material-ui/Divider";
 import {CustomEditor} from "../../../components/CustomEditor/CustomEditor";
 import {QAEditorComponent} from "../../question/subcomponents/Q&AEditorComponent";
 import Grid from "material-ui/Grid";
+import {RecruitmentActions} from "../../../actions/RecruitmentActions";
 
 interface StateToProps{
     comments: RecruitmentCommentDto[];
     user: UserDto;
     lastUpdated: number;
     edit: boolean;
+    pageId: string;
 }
 
 interface props extends StateToProps, DispatchProps {}
@@ -32,9 +34,10 @@ interface state{
 }
 const paperStyle = {height: "100%", padding: 5,};
 export class CommentBoxComponent extends Component<props, state> {
+    newComment: RecruitmentCommentDto;
     constructor(props){
         super();
-        let newComment: RecruitmentCommentDto = {
+        this.newComment = {
             _id: '',
             request: RecruitmentRequestEnum.NOT_SPECIFIED,
             comment: DraftJsHelper.convertEditorStateToRaw(EditorState.createEmpty()),
@@ -43,7 +46,7 @@ export class CommentBoxComponent extends Component<props, state> {
             updatedAt: undefined,
         };
         this.state = {
-            newComment: newComment,
+            newComment: this.newComment,
             addComment: false,
         }
     }
@@ -55,11 +58,13 @@ export class CommentBoxComponent extends Component<props, state> {
     };
 
     submitComment = () => {
-
+        let comment = {...this.state.newComment};
+        this.setState({newComment: this.newComment, addComment: false});
+        this.props.addComment(comment, this.props.pageId);
     };
 
     cancelComment = () => {
-
+        this.setState({newComment: this.newComment, addComment: false});
     };
 
     commentEditor = () => {
@@ -110,14 +115,16 @@ const mapStateToProps = (state: AppStoreState) => ({
     user: state.auth.user,
     lastUpdated: undefined,
     edit: undefined,
-});
-
-const mapDispatchToProps = (dispatch): DispatchProps => ({
+    pageId: state.recruitmentPage.recruitmentPage._id,
 });
 
 interface DispatchProps{
-
+    addComment: (comment: RecruitmentCommentDto, recruitmentId: string) => void;
 }
+
+const mapDispatchToProps = (dispatch): DispatchProps => ({
+    addComment: (comment: RecruitmentCommentDto, recruitmentId: string) => dispatch(RecruitmentActions.addRecruitmentComment(comment, recruitmentId)),
+});
 
 export const CommentBoxesView = connect<StateToProps, DispatchProps, any>(
     mapStateToProps, mapDispatchToProps)(CommentBoxComponent);

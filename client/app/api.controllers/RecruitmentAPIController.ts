@@ -2,6 +2,7 @@ import {ApiController} from "./ApiController";
 import {AxiosPromise} from "axios";
 import {APIUrls} from "../../../server/urls";
 import {RecruitmentDto} from "../../../server/dtos/recruitment/RecruitmentDto";
+import {RecruitmentCommentDto} from "../../../server/dtos/recruitment/RecruitmentCommenDto";
 
 export class RecruitmentAPIController extends ApiController{
     public static _instance: RecruitmentAPIController = new RecruitmentAPIController();
@@ -24,5 +25,13 @@ export class RecruitmentAPIController extends ApiController{
 
     fetchRecruitmentPage(id: string): AxiosPromise {
         return this.get(APIUrls.fetchRecruitmentPage.replace(":id", id));
+    }
+
+    addRecruitmentComment(comment: RecruitmentCommentDto, recruitmentId: string): AxiosPromise {
+        let reqBody = {
+            comment: comment,
+            recruitmentId: recruitmentId,
+        };
+        return this.post(APIUrls.addRecruitmentComment, reqBody);
     }
 }

@@ -5,6 +5,7 @@ import {AuthRequest, maybeAuthenticated, mustBeAuthenticated} from "../middlewar
 import {APIUrls} from "../urls";
 import {User} from "../models/User";
 import {RecruitmentDto} from "../dtos/recruitment/RecruitmentDto";
+import {RecruitmentCommentDto} from "../dtos/recruitment/RecruitmentCommenDto";
 
 export class RecruitmentAPI extends BaseAPI{
     private service: IRecruitmentService;
@@ -16,6 +17,7 @@ export class RecruitmentAPI extends BaseAPI{
         this.service = service;
         this.router.get(APIUrls.fetchRecruitmentPage, maybeAuthenticated, this.fetchRecruitmentPage);
         this.router.post(APIUrls.createRecruitment, mustBeAuthenticated, this.createRecruitment);
+        this.router.post(APIUrls.addRecruitmentComment, mustBeAuthenticated, this.addRecruitmentComment);
     }
 
     public createRecruitment = (req: AuthRequest, res: Response, next: NextFunction) => {
@@ -30,6 +32,14 @@ export class RecruitmentAPI extends BaseAPI{
         let user: User = req.user;
         let result = this.service.fetchRecruitmentPage(recruitmentId);
         this.respondPromise(result, res, next);
-    }
+    };
+
+    public addRecruitmentComment = (req: AuthRequest, res: Response, next: NextFunction) => {
+        let comment: RecruitmentCommentDto = req.body.comment;
+        let recruitmentId: string = req.body.recruitmentId;
+        let user: User = req.user;
+        let result = this.service.addRecruitmentComment(comment, recruitmentId);
+        this.respondPromise(result, res, next);
+    };
 }
 

@@ -6,4 +6,8 @@ export enum RecruitmentActionTypes{
     FetchRecruitmentPageRequest = <any> "FetchRecruitmentPageRequest",
     FetchRecruitmentPageOK = <any> "FetchRecruitmentPageOK",
     FetchRecruitmentPageError = <any> "FetchRecruitmentPageError",
+
+    AddCommentRequest = <any> "AddCommentRequest",
+    AddCommentOK = <any> "AddCommentOK",
+    AddCommentError = <any> "AddCommentError",
 }

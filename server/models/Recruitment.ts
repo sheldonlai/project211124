@@ -13,6 +13,7 @@ import {RawDraftContentState} from "draft-js";
 import {RecruitmentDto} from "../dtos/recruitment/RecruitmentDto";
 import {DraftJsHelper} from "../utils/DraftJsHelper";
 import {esClient} from "../esClient";
+import {RecruitmentCommentDto} from "../dtos/recruitment/RecruitmentCommenDto";
 
 let mongoosastic = require("mongoosastic");
 
@@ -67,6 +68,36 @@ export class Recruitment extends BaseModel{
 }
 
 export interface IRecruitment extends Recruitment, Document {}
+
+function commentModelToDto(comment: RecruitmentCommentDto){
+    let commentDto: RecruitmentCommentDto = {
+        _id: comment._id,
+        request: comment.request,
+        comment: comment.comment,
+        createdBy: comment.createdBy,
+        createdAt: comment.createdAt,
+        updatedAt: comment.updatedAt,
+    };
+    return commentDto;
+}
+
+export function recruitmentModelToDto(recruitment: Recruitment){
+    let commentsDto = recruitment.comments.map(comment => {return commentModelToDto(comment)});
+    let recruitmentDto = {
+        _id: recruitment._id,
+        title: recruitment.title,
+        comments: commentsDto,
+        content: recruitment.content,
+        recruitStatus: recruitment.recruitStatus,
+        university: recruitment.university,
+        courseDifficulty: recruitment.courseDifficulty,
+        createdAt: recruitment.createdAt,
+        updatedAt: recruitment.updatedAt,
+        groupMates: recruitment.groupMates,
+        views: recruitment.views,
+    };
+    return recruitmentDto;
+}
 
 const schema = new Schema({
     title: {type: String, required: true, es_indexed: true},

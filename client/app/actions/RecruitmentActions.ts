@@ -5,6 +5,7 @@ import {RecruitmentActionTypes} from "../constants/action.types/RecruitmentActio
 import {RouterController} from "../api.controllers/RouterController";
 import {Routes} from "../constants/Routes";
 import {RatingActions} from "./RatingActions";
+import {RecruitmentCommentDto} from "../../../server/dtos/recruitment/RecruitmentCommenDto";
 
 let apiController: RecruitmentAPIController = RecruitmentAPIController.getInstance();
 
@@ -36,6 +37,20 @@ export class RecruitmentActions extends BaseActions{
                     data: res.data
                 })
             }).catch(err => RatingActions.handleError(dispatch, err, RecruitmentActionTypes.FetchRecruitmentPageError))
+        }
+    }
+
+    static addRecruitmentComment(comment: RecruitmentCommentDto, recruitmentId: string){
+        return function(dispatch){
+            dispatch({
+                type: RecruitmentActionTypes.AddCommentRequest
+            });
+            apiController.addRecruitmentComment(comment, recruitmentId).then((res) => {
+                dispatch({
+                    type: RecruitmentActionTypes.AddCommentOK,
+                    data: res.data
+                })
+            }).catch(err => RatingActions.handleError(dispatch, err, RecruitmentActionTypes.AddCommentError))
         }
     }
 }

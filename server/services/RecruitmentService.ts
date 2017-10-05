@@ -3,14 +3,16 @@ import {AppError} from "../errors/AppError";
 import {BaseService} from "./BaseService";
 import * as _ from "lodash";
 import {RecruitmentDto} from "../dtos/recruitment/RecruitmentDto";
-import {Recruitment} from "../models/Recruitment";
+import {Recruitment, recruitmentModelToDto} from "../models/Recruitment";
 import {IRecruitmentRepository} from "../repositories/RecruitmentRepository";
 import {DraftJsHelper} from "../utils/DraftJsHelper";
+import {RecruitmentCommentDto} from "../dtos/recruitment/RecruitmentCommenDto";
 
 
 export interface IRecruitmentService {
     createRecruitment(recruitment: RecruitmentDto, user: User): Promise<RecruitmentDto>;
     fetchRecruitmentPage(recruitmentId: string): Promise<RecruitmentDto>;
+    addRecruitmentComment(comment: RecruitmentCommentDto, recruitmentId: string): Promise<RecruitmentDto>;
 }
 
 export class RecruitmentService extends BaseService implements IRecruitmentService {
@@ -30,6 +32,15 @@ export class RecruitmentService extends BaseService implements IRecruitmentServi
 
     fetchRecruitmentPage(recruitmentId: string): Promise<RecruitmentDto> {
         return this.recruitmentRepository.getById(recruitmentId);
+    }
+
+    addRecruitmentComment(comment: RecruitmentCommentDto, recruitmentId: string): Promise<RecruitmentDto> {
+        return this.recruitmentRepository.getById(recruitmentId).then(recruitment => {
+            recruitment.comments.push(comment);
+            return this.recruitmentRepository.update(recruitment).then(recruitment => {
+                return recruitment;
+            });
+        })
     }
 
     private checkPermissionForModification = (recruitmentDto: RecruitmentDto, recruitmentObj: Recruitment, currentUser: User) => {
