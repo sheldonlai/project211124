@@ -38,7 +38,7 @@ export class RecruitmentAPI extends BaseAPI{
         let comment: RecruitmentCommentDto = req.body.comment;
         let recruitmentId: string = req.body.recruitmentId;
         let user: User = req.user;
-        let result = this.service.addRecruitmentComment(comment, recruitmentId);
+        let result = this.service.addRecruitmentComment(comment, recruitmentId, user);
         this.respondPromise(result, res, next);
     };
 }

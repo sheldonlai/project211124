@@ -7,6 +7,7 @@ import Paper from "material-ui/Paper";
 import {connect} from "react-redux";
 import {CustomCard} from "../../../components/CardComponent/CardComponent";
 import {DraftJsHelper} from "../../../../../server/utils/DraftJsHelper";
+import Grid from "material-ui/Grid";
 
 interface RecruitmentBoxComponentProps {
     user: UserDto; // current user
@@ -30,15 +31,19 @@ export class RecruitmentBoxComponent extends Component<props, {}> {
         let recruitment: RecruitmentDto = {...this.props.recruitmentInfo};
         console.log(recruitment);
         return (
-                <Paper style={paperStyle} elevation={0}>
-                    <div>
-                        <CustomCard title={recruitment.title}
-                                    content={DraftJsHelper.convertRawToText(recruitment.content)}
-                                    date={new Date()}
-                                    wide
-                        />
-                    </div>
-                </Paper>
+                <Grid container justify="center">
+                    <Grid item>
+                        <Paper style={paperStyle} elevation={0}>
+                            <div>
+                                <CustomCard title={recruitment.title}
+                                            content={DraftJsHelper.convertRawToText(recruitment.content)}
+                                            date={new Date()}
+                                            wide
+                                />
+                            </div>
+                        </Paper>
+                    </Grid>
+                </Grid>
         )
     }
 }

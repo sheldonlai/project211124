@@ -25,10 +25,12 @@ export class RecruitmentComment{
     createdAt: Date;
     updatedAt: Date;
     // TODO: add year and semester, tags
-    constructor(score: boolean, comment:RawDraftContentState, createdBy: User){
-        this.request = RecruitmentRequestEnum.NOT_SPECIFIED;
+    constructor(request: RecruitmentRequestEnum, comment:RawDraftContentState, createdBy: User){
+        this.request = request;
         this.comment = comment;
         this.createdBy = createdBy;
+        this.createdAt = new Date(Date.now());
+        this.updatedAt = new Date(Date.now());
     }
 }
 

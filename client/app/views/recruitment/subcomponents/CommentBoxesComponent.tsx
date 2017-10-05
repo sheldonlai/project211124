@@ -17,6 +17,7 @@ import {CustomEditor} from "../../../components/CustomEditor/CustomEditor";
 import {QAEditorComponent} from "../../question/subcomponents/Q&AEditorComponent";
 import Grid from "material-ui/Grid";
 import {RecruitmentActions} from "../../../actions/RecruitmentActions";
+import {CommentBoxView} from "./CommentBoxComponent";
 
 interface StateToProps{
     comments: RecruitmentCommentDto[];
@@ -24,6 +25,8 @@ interface StateToProps{
     lastUpdated: number;
     edit: boolean;
     pageId: string;
+    recruiter: UserDto;
+    groupMates: UserDto[];
 }
 
 interface props extends StateToProps, DispatchProps {}
@@ -92,7 +95,13 @@ export class CommentBoxComponent extends Component<props, state> {
         let comments = {...this.props.comments};
         return(
             <div style={{position: "relative"}}>
-                <Grid container>
+                {this.props.comments.map(comment => {
+                    return <CommentBoxView key={comment._id} comment={comment}
+                                           recruiter={this.props.recruiter} user={this.props.user}
+                                           member={this.props.groupMates.indexOf(comment.createdBy) != -1}
+                            />
+                })}
+                <Grid container justify="center" direction="column" align="center">
                     <Grid item>
                         {this.state.addComment && this.commentEditor()}
                     </Grid>
@@ -116,6 +125,8 @@ const mapStateToProps = (state: AppStoreState) => ({
     lastUpdated: undefined,
     edit: undefined,
     pageId: state.recruitmentPage.recruitmentPage._id,
+    recruiter: state.recruitmentPage.recruitmentPage.createdBy,
+    groupMates: state.recruitmentPage.recruitmentPage.groupMates,
 });
 
 interface DispatchProps{

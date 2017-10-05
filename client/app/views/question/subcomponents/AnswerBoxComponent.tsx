@@ -80,7 +80,7 @@ export class AnswerBoxComponent extends Component<AnswerBoxComponentProps & disp
                     {answer.correct &&
                     <Grid container align={"center"}
                           style={{position: "absolute", left: -40 ,top: 0, height: "100%", width:40}}>
-                        <Grid item>
+                        <Grid item>r
                             <Icon style={{fontSize: 40, color: PRIMARY_COLOR}}>check</Icon>
                         </Grid>
                     </Grid>}
