@@ -53,4 +53,12 @@ export class RecruitmentActions extends BaseActions{
             }).catch(err => RatingActions.handleError(dispatch, err, RecruitmentActionTypes.AddCommentError))
         }
     }
+
+    static updateComment(comment: RecruitmentCommentDto, recruitmentId: string){
+        return function(dispatch){
+            dispatch({
+                type: RecruitmentActionTypes.EditCommentRequest
+            });
+        }
+    }
 }

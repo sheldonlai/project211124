@@ -11,27 +11,43 @@ import Divider from "material-ui/Divider";
 import {DraftJsHelper} from "../../../../../server/utils/DraftJsHelper";
 import {QAEditorComponent} from "../../question/subcomponents/Q&AEditorComponent";
 import {QuestionFooterComponent} from "../../question/subcomponents/QuestionFooterComponent";
+import {RecruitmentActions} from "../../../actions/RecruitmentActions";
 
 interface props{
     comment: RecruitmentCommentDto;
     recruiter: UserDto;
     user: UserDto;
     member: boolean;
+    updateComment: (comment: RecruitmentCommentDto) => void;
 }
 
 interface state{
+    editedComment: RecruitmentCommentDto;
     editMode: boolean;
 }
 
 const paperStyle = {height: "100%", padding: 5, width: "70%"};
 
 export class CommentBoxComponent extends Component<props, state>{
+    editedComment: RecruitmentCommentDto;
     constructor(props){
         super();
+        this.editedComment = {...props.comment};
         this.state = {
+            editedComment: this.editedComment,
             editMode: false,
         }
     }
+
+    updateComment = (field: string, val: any) => {
+        let comment = {...this.state.editedComment};
+        comment[field] = val;
+        this.setState({editedComment: comment});
+    };
+
+    cancelEdit = () => {
+        this.setState({editedComment: this.editedComment, editMode: false});
+    };
 
     render(){
         const editable = (this.props.user.username === this.props.comment.createdBy.username);
@@ -55,11 +71,11 @@ export class CommentBoxComponent extends Component<props, state>{
                             }
                         </Grid>
                     </Grid>
-                    <QAEditorComponent value={DraftJsHelper.convertRawToEditorState(this.props.comment.comment)}
-                                       onChange={() => {}}
+                    <QAEditorComponent value={DraftJsHelper.convertRawToEditorState(this.state.editedComment.comment)}
+                                       onChange={(content) => {this.updateComment("comment", DraftJsHelper.convertEditorStateToRaw(content))}}
                                        onSubmit={() => {}}
                                        readOnly={!this.state.editMode}
-                                       style={{fontSize: 14}} reset={() => {}}
+                                       style={{fontSize: 14}} reset={this.cancelEdit}
                     />
                     <Divider/>
                     <QuestionFooterComponent
@@ -69,9 +85,9 @@ export class CommentBoxComponent extends Component<props, state>{
                 </Paper>
                 {isRecruiter &&
                 <Grid container align={"center"}
-                      style={{position: "relative", left:-100, top: -80, height: "100%", width: "100%"}}>
+                      style={{position: "relative", left:-100, top: -100, height: "100%", width: "100%"}}>
                     <Grid item>
-                        <Button color="primary" disabled style={{display: "inline"}}>
+                        <Button disabled style={{display: "inline", color: "blue"}}>
                             RECRUITER
                         </Button>
                     </Grid>
