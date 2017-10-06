@@ -39,7 +39,7 @@ export class RecruitmentService extends BaseService implements IRecruitmentServi
             let newComment: RecruitmentComment = new RecruitmentComment(comment.request, comment.comment, user);
             recruitment.comments.push(newComment);
             return this.recruitmentRepository.update(recruitment).then(recruitment => {
-                return recruitment;
+                return this.recruitmentRepository.getById(recruitment._id);
             });
         })
     }
