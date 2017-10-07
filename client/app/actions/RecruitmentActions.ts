@@ -59,6 +59,9 @@ export class RecruitmentActions extends BaseActions{
             dispatch({
                 type: RecruitmentActionTypes.EditCommentRequest
             });
+            apiController.updateRecruitmentComment(comment, recruitmentId).then((res) => {
+
+            })
         }
     }
 }

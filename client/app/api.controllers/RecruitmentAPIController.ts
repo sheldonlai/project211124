@@ -34,4 +34,12 @@ export class RecruitmentAPIController extends ApiController{
         };
         return this.post(APIUrls.addRecruitmentComment, reqBody);
     }
+
+    updateRecruitmentComment(comment: RecruitmentCommentDto, recruitmentId: string): AxiosPromise {
+        let reqBody = {
+            comment: comment,
+            recruitmentId: recruitmentId,
+        };
+        return this.put(APIUrls.addRecruitmentComment, reqBody);
+    }
 }

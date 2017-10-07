@@ -13,6 +13,7 @@ export interface IRecruitmentService {
     createRecruitment(recruitment: RecruitmentDto, user: User): Promise<RecruitmentDto>;
     fetchRecruitmentPage(recruitmentId: string): Promise<RecruitmentDto>;
     addRecruitmentComment(comment: RecruitmentCommentDto, recruitmentId: string, user: User): Promise<RecruitmentDto>;
+    updateRecruitmentComment(comment: RecruitmentCommentDto, recruitmentId: string, user: User): Promise<RecruitmentDto>;
 }
 
 export class RecruitmentService extends BaseService implements IRecruitmentService {
@@ -41,6 +42,15 @@ export class RecruitmentService extends BaseService implements IRecruitmentServi
             return this.recruitmentRepository.update(recruitment).then(recruitment => {
                 return this.recruitmentRepository.getById(recruitment._id);
             });
+        })
+    }
+
+    updateRecruitmentComment(comment: RecruitmentCommentDto, recruitmentId: string, user: User): Promise<RecruitmentDto> {
+        console.log(recruitmentId);
+        return this.recruitmentRepository.getById(recruitmentId).then(recruitment => {
+            let idx: number = recruitment.comments.indexOf(comment);
+            console.log('idx = ' + idx);
+            return recruitment;
         })
     }
 

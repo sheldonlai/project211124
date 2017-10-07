@@ -73,7 +73,7 @@ export class CommentBoxComponent extends Component<props, state>{
                     </Grid>
                     <QAEditorComponent value={DraftJsHelper.convertRawToEditorState(this.state.editedComment.comment)}
                                        onChange={(content) => {this.updateComment("comment", DraftJsHelper.convertEditorStateToRaw(content))}}
-                                       onSubmit={() => {}}
+                                       onSubmit={() => {this.props.updateComment(this.state.editedComment)}}
                                        readOnly={!this.state.editMode}
                                        style={{fontSize: 14}} reset={this.cancelEdit}
                     />
@@ -84,14 +84,15 @@ export class CommentBoxComponent extends Component<props, state>{
                     />
                 </Paper>
                 {isRecruiter &&
-                <Grid container align={"center"}
-                      style={{position: "relative", left:-100, top: -100, height: "100%", width: "100%"}}>
-                    <Grid item>
-                        <Button disabled style={{display: "inline", color: "blue"}}>
-                            RECRUITER
-                        </Button>
+                <div>
+                    <Grid container align={"center"}>
+                        <Grid item style={{position: "relative", left:-100, top: -100, height: "100%"}}>
+                            <Button disabled style={{display: "inline", color: "blue"}}>
+                                RECRUITER
+                            </Button>
+                        </Grid>
                     </Grid>
-                </Grid>
+                </div>
                 }
             </div>
         )
