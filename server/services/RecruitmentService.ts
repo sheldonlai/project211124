@@ -46,12 +46,19 @@ export class RecruitmentService extends BaseService implements IRecruitmentServi
     }
 
     updateRecruitmentComment(comment: RecruitmentCommentDto, recruitmentId: string, user: User): Promise<RecruitmentDto> {
-        console.log(recruitmentId);
         return this.recruitmentRepository.getById(recruitmentId).then(recruitment => {
-            let idx: number = recruitment.comments.indexOf(comment);
-            console.log('idx = ' + idx);
-            return recruitment;
-        })
+            let idx: number = -1;
+            recruitment.comments.forEach((T, indx) => {
+                if(T._id == comment._id) {
+                    idx = indx;
+                    return;
+                }
+            });
+            recruitment.comments[idx] = comment;
+            return this.recruitmentRepository.update(recruitment).then(recruitment => {
+                return this.recruitmentRepository.getById(recruitment._id);
+            });
+        });
     }
 
     private checkPermissionForModification = (recruitmentDto: RecruitmentDto, recruitmentObj: Recruitment, currentUser: User) => {

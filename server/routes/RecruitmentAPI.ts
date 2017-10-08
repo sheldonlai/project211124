@@ -18,7 +18,7 @@ export class RecruitmentAPI extends BaseAPI{
         this.router.get(APIUrls.fetchRecruitmentPage, maybeAuthenticated, this.fetchRecruitmentPage);
         this.router.post(APIUrls.createRecruitment, mustBeAuthenticated, this.createRecruitment);
         this.router.post(APIUrls.addRecruitmentComment, mustBeAuthenticated, this.addRecruitmentComment);
-        this.router.put(APIUrls.addRecruitmentComment, mustBeAuthenticated, this.updateRecruitmentComment);
+        this.router.put(APIUrls.UpdateRecruitmentComment, mustBeAuthenticated, this.updateRecruitmentComment);
     }
 
     public createRecruitment = (req: AuthRequest, res: Response, next: NextFunction) => {
@@ -43,11 +43,10 @@ export class RecruitmentAPI extends BaseAPI{
         this.respondPromise(result, res, next);
     };
 
-    public updateRecruitmentComment = (req: AuthRequest, res, Response, next: NextFunction) => {
+    public updateRecruitmentComment = (req: AuthRequest, res: Response, next: NextFunction) => {
         let comment: RecruitmentCommentDto = req.body.comment;
         let recruitmentId: string = req.body.recruitmentId;
         let user: User = req.user;
-        console.log(recruitmentId);
         let result = this.service.updateRecruitmentComment(comment, recruitmentId, user);
         this.respondPromise(result, res, next);
     }

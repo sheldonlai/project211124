@@ -60,8 +60,11 @@ export class RecruitmentActions extends BaseActions{
                 type: RecruitmentActionTypes.EditCommentRequest
             });
             apiController.updateRecruitmentComment(comment, recruitmentId).then((res) => {
-
-            })
+                dispatch({
+                    type: RecruitmentActionTypes.EditCommentOK,
+                    data: res.data
+                })
+            }).catch(err => RatingActions.handleError(dispatch, err, RecruitmentActionTypes.EditCommentError))
         }
     }
 }

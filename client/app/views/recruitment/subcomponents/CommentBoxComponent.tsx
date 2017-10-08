@@ -83,17 +83,26 @@ export class CommentBoxComponent extends Component<props, state>{
                         createdUtc={this.props.comment.createdAt}
                     />
                 </Paper>
-                {isRecruiter &&
+                {(isRecruiter &&
                 <div>
                     <Grid container align={"center"}>
                         <Grid item style={{position: "relative", left:-100, top: -100, height: "100%"}}>
-                            <Button disabled style={{display: "inline", color: "blue"}}>
+                            <Button disabled style={{display: "inline", color: "green"}}>
                                 RECRUITER
                             </Button>
                         </Grid>
                     </Grid>
-                </div>
-                }
+                </div>)
+                || (this.props.member &&
+                <div>
+                    <Grid container align={"center"}>
+                        <Grid item style={{position: "relative", left:-100, top: -100, height: "100%"}}>
+                            <Button disabled style={{display: "inline", color: "blue"}}>
+                                MEMBER
+                            </Button>
+                        </Grid>
+                    </Grid>
+                </div>)}
             </div>
         )
     }

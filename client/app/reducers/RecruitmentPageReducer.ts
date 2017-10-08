@@ -41,6 +41,11 @@ export const RecruitmentPageReducer = (state = initialState, action): Recruitmen
         case RecruitmentActionTypes.AddCommentOK:
             return getOKState(state, action.data);
 
+        case RecruitmentActionTypes.EditCommentRequest:
+            return getLoadingState(state);
+        case RecruitmentActionTypes.EditCommentOK:
+            return getOKState(state, action.data);
+
         default:
             return state;
     }

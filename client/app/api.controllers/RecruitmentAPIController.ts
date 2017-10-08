@@ -40,6 +40,6 @@ export class RecruitmentAPIController extends ApiController{
             comment: comment,
             recruitmentId: recruitmentId,
         };
-        return this.put(APIUrls.addRecruitmentComment, reqBody);
+        return this.put(APIUrls.UpdateRecruitmentComment, reqBody);
     }
 }
