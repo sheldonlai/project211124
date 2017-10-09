@@ -3,6 +3,7 @@ import {AxiosPromise} from "axios";
 import {APIUrls} from "../../../server/urls";
 import {RecruitmentDto} from "../../../server/dtos/recruitment/RecruitmentDto";
 import {RecruitmentCommentDto} from "../../../server/dtos/recruitment/RecruitmentCommenDto";
+import {UserDto} from "../../../server/dtos/auth/UserDto";
 
 export class RecruitmentAPIController extends ApiController{
     public static _instance: RecruitmentAPIController = new RecruitmentAPIController();
@@ -40,6 +41,14 @@ export class RecruitmentAPIController extends ApiController{
             comment: comment,
             recruitmentId: recruitmentId,
         };
-        return this.put(APIUrls.UpdateRecruitmentComment, reqBody);
+        return this.put(APIUrls.updateRecruitmentComment, reqBody);
+    }
+
+    recruitMember(member: UserDto, recruitmentId: string): AxiosPromise{
+        let reqBody = {
+            member: member,
+            recruitmentId: recruitmentId,
+        };
+        return this.put(APIUrls.recruitMember, reqBody);
     }
 }

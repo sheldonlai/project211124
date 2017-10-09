@@ -80,7 +80,8 @@ export class APIUrls {
     static fetchRecruitmentPage = "/fetch-recruitment/:id";
 
     static addRecruitmentComment = "/add-recruitment-comment";
-    static UpdateRecruitmentComment = "/update-recruitment-comment";
+    static updateRecruitmentComment = "/update-recruitment-comment";
+    static recruitMember = "/recruit-member";
 
     /* Notification */
     static getNotificationsByUser = "/notifications";

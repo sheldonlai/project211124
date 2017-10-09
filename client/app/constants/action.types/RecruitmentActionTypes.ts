@@ -14,4 +14,8 @@ export enum RecruitmentActionTypes{
     EditCommentRequest = <any> "EditCommentRequest",
     EditCommentOK = <any> "EditCommentOK",
     EditCommentError = <any> "EditCommentError",
+
+    RecruitMemberRequest = <any> "RecruitMemberRequest",
+    RecruitMemberOK = <any> "RecruitMemberOK",
+    RecruitMemberError = <any> "RecruitMemberError",
 }

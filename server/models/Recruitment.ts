@@ -14,6 +14,7 @@ import {RecruitmentDto} from "../dtos/recruitment/RecruitmentDto";
 import {DraftJsHelper} from "../utils/DraftJsHelper";
 import {esClient} from "../esClient";
 import {RecruitmentCommentDto} from "../dtos/recruitment/RecruitmentCommenDto";
+import {UserDto} from "../dtos/auth/UserDto";
 
 let mongoosastic = require("mongoosastic");
 
@@ -83,7 +84,7 @@ function commentModelToDto(comment: RecruitmentCommentDto){
     return commentDto;
 }
 
-export function recruitmentModelToDto(recruitment: Recruitment){
+export function recruitmentModelToDto(recruitment: Recruitment, groupMates: UserDto[]){
     let commentsDto = recruitment.comments.map(comment => {return commentModelToDto(comment)});
     let recruitmentDto = {
         _id: recruitment._id,
@@ -95,7 +96,7 @@ export function recruitmentModelToDto(recruitment: Recruitment){
         courseDifficulty: recruitment.courseDifficulty,
         createdAt: recruitment.createdAt,
         updatedAt: recruitment.updatedAt,
-        groupMates: recruitment.groupMates,
+        groupMates: groupMates,
         views: recruitment.views,
     };
     return recruitmentDto;

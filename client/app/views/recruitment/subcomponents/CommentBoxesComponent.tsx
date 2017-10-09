@@ -98,8 +98,9 @@ export class CommentBoxComponent extends Component<props, state> {
                 {this.props.comments.map(comment => {
                     return <CommentBoxView key={comment._id} comment={comment}
                                            recruiter={this.props.recruiter} user={this.props.user}
-                                           member={this.props.groupMates.indexOf(comment.createdBy) != -1}
+                                           member={this.props.groupMates.indexOf(comment.createdBy._id) != -1}
                                            updateComment={(comment) => {this.props.updateComment(comment, this.props.pageId)}}
+                                           recruitMember={(member) => {this.props.recruitMember(member, this.props.pageId)}}
                             />
                 })}
                 <Grid container justify="center" direction="column" align="center">
@@ -133,11 +134,13 @@ const mapStateToProps = (state: AppStoreState) => ({
 interface DispatchProps{
     addComment: (comment: RecruitmentCommentDto, recruitmentId: string) => void;
     updateComment: (comment: RecruitmentCommentDto, recruitmentId: string) => void;
+    recruitMember: (member: UserDto, recruitmentId: string) => void;
 }
 
 const mapDispatchToProps = (dispatch): DispatchProps => ({
     addComment: (comment: RecruitmentCommentDto, recruitmentId: string) => dispatch(RecruitmentActions.addRecruitmentComment(comment, recruitmentId)),
     updateComment: (comment: RecruitmentCommentDto, recruitmentId: string) => dispatch(RecruitmentActions.updateComment(comment, recruitmentId)),
+    recruitMember: (member: UserDto, recruitmentId: string) => dispatch(RecruitmentActions.recruitMember(member, recruitmentId)),
 });
 
 export const CommentBoxesView = connect<StateToProps, DispatchProps, any>(

@@ -145,7 +145,7 @@ export class QuestionAPIController extends ApiController {
         return this.answerPutApiHelper(APIUrls.DownVoteAnswer, answer);
     }
 
-    blurryQuestinoSearch(inputStrings: string[]): AxiosPromise {
+    blurryQuestionSearch(inputStrings: string[]): AxiosPromise {
         return this.post(APIUrls.blurryQuestionSearch, inputStrings).then(response => {
             let data: any[] = response.data;
             let new_data: any[] = [];
