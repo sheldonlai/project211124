@@ -59,7 +59,7 @@ export class CommentBoxComponent extends Component<props, state>{
                 <Paper style={{...paperStyle, marginBottom: 10, marginTop: 10}} elevation={1}>
                     <Grid container justify="flex-end">
                         <Grid item>
-                            {masterView && !editable &&
+                            {masterView && !editable && !this.props.member &&
                             <Button color="primary" onClick={() => {
                                 this.props.recruitMember(this.props.comment.createdBy)
                             }}>

@@ -151,7 +151,7 @@ const schema = new Schema({
 });
 
 const autoPopulateUsers = function(next) {
-    this.populate(["createdBy", "comments.createdBy", "university"]);
+    this.populate(["createdBy", "comments.createdBy", "university", "groupMates"]);
     next();
 };
 
@@ -159,7 +159,8 @@ schema.pre('findOne', autoPopulateUsers).pre('find', autoPopulateUsers);
 schema.plugin(mongoosastic, {
     populate: [
         {path: 'university', select: 'name'},
-        {path: 'createdBy', select: 'username'}
+        {path: 'createdBy', select: 'username'},
+        {path: 'groupMates', select: 'username'}
     ],
     esClient
 });

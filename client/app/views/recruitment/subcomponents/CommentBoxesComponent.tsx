@@ -18,9 +18,11 @@ import {QAEditorComponent} from "../../question/subcomponents/Q&AEditorComponent
 import Grid from "material-ui/Grid";
 import {RecruitmentActions} from "../../../actions/RecruitmentActions";
 import {CommentBoxView} from "./CommentBoxComponent";
+import {FrontEndRecruitmentModels} from "../../../models/RecruitmentModels";
+import RecruitmentComment = FrontEndRecruitmentModels.RecruitmentComment;
 
 interface StateToProps{
-    comments: RecruitmentCommentDto[];
+    comments: RecruitmentComment;
     user: UserDto;
     lastUpdated: number;
     edit: boolean;
@@ -91,6 +93,15 @@ export class CommentBoxComponent extends Component<props, state> {
         )
     };
 
+    userIsMember = (userId: string) => {
+        for(let i=0; i<this.props.groupMates.length; i++){
+            if(this.props.groupMates[i]._id == userId){
+                return true;
+            }
+        }
+        return false;
+    };
+
     render(){
         let comments = {...this.props.comments};
         return(
@@ -98,7 +109,7 @@ export class CommentBoxComponent extends Component<props, state> {
                 {this.props.comments.map(comment => {
                     return <CommentBoxView key={comment._id} comment={comment}
                                            recruiter={this.props.recruiter} user={this.props.user}
-                                           member={this.props.groupMates.indexOf(comment.createdBy._id) != -1}
+                                           member={this.userIsMember(comment.createdBy._id)}
                                            updateComment={(comment) => {this.props.updateComment(comment, this.props.pageId)}}
                                            recruitMember={(member) => {this.props.recruitMember(member, this.props.pageId)}}
                             />

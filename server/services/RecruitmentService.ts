@@ -42,9 +42,7 @@ export class RecruitmentService extends BaseService implements IRecruitmentServi
         return this.recruitmentRepository.getById(recruitmentId).then(recruitment => {
             let newComment: RecruitmentComment = new RecruitmentComment(comment.request, comment.comment, user);
             recruitment.comments.push(newComment);
-            return this.recruitmentRepository.update(recruitment).then(recruitment => {
-                return this.recruitmentRepository.getById(recruitment._id);
-            });
+            return this.recruitmentRepository.update(recruitment);
         })
     }
 
@@ -66,9 +64,15 @@ export class RecruitmentService extends BaseService implements IRecruitmentServi
 
     recruitMember(member: UserDto, recruitmentId: string, user: User): Promise<RecruitmentDto>{
         return this.recruitmentRepository.getById(recruitmentId).then(recruitmentObj => {
-            recruitmentObj.groupMates.push(user);
-            return this.recruitmentRepository.update(recruitmentObj).then(recruitmentObj => {
-                return this.recruitmentRepository.getById(recruitmentObj._id);
+            if(recruitmentObj.groupMates.indexOf(member) != -1){
+                console.error("Member already exist in group");
+                return recruitmentObj;
+            }
+            recruitmentObj.groupMates.push(member);
+            return this.recruitmentRepository.update(recruitmentObj).then(recruitment => {
+                return this.recruitmentRepository.getById(recruitment._id).then(recruitment => {
+                    return recruitment;
+                });
             });
         })
     }
