@@ -7,6 +7,9 @@ import {Routes} from "../constants/Routes";
 import {RatingActions} from "./RatingActions";
 import {RecruitmentCommentDto} from "../../../server/dtos/recruitment/RecruitmentCommenDto";
 import {UserDto} from "../../../server/dtos/auth/UserDto";
+import {FrontEndRecruitmentModels} from "../models/RecruitmentModels";
+import Recruitment = FrontEndRecruitmentModels.Recruitment;
+import recruitmentDtoToModel = FrontEndRecruitmentModels.recruitmentDtoToModel;
 
 let apiController: RecruitmentAPIController = RecruitmentAPIController.getInstance();
 
@@ -33,9 +36,10 @@ export class RecruitmentActions extends BaseActions{
                 type: RecruitmentActionTypes.FetchRecruitmentPageRequest
             });
             apiController.fetchRecruitmentPage(id).then((res) => {
+                let data: Recruitment = recruitmentDtoToModel(res.data);
                 dispatch({
                     type: RecruitmentActionTypes.FetchRecruitmentPageOK,
-                    data: res.data
+                    data: data,
                 })
             }).catch(err => RatingActions.handleError(dispatch, err, RecruitmentActionTypes.FetchRecruitmentPageError))
         }

@@ -1,11 +1,12 @@
 import {ReducerStateStatus} from "../constants/ReducerStateStatus";
 import {RecruitmentDto} from "../../../server/dtos/recruitment/RecruitmentDto";
-import {Recruitment} from "../../../server/models/Recruitment";
 import {RecruitmentActionTypes} from "../constants/action.types/RecruitmentActionTypes";
+import {FrontEndRecruitmentModels} from "../models/RecruitmentModels";
+import Recruitment = FrontEndRecruitmentModels.Recruitment;
 
 export interface RecruitmentPageReducerState{
     status: ReducerStateStatus,
-    recruitmentPage: RecruitmentDto,
+    recruitmentPage: Recruitment,
     lastUpdated: number,
 }
 

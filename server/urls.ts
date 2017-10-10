@@ -33,13 +33,13 @@ export class APIUrls {
     static DownVoteAnswer = "/down-vote-answer";
     static DownVoteQuestion = "/down-vote-question";
 
-    static CreateQuestionComment = "/create-question-comment/:id";
-    static UpdateQuestionComment = "/update-question-comment/:id";
-    static DeleteQuestionComment = "/delete-question-comment/:id";
+    static CreateQuestionComment = "/create-question-comments/:id";
+    static UpdateQuestionComment = "/update-question-comments/:id";
+    static DeleteQuestionComment = "/delete-question-comments/:id";
 
-    static CreateAnswerComment = "/create-answer-comment/:id";
-    static UpdateAnswerComment = "/update-answer-comment/:id";
-    static DeleteAnswerComment = "/delete-answer-comment/:id";
+    static CreateAnswerComment = "/create-answer-comments/:id";
+    static UpdateAnswerComment = "/update-answer-comments/:id";
+    static DeleteAnswerComment = "/delete-answer-comments/:id";
 
     static MarkAnswerAsCorrect = "/answer-correct";
 
@@ -70,8 +70,8 @@ export class APIUrls {
     static getStory = "/story/:id";
     static createStory = "/create-story";
     static updateStory = "/update-story";
-    static createStoryComment = "/create-story-comment/:id";
-    static updateStoryComment = "/update-story-comment/:id";
+    static createStoryComment = "/create-story-comments/:id";
+    static updateStoryComment = "/update-story-comments/:id";
     static UpVoteStory = "/up-vote-story";
     static DownVoteStory = "/down-vote-story";
 
@@ -79,8 +79,8 @@ export class APIUrls {
     static createRecruitment = "/create-recruitment";
     static fetchRecruitmentPage = "/fetch-recruitment/:id";
 
-    static addRecruitmentComment = "/add-recruitment-comment";
-    static updateRecruitmentComment = "/update-recruitment-comment";
+    static addRecruitmentComment = "/add-recruitment-comments";
+    static updateRecruitmentComment = "/update-recruitment-comments";
     static recruitMember = "/recruit-member";
 
     /* Notification */

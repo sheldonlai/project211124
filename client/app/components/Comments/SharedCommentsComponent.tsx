@@ -76,7 +76,7 @@ export class SharedCommentsComponent extends React.Component<CommentsComponentPr
             this.resetState();
         }
         else {
-            this.setState({errorMsg: "Cannot submit empty comment."});
+            this.setState({errorMsg: "Cannot submit empty comments."});
         }
     };
 
@@ -232,7 +232,7 @@ export class SharedCommentsComponent extends React.Component<CommentsComponentPr
             this.props.onCommentUpdate(updatedComment);
             this.setState({EditCommentIndex: -1, commentContent: ""});
         } else {
-            this.setState({errorMsg: "Cannot submit empty comment."});
+            this.setState({errorMsg: "Cannot submit empty comments."});
         }
     };
 

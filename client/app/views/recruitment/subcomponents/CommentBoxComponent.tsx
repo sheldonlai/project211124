@@ -1,36 +1,33 @@
 import {Component} from "react";
 import * as React from "react";
-import {AppStoreState} from "../../../stores/AppStore";
-import {connect} from "react-redux";
-import {RecruitmentCommentDto} from "../../../../../server/dtos/recruitment/RecruitmentCommenDto";
 import Paper from "material-ui/Paper";
 import {UserDto} from "../../../../../server/dtos/auth/UserDto";
 import Grid from "material-ui/Grid";
 import Button from "material-ui/Button";
 import Divider from "material-ui/Divider";
-import {DraftJsHelper} from "../../../../../server/utils/DraftJsHelper";
 import {QAEditorComponent} from "../../question/subcomponents/Q&AEditorComponent";
 import {QuestionFooterComponent} from "../../question/subcomponents/QuestionFooterComponent";
-import {RecruitmentActions} from "../../../actions/RecruitmentActions";
+import {FrontEndRecruitmentModels} from "../../../models/RecruitmentModels";
+import RecruitmentComment = FrontEndRecruitmentModels.RecruitmentComment;
 
 interface props{
-    comment: RecruitmentCommentDto;
+    comment: RecruitmentComment;
     recruiter: UserDto;
     user: UserDto;
     member: boolean;
-    updateComment: (comment: RecruitmentCommentDto) => void;
+    updateComment: (comment: RecruitmentComment) => void;
     recruitMember: (member: UserDto) => void;
 }
 
 interface state{
-    editedComment: RecruitmentCommentDto;
+    editedComment: RecruitmentComment;
     editMode: boolean;
 }
 
 const paperStyle = {height: "100%", padding: 5, width: "70%"};
 
 export class CommentBoxComponent extends Component<props, state>{
-    editedComment: RecruitmentCommentDto;
+    editedComment: RecruitmentComment;
     constructor(props){
         super();
         this.editedComment = {...props.comment};
@@ -74,8 +71,8 @@ export class CommentBoxComponent extends Component<props, state>{
                             }
                         </Grid>
                     </Grid>
-                    <QAEditorComponent value={DraftJsHelper.convertRawToEditorState(this.state.editedComment.comment)}
-                                       onChange={(content) => {this.updateComment("comment", DraftJsHelper.convertEditorStateToRaw(content))}}
+                    <QAEditorComponent value={this.state.editedComment.comment}
+                                       onChange={(content) => {this.updateComment("comment", content)}}
                                        onSubmit={() => {this.props.updateComment(this.state.editedComment)}}
                                        readOnly={!this.state.editMode}
                                        style={{fontSize: 14}} reset={this.cancelEdit}

@@ -10,11 +10,13 @@ import {DraftJsHelper} from "../../../../../server/utils/DraftJsHelper";
 import Grid from "material-ui/Grid";
 import Divider from "material-ui/Divider";
 import Typography from "material-ui/Typography";
+import {FrontEndRecruitmentModels} from "../../../models/RecruitmentModels";
+import Recruitment = FrontEndRecruitmentModels.Recruitment;
 
 interface RecruitmentBoxComponentProps {
     user: UserDto; // current user
-    recruitmentInfo: RecruitmentDto;
-    recruitmentEditorState: RecruitmentDto;
+    recruitmentInfo: Recruitment;
+    recruitmentEditorState: Recruitment;
     edit: boolean;
 }
 
@@ -31,7 +33,7 @@ export class RecruitmentBoxComponent extends Component<props, {}> {
     }
 
     render() {
-        let recruitment: RecruitmentDto = {...this.props.recruitmentInfo};
+        let recruitment: Recruitment = {...this.props.recruitmentInfo};
         console.log(recruitment);
         return (
             <div>
@@ -42,7 +44,7 @@ export class RecruitmentBoxComponent extends Component<props, {}> {
                                 <Paper style={paperStyle} elevation={0}>
                                     <div>
                                         <CustomCard title={recruitment.title}
-                                                    content={DraftJsHelper.convertRawToText(recruitment.content)}
+                                                    content={DraftJsHelper.convertEditorStateToText(recruitment.content)}
                                                     date={new Date()}
                                                     wide
                                         />

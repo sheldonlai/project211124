@@ -1,7 +1,6 @@
 import * as React from "react";
 import {Component} from "react";
 import {RouteComponentProps, RouterProps} from "react-router";
-import {Recruitment} from "../../../../server/models/Recruitment";
 import {connect} from "react-redux";
 import {AppStoreState} from "../../stores/AppStore";
 import {RecruitmentDto} from "../../../../server/dtos/recruitment/RecruitmentDto";
@@ -22,10 +21,13 @@ import {Routes} from "../../constants/Routes";
 import Button from "material-ui/Button";
 import {CustomLink} from "../../components/RoutingComponents/CustomLink";
 import {DraftJsHelper} from "../../../../server/utils/DraftJsHelper";
+import {FrontEndRecruitmentModels} from "../../models/RecruitmentModels";
+import Recruitment = FrontEndRecruitmentModels.Recruitment;
+import recruitmentModelToDto = FrontEndRecruitmentModels.recruitmentModelToDto;
 
 export interface CreateRecruitmentState{
     error: string;
-    recruitmentObj: RecruitmentDto;
+    recruitmentObj: Recruitment;
 }
 
 interface props extends stateToProps, dispatchToProps, RouteComponentProps<any>{}
@@ -33,23 +35,7 @@ interface props extends stateToProps, dispatchToProps, RouteComponentProps<any>{
 class CreateRecruitment extends Component<props, CreateRecruitmentState> {
     constructor(props){
         super(props);
-        let Obj = {
-            _id: '',
-            comments: [],
-            title: '',
-            content: DraftJsHelper.convertEditorStateToRaw(EditorState.createEmpty()),
-            recruitStatus: RecruitStatus.OPEN,
-            university: undefined,
-            courseDifficulty: {
-                educationLevel: QuestionEducationLevel.NOT_SPECIFIED,
-                difficultyLevel: DifficultyLevel.NOT_SPECIFIED
-            },
-            createdBy: undefined,
-            createdAt: undefined,
-            updatedAt: undefined,
-            groupMates: [],
-            views: 0,
-        };
+        let Obj = new Recruitment();
         this.state = {
             error: '',
             recruitmentObj: Obj,
@@ -63,7 +49,8 @@ class CreateRecruitment extends Component<props, CreateRecruitmentState> {
     };
 
     onSubmit = () => {
-      this.props.createRecruitment(this.state.recruitmentObj);
+        let recruitmentDto: RecruitmentDto = recruitmentModelToDto(this.state.recruitmentObj);
+        this.props.createRecruitment(recruitmentDto);
     };
 
     render(){
@@ -112,9 +99,9 @@ class CreateRecruitment extends Component<props, CreateRecruitmentState> {
                         </Grid>
                         <Grid item xs={12} md={12}>
                             <Typography type="caption" gutterBottom>Content :</Typography>
-                            <CustomEditor value={DraftJsHelper.convertRawToEditorState(this.state.recruitmentObj.content)}
+                            <CustomEditor value={this.state.recruitmentObj.content}
                                           onChange={(content: EditorState) => {
-                                              this.updateObj("content", DraftJsHelper.convertEditorStateToRaw(content))
+                                              this.updateObj("content", content)
                                           }}
                                           style={{minHeight: 200}}
                             />

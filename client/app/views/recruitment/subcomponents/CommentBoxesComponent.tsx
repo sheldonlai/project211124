@@ -20,9 +20,10 @@ import {RecruitmentActions} from "../../../actions/RecruitmentActions";
 import {CommentBoxView} from "./CommentBoxComponent";
 import {FrontEndRecruitmentModels} from "../../../models/RecruitmentModels";
 import RecruitmentComment = FrontEndRecruitmentModels.RecruitmentComment;
+import commentModelToDto = FrontEndRecruitmentModels.commentModelToDto;
 
 interface StateToProps{
-    comments: RecruitmentComment;
+    comments: RecruitmentComment[];
     user: UserDto;
     lastUpdated: number;
     edit: boolean;
@@ -34,22 +35,15 @@ interface StateToProps{
 interface props extends StateToProps, DispatchProps {}
 
 interface state{
-    newComment: RecruitmentCommentDto;
+    newComment: RecruitmentComment;
     addComment: boolean;
 }
 const paperStyle = {height: "100%", padding: 5,};
 export class CommentBoxComponent extends Component<props, state> {
-    newComment: RecruitmentCommentDto;
+    newComment: RecruitmentComment;
     constructor(props){
         super();
-        this.newComment = {
-            _id: '',
-            request: RecruitmentRequestEnum.NOT_SPECIFIED,
-            comment: DraftJsHelper.convertEditorStateToRaw(EditorState.createEmpty()),
-            createdBy: props.user,
-            createdAt: new Date(Date.now()),
-            updatedAt: undefined,
-        };
+        this.newComment = new RecruitmentComment();
         this.state = {
             newComment: this.newComment,
             addComment: false,
@@ -63,9 +57,9 @@ export class CommentBoxComponent extends Component<props, state> {
     };
 
     submitComment = () => {
-        let comment = {...this.state.newComment};
+        let commentDto: RecruitmentCommentDto = commentModelToDto({...this.state.newComment});
         this.setState({newComment: this.newComment, addComment: false});
-        this.props.addComment(comment, this.props.pageId);
+        this.props.addComment(commentDto, this.props.pageId);
     };
 
     cancelComment = () => {
@@ -83,8 +77,8 @@ export class CommentBoxComponent extends Component<props, state> {
                         value={this.state.newComment.request}
                     />
                     <Divider/>
-                    <QAEditorComponent value={DraftJsHelper.convertRawToEditorState(this.state.newComment.comment)}
-                                       onChange={(content) => this.updateComment("comment", DraftJsHelper.convertEditorStateToRaw(content))}
+                    <QAEditorComponent value={this.state.newComment.comment}
+                                       onChange={(content) => this.updateComment("comment", content)}
                                        onSubmit={this.submitComment} readOnly={!this.state.addComment}
                                        style={{fontSize: 14}} reset={this.cancelComment}
                     />
@@ -110,7 +104,10 @@ export class CommentBoxComponent extends Component<props, state> {
                     return <CommentBoxView key={comment._id} comment={comment}
                                            recruiter={this.props.recruiter} user={this.props.user}
                                            member={this.userIsMember(comment.createdBy._id)}
-                                           updateComment={(comment) => {this.props.updateComment(comment, this.props.pageId)}}
+                                           updateComment={(comment) => {
+                                               let commentDto: RecruitmentCommentDto = commentModelToDto(comment);
+                                               this.props.updateComment(commentDto, this.props.pageId);
+                                           }}
                                            recruitMember={(member) => {this.props.recruitMember(member, this.props.pageId)}}
                             />
                 })}

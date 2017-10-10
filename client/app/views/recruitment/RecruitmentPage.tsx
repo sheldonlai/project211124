@@ -11,13 +11,15 @@ import {RecruitmentBoxComponent, RecruitmentBoxView} from "./subcomponents/Recru
 import {LoadingScreen} from "../../components/Animations/LoadingScreen";
 import {CommentBoxesView} from "./subcomponents/CommentBoxesComponent";
 import Grid from "material-ui/Grid";
+import {FrontEndRecruitmentModels} from "../../models/RecruitmentModels";
+import Recruitment = FrontEndRecruitmentModels.Recruitment;
 
 
 interface RecruitmentPageProps extends RouteComponentProps<{id: string}>{}
 
 interface StateToProps{
     pageStatus: ReducerStateStatus;
-    recruitmentInfo: RecruitmentDto;
+    recruitmentInfo: Recruitment;
     user: UserDto;
     lastUpdated: number;
 }
@@ -29,7 +31,7 @@ interface DispatchToProps{
 interface props extends StateToProps, DispatchToProps, RouteComponentProps<{ id: string }>{}
 
 interface state{
-    recruitment: RecruitmentDto;
+    recruitment: Recruitment;
     edit: boolean;
 }
 
@@ -38,7 +40,7 @@ export class RecruitmentPageComponent extends React.Component<props, state>{
         super();
 
         this.state = {
-            recruitment: undefined,
+            recruitment: new Recruitment(),
             edit: false,
         }
     }

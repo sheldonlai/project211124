@@ -1,13 +1,15 @@
-import {RecruitmentRequestEnum} from "../../../server/enums/RecruitmentRequestEnum";
-import {Draft} from "draft-js";
+import {RecruitmentRequestEnum} from "../../../server/enums/RecruitmentRequestEnum"
 import {UserDto} from "../../../server/dtos/auth/UserDto";
 import {RecruitStatus} from "../../../server/enums/RecruitmentStatusEnum";
 import {University} from "../../../server/models/LocationModels/Universities";
 import {QuestionDifficulty} from "../../../server/models/Question";
 import {RecruitmentCommentDto} from "../../../server/dtos/recruitment/RecruitmentCommenDto";
 import {DraftJsHelper} from "../../../server/utils/DraftJsHelper";
+import {RecruitmentDto} from "../../../server/dtos/recruitment/RecruitmentDto";
+import {EditorState} from "draft-js";
+import {DifficultyLevel, QuestionEducationLevel} from "../../../server/enums/QuestionEducationLevel";
+
 export namespace FrontEndRecruitmentModels{
-    import EditorState = Draft.Model.ImmutableData.EditorState;
     export class RecruitmentComment {
         _id: string;
         request: RecruitmentRequestEnum;
@@ -28,7 +30,7 @@ export namespace FrontEndRecruitmentModels{
     export class Recruitment {
         _id: string;
         title: string;
-        comment: RecruitmentComment[];
+        comments: RecruitmentComment[];
         content: EditorState;
         recruitStatus: RecruitStatus;
         university?: University;
@@ -41,11 +43,14 @@ export namespace FrontEndRecruitmentModels{
         constructor(){
             this._id = '';
             this.title = '';
-            this.comment = [];
+            this.comments = [];
             this.content = EditorState.createEmpty();
             this.recruitStatus = RecruitStatus.NOT_SPECIFIED;
             this.university = undefined;
-            this.courseDifficulty = undefined;
+            this.courseDifficulty = {
+                educationLevel: QuestionEducationLevel.NOT_SPECIFIED,
+                difficultyLevel: DifficultyLevel.NOT_SPECIFIED,
+            };
             this.createdBy = undefined;
             this.createdAt = new Date(Date.now());
             this.updatedAt = new Date(Date.now());
@@ -55,7 +60,7 @@ export namespace FrontEndRecruitmentModels{
     }
 
     export const commentModelToDto = (comment: RecruitmentComment): RecruitmentCommentDto => {
-        let commentDto: RecruitmentcommentDto = {
+        let commentDto: RecruitmentCommentDto = {
             _id: comment._id,
             request: comment.request,
             comment: DraftJsHelper.convertEditorStateToRaw(comment.comment),
@@ -75,6 +80,47 @@ export namespace FrontEndRecruitmentModels{
         commentModel.comment = DraftJsHelper.convertRawToEditorState(comment.comment);
         commentModel.request = comment.request;
         return commentModel;
+    }
+
+    export const recruitmentDtoToModel = (recruitmentDto: RecruitmentDto): Recruitment => {
+        let recruitment: Recruitment = new Recruitment();
+        let comments: RecruitmentComment[] = recruitmentDto.comments.map(comment => {
+            return commentDtoToModel(comment);
+        });
+        recruitment._id = recruitmentDto._id;
+        recruitment.title = recruitmentDto.title;
+        recruitment.comments = comments;
+        recruitment.content = DraftJsHelper.convertRawToEditorState(recruitmentDto.content);
+        recruitment.recruitStatus = recruitmentDto.recruitStatus;
+        recruitment.university = recruitmentDto.university;
+        recruitment.courseDifficulty = recruitmentDto.courseDifficulty;
+        recruitment.createdBy = recruitmentDto.createdBy;
+        recruitment.createdAt = recruitmentDto.createdAt;
+        recruitment.updatedAt = recruitmentDto.updatedAt;
+        recruitment.groupMates = recruitmentDto.groupMates;
+        recruitment.views = recruitmentDto.views;
+        return recruitment;
+    }
+
+    export const recruitmentModelToDto = (recruitmentModel: Recruitment): RecruitmentDto => {
+        let comments: RecruitmentCommentDto[] = recruitmentModel.comments.map(comment => {
+            return commentModelToDto(comment);
+        });
+        let recruitmentDto: RecruitmentDto = {
+            _id: recruitmentModel._id,
+            title: recruitmentModel.title,
+            comments: comments,
+            content: DraftJsHelper.convertEditorStateToRaw(recruitmentModel.content),
+            recruitStatus: recruitmentModel.recruitStatus,
+            university: recruitmentModel.university,
+            courseDifficulty: recruitmentModel.courseDifficulty,
+            createdBy: recruitmentModel.createdBy,
+            createdAt: recruitmentModel.createdAt,
+            updatedAt: recruitmentModel.updatedAt,
+            groupMates: recruitmentModel.groupMates,
+            views: recruitmentModel.views,
+        };
+        return recruitmentDto;
     }
 
 }

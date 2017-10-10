@@ -77,7 +77,7 @@ export class CommentsComponent extends React.Component<CommentsComponentProps, C
             });
         }
         else {
-            this.setState({errorMsg: "Cannot submit empty comment."});
+            this.setState({errorMsg: "Cannot submit empty comments."});
         }
     };
 
@@ -197,7 +197,7 @@ export class CommentsComponent extends React.Component<CommentsComponentProps, C
             this.setState({EditCommentIndx: -1, commentContent: ""});
         }
         else {
-            this.setState({errorMsg: "Cannot submit empty comment."});
+            this.setState({errorMsg: "Cannot submit empty comments."});
         }
     };
 
@@ -217,7 +217,7 @@ export class CommentsComponent extends React.Component<CommentsComponentProps, C
 
     renderComments = () => {
         let comments: CommentDto[] = this.props.comments.slice(0, this.state.showMaxComments);
-        //<div>Posted on {comment.createdUtc}</div>
+        //<div>Posted on {comments.createdUtc}</div>
         return comments.map((comment, indx) => {
             return (
                 <div key={comment.lastEditedUtc + comment.commentBy.username}
