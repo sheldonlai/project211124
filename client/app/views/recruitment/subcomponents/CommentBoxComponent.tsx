@@ -48,8 +48,8 @@ export class CommentBoxComponent extends Component<props, state>{
     };
 
     render(){
-        const editable = (this.props.user.username === this.props.comment.createdBy.username);
-        const masterView = (this.props.user.username === this.props.recruiter.username);
+        const editable = this.props.user?((this.props.user.username === this.props.comment.createdBy.username)):false;
+        const masterView = this.props.user?((this.props.user.username === this.props.recruiter.username)):false;
         const isRecruiter = (this.props.recruiter.username === this.props.comment.createdBy.username);
         return(
             <div style={{ marginLeft: "240px", }}>

@@ -21,9 +21,10 @@ export class RecruitmentActions extends BaseActions{
                 type: RecruitmentActionTypes.CreateRecruitmentRequest
             });
             apiController.createRecruitment(recruitmentObj).then(res => {
+                let data: Recruitment = recruitmentDtoToModel(res.data);
                 dispatch({
                     type: RecruitmentActionTypes.CreateRecruitmentOK,
-                    data: res.data
+                    data: data,
                 });
                 RouterController.history.push(Routes.recruitment_by_id.replace(":id", res.data._id));
             }).catch(err => RecruitmentActions.handleError(dispatch, err, RecruitmentActionTypes.CreateRecruitmentError));
@@ -51,9 +52,10 @@ export class RecruitmentActions extends BaseActions{
                 type: RecruitmentActionTypes.AddCommentRequest
             });
             apiController.addRecruitmentComment(comment, recruitmentId).then((res) => {
+                let data: Recruitment = recruitmentDtoToModel(res.data);
                 dispatch({
                     type: RecruitmentActionTypes.AddCommentOK,
-                    data: res.data
+                    data: data,
                 })
             }).catch(err => RatingActions.handleError(dispatch, err, RecruitmentActionTypes.AddCommentError))
         }
@@ -65,9 +67,10 @@ export class RecruitmentActions extends BaseActions{
                 type: RecruitmentActionTypes.EditCommentRequest
             });
             apiController.updateRecruitmentComment(comment, recruitmentId).then((res) => {
+                let data: Recruitment = recruitmentDtoToModel(res.data);
                 dispatch({
                     type: RecruitmentActionTypes.EditCommentOK,
-                    data: res.data
+                    data: data,
                 })
             }).catch(err => RatingActions.handleError(dispatch, err, RecruitmentActionTypes.EditCommentError))
         }
@@ -79,9 +82,10 @@ export class RecruitmentActions extends BaseActions{
                 type: RecruitmentActionTypes.RecruitMemberRequest
             });
             apiController.recruitMember(member, recruitmentId).then(res => {
+                let data: Recruitment = recruitmentDtoToModel(res.data);
                 dispatch({
                     type: RecruitmentActionTypes.RecruitMemberOK,
-                    data: res.data
+                    data: data,
                 })
             }).catch(err => RatingActions.handleError(dispatch, err, RecruitmentActionTypes.RecruitMemberError))
         }

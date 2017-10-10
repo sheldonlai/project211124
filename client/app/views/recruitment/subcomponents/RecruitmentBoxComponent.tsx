@@ -1,7 +1,6 @@
 import * as React from "react";
 import {Component} from "react";
 import {UserDto} from "../../../../../server/dtos/auth/UserDto";
-import {RecruitmentDto} from "../../../../../server/dtos/recruitment/RecruitmentDto";
 import {AppStoreState} from "../../../stores/AppStore";
 import Paper from "material-ui/Paper";
 import {connect} from "react-redux";
@@ -12,6 +11,7 @@ import Divider from "material-ui/Divider";
 import Typography from "material-ui/Typography";
 import {FrontEndRecruitmentModels} from "../../../models/RecruitmentModels";
 import Recruitment = FrontEndRecruitmentModels.Recruitment;
+import {EditorState} from "draft-js";
 
 interface RecruitmentBoxComponentProps {
     user: UserDto; // current user
@@ -34,7 +34,6 @@ export class RecruitmentBoxComponent extends Component<props, {}> {
 
     render() {
         let recruitment: Recruitment = {...this.props.recruitmentInfo};
-        console.log(recruitment);
         return (
             <div>
                 <Grid container spacing={24}>

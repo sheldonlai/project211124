@@ -47,13 +47,14 @@ export class AnswerBoxComponent extends Component<AnswerBoxComponentProps & disp
     render() {
         const answer: Answer = {...this.props.answer};
         const editable = (this.props.user && this.props.user.username === answer.author.username);
+        const masterView = this.props.user?((this.props.user._id === this.props.questionAuthor._id)):false;
         return (
             <div style={{ marginLeft: "40px", }}>
                 <Paper style={{...paperStyle, marginBottom: 10, marginTop: 10, position: "relative"}} elevation={1}>
                     <div>
                         <Grid container justify="flex-end">
                             <Grid item>
-                                {this.props.user._id === this.props.questionAuthor._id && !this.props.editMode &&
+                                {masterView && !this.props.editMode &&
                                 <Button color="primary" onClick={this.props.onMarkAnswerAsCorrect}>
                                     Mark as Correct
                                 </Button>}
