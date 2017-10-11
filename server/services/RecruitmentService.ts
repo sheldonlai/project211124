@@ -36,7 +36,10 @@ export class RecruitmentService extends BaseService implements IRecruitmentServi
         }
         return Promise.all(recruitmentPreviews).then(result => {
             let featuredRecruitments = result[0].map(recruitment => Recruitment.fromObject(recruitment).toPreviewDto());
-            let myRecruitments = result[1].map(recruitment => Recruitment.fromObject(recruitment).toPreviewDto());
+            let myRecruitments = [];
+            if(user){
+                result[1].map(recruitment => Recruitment.fromObject(recruitment).toPreviewDto());
+            }
 
             return{
                 featuredRecruitments,
