@@ -8,6 +8,10 @@ import {DraftJsHelper} from "../../../server/utils/DraftJsHelper";
 import {RecruitmentDto} from "../../../server/dtos/recruitment/RecruitmentDto";
 import {EditorState} from "draft-js";
 import {DifficultyLevel, QuestionEducationLevel} from "../../../server/enums/QuestionEducationLevel";
+import {Preview} from "./CommonModels";
+import {UniversityDto} from "../../../server/dtos/location/UniversityDto";
+import {RecruitmentPreviewDto} from "../../../server/dtos/recruitment/RecruitmentPreviewDto";
+import {Routes} from "../constants/Routes";
 
 export namespace FrontEndRecruitmentModels{
     export class RecruitmentComment {
@@ -123,4 +127,61 @@ export namespace FrontEndRecruitmentModels{
         return recruitmentDto;
     }
 
+    /*
+     _id: string,
+     title: string,
+     content: string,
+     author: UserDto,
+     createdAt: Date,
+     updatedAt: Date,
+     university: UniversityDto,
+     courseDifficulty: QuestionDifficulty,
+     groupSize: number,
+     views: number,
+     */
+
+    export class RecruitmentPreview implements Preview{
+        _id: string;
+        title: string;
+        content: string;
+        author: UserDto;
+        createdAt: Date;
+        updatedAt: Date;
+        university: UniversityDto;
+        courseDifficulty: QuestionDifficulty;
+        groupSize: number;
+        views: number;
+        createdUtc: Date;
+
+        constructor(){
+            this._id = '';
+            this.title = '';
+            this.content = '';
+            this.author = undefined;
+            this.createdAt = new Date(Date.now());
+            this.updatedAt = new Date(Date.now());
+            this.university = undefined;
+            this.courseDifficulty = {
+                educationLevel: QuestionEducationLevel.NOT_SPECIFIED,
+                difficultyLevel: DifficultyLevel.NOT_SPECIFIED,
+            };
+            this.groupSize = 0;
+            this.views = 0;
+            this.createdUtc = this.createdAt;
+        }
+
+        static recruitmentPreviewModelToDto(preview: RecruitmentPreviewDto): RecruitmentPreview{
+            let object: RecruitmentPreview = new RecruitmentPreview();
+            for ( let key of Object.keys(preview)) {
+                object[key] = preview[key];
+            }
+            return object;
+        }
+
+        toLink() {
+            let title = encodeURIComponent(this.title).replace(/%20/g, '-');
+            title = encodeURIComponent(title).replace(/%3F/g, '');
+            return Routes.recruitment_by_id.replace(':id', this._id).replace(':name', title);
+        }
+    }
 }

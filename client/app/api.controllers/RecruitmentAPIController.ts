@@ -20,6 +20,10 @@ export class RecruitmentAPIController extends ApiController{
         RecruitmentAPIController._instance = this;
     }
 
+    getRecruitmentPreview(): AxiosPromise {
+        return this.get(APIUrls.getRecruitmentPreviews);
+    }
+
     createRecruitment(recruitment: RecruitmentDto): AxiosPromise {
         return this.post(APIUrls.createRecruitment, recruitment);
     }

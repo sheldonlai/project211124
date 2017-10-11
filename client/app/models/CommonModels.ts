@@ -8,7 +8,7 @@ export interface Preview {
     content: string;
     createdUtc: Date;
     author: UserDto;
-    category: CategoryTypeEnum;
+    category?: CategoryTypeEnum;
     img? : string;
     toLink : () => string;
 }

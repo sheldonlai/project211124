@@ -34,7 +34,6 @@ export class RecruitmentRepository extends BaseRepository<Recruitment, IRecruitm
 
     getRecruitmentByAuthor(user: User): Promise<Recruitment[]> {
         return RecruitmentModel.find({createdBy: user._id}).lean().exec()
-            .then((recruitments: Recruitment[]) => Promise.all(r => this.applyAdditionalFunction(r)))
             .then((recruitments: Recruitment[]) => {
                 return this.getModels(recruitments);
             });
@@ -45,14 +44,6 @@ export class RecruitmentRepository extends BaseRepository<Recruitment, IRecruitm
             .then((question: Question) => this.applyAdditionalFunction(question))
             .then((question: Question) => {
                 return this.getModel(question);
-            });
-    }
-
-    getQuestionsByAuthor(user: User): Promise<Question[]> {
-        return QuestionModel.find({author: user._id}).lean().exec()
-            .then((questions: Question[]) => Promise.all(questions.map((q) => this.applyAdditionalFunction(q))))
-            .then((question: Question[]) => {
-                return this.getModels(question);
             });
     }
 

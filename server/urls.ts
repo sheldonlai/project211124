@@ -83,6 +83,8 @@ export class APIUrls {
     static updateRecruitmentComment = "/update-recruitment-comments";
     static recruitMember = "/recruit-member";
 
+    static getRecruitmentPreviews = "/get-recruitment-previews";
+
     /* Notification */
     static getNotificationsByUser = "/notifications";
     static notificationSeen = "/notification/seen/:id";

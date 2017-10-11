@@ -14,6 +14,7 @@ import {StoryPageReducer, StoryPageReducerState} from "../reducers/StoryPageRedu
 import {DashboardReducer, DashboardReducerState} from "../reducers/DashboardReducer";
 import {ProfileReducer, ProfileReducerState} from "../reducers/ProfileReducer";
 import {RecruitmentPageReducer, RecruitmentPageReducerState} from "../reducers/RecruitmentPageReducer";
+import {RecruitmentHomeReducer, RecruitmentHomeReducerState} from "../reducers/RecruitmentHomeReducer";
 
 const loggerMiddleware = createLogger();
 const composeEnhancers = window['__REDUX_DEVTOOLS_EXTENSION_COMPOSE__'] || compose;
@@ -31,6 +32,7 @@ export interface AppStoreState {
     ratingPage: RatingPageReducerState;
     storyHome: StoryHomeReducerState;
     storyPage: StoryPageReducerState;
+    recruitmentHome: RecruitmentHomeReducerState;
     recruitmentPage: RecruitmentPageReducerState;
     profile: ProfileReducerState,
 }
@@ -48,6 +50,7 @@ const reducer = combineReducers({
     ratingPage: RatingPageReducer,
     storyHome: StoryHomeReducer,
     storyPage: StoryPageReducer,
+    recruitmentHome: RecruitmentHomeReducer,
     recruitmentPage: RecruitmentPageReducer,
     profile: ProfileReducer,
 });

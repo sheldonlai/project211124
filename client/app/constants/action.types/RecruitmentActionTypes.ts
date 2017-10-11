@@ -18,4 +18,8 @@ export enum RecruitmentActionTypes{
     RecruitMemberRequest = <any> "RecruitMemberRequest",
     RecruitMemberOK = <any> "RecruitMemberOK",
     RecruitMemberError = <any> "RecruitMemberError",
+
+    GetRecruitmentPreviewRequest = <any> "GetPreviewRequest",
+    GetRecruitmentPreviewOK = <any> "GetPreviewOK",
+    GetRecruitmentPreviewError = <any> "GetPreviewError",
 }

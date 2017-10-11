@@ -15,6 +15,20 @@ let apiController: RecruitmentAPIController = RecruitmentAPIController.getInstan
 
 export class RecruitmentActions extends BaseActions{
 
+    static getRecruitmentPreviews(){
+        return function(dispatch){
+            dispatch({
+                type: RecruitmentActionTypes.GetRecruitmentPreviewRequest,
+            });
+            apiController.getRecruitmentPreview().then(res => {
+                dispatch({
+                    type: RecruitmentActionTypes.GetRecruitmentPreviewOK,
+                    data: res.data,
+                });
+            }).catch(err => RecruitmentActions.handleError(dispatch, err, RecruitmentActionTypes.GetRecruitmentPreviewError));
+        }
+    }
+
     static createRecruitment(recruitmentObj: RecruitmentDto){
         return function (dispatch){
             dispatch({

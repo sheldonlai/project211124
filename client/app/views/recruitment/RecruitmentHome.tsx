@@ -19,9 +19,11 @@ import Typography from "material-ui/Typography";
 import TextField from 'material-ui/TextField';
 import {TeammateAdvancedSearchEditor} from '../rating/subcomponents/TeammateAdvancedSearchEditor'
 import {RatingApiController} from "../../api.controllers/RatingApiController";
-import Tabs from "material-ui/Tabs/Tabs";
-import Tab from "material-ui/Tabs/Tab";
-import {RatingHomeView} from "../rating/RatingHomeView";
+import {RecruitmentActions} from "../../actions/RecruitmentActions";
+import {PreviewCardsComponent} from "../../components/CardComponent/PreviewCardsComponent";
+import {FrontEndRecruitmentModels} from "../../models/RecruitmentModels";
+import RecruitmentPreview = FrontEndRecruitmentModels.RecruitmentPreview;
+import {PRIMARY_COLOR} from "../router";
 
 interface state {
     tab: number;
@@ -38,55 +40,65 @@ export class RecruitmentHomeComponent extends React.Component<StateToProps & Dis
         this.apiController = RatingApiController.getInstance();
     }
 
+    componentWillMount(){
+        this.props.fetchRecruitmentPreviews();
+    }
 
     render() {
+        if(this.props.pageStatus == ReducerStateStatus.LOADING)
+            return <LoadingScreen/>
+
         return (
             <div>
-                <Tabs
-                    value={this.state.tab}
-                    onChange={(event, value) => this.setState({tab: value})}
-                    indicatorColor="primary"
-                    textColor="primary"
-                    scrollable
-                    scrollButtons="auto"
-                >
-                    <Tab label="Recruitment" />
-                    <Tab label="People" />
-                </Tabs>
-                {this.state.tab === 0 && 'Item Two'}
-                {this.state.tab === 1 && <RatingHomeView />}
-                <br/>
-                <CustomLink to={Routes.create_recruitment}>
-                    <Button style={{margin: "10px 0px"}}>
-                        RECRUIT TEAMMATE
-                    </Button>
-                </CustomLink>
+                <PreviewCardsComponent label="Featured" list={this.props.featuredRecruitments} maxBlock={4}>
+                    <Grid container justify="flex-end" direction="column" style={{width: "100%"}}>
+                        <Grid item style={{paddding: 5}}>
+                            <Typography type="display1" style={{color: PRIMARY_COLOR}}>
+                                Recruitment
+                            </Typography>
+                            <Typography type="body1" color="secondary" style={{textAlign: "left"}}>
+                                This is the module for member recruitment. Here, you could look for teammates to join your course group,
+                                or to find partners to work on a personal project together.
+                            </Typography>
+                        </Grid>
+                        {
+                            this.props.loggedIn &&
+                            <Grid item>
+                                <CustomLink to={Routes.create_recruitment}>
+                                    <Button style={{margin: "10px 0px"}}>
+                                        RECRUIT TEAMMATE
+                                    </Button>
+                                </CustomLink>
+                            </Grid>
+                        }
+                    </Grid>
+                </PreviewCardsComponent>
+                <PreviewCardsComponent label="My Recruitments" list={this.props.myRecruitments} maxBlock={4}/>
             </div>
         )
     }
 }
 
 interface DispatchToProps {
-    fetchRatingPreviews: () => void;
-    BlurrySearch: (InputStrings: string[]) => void;
-    AdvancedSearch: (TeammateObj: TeammateRecordDto) => void;
+    fetchRecruitmentPreviews: () => void;
 }
 
 const mapDispatchToProps = (dispatch): DispatchToProps => ({
-    fetchRatingPreviews: () => dispatch(RatingActions.getTeammateRecordPreview()),
-    BlurrySearch: (InputStrings: string[]) => dispatch(RatingActions.BlurrySearch(InputStrings)),
-    AdvancedSearch: (TeammateObj: TeammateRecordDto) => dispatch(RatingActions.AdvancedTeammateSearch(TeammateObj)),
+    fetchRecruitmentPreviews: () => dispatch(RecruitmentActions.getRecruitmentPreviews()),
 });
 
 interface StateToProps {
-    ratingPreviewStatus: ReducerStateStatus;
-    ratingPreviews: TeammatePreviewDto[];
+    pageStatus: ReducerStateStatus;
+    featuredRecruitments: RecruitmentPreview[],
+    myRecruitments: RecruitmentPreview[],
     loggedIn: boolean;
+
 }
 
 const mapStateToProps = (state: AppStoreState): StateToProps => ({
-    ratingPreviewStatus: state.ratingHome.status,
-    ratingPreviews: state.ratingHome.previews,
+    pageStatus: state.recruitmentHome.status,
+    featuredRecruitments: state.recruitmentHome.featuredRecruitments,
+    myRecruitments: state.recruitmentHome.myRecruitments,
     loggedIn: state.auth.loggedIn,
 });
 

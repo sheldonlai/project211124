@@ -21,7 +21,14 @@ export class RecruitmentAPI extends BaseAPI{
         this.router.post(APIUrls.addRecruitmentComment, mustBeAuthenticated, this.addRecruitmentComment);
         this.router.put(APIUrls.updateRecruitmentComment, mustBeAuthenticated, this.updateRecruitmentComment);
         this.router.put(APIUrls.recruitMember, mustBeAuthenticated, this.recruitMember);
+        this.router.get(APIUrls.getRecruitmentPreviews, maybeAuthenticated, this.getRecruitmentPreviews)
     }
+
+    public getRecruitmentPreviews = (req: AuthRequest, res: Response, next: NextFunction) => {
+        let user: User = req.user;
+        let result = this.service.getRecruitmentPreviews(user);
+        this.respondPromise(result, res, next);
+    };
 
     public createRecruitment = (req: AuthRequest, res: Response, next: NextFunction) => {
         let recruitment: RecruitmentDto = req.body;
