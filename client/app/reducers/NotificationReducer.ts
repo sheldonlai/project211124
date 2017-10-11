@@ -1,11 +1,9 @@
 
-
 import {ReducerStateStatus} from "../constants/ReducerStateStatus";
 
 export interface NotificationReducerState {
     status : ReducerStateStatus;
     notifications: any[];
-
 }
 
 const initialState : NotificationReducerState = {

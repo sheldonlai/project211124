@@ -7,7 +7,7 @@ import {isNullOrUndefined} from "util";
 export interface ISubscriptionRepository extends IBaseRepository<Subscription> {
     subscriptionExists(subscriber: User, subscribeeId: Types.ObjectId, subscribeeType: string): Promise<boolean>;
     getSubscribers(subscribeeId: Types.ObjectId, subscribeeType: string): Promise<Array<Subscription>>;
-    getSubscribees(subscriber: User, subscribeeType?: string): Promise<Array<Subscription>>
+    getUserSubscriptions(subscriber: User, subscribeeType?: string): Promise<Array<Subscription>>
 }
 
 export class SubscriptionRepository
@@ -32,7 +32,7 @@ export class SubscriptionRepository
         return this.filter(query);
     }
 
-    getSubscribees(subscriber: User, subscribeeType?: string): Promise<Array<Subscription>> {
+    getUserSubscriptions(subscriber: User, subscribeeType?: string): Promise<Array<Subscription>> {
         let query: Object;
         if(isNullOrUndefined(subscribeeType)) {
             query = {subscriber: subscriber._id};

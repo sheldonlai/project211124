@@ -14,7 +14,7 @@ export class NotificationAPI extends BaseAPI {
         super();
         this.router = Router();
         this.router.get(APIUrls.getNotificationsByUser, mustBeAuthenticated, this.getNotificationsByUser);
-        this.router.post(APIUrls.notificationSeen, mustBeAuthenticated, this.notificationSeen);
+        this.router.put(APIUrls.notificationSeen, mustBeAuthenticated, this.notificationSeen);
         this.router.post(APIUrls.deleteNotification, mustBeAuthenticated, this.deleteNotification);
     }
 

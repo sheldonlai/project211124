@@ -19,10 +19,10 @@ export class SubscriptionAPI extends BaseAPI {
         super();
         this.router = Router();
         this.router.post(APIUrls.subscribe, mustBeAuthenticated, this.subscribe);
-        this.router.post(APIUrls.unsubscribe, mustBeAuthenticated, this.unsubscribe);
+        this.router.delete(APIUrls.unsubscribe, mustBeAuthenticated, this.unsubscribe);
         this.router.post(APIUrls.getSubscribers, maybeAuthenticated, this.getSubscribers);
-        this.router.get(APIUrls.getSubscribees, mustBeAuthenticated, this.getSubscribees);
-        this.router.get(APIUrls.getBySubscribeeType, mustBeAuthenticated, this.getBySubscribeeType);
+        this.router.get(APIUrls.getUserSubscription, mustBeAuthenticated, this.getUserSubscriptions);
+        this.router.get(APIUrls.getBySubscribeeType, mustBeAuthenticated, this.getUserSubscriptionsByType);
         this.router.get(APIUrls.getByID, mustBeAuthenticated, this.getByID);
     }
 
@@ -63,19 +63,19 @@ export class SubscriptionAPI extends BaseAPI {
     /**
      * Get all subscriptions that belongs to the current user
      */
-    public getSubscribees = (req: AuthRequest, res: Response, next: NextFunction) => {
+    public getUserSubscriptions = (req: AuthRequest, res: Response, next: NextFunction) => {
         const currentUser: User = req.user;
-        const promise: Promise<Array<Subscription>> = this.service.getSubscribees(currentUser);
+        const promise: Promise<Array<Subscription>> = this.service.getUserSubscriptions(currentUser);
         this.respondPromise(promise, res, next);
     };
 
     /**
      * Get all subscriptions with the given notifiableEntity type and belongs to the current user
      */
-    public getBySubscribeeType = (req: AuthRequest, res: Response, next: NextFunction) => {
+    public getUserSubscriptionsByType = (req: AuthRequest, res: Response, next: NextFunction) => {
         const currentUser: User = req.user;
         const requestDTO: NotifiableEntityTypeDTO = req.body;
-        const promise: Promise<Array<Subscription>> = this.service.getBySubscribeeType(
+        const promise: Promise<Array<Subscription>> = this.service.getUserSubscriptionsByType(
             currentUser,
             this.subscriptionConversions.toNotifiableEntityType(requestDTO));
         this.respondPromise(promise, res, next);
@@ -89,5 +89,7 @@ export class SubscriptionAPI extends BaseAPI {
         const promise: Promise<Subscription> = this.service.getByID(subscriptionID);
         this.respondPromise(promise, res, next);
     };
+
+    
 
 }

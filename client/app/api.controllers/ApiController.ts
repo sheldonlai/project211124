@@ -29,7 +29,7 @@ export class ApiController {
         return axios.post(this.apiPrefix + url, data, this.config);
     };
 
-    put = (url: string, data: any) : AxiosPromise => {
+    put = (url: string, data?: any) : AxiosPromise => {
         return axios.put(this.apiPrefix + url, data, this.config);
     };
 

@@ -43,11 +43,11 @@ export class Notification extends BaseModel {
 export interface INotification extends Notification, Document {}
 
 const schema = new Schema({
-    recipient:        {type: Schema.Types.ObjectId, ref: 'user', required: true},
-    notifiableEntity: {type: Schema.Types.ObjectId, ref: 'subscription.subscribeeType', required: true},
-    subscribeeType:   {type: String, required: true },
-    isRead:           {type: Boolean, required: true},
-    sendAt:           {type: Date, default: Date.now, required: true }
+    recipient:              {type: Schema.Types.ObjectId, ref: 'user', required: true},
+    notifiableEntity:       {type: Schema.Types.ObjectId, ref: 'subscription.subscribeToType', required: true},
+    notifiableEntityType:   {type: String, required: true},
+    isRead:                 {type: Boolean, required: true},
+    sendAt:                 {type: Date, default: Date.now, required: true }
 });
 
 export const NotificationModel = model<INotification>('notification', schema);

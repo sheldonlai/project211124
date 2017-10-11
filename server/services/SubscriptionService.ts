@@ -11,12 +11,12 @@ import {BaseModel} from "../models/Base/BaseModel";
 
 export interface ISubscriptionService {
     notify(notifiableEntity: NotifiableEntity): Promise<Array<Notification>>
-    subscribe(subscriber: User, subscribeeID: Types.ObjectId, subscribeeType: string): Promise<Subscription>;
+    subscribe(subscriber: User, subscribeToID: Types.ObjectId, subscribeeType: string): Promise<Subscription>;
     unsubscribe(subscriber: User, subscriptionID: Types.ObjectId): Promise<Subscription>;
-    isSubscribed(subscriber: User, subscribeeID: Types.ObjectId, subscribeeType: string): Promise<boolean>;
-    getSubscribers(subscribeeID: Types.ObjectId, subscribeeType: string): Promise<Array<Subscription>>;
-    getSubscribees(subscriber: User): Promise<Array<Subscription>>;
-    getBySubscribeeType(subscriber: User, subscribeeType: string): Promise<Array<Subscription>>;
+    isSubscribed(subscriber: User, subscribeToID: Types.ObjectId, subscribeeType: string): Promise<boolean>;
+    getSubscribers(subscribeToID: Types.ObjectId, subscribeeType: string): Promise<Array<Subscription>>;
+    getUserSubscriptions(subscriber: User): Promise<Array<Subscription>>;
+    getUserSubscriptionsByType(subscriber: User, subscribeeType: string): Promise<Array<Subscription>>;
     getByID(subscriptionID: Types.ObjectId): Promise<Subscription>;
     deleteByID(user: User, subscriptionID: Types.ObjectId): Promise<Subscription>;
 }
@@ -56,12 +56,12 @@ export class SubscriptionService implements ISubscriptionService {
         return this.subscriptionRepository.getSubscribers(subscribeeID, subscribeeType);
     }
 
-    getSubscribees(subscriber: User): Promise<Array<Subscription>> {
-        return this.subscriptionRepository.getSubscribees(subscriber);
+    getUserSubscriptions(subscriber: User): Promise<Array<Subscription>> {
+        return this.subscriptionRepository.getUserSubscriptions(subscriber);
     }
 
-    getBySubscribeeType(subscriber: User, subscribeeType: string): Promise<Array<Subscription>> {
-        return this.subscriptionRepository.getSubscribees(subscriber, subscribeeType);
+    getUserSubscriptionsByType(subscriber: User, subscribeeType: string): Promise<Array<Subscription>> {
+        return this.subscriptionRepository.getUserSubscriptions(subscriber, subscribeeType);
     }
 
     async getByID(subscriptionID: Types.ObjectId): Promise<Subscription> {

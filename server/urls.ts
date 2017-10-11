@@ -94,7 +94,7 @@ export class APIUrls {
     static subscribe = "/subscription/subscribe";
     static unsubscribe = "/subscription/unsubscribe/:id";
     static getSubscribers = "/subscription/subscribers";
-    static getSubscribees = "/subscription/subscribees";
+    static getUserSubscription = "/subscription/subscribees";
     static getBySubscribeeType = "/subscription/subscribees/:type";
     static getByID = "/subscription/get/:id";
 
