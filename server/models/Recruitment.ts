@@ -15,6 +15,7 @@ import {DraftJsHelper} from "../utils/DraftJsHelper";
 import {esClient} from "../esClient";
 import {RecruitmentCommentDto} from "../dtos/recruitment/RecruitmentCommenDto";
 import {UserDto} from "../dtos/auth/UserDto";
+import {RecruitmentPreviewDto} from "../dtos/recruitment/RecruitmentPreviewDto";
 
 let mongoosastic = require("mongoosastic");
 
@@ -48,10 +49,10 @@ export class Recruitment extends BaseModel{
     updatedAt: Date;
     views: number;
     constructor(
-        title: string,
-        content: RawDraftContentState,
-        recruitStatus: RecruitStatus,
-        createdBy: User,
+        title?: string,
+        content?: RawDraftContentState,
+        recruitStatus?: RecruitStatus,
+        createdBy?: User,
         university?: University,
         courseDifficulty?: QuestionDifficulty,
     ){
@@ -67,6 +68,30 @@ export class Recruitment extends BaseModel{
         this.comments = [];
         this.groupMates = [];
         this.views = 0;
+    }
+
+    static fromObject(obj: Partial<Recruitment>): Recruitment {
+        let object = new Recruitment();
+        for (let key of Object.keys(obj)) {
+            object[key] = obj[key]
+        }
+        return object;
+    }
+
+    toPreviewDto(): RecruitmentPreviewDto{
+        let previewDto: RecruitmentPreviewDto = {
+            _id: this._id,
+            title: this.title,
+            content: DraftJsHelper.convertRawToText(this.content),
+            author: this.createdBy,
+            createdAt: this.createdAt,
+            updatedAt: this.updatedAt,
+            university: this.university,
+            courseDifficulty: this.courseDifficulty,
+            groupSize: this.groupMates.length,
+            views: this.views,
+        }
+        return previewDto;
     }
 }
 

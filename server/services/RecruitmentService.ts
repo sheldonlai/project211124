@@ -9,6 +9,7 @@ import {DraftJsHelper} from "../utils/DraftJsHelper";
 import {RecruitmentCommentDto} from "../dtos/recruitment/RecruitmentCommenDto";
 import {UserDto} from "../dtos/auth/UserDto";
 import {UserRepository} from "../repositories/UserRepository";
+import {RecruitmentPreviewCollectionsDto} from "../dtos/recruitment/RecruitmentPreviewCollectionsDto";
 
 
 export interface IRecruitmentService {
@@ -17,6 +18,7 @@ export interface IRecruitmentService {
     addRecruitmentComment(comment: RecruitmentCommentDto, recruitmentId: string, user: User): Promise<RecruitmentDto>;
     updateRecruitmentComment(comment: RecruitmentCommentDto, recruitmentId: string, user: User): Promise<RecruitmentDto>;
     recruitMember(member: UserDto, recruitmentId: string, user: User): Promise<RecruitmentDto>;
+    getRecruitmentPreviews(user?: User): Promise<RecruitmentPreviewCollectionsDto>;
 }
 
 export class RecruitmentService extends BaseService implements IRecruitmentService {
@@ -24,6 +26,17 @@ export class RecruitmentService extends BaseService implements IRecruitmentServi
         private recruitmentRepository: IRecruitmentRepository,
     ) {
         super();
+    }
+
+    async getRecruitmentPreviews(user?: User): Promise<RecruitmentPreviewCollectionsDto> {
+        let recruitmentPreviews = [];
+        recruitmentPreviews.push(this.recruitmentRepository.getAll({sort: "-createdAt", limit: 25}));
+        if(user){
+            recruitmentPreviews.push(this.recruitmentRepository.getRecruitmentByAuthor(user));
+        }
+        return Promise.all(recruitmentPreviews).then(result => {
+
+        })
     }
 
     createRecruitment(recruitment: RecruitmentDto, user: User): Promise<RecruitmentDto> {

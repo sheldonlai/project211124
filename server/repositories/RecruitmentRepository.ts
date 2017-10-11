@@ -8,9 +8,9 @@ import {removeUserRestrictedInfo} from "../utils/UserUtils";
 import {Tag} from "../models/Tags";
 
 export interface IRecruitmentRepository extends IBaseRepository<Recruitment> {
-    //getQuestionsByAuthor(user: User): Promise<Question[]>;
     //getQuestionByTitle(title: string): Promise<Question>;
     //findOneAndUpdateVoteQuestion(userQuestionVote: UserQuestionVote): Promise<Question>;
+    getRecruitmentByAuthor(user: User): Promise<Recruitment[]>
     increaseViewCount(questionId: any) :Promise<any>
 }
 
@@ -30,6 +30,14 @@ export class RecruitmentRepository extends BaseRepository<Recruitment, IRecruitm
     update(recruitment: Recruitment): Promise<Recruitment> {
         delete recruitment.createdAt;
         return super.update(recruitment);
+    }
+
+    getRecruitmentByAuthor(user: User): Promise<Recruitment[]> {
+        return RecruitmentModel.find({createdBy: user._id}).lean().exec()
+            .then((recruitments: Recruitment[]) => Promise.all(r => this.applyAdditionalFunction(r)))
+            .then((recruitments: Recruitment[]) => {
+                return this.getModels(recruitments);
+            });
     }
 
     /*getQuestionByTitle(title: string): Promise<Question> {
