@@ -53,7 +53,7 @@ export class CommentBoxComponent extends Component<props, state>{
         const isRecruiter = (this.props.recruiter.username === this.props.comment.createdBy.username);
         return(
             <div style={{ marginLeft: "240px", }}>
-                <Paper style={{...paperStyle, marginBottom: 10, marginTop: 10}} elevation={1}>
+                <Paper style={{...paperStyle, marginBottom: 10, marginTop: 10}} elevation={1} key={this.props.comment._id}>
                     <Grid container justify="flex-end">
                         <Grid item>
                             {masterView && !editable && !this.props.member &&

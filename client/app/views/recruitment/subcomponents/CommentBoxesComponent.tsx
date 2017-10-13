@@ -67,15 +67,18 @@ export class CommentBoxComponent extends Component<props, state> {
     };
 
     commentEditor = () => {
+        let masterView = this.props.user._id === this.props.recruiter._id;
         return(
             <div>
                 <Paper style={paperStyle} elevation={0}>
-                    <DropDownSelect
-                        placeholder={"Request to join"}
-                        data={getDropDownDataFromStringEnum(UserRequestEnum)}
-                        onChange={(request) => this.updateComment("request", request)}
-                        value={this.state.newComment.request}
-                    />
+                    {!masterView &&
+                        <DropDownSelect
+                            placeholder={"Request to join"}
+                            data={getDropDownDataFromStringEnum(UserRequestEnum)}
+                            onChange={(request) => this.updateComment("request", request)}
+                            value={this.state.newComment.request}
+                        />
+                    }
                     <Divider/>
                     <QAEditorComponent value={this.state.newComment.comment}
                                        onChange={(content) => this.updateComment("comment", content)}
@@ -108,7 +111,7 @@ export class CommentBoxComponent extends Component<props, state> {
         return(
             <div style={{position: "relative"}}>
                 {this.props.comments.map(comment => {
-                    return <CommentBoxView key={comment._id} comment={comment}
+                    return <CommentBoxView comment={comment}
                                            recruiter={this.props.recruiter} user={this.props.user}
                                            member={this.userIsMember(comment.createdBy._id)}
                                            updateComment={(comment) => {
@@ -116,6 +119,7 @@ export class CommentBoxComponent extends Component<props, state> {
                                                this.props.updateComment(commentDto, this.props.pageId);
                                            }}
                                            recruitMember={(comment) => {this.onRecruitMember(comment)}}
+                                           key={comment._id}
                             />
                 })}
                 <Grid container justify="center" direction="column" align="center">
