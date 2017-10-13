@@ -30,7 +30,9 @@ export class RecruitmentService extends BaseService implements IRecruitmentServi
 
     async getRecruitmentPreviews(user?: User): Promise<RecruitmentPreviewCollectionsDto> {
         let recruitmentPreviews = [];
-        recruitmentPreviews.push(this.recruitmentRepository.getAll({sort: "-createdAt", limit: 25}));
+        recruitmentPreviews.push(this.recruitmentRepository.getAll({sort: "-createdAt", limit: 25}).catch(err =>{
+            console.log(err);
+        }));
         if(user){
             recruitmentPreviews.push(this.recruitmentRepository.getRecruitmentByAuthor(user));
         }
@@ -38,21 +40,21 @@ export class RecruitmentService extends BaseService implements IRecruitmentServi
             let featuredRecruitments = result[0].map(recruitment => Recruitment.fromObject(recruitment).toPreviewDto());
             let myRecruitments = [];
             if(user){
-                result[1].map(recruitment => Recruitment.fromObject(recruitment).toPreviewDto());
+                myRecruitments = result[1].map(recruitment => Recruitment.fromObject(recruitment).toPreviewDto());
             }
 
             return{
                 featuredRecruitments,
                 myRecruitments,
             };
-        })
+        });
     }
 
     createRecruitment(recruitment: RecruitmentDto, user: User): Promise<RecruitmentDto> {
         let recruitmentObject = new Recruitment(recruitment.title, recruitment.content, recruitment.recruitStatus,
             user, recruitment.university, recruitment.courseDifficulty);
         return this.recruitmentRepository.create(recruitmentObject).then(recruitmentObj => {
-            return recruitmentObj;
+            return this.recruitmentRepository.getById(recruitmentObj._id);
         });
     }
 
@@ -64,7 +66,9 @@ export class RecruitmentService extends BaseService implements IRecruitmentServi
         return this.recruitmentRepository.getById(recruitmentId).then(recruitment => {
             let newComment: RecruitmentComment = new RecruitmentComment(comment.request, comment.comment, user);
             recruitment.comments.push(newComment);
-            return this.recruitmentRepository.update(recruitment);
+            return this.recruitmentRepository.update(recruitment).then(recruitmentObj => {
+                return this.recruitmentRepository.getById(recruitmentObj._id);
+            });
         })
     }
 

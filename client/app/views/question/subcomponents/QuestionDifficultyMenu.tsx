@@ -7,14 +7,17 @@ import {QuestionDifficulty} from "../../../../../server/models/Question";
 interface props {
     onDifficultyChange: (diff: QuestionDifficulty) => void;
     difficulty: QuestionDifficulty;
+    placeholder?: string;
 }
 
 export class QuestionDifficultyMenu extends React.Component<props> {
     render() {
+        let questionPlaceHolder: string = this.props.placeholder?this.props.placeholder:"Question Level";
+
         return (
             <div>
                 <DropDownSelect
-                    placeholder="Question Level"
+                    placeholder={questionPlaceHolder}
                     data={getDropDownDataFromStringEnum(QuestionEducationLevel)}
                     onChange={(educationLevel) => this.props.onDifficultyChange({
                         educationLevel, difficultyLevel: this.props.difficulty.difficultyLevel

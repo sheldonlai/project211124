@@ -24,6 +24,8 @@ import {DraftJsHelper} from "../../../../server/utils/DraftJsHelper";
 import {FrontEndRecruitmentModels} from "../../models/RecruitmentModels";
 import Recruitment = FrontEndRecruitmentModels.Recruitment;
 import recruitmentModelToDto = FrontEndRecruitmentModels.recruitmentModelToDto;
+import {YearSelector} from "../../components/Forms/YearSelector";
+import {SemesterEnum} from "../../../../server/enums/SemesterEnum";
 
 export interface CreateRecruitmentState{
     error: string;
@@ -49,6 +51,14 @@ class CreateRecruitment extends Component<props, CreateRecruitmentState> {
     };
 
     onSubmit = () => {
+        if(!this.state.recruitmentObj.title){
+            this.setState({error: 'Title cannot be empty'});
+            return;
+        }
+        if(!this.state.recruitmentObj.content){
+            this.setState({error: 'Content cannot be empty'});
+            return;
+        }
         let recruitmentDto: RecruitmentDto = recruitmentModelToDto(this.state.recruitmentObj);
         this.props.createRecruitment(recruitmentDto);
     };
@@ -85,6 +95,15 @@ class CreateRecruitment extends Component<props, CreateRecruitmentState> {
                             />
                         </Grid>
                         <Grid item xs={12}>
+                            <YearSelector yearMin={(new Date()).getFullYear()} yearMax={(new Date()).getFullYear() + 20}/>
+                            <DropDownSelect
+                                placeholder="Semester"
+                                data={getDropDownDataFromStringEnum(SemesterEnum)}
+                                onChange={(value) => {}}
+                                value={undefined}
+                            />
+                        </Grid>
+                        <Grid item xs={12}>
                             <TeammateLocationEditor
                                 university={this.state.recruitmentObj.university}
                                 city={undefined}
@@ -95,6 +114,7 @@ class CreateRecruitment extends Component<props, CreateRecruitmentState> {
                             <QuestionDifficultyMenu
                                 difficulty={this.state.recruitmentObj.courseDifficulty}
                                 onDifficultyChange={(diff: QuestionDifficulty) => this.updateObj("courseDifficulty", diff)}
+                                placeholder="Course Difficulty"
                             />
                         </Grid>
                         <Grid item xs={12} md={12}>

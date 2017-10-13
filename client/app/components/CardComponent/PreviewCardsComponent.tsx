@@ -91,7 +91,7 @@ export class PreviewCardsComponent extends React.Component<props, state> {
                             <div>
                                 <Grid container justify="flex-start">
                                     {list.map((e) => (
-                                        <Grid item key={e.element.title}>
+                                        <Grid item key={e.element._id}>
                                             <div
                                                 onClick={() => RouterController.history.push(e.element.toLink())}
                                                 style={{display: "inline-block", cursor: 'pointer'}}>

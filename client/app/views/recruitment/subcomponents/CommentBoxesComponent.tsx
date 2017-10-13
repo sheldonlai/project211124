@@ -96,6 +96,13 @@ export class CommentBoxComponent extends Component<props, state> {
         return false;
     };
 
+    onRecruitMember = (comment: RecruitmentComment) => {
+        let updatedComment = commentModelToDto({...comment});
+        updatedComment.request = RecruitmentRequestEnum.JOINED;
+        this.props.updateComment(updatedComment, this.props.pageId);
+        this.props.recruitMember(updatedComment.createdBy, this.props.pageId);
+    };
+
     render(){
         let comments = {...this.props.comments};
         return(
@@ -108,7 +115,7 @@ export class CommentBoxComponent extends Component<props, state> {
                                                let commentDto: RecruitmentCommentDto = commentModelToDto(comment);
                                                this.props.updateComment(commentDto, this.props.pageId);
                                            }}
-                                           recruitMember={(member) => {this.props.recruitMember(member, this.props.pageId)}}
+                                           recruitMember={(comment) => {this.onRecruitMember(comment)}}
                             />
                 })}
                 <Grid container justify="center" direction="column" align="center">

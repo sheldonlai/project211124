@@ -2,7 +2,7 @@ import {Document, model, Schema, Types} from "mongoose";
 import {User} from "./User";
 import {BaseModel} from "./Base/BaseModel";
 import {NotifiableEntity} from "./NotificableEntity";
-import {createModelFromObject} from "../../client/app/utils/ModelUtils";
+import {createModelFromObject} from "../utils/ModelUtils";
 
 export class Subscription extends BaseModel {
     subscriber: Types.ObjectId | User;

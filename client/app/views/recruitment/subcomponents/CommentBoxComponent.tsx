@@ -16,7 +16,7 @@ interface props{
     user: UserDto;
     member: boolean;
     updateComment: (comment: RecruitmentComment) => void;
-    recruitMember: (member: UserDto) => void;
+    recruitMember: (comment: RecruitmentComment) => void;
 }
 
 interface state{
@@ -58,7 +58,7 @@ export class CommentBoxComponent extends Component<props, state>{
                         <Grid item>
                             {masterView && !editable && !this.props.member &&
                             <Button color="primary" onClick={() => {
-                                this.props.recruitMember(this.props.comment.createdBy)
+                                this.props.recruitMember(this.props.comment)
                             }}>
                                 Recruit into team
                             </Button>}

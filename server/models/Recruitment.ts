@@ -16,6 +16,7 @@ import {esClient} from "../esClient";
 import {RecruitmentCommentDto} from "../dtos/recruitment/RecruitmentCommenDto";
 import {UserDto} from "../dtos/auth/UserDto";
 import {RecruitmentPreviewDto} from "../dtos/recruitment/RecruitmentPreviewDto";
+import {SemesterEnum} from "../enums/SemesterEnum";
 
 let mongoosastic = require("mongoosastic");
 
@@ -26,7 +27,6 @@ export class RecruitmentComment{
     createdBy: User;
     createdAt: Date;
     updatedAt: Date;
-    // TODO: add year and semester, tags
     constructor(request: RecruitmentRequestEnum, comment:RawDraftContentState, createdBy: User){
         this.request = request;
         this.comment = comment;
@@ -40,6 +40,8 @@ export class Recruitment extends BaseModel{
     title: string;
     content: RawDraftContentState;
     recruitStatus: RecruitStatus;
+    recruitmentYear: number;
+    recruitmentSemester: SemesterEnum;
     createdBy: User;
     university: University;
     courseDifficulty: QuestionDifficulty;

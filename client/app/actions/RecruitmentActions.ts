@@ -40,7 +40,9 @@ export class RecruitmentActions extends BaseActions{
                     type: RecruitmentActionTypes.CreateRecruitmentOK,
                     data: data,
                 });
-                RouterController.history.push(Routes.recruitment_by_id.replace(":id", res.data._id));
+                let title = encodeURIComponent(res.data.title).replace(/%20/g, '-');
+                title = encodeURIComponent(title).replace(/%3F/g, '');
+                RouterController.history.push(Routes.recruitment_by_id.replace(":id", res.data._id).replace(":name", title));
             }).catch(err => RecruitmentActions.handleError(dispatch, err, RecruitmentActionTypes.CreateRecruitmentError));
         }
     }
