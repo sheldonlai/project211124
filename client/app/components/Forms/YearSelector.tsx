@@ -6,6 +6,7 @@ import {DropDownSelect, DropDownSelectData} from "./DropDownSelect";
 interface props{
     yearMin: number;
     yearMax: number;
+    onChange: (year) => void;
 }
 
 interface state{
@@ -40,9 +41,10 @@ export class YearSelector extends React.Component<props, state>{
                     data={this.yearContainer}
                     value={this.state.year}
                     placeholder="Year"
-                    onChange={(year) =>
-                        this.setState({year: year})
-                    }
+                    onChange={(year) =>{
+                        this.setState({year: year});
+                        this.props.onChange(year);
+                    }}
                 />
             </div>
         )

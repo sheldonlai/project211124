@@ -57,6 +57,8 @@ export class Recruitment extends BaseModel{
         createdBy?: User,
         university?: University,
         courseDifficulty?: QuestionDifficulty,
+        recruitmentYear?: number,
+        recruitmentSemester?: SemesterEnum,
     ){
         super();
         this.title = title;
@@ -70,6 +72,8 @@ export class Recruitment extends BaseModel{
         this.comments = [];
         this.groupMates = [];
         this.views = 0;
+        this.recruitmentYear = recruitmentYear?recruitmentYear:(new Date()).getFullYear();
+        this.recruitmentSemester = recruitmentSemester?recruitmentSemester: SemesterEnum.NOT_SPECIFIED;
     }
 
     static fromObject(obj: Partial<Recruitment>): Recruitment {
@@ -98,36 +102,6 @@ export class Recruitment extends BaseModel{
 }
 
 export interface IRecruitment extends Recruitment, Document {}
-
-function commentModelToDto(comment: RecruitmentCommentDto){
-    let commentDto: RecruitmentCommentDto = {
-        _id: comment._id,
-        request: comment.request,
-        comment: comment.comment,
-        createdBy: comment.createdBy,
-        createdAt: comment.createdAt,
-        updatedAt: comment.updatedAt,
-    };
-    return commentDto;
-}
-
-export function recruitmentModelToDto(recruitment: Recruitment, groupMates: UserDto[]){
-    let commentsDto = recruitment.comments.map(comment => {return commentModelToDto(comment)});
-    let recruitmentDto = {
-        _id: recruitment._id,
-        title: recruitment.title,
-        comments: commentsDto,
-        content: recruitment.content,
-        recruitStatus: recruitment.recruitStatus,
-        university: recruitment.university,
-        courseDifficulty: recruitment.courseDifficulty,
-        createdAt: recruitment.createdAt,
-        updatedAt: recruitment.updatedAt,
-        groupMates: groupMates,
-        views: recruitment.views,
-    };
-    return recruitmentDto;
-}
 
 const schema = new Schema({
     title: {type: String, required: true, es_indexed: true},
@@ -173,6 +147,8 @@ const schema = new Schema({
         {type: Schema.Types.ObjectId, ref: 'user'}
     ],
     views: {type: Number, default: 0},
+    recruitmentYear: {type: Number, default: (new Date()).getFullYear()},
+    recruitmentSemester: {type: String, enum: Object.keys(SemesterEnum), default: SemesterEnum.NOT_SPECIFIED},
 },{
     timestamps: true
 });

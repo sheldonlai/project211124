@@ -59,6 +59,10 @@ class CreateRecruitment extends Component<props, CreateRecruitmentState> {
             this.setState({error: 'Content cannot be empty'});
             return;
         }
+        if(this.state.recruitmentObj.recruitStatus == RecruitStatus.NOT_SPECIFIED){
+            this.setState({error: 'Please specify your recruitment status'});
+            return;
+        }
         let recruitmentDto: RecruitmentDto = recruitmentModelToDto(this.state.recruitmentObj);
         this.props.createRecruitment(recruitmentDto);
     };
@@ -95,12 +99,14 @@ class CreateRecruitment extends Component<props, CreateRecruitmentState> {
                             />
                         </Grid>
                         <Grid item xs={12}>
-                            <YearSelector yearMin={(new Date()).getFullYear()} yearMax={(new Date()).getFullYear() + 20}/>
+                            <YearSelector yearMin={(new Date()).getFullYear()} yearMax={(new Date()).getFullYear() + 20}
+                                          onChange = {(year) => {this.updateObj("recruitmentYear", year)}}
+                            />
                             <DropDownSelect
                                 placeholder="Semester"
                                 data={getDropDownDataFromStringEnum(SemesterEnum)}
-                                onChange={(value) => {}}
-                                value={undefined}
+                                onChange={(value) => {this.updateObj("recruitmentSemester", value)}}
+                                value={this.state.recruitmentObj.recruitmentSemester}
                             />
                         </Grid>
                         <Grid item xs={12}>

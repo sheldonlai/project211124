@@ -3,7 +3,7 @@ import {AppError} from "../errors/AppError";
 import {BaseService} from "./BaseService";
 import * as _ from "lodash";
 import {RecruitmentDto} from "../dtos/recruitment/RecruitmentDto";
-import {Recruitment, RecruitmentComment, recruitmentModelToDto} from "../models/Recruitment";
+import {Recruitment, RecruitmentComment} from "../models/Recruitment";
 import {IRecruitmentRepository} from "../repositories/RecruitmentRepository";
 import {DraftJsHelper} from "../utils/DraftJsHelper";
 import {RecruitmentCommentDto} from "../dtos/recruitment/RecruitmentCommenDto";
@@ -52,7 +52,7 @@ export class RecruitmentService extends BaseService implements IRecruitmentServi
 
     createRecruitment(recruitment: RecruitmentDto, user: User): Promise<RecruitmentDto> {
         let recruitmentObject = new Recruitment(recruitment.title, recruitment.content, recruitment.recruitStatus,
-            user, recruitment.university, recruitment.courseDifficulty);
+            user, recruitment.university, recruitment.courseDifficulty, recruitment.recruitmentYear, recruitment.recruitmentSemester);
         return this.recruitmentRepository.create(recruitmentObject).then(recruitmentObj => {
             return this.recruitmentRepository.getById(recruitmentObj._id);
         });

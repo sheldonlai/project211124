@@ -66,8 +66,9 @@ export class RecruitmentPageComponent extends React.Component<props, state>{
             return (<LoadingScreen/>)
         }
         return(
+            // TODO: Separate comment and requests
             <div style={{padding: 10}}>
-                <Grid container direction="column" justify="center">
+                <Grid container direction="column" justify="flex-start">
                     <Grid item>
                         <RecruitmentBoxView/>
                     </Grid>

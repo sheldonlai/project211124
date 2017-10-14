@@ -3,4 +3,5 @@ export enum SemesterEnum{
     SUMMER = <any> "SUMMER",
     FALL = <any> "FALL",
     WINTER = <any> "WINTER",
+    NOT_SPECIFIED = <any> "NOT SPECIFIED",
 }

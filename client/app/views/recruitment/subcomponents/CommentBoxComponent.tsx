@@ -52,9 +52,9 @@ export class CommentBoxComponent extends Component<props, state>{
         const masterView = this.props.user?((this.props.user.username === this.props.recruiter.username)):false;
         const isRecruiter = (this.props.recruiter.username === this.props.comment.createdBy.username);
         return(
-            <div style={{ marginLeft: "240px", }}>
+            <div>
                 <Paper style={{...paperStyle, marginBottom: 10, marginTop: 10}} elevation={1} key={this.props.comment._id}>
-                    <Grid container justify="flex-end">
+                    <Grid container justify="flex-start">
                         <Grid item>
                             {masterView && !editable && !this.props.member &&
                             <Button color="primary" onClick={() => {
@@ -86,7 +86,7 @@ export class CommentBoxComponent extends Component<props, state>{
                 {(isRecruiter &&
                 <div>
                     <Grid container align={"center"}>
-                        <Grid item style={{position: "relative", left:-100, top: -100, height: "100%"}}>
+                        <Grid item style={{position: "relative", left: 825, top: -42.5, height: "100%"}}>
                             <Button disabled style={{display: "inline", color: "green"}}>
                                 RECRUITER
                             </Button>
@@ -96,7 +96,7 @@ export class CommentBoxComponent extends Component<props, state>{
                 || (this.props.member &&
                 <div>
                     <Grid container align={"center"}>
-                        <Grid item style={{position: "relative", left:-100, top: -100, height: "100%"}}>
+                        <Grid item style={{position: "relative", left: 825, top: -42.5, height: "100%"}}>
                             <Button disabled style={{display: "inline", color: "blue"}}>
                                 MEMBER
                             </Button>

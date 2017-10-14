@@ -12,6 +12,7 @@ import {Preview} from "./CommonModels";
 import {UniversityDto} from "../../../server/dtos/location/UniversityDto";
 import {RecruitmentPreviewDto} from "../../../server/dtos/recruitment/RecruitmentPreviewDto";
 import {Routes} from "../constants/Routes";
+import {SemesterEnum} from "../../../server/enums/SemesterEnum";
 
 export namespace FrontEndRecruitmentModels{
     export class RecruitmentComment {
@@ -36,6 +37,8 @@ export namespace FrontEndRecruitmentModels{
         title: string;
         comments: RecruitmentComment[];
         content: EditorState;
+        recruitmentYear: number;
+        recruitmentSemester: SemesterEnum;
         recruitStatus: RecruitStatus;
         university?: University;
         courseDifficulty?: QuestionDifficulty;
@@ -49,6 +52,8 @@ export namespace FrontEndRecruitmentModels{
             this.title = '';
             this.comments = [];
             this.content = EditorState.createEmpty();
+            this.recruitmentYear = (new Date()).getFullYear();
+            this.recruitmentSemester = SemesterEnum.NOT_SPECIFIED;
             this.recruitStatus = RecruitStatus.NOT_SPECIFIED;
             this.university = undefined;
             this.courseDifficulty = {
@@ -95,6 +100,8 @@ export namespace FrontEndRecruitmentModels{
         recruitment.title = recruitmentDto.title;
         recruitment.comments = comments;
         recruitment.content = DraftJsHelper.convertRawToEditorState(recruitmentDto.content);
+        recruitment.recruitmentYear = recruitmentDto.recruitmentYear;
+        recruitment.recruitmentSemester = recruitmentDto.recruitmentSemester;
         recruitment.recruitStatus = recruitmentDto.recruitStatus;
         recruitment.university = recruitmentDto.university;
         recruitment.courseDifficulty = recruitmentDto.courseDifficulty;
@@ -115,6 +122,8 @@ export namespace FrontEndRecruitmentModels{
             title: recruitmentModel.title,
             comments: comments,
             content: DraftJsHelper.convertEditorStateToRaw(recruitmentModel.content),
+            recruitmentYear: recruitmentModel.recruitmentYear,
+            recruitmentSemester: recruitmentModel.recruitmentSemester,
             recruitStatus: recruitmentModel.recruitStatus,
             university: recruitmentModel.university,
             courseDifficulty: recruitmentModel.courseDifficulty,
@@ -126,19 +135,6 @@ export namespace FrontEndRecruitmentModels{
         };
         return recruitmentDto;
     }
-
-    /*
-     _id: string,
-     title: string,
-     content: string,
-     author: UserDto,
-     createdAt: Date,
-     updatedAt: Date,
-     university: UniversityDto,
-     courseDifficulty: QuestionDifficulty,
-     groupSize: number,
-     views: number,
-     */
 
     export class RecruitmentPreview implements Preview{
         _id: string;

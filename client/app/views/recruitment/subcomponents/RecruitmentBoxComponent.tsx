@@ -12,6 +12,10 @@ import Typography from "material-ui/Typography";
 import {FrontEndRecruitmentModels} from "../../../models/RecruitmentModels";
 import Recruitment = FrontEndRecruitmentModels.Recruitment;
 import {EditorState} from "draft-js";
+import {SplitVIewTemplate} from "../../../components/Templates/SplitVIewTemplate";
+import Button from "material-ui/Button";
+import {SemesterEnum} from "../../../../../server/enums/SemesterEnum";
+import Input from "material-ui/TextField";
 
 interface RecruitmentBoxComponentProps {
     user: UserDto; // current user
@@ -24,58 +28,84 @@ interface props extends RecruitmentBoxComponentProps, DispatchProps {
 
 }
 
+interface state{
+    edit: boolean;
+}
+
 let paperStyle = {height: "100%", padding: 5};
 let boxStyle = {height:"200%", width: "50%", padding: 5};
 
-export class RecruitmentBoxComponent extends Component<props, {}> {
+export class RecruitmentBoxComponent extends Component<props, state> {
     constructor(props){
         super(props);
+
+        this.state = {
+            edit: false,
+        }
+    }
+
+    editButton = () => {
+        if (!this.props.user || this.state.edit)
+            return undefined;
+        return (
+            <Grid container justify="flex-end">
+                <Grid item>
+                    <Button onClick={() => this.setState({edit: true})}>
+                        Edit
+                    </Button>
+                </Grid>
+            </Grid>
+        )
     }
 
     render() {
         let recruitment: Recruitment = {...this.props.recruitmentInfo};
-        return (
-            <div>
-                <Grid container spacing={24}>
-                    <Grid item xs={12}>
-                        <Grid container justify="center">
+        console.log(recruitment);
+        return(
+            <SplitVIewTemplate>
+                <Paper style={paperStyle} elevation={0}>
+                    {this.editButton()}
+                    <Typography type="display1" noWrap>
+                        {recruitment.title}
+                    </Typography>
+                    <SplitVIewTemplate>
+                        <div>
+                            {
+                                recruitment.recruitmentYear &&
+                                <Typography type="caption" gutterBottom>
+                                    {recruitment.recruitmentYear}
+                                </Typography>
+                            }
+                            {
+                                recruitment.recruitmentSemester !== SemesterEnum.NOT_SPECIFIED &&
+                                <Typography type="caption" gutterBottom>
+                                    {recruitment.recruitmentSemester}
+                                </Typography>
+                            }
+                        </div>
+                        <Grid container justify="flex-end">
                             <Grid item>
-                                <Paper style={paperStyle} elevation={0}>
-                                    <div>
-                                        <CustomCard title={recruitment.title}
-                                                    content={DraftJsHelper.convertEditorStateToText(recruitment.content)}
-                                                    date={new Date()}
-                                                    wide
-                                        />
-                                    </div>
-                                </Paper>
+                                <Typography type="caption">
+                                    Recruiter: {recruitment.createdBy.username}
+                                </Typography>
                             </Grid>
                         </Grid>
-                    </Grid>
-                    <Grid item xs={3}></Grid>
-                    <Grid item xs={3}>
-                        <Grid container direction="column">
-                            <Grid item>
-                                {(this.props.recruitmentInfo.groupMates.length > 0) &&
-                                <Typography type="body2">Members:</Typography>
-                                }
-                            </Grid>
-                            <Grid item>
-                                {
-                                    this.props.recruitmentInfo.groupMates.map(member => {
-                                        return (
-                                            <Paper style={boxStyle} elevation={1}>
-                                                <Typography type="body2">{member.username}</Typography>
-                                            </Paper>)
-                                    })
-                                }
-                            </Grid>
-                        </Grid>
-                    </Grid>
-                </Grid>
-            </div>
+                    </SplitVIewTemplate>
+                    <Divider/>
+                    <Typography paragraph gutterBottom>
+                        {DraftJsHelper.convertEditorStateToText(recruitment.content)}
+                    </Typography>
+                    <Divider/>
+                </Paper>
+                <div>
+                    <Typography type="title">
+                        Members:
+                    </Typography>
+                </div>
+            </SplitVIewTemplate>
         )
     }
+
 }
 
 const mapStateToProps = (state: AppStoreState) => ({

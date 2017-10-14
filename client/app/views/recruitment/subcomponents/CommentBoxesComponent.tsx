@@ -109,7 +109,7 @@ export class CommentBoxComponent extends Component<props, state> {
     render(){
         let comments = {...this.props.comments};
         return(
-            <div style={{position: "relative"}}>
+            <div style={{}}>
                 {this.props.comments.map(comment => {
                     return <CommentBoxView comment={comment}
                                            recruiter={this.props.recruiter} user={this.props.user}
@@ -122,7 +122,7 @@ export class CommentBoxComponent extends Component<props, state> {
                                            key={comment._id}
                             />
                 })}
-                <Grid container justify="center" direction="column" align="center">
+                <Grid container justify="flex-end" direction="column" align="center">
                     <Grid item>
                         {this.state.addComment && this.commentEditor()}
                     </Grid>
