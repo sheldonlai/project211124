@@ -15,7 +15,13 @@ import {EditorState} from "draft-js";
 import {SplitVIewTemplate} from "../../../components/Templates/SplitVIewTemplate";
 import Button from "material-ui/Button";
 import {SemesterEnum} from "../../../../../server/enums/SemesterEnum";
-import Input from "material-ui/TextField";
+import TextField from "material-ui/TextField";
+import {YearSelector} from "../../../components/Forms/YearSelector";
+import {getDropDownDataFromStringEnum} from "../../../utils/utils";
+import {DropDownSelect} from "../../../components/Forms/DropDownSelect";
+import {CustomEditor} from "../../../components/CustomEditor/CustomEditor";
+import {QuestionDifficulty} from "../../../../../server/models/Question";
+import {QuestionDifficultyMenu} from "../../question/subcomponents/QuestionDifficultyMenu";
 
 interface RecruitmentBoxComponentProps {
     user: UserDto; // current user
@@ -29,6 +35,7 @@ interface props extends RecruitmentBoxComponentProps, DispatchProps {
 }
 
 interface state{
+    editedRecruitment: Recruitment;
     edit: boolean;
 }
 
@@ -40,6 +47,7 @@ export class RecruitmentBoxComponent extends Component<props, state> {
         super(props);
 
         this.state = {
+            editedRecruitment: {...this.props.recruitmentInfo},
             edit: false,
         }
     }
@@ -58,9 +66,79 @@ export class RecruitmentBoxComponent extends Component<props, state> {
         )
     }
 
-    render() {
+    updateObj = (key: string, value: any) => {
+        let obj = {...this.state.editedRecruitment};
+        obj[key] = value;
+        this.setState({editedRecruitment: obj});
+    };
+
+    editorView = () => {
         let recruitment: Recruitment = {...this.props.recruitmentInfo};
         console.log(recruitment);
+        return(
+            <SplitVIewTemplate>
+                <Paper style={paperStyle} elevation={0}>
+                    <TextField defaultValue = {this.state.editedRecruitment.title}
+                               label="title"
+                               fullWidth
+                               onChange = {(event: any) => this.updateObj("title", event.target.value)}
+                    />
+                    <SplitVIewTemplate>
+                        <Grid container>
+                            <Grid item xs={12} sm={6}>
+                                {
+                                    <YearSelector yearMin={(new Date()).getFullYear()} yearMax={(new Date()).getFullYear() + 20}
+                                                  defaultYear={this.state.editedRecruitment.recruitmentYear}
+                                                  onChange={(year) => this.updateObj("recruitmentYear", year)}
+                                    />
+
+                                }
+                                {
+                                    <DropDownSelect
+                                        placeholder="Semester"
+                                        data={getDropDownDataFromStringEnum(SemesterEnum)}
+                                        onChange={(val) => this.updateObj("recruitmentSemester", val)}
+                                        value={this.state.editedRecruitment.recruitmentSemester}
+                                    />
+                                }
+                            </Grid>
+                            <Grid item xs={12} sm={6}>
+                                <QuestionDifficultyMenu
+                                    difficulty={this.state.editedRecruitment.courseDifficulty}
+                                    onDifficultyChange={(diff: QuestionDifficulty) => this.updateObj("courseDifficulty", diff)}
+                                    placeholder="Course Difficulty"
+                                />
+                            </Grid>
+                        </Grid>
+                        <Grid container justify="flex-end">
+                            <Grid item>
+                                <Typography type="caption">
+                                    Recruiter: {this.state.editedRecruitment.createdBy.username}
+                                </Typography>
+                            </Grid>
+                        </Grid>
+                    </SplitVIewTemplate>
+                    <Divider/>
+                    <CustomEditor value={this.state.editedRecruitment.content}
+                                  onChange={(content: EditorState) => {
+                                      this.updateObj("content", content)
+                                  }}
+                                  style={{minHeight: 200}}
+                    />
+                    <Divider/>
+
+                </Paper>
+                <div>
+                    <Typography type="title">
+                        Members:
+                    </Typography>
+                </div>
+            </SplitVIewTemplate>
+        )
+    }
+
+    normalView = () => {
+        let recruitment: Recruitment = {...this.props.recruitmentInfo};
         return(
             <SplitVIewTemplate>
                 <Paper style={paperStyle} elevation={0}>
@@ -104,6 +182,10 @@ export class RecruitmentBoxComponent extends Component<props, state> {
                 </div>
             </SplitVIewTemplate>
         )
+    }
+
+    render(){
+        return this.state.edit? this.editorView() : this.normalView();
     }
 
 }

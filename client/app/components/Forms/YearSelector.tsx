@@ -7,6 +7,7 @@ interface props{
     yearMin: number;
     yearMax: number;
     onChange: (year) => void;
+    defaultYear?: number;
 }
 
 interface state{
@@ -29,7 +30,7 @@ export class YearSelector extends React.Component<props, state>{
         });
 
         this.state = {
-            year: currentYear,
+            year: this.props.defaultYear? this.props.defaultYear: currentYear,
         }
     }
 
