@@ -83,7 +83,7 @@ export class CommentBoxComponent extends Component<props, state> {
                     <QAEditorComponent value={this.state.newComment.comment}
                                        onChange={(content) => this.updateComment("comment", content)}
                                        onSubmit={this.submitComment} readOnly={!this.state.addComment}
-                                       style={{fontSize: 14}} reset={this.cancelComment}
+                                       style={{minHeight: "100px", fontSize: 14}} reset={this.cancelComment}
                     />
                 </Paper>
             </div>
@@ -122,15 +122,15 @@ export class CommentBoxComponent extends Component<props, state> {
                                            key={comment._id}
                             />
                 })}
-                <Grid container justify="flex-end" direction="column" align="center">
+                <Grid container justify="flex-start" direction="column">
                     <Grid item>
                         {this.state.addComment && this.commentEditor()}
                     </Grid>
                     <Grid item>
                         {(this.props.user && !this.state.addComment) &&
-                        <div key="edit-answer-button" style={{float: 'right', marginTop: 5}}>
-                            <Button fab color="primary" onClick={() => this.setState({addComment: true})}>
-                                <AddIcon/>
+                        <div>
+                            <Button color="primary" onClick={() => this.setState({addComment: true})}>
+                               Leave a comment
                             </Button>
                         </div>}
                     </Grid>

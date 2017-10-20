@@ -10,6 +10,7 @@ import {UserDto} from "../../../server/dtos/auth/UserDto";
 import {FrontEndRecruitmentModels} from "../models/RecruitmentModels";
 import Recruitment = FrontEndRecruitmentModels.Recruitment;
 import recruitmentDtoToModel = FrontEndRecruitmentModels.recruitmentDtoToModel;
+import recruitmentModelToDto = FrontEndRecruitmentModels.recruitmentModelToDto;
 
 let apiController: RecruitmentAPIController = RecruitmentAPIController.getInstance();
 
@@ -44,6 +45,21 @@ export class RecruitmentActions extends BaseActions{
                 title = encodeURIComponent(title).replace(/%3F/g, '');
                 RouterController.history.push(Routes.recruitment_by_id.replace(":id", res.data._id).replace(":name", title));
             }).catch(err => RecruitmentActions.handleError(dispatch, err, RecruitmentActionTypes.CreateRecruitmentError));
+        }
+    }
+
+    static editRecruitment(recruitmentObj: RecruitmentDto){
+        return function(dispatch){
+            dispatch({
+                type: RecruitmentActionTypes.EditRecruitmentRequest,
+            });
+            apiController.editRecruitment(recruitmentObj).then(res => {
+                let data: Recruitment = recruitmentDtoToModel(res.data);
+                dispatch({
+                    type: RecruitmentActionTypes.EditRecruitmentOK,
+                    data: data,
+                })
+            }).catch(err => RecruitmentActions.handleError(dispatch, err, RecruitmentActionTypes.EditRecruitmentError));
         }
     }
 

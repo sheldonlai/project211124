@@ -78,6 +78,7 @@ export class APIUrls {
     /* Recruitment */
     static createRecruitment = "/create-recruitment";
     static fetchRecruitmentPage = "/fetch-recruitment/:id";
+    static editRecruitment = "/edit-recruitment";
 
     static addRecruitmentComment = "/add-recruitment-comments";
     static updateRecruitmentComment = "/update-recruitment-comments";

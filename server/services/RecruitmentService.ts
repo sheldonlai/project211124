@@ -19,6 +19,7 @@ export interface IRecruitmentService {
     updateRecruitmentComment(comment: RecruitmentCommentDto, recruitmentId: string, user: User): Promise<RecruitmentDto>;
     recruitMember(member: UserDto, recruitmentId: string, user: User): Promise<RecruitmentDto>;
     getRecruitmentPreviews(user?: User): Promise<RecruitmentPreviewCollectionsDto>;
+    editRecruitment(recruitment: RecruitmentDto, user: User): Promise<RecruitmentDto>;
 }
 
 export class RecruitmentService extends BaseService implements IRecruitmentService {
@@ -56,6 +57,24 @@ export class RecruitmentService extends BaseService implements IRecruitmentServi
         return this.recruitmentRepository.create(recruitmentObject).then(recruitmentObj => {
             return this.recruitmentRepository.getById(recruitmentObj._id);
         });
+    }
+
+    editRecruitment(recruitment: RecruitmentDto, user: User): Promise<RecruitmentDto> {
+        return this.recruitmentRepository.getById(recruitment._id).then(recruitmentFound => {
+            this.checkPermissionForModification(recruitment, recruitmentFound, user);
+            recruitmentFound.title = recruitment.title;
+            recruitmentFound.recruitStatus = recruitment.recruitStatus;
+            recruitmentFound.recruitmentYear = recruitment.recruitmentYear;
+            recruitmentFound.recruitmentSemester = recruitment.recruitmentSemester;
+            recruitmentFound.university = recruitment.university;
+            recruitmentFound.courseDifficulty = recruitment.courseDifficulty;
+            recruitmentFound.groupMates = recruitment.groupMates;
+            recruitmentFound.updatedAt = new Date();
+            recruitmentFound.content = recruitment.content;
+            return this.recruitmentRepository.update(recruitmentFound).then(result => {
+                return this.recruitmentRepository.getById(result._id);
+            })
+        })
     }
 
     fetchRecruitmentPage(recruitmentId: string): Promise<RecruitmentDto> {

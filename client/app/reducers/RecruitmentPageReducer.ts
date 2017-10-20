@@ -3,6 +3,7 @@ import {RecruitmentDto} from "../../../server/dtos/recruitment/RecruitmentDto";
 import {RecruitmentActionTypes} from "../constants/action.types/RecruitmentActionTypes";
 import {FrontEndRecruitmentModels} from "../models/RecruitmentModels";
 import Recruitment = FrontEndRecruitmentModels.Recruitment;
+import {DraftJsHelper} from "../../../server/utils/DraftJsHelper";
 
 export interface RecruitmentPageReducerState{
     status: ReducerStateStatus,
@@ -50,6 +51,11 @@ export const RecruitmentPageReducer = (state = initialState, action): Recruitmen
         case RecruitmentActionTypes.RecruitMemberRequest:
             return getLoadingState(state);
         case RecruitmentActionTypes.RecruitMemberOK:
+            return getOKState(state, action.data);
+
+        case RecruitmentActionTypes.EditRecruitmentRequest:
+            return getLoadingState(state);
+        case RecruitmentActionTypes.EditRecruitmentOK:
             return getOKState(state, action.data);
 
         default:

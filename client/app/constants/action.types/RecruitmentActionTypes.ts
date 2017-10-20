@@ -22,4 +22,8 @@ export enum RecruitmentActionTypes{
     GetRecruitmentPreviewRequest = <any> "GetPreviewRequest",
     GetRecruitmentPreviewOK = <any> "GetPreviewOK",
     GetRecruitmentPreviewError = <any> "GetPreviewError",
+
+    EditRecruitmentRequest = <any> "EditRecruitmentRequest",
+    EditRecruitmentOK = <any> "EditRecruitmentOK",
+    EditRecruitmentError = <any> "EditRecruitmentError",
 }

@@ -55,4 +55,8 @@ export class RecruitmentAPIController extends ApiController{
         };
         return this.put(APIUrls.recruitMember, reqBody);
     }
+
+    editRecruitment(updatedRecruitment: RecruitmentDto): AxiosPromise{
+        return this.put(APIUrls.editRecruitment, updatedRecruitment);
+    }
 }

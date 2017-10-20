@@ -33,21 +33,21 @@ const getErrorState = (state: QuestionPageReducerState, action: any) => {
     };
 };
 
+const getLoadingState = (state: QuestionPageReducerState) => {
+    return {
+        status: ReducerStateStatus.LOADING,
+        questionPage: state.questionPage,
+        lastUpdated: state.lastUpdated,
+        error: ''
+    };
+};
+
 const getOKState = (questionPage: QuestionPage) => {
     sortAnswers(questionPage.answers);
     return {
         status: ReducerStateStatus.DONE,
         questionPage: questionPage,
         lastUpdated: Date.now(),
-        error: ''
-    };
-};
-
-const getLoadingState = (state: QuestionPageReducerState) => {
-    return {
-        status: ReducerStateStatus.LOADING,
-        questionPage: state.questionPage,
-        lastUpdated: state.lastUpdated,
         error: ''
     };
 };

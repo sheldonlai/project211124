@@ -22,6 +22,9 @@ import {DropDownSelect} from "../../../components/Forms/DropDownSelect";
 import {CustomEditor} from "../../../components/CustomEditor/CustomEditor";
 import {QuestionDifficulty} from "../../../../../server/models/Question";
 import {QuestionDifficultyMenu} from "../../question/subcomponents/QuestionDifficultyMenu";
+import {RecruitmentDto} from "../../../../../server/dtos/recruitment/RecruitmentDto";
+import {RecruitmentActions} from "../../../actions/RecruitmentActions";
+import recruitmentModelToDto = FrontEndRecruitmentModels.recruitmentModelToDto;
 
 interface RecruitmentBoxComponentProps {
     user: UserDto; // current user
@@ -31,7 +34,6 @@ interface RecruitmentBoxComponentProps {
 }
 
 interface props extends RecruitmentBoxComponentProps, DispatchProps {
-
 }
 
 interface state{
@@ -40,7 +42,6 @@ interface state{
 }
 
 let paperStyle = {height: "100%", padding: 5};
-let boxStyle = {height:"200%", width: "50%", padding: 5};
 
 export class RecruitmentBoxComponent extends Component<props, state> {
     constructor(props){
@@ -74,66 +75,84 @@ export class RecruitmentBoxComponent extends Component<props, state> {
 
     editorView = () => {
         let recruitment: Recruitment = {...this.props.recruitmentInfo};
-        console.log(recruitment);
         return(
-            <SplitVIewTemplate>
-                <Paper style={paperStyle} elevation={0}>
-                    <TextField defaultValue = {this.state.editedRecruitment.title}
-                               label="title"
-                               fullWidth
-                               onChange = {(event: any) => this.updateObj("title", event.target.value)}
-                    />
-                    <SplitVIewTemplate>
-                        <Grid container>
-                            <Grid item xs={12} sm={6}>
-                                {
-                                    <YearSelector yearMin={(new Date()).getFullYear()} yearMax={(new Date()).getFullYear() + 20}
-                                                  defaultYear={this.state.editedRecruitment.recruitmentYear}
-                                                  onChange={(year) => this.updateObj("recruitmentYear", year)}
-                                    />
+            <div>
+                <SplitVIewTemplate>
+                    <Paper style={paperStyle} elevation={0}>
+                        <TextField defaultValue = {this.state.editedRecruitment.title}
+                                   label="title"
+                                   fullWidth
+                                   onChange = {(event: any) => this.updateObj("title", event.target.value)}
+                        />
+                        <SplitVIewTemplate>
+                            <Grid container>
+                                <Grid item xs={12} sm={6}>
+                                    {
+                                        <YearSelector yearMin={(new Date()).getFullYear()} yearMax={(new Date()).getFullYear() + 20}
+                                                      defaultYear={this.state.editedRecruitment.recruitmentYear}
+                                                      onChange={(year) => this.updateObj("recruitmentYear", year)}
+                                        />
 
-                                }
-                                {
-                                    <DropDownSelect
-                                        placeholder="Semester"
-                                        data={getDropDownDataFromStringEnum(SemesterEnum)}
-                                        onChange={(val) => this.updateObj("recruitmentSemester", val)}
-                                        value={this.state.editedRecruitment.recruitmentSemester}
+                                    }
+                                    {
+                                        <DropDownSelect
+                                            placeholder="Semester"
+                                            data={getDropDownDataFromStringEnum(SemesterEnum)}
+                                            onChange={(val) => this.updateObj("recruitmentSemester", val)}
+                                            value={this.state.editedRecruitment.recruitmentSemester}
+                                        />
+                                    }
+                                </Grid>
+                                <Grid item xs={12} sm={6}>
+                                    <QuestionDifficultyMenu
+                                        difficulty={this.state.editedRecruitment.courseDifficulty}
+                                        onDifficultyChange={(diff: QuestionDifficulty) => this.updateObj("courseDifficulty", diff)}
+                                        placeholder="Course Difficulty"
                                     />
-                                }
+                                </Grid>
                             </Grid>
-                            <Grid item xs={12} sm={6}>
-                                <QuestionDifficultyMenu
-                                    difficulty={this.state.editedRecruitment.courseDifficulty}
-                                    onDifficultyChange={(diff: QuestionDifficulty) => this.updateObj("courseDifficulty", diff)}
-                                    placeholder="Course Difficulty"
-                                />
+                            <Grid container justify="flex-end">
+                                <Grid item>
+                                    <Typography type="caption">
+                                        Recruiter: {this.state.editedRecruitment.createdBy.username}
+                                    </Typography>
+                                </Grid>
                             </Grid>
-                        </Grid>
-                        <Grid container justify="flex-end">
-                            <Grid item>
-                                <Typography type="caption">
-                                    Recruiter: {this.state.editedRecruitment.createdBy.username}
-                                </Typography>
-                            </Grid>
-                        </Grid>
-                    </SplitVIewTemplate>
-                    <Divider/>
-                    <CustomEditor value={this.state.editedRecruitment.content}
-                                  onChange={(content: EditorState) => {
-                                      this.updateObj("content", content)
-                                  }}
-                                  style={{minHeight: 200}}
-                    />
-                    <Divider/>
+                        </SplitVIewTemplate>
+                        <Divider/>
+                        <CustomEditor value={this.state.editedRecruitment.content}
+                                      onChange={(content: EditorState) => {
+                                          this.updateObj("content", content)
+                                      }}
+                                      style={{minHeight: 200}}
+                        />
+                        <Divider/>
 
-                </Paper>
-                <div>
-                    <Typography type="title">
-                        Members:
-                    </Typography>
-                </div>
-            </SplitVIewTemplate>
+                    </Paper>
+                    <div>
+                        <Typography type="title">
+                            Members:
+                        </Typography>
+                    </div>
+                </SplitVIewTemplate>
+                <Grid container spacing={24}>
+                    <Grid item xs>
+                        <Button style={{margin: "10px 0px"}} onClick={() => this.setState({edit: false})}>
+                            Cancel
+                        </Button>
+                    </Grid>
+                    <Grid item xs={3}></Grid>
+                    <Grid item xs>
+                        <Button style={{margin: "10px 0px"}} onClick={() => {
+                            let updatedRecruitment: RecruitmentDto = recruitmentModelToDto(this.state.editedRecruitment);
+                            this.setState({edit: false});
+                            this.props.updateRecruitment(updatedRecruitment);
+                        }}>
+                            Submit
+                        </Button>
+                    </Grid>
+                </Grid>
+            </div>
         )
     }
 
@@ -176,9 +195,34 @@ export class RecruitmentBoxComponent extends Component<props, state> {
                     <Divider/>
                 </Paper>
                 <div>
-                    <Typography type="title">
-                        Members:
-                    </Typography>
+                    <Grid container direction="column">
+                        <Grid item>
+                            <Divider/>
+                            <br/>
+
+                            <Typography type="caption">
+                                Level
+                            </Typography>
+                            <Typography type="body1" gutterBottom>
+                                {recruitment.courseDifficulty.educationLevel}
+                            </Typography>
+
+                            <br/>
+
+                            <Typography type="caption">
+                                Difficulty
+                            </Typography>
+                            <Typography type="body1" gutterBottom>
+                                {recruitment.courseDifficulty.difficultyLevel}
+                            </Typography>
+                            <Divider/>
+                        </Grid>
+                        <Grid item>
+                            <Typography type="title">
+                                Members:
+                            </Typography>
+                        </Grid>
+                    </Grid>
                 </div>
             </SplitVIewTemplate>
         )
@@ -197,11 +241,13 @@ const mapStateToProps = (state: AppStoreState) => ({
     edit: undefined,
 });
 
-const mapDispatchToProps = (dispatch): DispatchProps => ({
-});
-
 interface DispatchProps {
+    updateRecruitment: (updatedRecruitment: RecruitmentDto) => void;
 }
+
+const mapDispatchToProps = (dispatch): DispatchProps => ({
+    updateRecruitment: (updatedRecruitment: RecruitmentDto) => dispatch(RecruitmentActions.editRecruitment(updatedRecruitment)),
+});
 
 export const RecruitmentBoxView = connect<RecruitmentBoxComponentProps, DispatchProps, any>(
     mapStateToProps, mapDispatchToProps)(RecruitmentBoxComponent);
