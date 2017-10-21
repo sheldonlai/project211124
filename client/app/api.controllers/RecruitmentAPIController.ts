@@ -1,7 +1,7 @@
 import {ApiController} from "./ApiController";
 import {AxiosPromise} from "axios";
 import {APIUrls} from "../../../server/urls";
-import {RecruitmentDto} from "../../../server/dtos/recruitment/RecruitmentDto";
+import {RecruitmentDto, RecruitmentRequestDto} from "../../../server/dtos/recruitment/RecruitmentDto";
 import {RecruitmentCommentDto} from "../../../server/dtos/recruitment/RecruitmentCommenDto";
 import {UserDto} from "../../../server/dtos/auth/UserDto";
 
@@ -58,5 +58,13 @@ export class RecruitmentAPIController extends ApiController{
 
     editRecruitment(updatedRecruitment: RecruitmentDto): AxiosPromise{
         return this.put(APIUrls.editRecruitment, updatedRecruitment);
+    }
+
+    joinRecruitment(request: RecruitmentRequestDto, recruitmentId: string): AxiosPromise{
+        let reqBody = {
+            request: request,
+            recruitmentId: recruitmentId,
+        };
+        return this.put(APIUrls.joinRecruitment, reqBody);
     }
 }

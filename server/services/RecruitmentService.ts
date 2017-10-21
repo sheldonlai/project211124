@@ -2,7 +2,7 @@ import {User} from "../models/User";
 import {AppError} from "../errors/AppError";
 import {BaseService} from "./BaseService";
 import * as _ from "lodash";
-import {RecruitmentDto} from "../dtos/recruitment/RecruitmentDto";
+import {RecruitmentDto, RecruitmentRequestDto} from "../dtos/recruitment/RecruitmentDto";
 import {Recruitment, RecruitmentComment} from "../models/Recruitment";
 import {IRecruitmentRepository} from "../repositories/RecruitmentRepository";
 import {DraftJsHelper} from "../utils/DraftJsHelper";
@@ -20,6 +20,7 @@ export interface IRecruitmentService {
     recruitMember(member: UserDto, recruitmentId: string, user: User): Promise<RecruitmentDto>;
     getRecruitmentPreviews(user?: User): Promise<RecruitmentPreviewCollectionsDto>;
     editRecruitment(recruitment: RecruitmentDto, user: User): Promise<RecruitmentDto>;
+    joinRecruitment(request: RecruitmentRequestDto, recruitmentId: string, user: User): Promise<RecruitmentDto>;
 }
 
 export class RecruitmentService extends BaseService implements IRecruitmentService {
@@ -119,6 +120,15 @@ export class RecruitmentService extends BaseService implements IRecruitmentServi
                     return recruitment;
                 });
             });
+        })
+    }
+
+    joinRecruitment(request: RecruitmentRequestDto, recruitmentId: string, user: User): Promise<RecruitmentDto>{
+        return this.recruitmentRepository.getById(recruitmentId).then(recruitmentFound => {
+            recruitmentFound.pendingRequests.push(request);
+            return this.recruitmentRepository.update(recruitmentFound).then(updatedRecruitment => {
+                return this.recruitmentRepository.getById(updatedRecruitment._id);
+            })
         })
     }
 

@@ -1,6 +1,6 @@
 import {RecruitmentAPIController} from "../api.controllers/RecruitmentAPIController";
 import {BaseActions} from "./BaseActions";
-import {RecruitmentDto} from "../../../server/dtos/recruitment/RecruitmentDto";
+import {RecruitmentDto, RecruitmentRequestDto} from "../../../server/dtos/recruitment/RecruitmentDto";
 import {RecruitmentActionTypes} from "../constants/action.types/RecruitmentActionTypes";
 import {RouterController} from "../api.controllers/RouterController";
 import {Routes} from "../constants/Routes";
@@ -120,6 +120,21 @@ export class RecruitmentActions extends BaseActions{
                     data: data,
                 })
             }).catch(err => RatingActions.handleError(dispatch, err, RecruitmentActionTypes.RecruitMemberError))
+        }
+    }
+
+    static joinRecruitment(request: RecruitmentRequestDto, recruitmentId: string){
+        return function(dispatch){
+            dispatch({
+                type: RecruitmentActionTypes.JoinRecruitmentRequest,
+            })
+            apiController.joinRecruitment(request, recruitmentId).then(res => {
+                let data: Recruitment = recruitmentDtoToModel(res.data);
+                dispatch({
+                    type: RecruitmentActionTypes.JoinRecruitmentOK,
+                    data: data,
+                })
+            }).catch(err => RatingActions.handleError(dispatch, err, RecruitmentActionTypes.JoinRecruitmentError))
         }
     }
 }

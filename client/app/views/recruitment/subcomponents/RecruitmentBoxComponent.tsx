@@ -22,9 +22,12 @@ import {DropDownSelect} from "../../../components/Forms/DropDownSelect";
 import {CustomEditor} from "../../../components/CustomEditor/CustomEditor";
 import {QuestionDifficulty} from "../../../../../server/models/Question";
 import {QuestionDifficultyMenu} from "../../question/subcomponents/QuestionDifficultyMenu";
-import {RecruitmentDto} from "../../../../../server/dtos/recruitment/RecruitmentDto";
+import {RecruitmentDto, RecruitmentRequestDto} from "../../../../../server/dtos/recruitment/RecruitmentDto";
 import {RecruitmentActions} from "../../../actions/RecruitmentActions";
 import recruitmentModelToDto = FrontEndRecruitmentModels.recruitmentModelToDto;
+import {DifficultyLevel, QuestionEducationLevel} from "../../../../../server/enums/QuestionEducationLevel";
+import {TeammateLocationEditor} from "../../rating/subcomponents/TeammateLocationEditor";
+import Dialog from "material-ui/Dialog";
 
 interface RecruitmentBoxComponentProps {
     user: UserDto; // current user
@@ -110,6 +113,13 @@ export class RecruitmentBoxComponent extends Component<props, state> {
                                         placeholder="Course Difficulty"
                                     />
                                 </Grid>
+                                <Grid item xs={12} sm={6}>
+                                    <TeammateLocationEditor
+                                        university={this.state.editedRecruitment.university}
+                                        city={undefined}
+                                        onChange={this.updateObj}
+                                    />
+                                </Grid>
                             </Grid>
                             <Grid container justify="flex-end">
                                 <Grid item>
@@ -156,75 +166,136 @@ export class RecruitmentBoxComponent extends Component<props, state> {
         )
     }
 
+    levelToString = (level: QuestionEducationLevel) => {
+        switch(level){
+            case QuestionEducationLevel.NOT_SPECIFIED:
+                return "Not specified";
+            case QuestionEducationLevel.SECONDARY:
+                return "Secondary";
+            case QuestionEducationLevel.UNIVERSITY:
+                return "University";
+            case QuestionEducationLevel.OTHER:
+                return "Other";
+            default:
+                return "Not specified";
+        }
+    };
+
+    levelToNumber = (level: DifficultyLevel) => {
+        switch(level){
+            case DifficultyLevel.NOT_SPECIFIED:
+                return "Not specified";
+            default:
+                return "Level " + level;
+        }
+    };
+
+    joinRequestView = () => {
+        return(
+            <div>
+                <Dialog open={true}>
+
+                </Dialog>
+            </div>
+        )
+    }
+
+
     normalView = () => {
         let recruitment: Recruitment = {...this.props.recruitmentInfo};
+        let masterView = recruitment.createdBy._id === this.props.user._id;
         return(
-            <SplitVIewTemplate>
-                <Paper style={paperStyle} elevation={0}>
-                    {this.editButton()}
-                    <Typography type="display1" noWrap>
-                        {recruitment.title}
-                    </Typography>
-                    <SplitVIewTemplate>
-                        <div>
-                            {
-                                recruitment.recruitmentYear &&
-                                <Typography type="caption" gutterBottom>
-                                    {recruitment.recruitmentYear}
-                                </Typography>
-                            }
-                            {
-                                recruitment.recruitmentSemester !== SemesterEnum.NOT_SPECIFIED &&
-                                <Typography type="caption" gutterBottom>
-                                    {recruitment.recruitmentSemester}
-                                </Typography>
-                            }
-                        </div>
-                        <Grid container justify="flex-end">
+            <div>
+                <SplitVIewTemplate>
+                    <Paper style={paperStyle} elevation={0}>
+                        {this.editButton()}
+                        <Typography type="display1" noWrap>
+                            {recruitment.title}
+                        </Typography>
+                        <SplitVIewTemplate>
+                            <div>
+                                {
+                                    recruitment.recruitmentYear &&
+                                    <Typography type="caption" gutterBottom>
+                                        {recruitment.recruitmentYear}
+                                    </Typography>
+                                }
+                                {
+                                    recruitment.recruitmentSemester !== SemesterEnum.NOT_SPECIFIED &&
+                                    <Typography type="caption" gutterBottom>
+                                        {recruitment.recruitmentSemester}
+                                    </Typography>
+                                }
+                            </div>
+                            <Grid container justify="flex-end">
+                                <Grid item>
+                                    <Typography type="caption">
+                                        Recruiter: {recruitment.createdBy.username}
+                                    </Typography>
+                                </Grid>
+                            </Grid>
+                        </SplitVIewTemplate>
+                        <Divider/>
+                        <Typography paragraph gutterBottom>
+                            {DraftJsHelper.convertEditorStateToText(recruitment.content)}
+                        </Typography>
+                        <Divider/>
+                        <br/>
+                        {
+                            !masterView &&
+                            <Button raised style={{backgroundColor: "#0099ff", color: "white"}} onClick={this.joinRequestView}>
+                                Join Now
+                            </Button>
+                        }
+                        {
+                            masterView &&
+                            (recruitment.pendingRequests.map(request => {
+
+                            }))
+                        }
+                    </Paper>
+                    <div>
+                        <Grid container direction="column">
                             <Grid item>
+                                <Divider/>
+                                <br/>
+
                                 <Typography type="caption">
-                                    Recruiter: {recruitment.createdBy.username}
+                                    Level
+                                </Typography>
+                                <Typography type="body1" gutterBottom>
+                                    {this.levelToString(recruitment.courseDifficulty.educationLevel)}
+                                </Typography>
+
+                                <br/>
+
+                                <Typography type="caption">
+                                    Difficulty
+                                </Typography>
+                                <Typography type="body1" gutterBottom>
+                                    {this.levelToNumber(recruitment.courseDifficulty.difficultyLevel)}
+                                </Typography>
+
+                                <br/>
+
+                                <Typography type="caption">
+                                    University
+                                </Typography>
+                                <Typography type="body1" gutterBottom>
+                                    {recruitment.university? recruitment.university.name: "Not specified"}
+                                </Typography>
+                                <Divider/>
+                            </Grid>
+                            <Grid item>
+                                <Typography type="title">
+                                    Members:
                                 </Typography>
                             </Grid>
                         </Grid>
-                    </SplitVIewTemplate>
-                    <Divider/>
-                    <Typography paragraph gutterBottom>
-                        {DraftJsHelper.convertEditorStateToText(recruitment.content)}
-                    </Typography>
-                    <Divider/>
-                </Paper>
-                <div>
-                    <Grid container direction="column">
-                        <Grid item>
-                            <Divider/>
-                            <br/>
+                    </div>
+                </SplitVIewTemplate>
 
-                            <Typography type="caption">
-                                Level
-                            </Typography>
-                            <Typography type="body1" gutterBottom>
-                                {recruitment.courseDifficulty.educationLevel}
-                            </Typography>
-
-                            <br/>
-
-                            <Typography type="caption">
-                                Difficulty
-                            </Typography>
-                            <Typography type="body1" gutterBottom>
-                                {recruitment.courseDifficulty.difficultyLevel}
-                            </Typography>
-                            <Divider/>
-                        </Grid>
-                        <Grid item>
-                            <Typography type="title">
-                                Members:
-                            </Typography>
-                        </Grid>
-                    </Grid>
-                </div>
-            </SplitVIewTemplate>
+            </div>
         )
     }
 
@@ -243,10 +314,12 @@ const mapStateToProps = (state: AppStoreState) => ({
 
 interface DispatchProps {
     updateRecruitment: (updatedRecruitment: RecruitmentDto) => void;
+    joinRecruitment: (request: RecruitmentRequestDto, recruitmentId: string) => void;
 }
 
 const mapDispatchToProps = (dispatch): DispatchProps => ({
     updateRecruitment: (updatedRecruitment: RecruitmentDto) => dispatch(RecruitmentActions.editRecruitment(updatedRecruitment)),
+    joinRecruitment: (request: RecruitmentRequestDto, recruitmentId: string) => dispatch(RecruitmentActions.joinRecruitment(request, recruitmentId)),
 });
 
 export const RecruitmentBoxView = connect<RecruitmentBoxComponentProps, DispatchProps, any>(

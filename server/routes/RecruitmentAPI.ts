@@ -4,7 +4,7 @@ import {NextFunction, Response, Router} from "express";
 import {AuthRequest, maybeAuthenticated, mustBeAuthenticated} from "../middlewares/AuthMiddleware";
 import {APIUrls} from "../urls";
 import {User} from "../models/User";
-import {RecruitmentDto} from "../dtos/recruitment/RecruitmentDto";
+import {RecruitmentDto, RecruitmentRequestDto} from "../dtos/recruitment/RecruitmentDto";
 import {RecruitmentCommentDto} from "../dtos/recruitment/RecruitmentCommenDto";
 import {UserDto} from "../dtos/auth/UserDto";
 
@@ -23,6 +23,7 @@ export class RecruitmentAPI extends BaseAPI{
         this.router.put(APIUrls.recruitMember, mustBeAuthenticated, this.recruitMember);
         this.router.get(APIUrls.getRecruitmentPreviews, maybeAuthenticated, this.getRecruitmentPreviews);
         this.router.put(APIUrls.editRecruitment, mustBeAuthenticated, this.editRecruitment);
+        this.router.put(APIUrls.joinRecruitment, mustBeAuthenticated, this.joinRecruitment);
     }
 
     public getRecruitmentPreviews = (req: AuthRequest, res: Response, next: NextFunction) => {
@@ -75,5 +76,13 @@ export class RecruitmentAPI extends BaseAPI{
         let result = this.service.editRecruitment(updatedRecruitment, user);
         this.respondPromise(result, res, next);
     };
+
+    public joinRecruitment = (req: AuthRequest, res: Response, next: NextFunction) => {
+        let request: RecruitmentRequestDto = req.body.reqBody.request;
+        let recruitmentId: string = req.body.reqBody.recruitmentId;
+        let user: User = req.user;
+        let result = this.service.joinRecruitment(request, recruitmentId, user);
+        this.respondPromise(result, res, next);
+    }
 }
 

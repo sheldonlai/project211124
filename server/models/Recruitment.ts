@@ -8,7 +8,7 @@ import {listNumericalEnumValues} from "../utils/EnumsUtil";
 import {QuestionDifficulty} from "./Question";
 import {DifficultyLevel, QuestionEducationLevel} from "../enums/QuestionEducationLevel";
 import {RecruitStatus} from "../enums/RecruitmentStatusEnum";
-import {RecruitmentRequestEnum} from "../enums/RecruitmentRequestEnum";
+import {RecruitmentRequestEnum, RequestStateEnum} from "../enums/RecruitmentRequestEnum";
 import {RawDraftContentState} from "draft-js";
 import {RecruitmentDto} from "../dtos/recruitment/RecruitmentDto";
 import {DraftJsHelper} from "../utils/DraftJsHelper";
@@ -36,6 +36,21 @@ export class RecruitmentComment{
     }
 }
 
+export class RecruitmentRequest{
+    _id: any;
+    createdBy: User;
+    createdAt: Date;
+    status: RequestStateEnum;
+    message?: any;
+
+    constructor(createdBy: User, message?: string){
+        this.createdBy = createdBy;
+        this.message = message;
+        this.createdAt = new Date();
+        this.status = RequestStateEnum.PENDING;
+    }
+}
+
 export class Recruitment extends BaseModel{
     title: string;
     content: RawDraftContentState;
@@ -49,6 +64,7 @@ export class Recruitment extends BaseModel{
     groupMates: User[];
     createdAt: Date;
     updatedAt: Date;
+    pendingRequests: RecruitmentRequest[];
     views: number;
     constructor(
         title?: string,
@@ -59,6 +75,7 @@ export class Recruitment extends BaseModel{
         courseDifficulty?: QuestionDifficulty,
         recruitmentYear?: number,
         recruitmentSemester?: SemesterEnum,
+        pendingRequests?: RecruitmentRequest[],
     ){
         super();
         this.title = title;
@@ -71,6 +88,7 @@ export class Recruitment extends BaseModel{
         this.updatedAt = new Date(Date.now());
         this.comments = [];
         this.groupMates = [];
+        this.pendingRequests = pendingRequests;
         this.views = 0;
         this.recruitmentYear = recruitmentYear?recruitmentYear:(new Date()).getFullYear();
         this.recruitmentSemester = recruitmentSemester?recruitmentSemester: SemesterEnum.NOT_SPECIFIED;
@@ -145,6 +163,14 @@ const schema = new Schema({
     ],
     groupMates: [
         {type: Schema.Types.ObjectId, ref: 'user'}
+    ],
+    pendingRequests:[
+        {
+            createdBy: {type: Schema.Types.ObjectId, ref: 'user'},
+            createdAt: {type: Date, default: Date.now()},
+            message: {type: String, default: ""},
+            status: {type: String, enum: Object.keys(RequestStateEnum), default: RequestStateEnum.PENDING},
+        }
     ],
     views: {type: Number, default: 0},
     recruitmentYear: {type: Number, default: (new Date()).getFullYear()},

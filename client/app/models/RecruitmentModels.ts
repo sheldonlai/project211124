@@ -1,11 +1,11 @@
-import {RecruitmentRequestEnum} from "../../../server/enums/RecruitmentRequestEnum"
+import {RecruitmentRequestEnum, RequestStateEnum} from "../../../server/enums/RecruitmentRequestEnum"
 import {UserDto} from "../../../server/dtos/auth/UserDto";
 import {RecruitStatus} from "../../../server/enums/RecruitmentStatusEnum";
 import {University} from "../../../server/models/LocationModels/Universities";
 import {QuestionDifficulty} from "../../../server/models/Question";
 import {RecruitmentCommentDto} from "../../../server/dtos/recruitment/RecruitmentCommenDto";
 import {DraftJsHelper} from "../../../server/utils/DraftJsHelper";
-import {RecruitmentDto} from "../../../server/dtos/recruitment/RecruitmentDto";
+import {RecruitmentDto, RecruitmentRequestDto} from "../../../server/dtos/recruitment/RecruitmentDto";
 import {EditorState} from "draft-js";
 import {DifficultyLevel, QuestionEducationLevel} from "../../../server/enums/QuestionEducationLevel";
 import {Preview} from "./CommonModels";
@@ -15,6 +15,21 @@ import {Routes} from "../constants/Routes";
 import {SemesterEnum} from "../../../server/enums/SemesterEnum";
 
 export namespace FrontEndRecruitmentModels{
+    export class RecruitmentRequest {
+        _id: string;
+        createdBy: UserDto;
+        createdAt: Date;
+        status: RequestStateEnum;
+        message?: string;
+        constructor(){
+            this._id = '';
+            this.createdBy = undefined;
+            this.createdAt = new Date();
+            this.status = RequestStateEnum.PENDING;
+            this.message = '';
+        }
+    }
+
     export class RecruitmentComment {
         _id: string;
         request: RecruitmentRequestEnum;
@@ -46,6 +61,7 @@ export namespace FrontEndRecruitmentModels{
         createdAt: Date;
         updatedAt: Date;
         groupMates: UserDto[];
+        pendingRequests: RecruitmentRequest[];
         views: number;
         constructor(){
             this._id = '';
@@ -64,9 +80,31 @@ export namespace FrontEndRecruitmentModels{
             this.createdAt = new Date(Date.now());
             this.updatedAt = new Date(Date.now());
             this.groupMates = [];
+            this.pendingRequests = [];
             this.views = 0;
         }
     }
+
+    export const requestModelToDto = (request: RecruitmentRequest): RecruitmentRequestDto => {
+        let requestDto: RecruitmentRequestDto = {
+            _id: request._id,
+            createdBy: request.createdBy,
+            createdAt: request.createdAt,
+            status: request.status,
+            message: request.message,
+        };
+        return requestDto;
+    };
+
+    export const requestDtoToModel = (requestDto: RecruitmentRequestDto): RecruitmentRequest => {
+        let requestModel: RecruitmentRequest = new RecruitmentRequest();
+        requestModel._id = requestDto._id;
+        requestModel.createdBy = requestDto.createdBy;
+        requestModel.createdAt = requestDto.createdAt;
+        requestModel.status = requestDto.status;
+        requestModel.message = requestDto.message;
+        return requestModel;
+    };
 
     export const commentModelToDto = (comment: RecruitmentComment): RecruitmentCommentDto => {
         let commentDto: RecruitmentCommentDto = {
@@ -96,6 +134,9 @@ export namespace FrontEndRecruitmentModels{
         let comments: RecruitmentComment[] = recruitmentDto.comments.map(comment => {
             return commentDtoToModel(comment);
         });
+        let requests: RecruitmentRequest[] = recruitmentDto.pendingRequests? recruitmentDto.pendingRequests.map(request => {
+            return requestDtoToModel(request);
+        }): [];
         recruitment._id = recruitmentDto._id;
         recruitment.title = recruitmentDto.title;
         recruitment.comments = comments;
@@ -109,6 +150,7 @@ export namespace FrontEndRecruitmentModels{
         recruitment.createdAt = recruitmentDto.createdAt;
         recruitment.updatedAt = recruitmentDto.updatedAt;
         recruitment.groupMates = recruitmentDto.groupMates;
+        recruitment.pendingRequests = requests;
         recruitment.views = recruitmentDto.views;
         return recruitment;
     }
@@ -117,6 +159,9 @@ export namespace FrontEndRecruitmentModels{
         let comments: RecruitmentCommentDto[] = recruitmentModel.comments.map(comment => {
             return commentModelToDto(comment);
         });
+        let requests: RecruitmentRequestDto[] = recruitmentModel.pendingRequests?recruitmentModel.pendingRequests.map(request => {
+            return requestModelToDto(request);
+        }): [];
         let recruitmentDto: RecruitmentDto = {
             _id: recruitmentModel._id,
             title: recruitmentModel.title,
@@ -131,6 +176,7 @@ export namespace FrontEndRecruitmentModels{
             createdAt: recruitmentModel.createdAt,
             updatedAt: recruitmentModel.updatedAt,
             groupMates: recruitmentModel.groupMates,
+            pendingRequests: requests,
             views: recruitmentModel.views,
         };
         return recruitmentDto;

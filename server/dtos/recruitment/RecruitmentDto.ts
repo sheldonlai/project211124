@@ -6,6 +6,15 @@ import {University} from "../../models/LocationModels/Universities";
 import {RecruitStatus} from "../../enums/RecruitmentStatusEnum";
 import {EditorState} from "draft-js";
 import {SemesterEnum} from "../../enums/SemesterEnum";
+import {RequestStateEnum} from "../../enums/RecruitmentRequestEnum";
+
+export interface RecruitmentRequestDto{
+    _id: string;
+    createdBy: UserDto;
+    createdAt: Date;
+    status: RequestStateEnum;
+    message?: string;
+}
 
 export interface RecruitmentDto{
     _id: string;
@@ -21,5 +30,6 @@ export interface RecruitmentDto{
     createdAt: Date;
     updatedAt: Date;
     groupMates: UserDto[];
+    pendingRequests: RecruitmentRequestDto[];
     views: number;
 }
