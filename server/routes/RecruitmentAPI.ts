@@ -42,7 +42,7 @@ export class RecruitmentAPI extends BaseAPI{
     public fetchRecruitmentPage = (req: AuthRequest, res: Response, next: NextFunction) => {
         let recruitmentId: string = req.params.id;
         let user: User = req.user;
-        let result = this.service.fetchRecruitmentPage(recruitmentId);
+        let result = this.service.fetchRecruitmentPage(recruitmentId, user);
         this.respondPromise(result, res, next);
     };
 
@@ -78,8 +78,8 @@ export class RecruitmentAPI extends BaseAPI{
     };
 
     public joinRecruitment = (req: AuthRequest, res: Response, next: NextFunction) => {
-        let request: RecruitmentRequestDto = req.body.reqBody.request;
-        let recruitmentId: string = req.body.reqBody.recruitmentId;
+        let request: RecruitmentRequestDto = req.body.request;
+        let recruitmentId: string = req.body.recruitmentId;
         let user: User = req.user;
         let result = this.service.joinRecruitment(request, recruitmentId, user);
         this.respondPromise(result, res, next);

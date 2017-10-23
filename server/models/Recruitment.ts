@@ -41,11 +41,11 @@ export class RecruitmentRequest{
     createdBy: User;
     createdAt: Date;
     status: RequestStateEnum;
-    message?: any;
+    message?: string;
 
     constructor(createdBy: User, message?: string){
         this.createdBy = createdBy;
-        this.message = message;
+        this.message = message? message: "";
         this.createdAt = new Date();
         this.status = RequestStateEnum.PENDING;
     }
@@ -74,8 +74,7 @@ export class Recruitment extends BaseModel{
         university?: University,
         courseDifficulty?: QuestionDifficulty,
         recruitmentYear?: number,
-        recruitmentSemester?: SemesterEnum,
-        pendingRequests?: RecruitmentRequest[],
+        recruitmentSemester?: SemesterEnum
     ){
         super();
         this.title = title;
@@ -88,7 +87,7 @@ export class Recruitment extends BaseModel{
         this.updatedAt = new Date(Date.now());
         this.comments = [];
         this.groupMates = [];
-        this.pendingRequests = pendingRequests;
+        this.pendingRequests = [];
         this.views = 0;
         this.recruitmentYear = recruitmentYear?recruitmentYear:(new Date()).getFullYear();
         this.recruitmentSemester = recruitmentSemester?recruitmentSemester: SemesterEnum.NOT_SPECIFIED;

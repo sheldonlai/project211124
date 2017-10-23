@@ -28,6 +28,9 @@ import recruitmentModelToDto = FrontEndRecruitmentModels.recruitmentModelToDto;
 import {DifficultyLevel, QuestionEducationLevel} from "../../../../../server/enums/QuestionEducationLevel";
 import {TeammateLocationEditor} from "../../rating/subcomponents/TeammateLocationEditor";
 import Dialog from "material-ui/Dialog";
+import {DialogContent, DialogTitle, DialogActions} from "material-ui";
+import RecruitmentRequest = FrontEndRecruitmentModels.RecruitmentRequest;
+import requestModelToDto = FrontEndRecruitmentModels.requestModelToDto;
 
 interface RecruitmentBoxComponentProps {
     user: UserDto; // current user
@@ -42,6 +45,8 @@ interface props extends RecruitmentBoxComponentProps, DispatchProps {
 interface state{
     editedRecruitment: Recruitment;
     edit: boolean;
+    joinRequestDialog: boolean;
+    joinRequest: RecruitmentRequest;
 }
 
 let paperStyle = {height: "100%", padding: 5};
@@ -53,7 +58,11 @@ export class RecruitmentBoxComponent extends Component<props, state> {
         this.state = {
             editedRecruitment: {...this.props.recruitmentInfo},
             edit: false,
+            joinRequestDialog: false,
+            joinRequest: new RecruitmentRequest,
         }
+
+        console.log(this.props.recruitmentInfo.pendingRequests);
     }
 
     editButton = () => {
@@ -192,23 +201,53 @@ export class RecruitmentBoxComponent extends Component<props, state> {
 
     joinRequestView = () => {
         return(
-            <div>
-                <Dialog open={true}>
-
-                </Dialog>
-            </div>
+            <Dialog open={this.state.joinRequestDialog}>
+                <DialogTitle>
+                    <div>
+                        <Typography type="subheading">{"Requesting to join \"" + this.props.recruitmentInfo.title + "\""}</Typography>
+                        <Typography type="caption">{"Author: " + this.props.recruitmentInfo.createdBy.username}</Typography>
+                    </div>
+                </DialogTitle>
+                <DialogContent>
+                    <Divider/>
+                    <br/>
+                    <textarea rows={5} cols={50} placeholder={"(optional) Write a note to " + this.props.recruitmentInfo.createdBy.username}
+                              value={this.state.joinRequest.message}
+                              onChange={(event) => {
+                                  let obj = {...this.state.joinRequest};
+                                  obj.message = event.target.value;
+                                  this.setState({joinRequest: obj});
+                              }}
+                    />
+                    <br/>
+                    <Grid container justify="flex-end">
+                        <Grid item>
+                            <Button onClick={() => this.setState({joinRequestDialog: false})}>
+                                Cancel
+                            </Button>
+                            <Button onClick={() => {
+                                let obj = requestModelToDto(this.state.joinRequest);
+                                obj.createdBy = this.props.user;
+                                this.props.joinRecruitment(obj, this.props.recruitmentInfo._id);
+                                this.setState({joinRequest: new RecruitmentRequest(), joinRequestDialog: false});
+                            }}>
+                                Submit
+                            </Button>
+                        </Grid>
+                    </Grid>
+                </DialogContent>
+            </Dialog>
         )
     }
 
-
     normalView = () => {
         let recruitment: Recruitment = {...this.props.recruitmentInfo};
-        let masterView = recruitment.createdBy._id === this.props.user._id;
+        let masterView = this.props.user?recruitment.createdBy._id === this.props.user._id: false;
         return(
             <div>
                 <SplitVIewTemplate>
                     <Paper style={paperStyle} elevation={0}>
-                        {this.editButton()}
+                        {masterView && this.editButton()}
                         <Typography type="display1" noWrap>
                             {recruitment.title}
                         </Typography>
@@ -243,7 +282,7 @@ export class RecruitmentBoxComponent extends Component<props, state> {
                         <br/>
                         {
                             !masterView &&
-                            <Button raised style={{backgroundColor: "#0099ff", color: "white"}} onClick={this.joinRequestView}>
+                            <Button raised style={{backgroundColor: "#0099ff", color: "white"}} onClick={() => this.setState({joinRequestDialog: true})}>
                                 Join Now
                             </Button>
                         }
@@ -253,6 +292,7 @@ export class RecruitmentBoxComponent extends Component<props, state> {
 
                             }))
                         }
+                        {this.joinRequestView()}
                     </Paper>
                     <div>
                         <Grid container direction="column">

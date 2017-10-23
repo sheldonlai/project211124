@@ -3,7 +3,7 @@ import {AppError} from "../errors/AppError";
 import {BaseService} from "./BaseService";
 import * as _ from "lodash";
 import {RecruitmentDto, RecruitmentRequestDto} from "../dtos/recruitment/RecruitmentDto";
-import {Recruitment, RecruitmentComment} from "../models/Recruitment";
+import {Recruitment, RecruitmentComment, RecruitmentRequest} from "../models/Recruitment";
 import {IRecruitmentRepository} from "../repositories/RecruitmentRepository";
 import {DraftJsHelper} from "../utils/DraftJsHelper";
 import {RecruitmentCommentDto} from "../dtos/recruitment/RecruitmentCommenDto";
@@ -14,7 +14,7 @@ import {RecruitmentPreviewCollectionsDto} from "../dtos/recruitment/RecruitmentP
 
 export interface IRecruitmentService {
     createRecruitment(recruitment: RecruitmentDto, user: User): Promise<RecruitmentDto>;
-    fetchRecruitmentPage(recruitmentId: string): Promise<RecruitmentDto>;
+    fetchRecruitmentPage(recruitmentId: string, user?: User): Promise<RecruitmentDto>;
     addRecruitmentComment(comment: RecruitmentCommentDto, recruitmentId: string, user: User): Promise<RecruitmentDto>;
     updateRecruitmentComment(comment: RecruitmentCommentDto, recruitmentId: string, user: User): Promise<RecruitmentDto>;
     recruitMember(member: UserDto, recruitmentId: string, user: User): Promise<RecruitmentDto>;
@@ -78,8 +78,13 @@ export class RecruitmentService extends BaseService implements IRecruitmentServi
         })
     }
 
-    fetchRecruitmentPage(recruitmentId: string): Promise<RecruitmentDto> {
-        return this.recruitmentRepository.getById(recruitmentId);
+    fetchRecruitmentPage(recruitmentId: string, user?: User): Promise<RecruitmentDto> {
+        return this.recruitmentRepository.getById(recruitmentId).then(recruitmentFound => {
+            if(user && !user._id.equals(recruitmentFound.createdBy._id)){
+                recruitmentFound.pendingRequests = []; //hide private fields from non-author users
+            }
+            return recruitmentFound;
+        });
     }
 
     addRecruitmentComment(comment: RecruitmentCommentDto, recruitmentId: string, user: User): Promise<RecruitmentDto> {
@@ -125,7 +130,8 @@ export class RecruitmentService extends BaseService implements IRecruitmentServi
 
     joinRecruitment(request: RecruitmentRequestDto, recruitmentId: string, user: User): Promise<RecruitmentDto>{
         return this.recruitmentRepository.getById(recruitmentId).then(recruitmentFound => {
-            recruitmentFound.pendingRequests.push(request);
+            let newRequest: RecruitmentRequest = new RecruitmentRequest(request.createdBy, request.message);
+            recruitmentFound.pendingRequests.push(newRequest);
             return this.recruitmentRepository.update(recruitmentFound).then(updatedRecruitment => {
                 return this.recruitmentRepository.getById(updatedRecruitment._id);
             })
