@@ -7,9 +7,12 @@ import {User} from "../models/User";
 import {RecruitmentDto, RecruitmentRequestDto} from "../dtos/recruitment/RecruitmentDto";
 import {RecruitmentCommentDto} from "../dtos/recruitment/RecruitmentCommenDto";
 import {UserDto} from "../dtos/auth/UserDto";
+import {IRecruitmentRecordsService} from "../services/RecruitmentRecordsService";
+import {RecruitmentRecordEntityDto} from "../dtos/recruitment/RecruitmentRecordsDto";
 
 export class RecruitmentAPI extends BaseAPI{
     private service: IRecruitmentService;
+    private recordService: IRecruitmentRecordsService;
     public router: Router;
 
     constructor(service: IRecruitmentService){
@@ -24,6 +27,8 @@ export class RecruitmentAPI extends BaseAPI{
         this.router.get(APIUrls.getRecruitmentPreviews, maybeAuthenticated, this.getRecruitmentPreviews);
         this.router.put(APIUrls.editRecruitment, mustBeAuthenticated, this.editRecruitment);
         this.router.put(APIUrls.joinRecruitment, mustBeAuthenticated, this.joinRecruitment);
+        this.router.get(APIUrls.getRecruitmentRecords, mustBeAuthenticated, this.getRecruitmentRecords);
+        this.router.put(APIUrls.addRecruitmentRecord, mustBeAuthenticated, this.addRecruitmentRecord);
     }
 
     public getRecruitmentPreviews = (req: AuthRequest, res: Response, next: NextFunction) => {
@@ -82,6 +87,20 @@ export class RecruitmentAPI extends BaseAPI{
         let recruitmentId: string = req.body.recruitmentId;
         let user: User = req.user;
         let result = this.service.joinRecruitment(request, recruitmentId, user);
+        this.respondPromise(result, res, next);
+    };
+
+    public getRecruitmentRecords = (req: AuthRequest, res: Response, next: NextFunction) => {
+        let user: User = req.user;
+        let result = this.recordService.getRecruitmentRecords(user);
+        this.respondPromise(result, res, next);
+    };
+
+    public addRecruitmentRecord = (req: AuthRequest, res: Response, next: NextFunction) => {
+        let record: RecruitmentRecordEntityDto = req.body.record;
+        let recordsId: string = req.body.recordsId;
+        let user: User;
+        let result = this.recordService.addRecruitmentRecord(record, recordsId);
         this.respondPromise(result, res, next);
     }
 }

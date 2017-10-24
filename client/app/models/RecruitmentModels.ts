@@ -13,6 +13,10 @@ import {UniversityDto} from "../../../server/dtos/location/UniversityDto";
 import {RecruitmentPreviewDto} from "../../../server/dtos/recruitment/RecruitmentPreviewDto";
 import {Routes} from "../constants/Routes";
 import {SemesterEnum} from "../../../server/enums/SemesterEnum";
+import {
+    RecruitmentRecordEntityDto,
+    RecruitmentRecordsDto
+} from "../../../server/dtos/recruitment/RecruitmentRecordsDto";
 
 export namespace FrontEndRecruitmentModels{
     export class RecruitmentRequest {
@@ -225,5 +229,60 @@ export namespace FrontEndRecruitmentModels{
             title = encodeURIComponent(title).replace(/%3F/g, '');
             return Routes.recruitment_by_id.replace(':id', this._id).replace(':name', title);
         }
+    }
+
+    export interface RecruitmentRecordEntity{
+        recruitment: Recruitment;
+        status: RequestStateEnum;
+    }
+
+    export class RecruitmentRecords{
+        _id: string;
+        user: UserDto;
+        records: RecruitmentRecordEntity[];
+
+        constructor(user?: UserDto){
+            this.user = user? user: undefined;
+            this.records = [];
+        }
+    }
+
+    export const recordEntityDtoToModel = (dto: RecruitmentRecordEntityDto): RecruitmentRecordEntity => {
+        let record: RecruitmentRecordEntity = {
+            recruitment: recruitmentDtoToModel(dto.recruitment),
+            status: dto.status,
+        };
+        return record;
+    }
+
+    export const recordEntityModelToDto = (model: RecruitmentRecordEntity): RecruitmentRecordEntityDto => {
+        let record: RecruitmentRecordEntityDto = {
+            recruitment: recruitmentModelToDto(model.recruitment),
+            status: model.status,
+        };
+        return record;
+    }
+
+    export const recordsDtoToModel = (dto: RecruitmentRecordsDto): RecruitmentRecords => {
+        let model: RecruitmentRecords = new RecruitmentRecords();
+        let records: RecruitmentRecordEntity[] = dto.records.map(recordEntity => {
+            return recordEntityDtoToModel(recordEntity);
+        });
+        model._id = dto._id;
+        model.user = dto.user;
+        model.records = records;
+        return model;
+    }
+
+    export const recordsModelToDto = (model: RecruitmentRecords): RecruitmentRecordsDto => {
+        let records: RecruitmentRecordEntityDto[] = model.records.map(recordEntity => {
+            return recordEntityModelToDto(recordEntity);
+        });
+        let dto: RecruitmentRecordsDto = {
+            _id: model._id,
+            user: model.user,
+            records: records,
+        };
+        return dto;
     }
 }

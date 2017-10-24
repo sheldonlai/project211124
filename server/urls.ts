@@ -87,6 +87,8 @@ export class APIUrls {
     static getRecruitmentPreviews = "/get-recruitment-previews";
     static joinRecruitment = "/join-recruitment";
 
+    static getRecruitmentRecords = "/get-recruitment-records";
+    static addRecruitmentRecord = "/add-recruitment-record";
     /* Notification */
     static getNotificationsByUser = "/notifications";
     static notificationSeen = "/notification/seen/:id";

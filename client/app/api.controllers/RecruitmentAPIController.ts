@@ -4,6 +4,9 @@ import {APIUrls} from "../../../server/urls";
 import {RecruitmentDto, RecruitmentRequestDto} from "../../../server/dtos/recruitment/RecruitmentDto";
 import {RecruitmentCommentDto} from "../../../server/dtos/recruitment/RecruitmentCommenDto";
 import {UserDto} from "../../../server/dtos/auth/UserDto";
+import {FrontEndRecruitmentModels} from "../models/RecruitmentModels";
+import RecruitmentRecordEntity = FrontEndRecruitmentModels.RecruitmentRecordEntity;
+import {RecruitmentRecordEntityDto} from "../../../server/dtos/recruitment/RecruitmentRecordsDto";
 
 export class RecruitmentAPIController extends ApiController{
     public static _instance: RecruitmentAPIController = new RecruitmentAPIController();
@@ -66,5 +69,17 @@ export class RecruitmentAPIController extends ApiController{
             recruitmentId: recruitmentId,
         };
         return this.put(APIUrls.joinRecruitment, reqBody);
+    }
+
+    getRecruitmentRecords(): AxiosPromise{
+        return this.get(APIUrls.getRecruitmentRecords);
+    }
+
+    addRecruitmentRecord(recordEntity: RecruitmentRecordEntityDto, recordsId: string): AxiosPromise{
+        let reqBody = {
+            record: recordEntity,
+            recordsId: recordsId,
+        };
+        return this.put(APIUrls.addRecruitmentRecord, reqBody);
     }
 }

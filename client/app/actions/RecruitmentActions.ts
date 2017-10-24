@@ -11,6 +11,10 @@ import {FrontEndRecruitmentModels} from "../models/RecruitmentModels";
 import Recruitment = FrontEndRecruitmentModels.Recruitment;
 import recruitmentDtoToModel = FrontEndRecruitmentModels.recruitmentDtoToModel;
 import recruitmentModelToDto = FrontEndRecruitmentModels.recruitmentModelToDto;
+import RecruitmentRecords = FrontEndRecruitmentModels.RecruitmentRecords;
+import recordsDtoToModel = FrontEndRecruitmentModels.recordsDtoToModel;
+import RecruitmentRecordEntity = FrontEndRecruitmentModels.RecruitmentRecordEntity;
+import {RecruitmentRecordEntityDto} from "../../../server/dtos/recruitment/RecruitmentRecordsDto";
 
 let apiController: RecruitmentAPIController = RecruitmentAPIController.getInstance();
 
@@ -127,7 +131,7 @@ export class RecruitmentActions extends BaseActions{
         return function(dispatch){
             dispatch({
                 type: RecruitmentActionTypes.JoinRecruitmentRequest,
-            })
+            });
             apiController.joinRecruitment(request, recruitmentId).then(res => {
                 let data: Recruitment = recruitmentDtoToModel(res.data);
                 dispatch({
@@ -135,6 +139,36 @@ export class RecruitmentActions extends BaseActions{
                     data: data,
                 })
             }).catch(err => RatingActions.handleError(dispatch, err, RecruitmentActionTypes.JoinRecruitmentError))
+        }
+    }
+
+    static addRecruitmentRecord(recordEntity: RecruitmentRecordEntityDto, recordsId: string){
+        return function(dispatch){
+            dispatch({
+                type: RecruitmentActionTypes.AddRecruitmentRecordRequest,
+            })
+            apiController.addRecruitmentRecord(recordEntity, recordsId).then(res => {
+                let data: RecruitmentRecords = recordsDtoToModel(res.data);
+                dispatch({
+                    type: RecruitmentActionTypes.AddRecruitmentRecordOK,
+                    data: data,
+                })
+            }).catch(err => RecruitmentActions.handleError(dispatch, err, RecruitmentActionTypes.AddCommentError))
+        }
+    }
+
+    static getRecruitmentRecords(){
+        return function(dispatch){
+            dispatch({
+                type: RecruitmentActionTypes.GetRecruitmentRecordsRequest,
+            });
+            apiController.getRecruitmentRecords().then(res => {
+                let data: RecruitmentRecords = recordsDtoToModel(res.data);
+                dispatch({
+                    type: RecruitmentActionTypes.GetRecruitmentRecordsOK,
+                    data: data,
+                })
+            }).catch(err => RecruitmentActions.handleError(dispatch, err, RecruitmentActionTypes.GetRecruitmentRecordsError))
         }
     }
 }

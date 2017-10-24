@@ -30,4 +30,12 @@ export enum RecruitmentActionTypes{
     JoinRecruitmentRequest = <any> "JoinRecruitmentRequest",
     JoinRecruitmentOK = <any> "JoinRecruitmentOK",
     JoinRecruitmentError = <any> "JoinRecruitmentError",
+
+    GetRecruitmentRecordsRequest = <any> "GetRecruitmentRecordsRequest",
+    GetRecruitmentRecordsOK = <any> "GetRecruitmentRecordsOK",
+    GetRecruitmentRecordsError = <any> "GetRecruitmentRecordsError",
+
+    AddRecruitmentRecordRequest = <any> "AddRecruitmentRecordRequest",
+    AddRecruitmentRecordOK = <any> "AddRecruitmentRecordOK",
+    AddRecruitmentRecordError = <any> "AddRecruitmentRecordError",
 }

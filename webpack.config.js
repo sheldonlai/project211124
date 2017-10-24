@@ -6,6 +6,9 @@ module.exports = {
     app: './client/app/main.tsx',
     // question: './client/app/views/question/QuestionRouter.tsx'
   },
+  stats:{
+    errorDetails: true
+  },
   devtool: 'source-maps',
   cache: true,
   plugins: [
