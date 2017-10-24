@@ -13,6 +13,7 @@ import {CommentBoxesView} from "./subcomponents/CommentBoxesComponent";
 import Grid from "material-ui/Grid";
 import {FrontEndRecruitmentModels} from "../../models/RecruitmentModels";
 import Recruitment = FrontEndRecruitmentModels.Recruitment;
+import RecruitmentRecords = FrontEndRecruitmentModels.RecruitmentRecords;
 
 
 interface RecruitmentPageProps extends RouteComponentProps<{id: string}>{}
@@ -22,10 +23,12 @@ interface StateToProps{
     recruitmentInfo: Recruitment;
     user: UserDto;
     lastUpdated: number;
+    recruitmentRecords: RecruitmentRecords;
 }
 
 interface DispatchToProps{
     fetchRecruitment: (id: string) => void;
+    fetchRecruitmentRecords: () => void;
 }
 
 interface props extends StateToProps, DispatchToProps, RouteComponentProps<{ id: string }>{}
@@ -49,8 +52,10 @@ export class RecruitmentPageComponent extends React.Component<props, state>{
         const id = this.props.match.params.id;
         if (!id)
             console.error("No id is specified");
-        if(!this.props.recruitmentInfo || this.props.recruitmentInfo._id != id || Date.now() - this.props.lastUpdated > 1000)
+        if(!this.props.recruitmentInfo || this.props.recruitmentInfo._id != id || Date.now() - this.props.lastUpdated > 1000){
             this.props.fetchRecruitment(id);
+            this.props.fetchRecruitmentRecords();
+        }
         else if (this.props.recruitmentInfo._id != id)
             this.setState({recruitment: {...this.props.recruitmentInfo}});
     }
@@ -82,7 +87,8 @@ export class RecruitmentPageComponent extends React.Component<props, state>{
 }
 
 const mapDispatchToProps = (dispatch): DispatchToProps => ({
-    fetchRecruitment: (id) => dispatch(RecruitmentActions.fetchRecruitmentPage(id))
+    fetchRecruitment: (id) => dispatch(RecruitmentActions.fetchRecruitmentPage(id)),
+    fetchRecruitmentRecords: () => dispatch(RecruitmentActions.getRecruitmentRecords()),
 });
 
 const mapStateToProps = (state: AppStoreState): StateToProps => ({
@@ -90,6 +96,7 @@ const mapStateToProps = (state: AppStoreState): StateToProps => ({
     recruitmentInfo: state.recruitmentPage.recruitmentPage,
     user: state.auth.user,
     lastUpdated: state.recruitmentPage.lastUpdated,
+    recruitmentRecords: state.recruitmentRecords.records,
 });
 
 export const RecruitmentPageView = connect <StateToProps, DispatchToProps, RouteComponentProps<{id: string}>>(

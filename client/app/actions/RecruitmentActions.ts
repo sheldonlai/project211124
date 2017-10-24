@@ -146,7 +146,7 @@ export class RecruitmentActions extends BaseActions{
         return function(dispatch){
             dispatch({
                 type: RecruitmentActionTypes.AddRecruitmentRecordRequest,
-            })
+            });
             apiController.addRecruitmentRecord(recordEntity, recordsId).then(res => {
                 let data: RecruitmentRecords = recordsDtoToModel(res.data);
                 dispatch({
