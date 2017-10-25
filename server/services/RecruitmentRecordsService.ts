@@ -8,12 +8,12 @@ import {IRecruitmentRepository} from "../repositories/RecruitmentRepository";
 import {RecruitmentDto} from "../dtos/recruitment/RecruitmentDto";
 import {IUserRepository} from "../repositories/UserRepository";
 
-export interface IRecruitmentRecordsService{
+export interface IRecruitmentRecordsService {
     addRecruitmentRecord(recordEntity: RecruitmentRecordEntityDto, recordsId: string): Promise<RecruitmentRecordsDto>;
     getRecruitmentRecords(user: UserDto): Promise<RecruitmentRecordsDto>;
 }
 
-export class RecruitmentRecordsService extends BaseService implements IRecruitmentRecordsService{
+export class RecruitmentRecordsService extends BaseService implements IRecruitmentRecordsService {
     constructor(
         private recruitmentRecordsRepository: IRecruitmentRecordsRepository,
         private recruitmentRepository: IRecruitmentRepository,
@@ -31,7 +31,9 @@ export class RecruitmentRecordsService extends BaseService implements IRecruitme
             recordsFound.records.push(record);
             return this.recruitmentRecordsRepository.update(recordsFound).then(updatedRecords => {
                 return this.recruitmentRecordsRepository.getById(updatedRecords._id).then(recordsFound => {
-                    return this.recordsModelToDto(recordsFound);
+                    return this.recordsModelToDto(recordsFound).then(convertedRecords => {
+                        return convertedRecords;
+                    });
                 })
             })
         })
@@ -39,17 +41,17 @@ export class RecruitmentRecordsService extends BaseService implements IRecruitme
 
     getRecruitmentRecords(user: UserDto): Promise<RecruitmentRecordsDto>{
         return this.recruitmentRecordsRepository.findOne({'userId': user._id}).then(recordsFound => {
-            if(!recordsFound){
-                let newRecords: RecruitmentRecords = new RecruitmentRecords(user._id);
-                return this.recruitmentRecordsRepository.create(newRecords).then(recordsFound => {
-                    return this.recruitmentRecordsRepository.getById(recordsFound._id).then(r => {
-                        return this.recordsModelToDto(r);
+            return this.recordsModelToDto(recordsFound);
+        }).catch(err => {
+            console.log('Entity not found, creating new record...');
+            let newRecords: RecruitmentRecords = new RecruitmentRecords(user._id);
+            return this.recruitmentRecordsRepository.create(newRecords).then(recordsFound => {
+                return this.recruitmentRecordsRepository.getById(recordsFound._id).then(r => {
+                    return this.recordsModelToDto(r).then(convertedRecords => {
+                        return convertedRecords;
                     });
                 });
-            }
-            else{
-                return this.recordsModelToDto(recordsFound);
-            }
+            });
         })
     }
 
@@ -63,18 +65,30 @@ export class RecruitmentRecordsService extends BaseService implements IRecruitme
     }
 
     private async recordsModelToDto(model: RecruitmentRecords): Promise<RecruitmentRecordsDto>{
-        let records: RecruitmentRecordEntityDto[] = [];
+        let records = [];
         model.records.forEach(record => {
-            this.recordEntityModelToDto(record).then(recordDto => {
-                records.push(recordDto);
+            this.recordEntityModelToDto(record).then(record => {
+                records.push(record);
             })
         });
-        return this.userRepository.getById(model.userId).then(userFound => {
-            return {
-                _id: model._id,
-                records: records,
-                user: userFound
-            }
+        let user;
+        this.userRepository.getById(model.userId).then(userFound => {
+            user = userFound;
         });
+        /*return Promise.all([records, user]).then(result => {
+            console.log(result[0]);
+            return{
+                _id: model._id,
+                records: result[0],
+                user: result[1],
+            }
+        })*/
+        console.log(records);
+        return{
+            _id: model._id,
+            records: records,
+            user: user,
+        }
     }
 }
+

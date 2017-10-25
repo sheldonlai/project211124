@@ -14,6 +14,7 @@ import Grid from "material-ui/Grid";
 import {FrontEndRecruitmentModels} from "../../models/RecruitmentModels";
 import Recruitment = FrontEndRecruitmentModels.Recruitment;
 import RecruitmentRecords = FrontEndRecruitmentModels.RecruitmentRecords;
+import RecruitmentRecordEntity = FrontEndRecruitmentModels.RecruitmentRecordEntity;
 
 
 interface RecruitmentPageProps extends RouteComponentProps<{id: string}>{}

@@ -33,7 +33,7 @@ export const RecruitmentRecordsReducer = (state = initialState, action): Recruit
       case RecruitmentActionTypes.GetRecruitmentRecordsRequest:
           return getLoadingState(state);
       case RecruitmentActionTypes.GetRecruitmentRecordsOK:
-          return getOKState(state, action);
+          return getOKState(state, action.data);
 
       default:
           return state;

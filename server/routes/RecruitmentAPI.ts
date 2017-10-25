@@ -15,10 +15,11 @@ export class RecruitmentAPI extends BaseAPI{
     private recordService: IRecruitmentRecordsService;
     public router: Router;
 
-    constructor(service: IRecruitmentService){
+    constructor(service: IRecruitmentService, recordService: IRecruitmentRecordsService){
         super();
         this.router = Router();
         this.service = service;
+        this.recordService = recordService;
         this.router.get(APIUrls.fetchRecruitmentPage, maybeAuthenticated, this.fetchRecruitmentPage);
         this.router.post(APIUrls.createRecruitment, mustBeAuthenticated, this.createRecruitment);
         this.router.post(APIUrls.addRecruitmentComment, mustBeAuthenticated, this.addRecruitmentComment);

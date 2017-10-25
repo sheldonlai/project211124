@@ -124,7 +124,7 @@ export class Server {
 
         routes.push(new AdminAPI(ServiceProvider.AdminService));
 
-        routes.push(new RecruitmentAPI(ServiceProvider.RecruitmentService));
+        routes.push(new RecruitmentAPI(ServiceProvider.RecruitmentService, ServiceProvider.RecruitmentRecordsService));
 
         routes.forEach((route) => this.app.use('/api',route.router));
 

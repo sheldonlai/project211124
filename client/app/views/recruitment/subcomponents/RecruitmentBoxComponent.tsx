@@ -31,12 +31,20 @@ import Dialog from "material-ui/Dialog";
 import {DialogContent, DialogTitle, DialogActions} from "material-ui";
 import RecruitmentRequest = FrontEndRecruitmentModels.RecruitmentRequest;
 import requestModelToDto = FrontEndRecruitmentModels.requestModelToDto;
+import RecruitmentRecordEntity = FrontEndRecruitmentModels.RecruitmentRecordEntity;
+import RecruitmentRecords = FrontEndRecruitmentModels.RecruitmentRecords;
+import {RecruitmentRecordEntityDto} from "../../../../../server/dtos/recruitment/RecruitmentRecordsDto";
+import {RequestStateEnum} from "../../../../../server/enums/RecruitmentRequestEnum";
+import {ReducerStateStatus} from "../../../constants/ReducerStateStatus";
+import {LoadingScreen} from "../../../components/Animations/LoadingScreen";
 
 interface RecruitmentBoxComponentProps {
     user: UserDto; // current user
     recruitmentInfo: Recruitment;
     recruitmentEditorState: Recruitment;
     edit: boolean;
+    recruitmentRecords: RecruitmentRecords;
+    pageStatus: ReducerStateStatus;
 }
 
 interface props extends RecruitmentBoxComponentProps, DispatchProps {
@@ -60,9 +68,7 @@ export class RecruitmentBoxComponent extends Component<props, state> {
             edit: false,
             joinRequestDialog: false,
             joinRequest: new RecruitmentRequest,
-        }
-
-        console.log(this.props.recruitmentInfo.pendingRequests);
+        };
     }
 
     editButton = () => {
@@ -77,7 +83,18 @@ export class RecruitmentBoxComponent extends Component<props, state> {
                 </Grid>
             </Grid>
         )
-    }
+    };
+
+    applied = (recruitmentId: string): boolean => {
+      let i:number;
+      console.log(this.props.recruitmentRecords.records);
+      for(i=0; i<this.props.recruitmentRecords.records.length; i++){
+          if(this.props.recruitmentRecords.records[i].recruitment._id == recruitmentId){
+              return true;
+          }
+      }
+      return false;
+    };
 
     updateObj = (key: string, value: any) => {
         let obj = {...this.state.editedRecruitment};
@@ -229,6 +246,11 @@ export class RecruitmentBoxComponent extends Component<props, state> {
                                 let obj = requestModelToDto(this.state.joinRequest);
                                 obj.createdBy = this.props.user;
                                 this.props.joinRecruitment(obj, this.props.recruitmentInfo._id);
+                                let newRecord: RecruitmentRecordEntityDto = {
+                                    recruitment: recruitmentModelToDto(this.props.recruitmentInfo),
+                                    status: RequestStateEnum.PENDING,
+                                };
+                                this.props.addRecruitmentRecord(newRecord, this.props.recruitmentRecords._id);
                                 this.setState({joinRequest: new RecruitmentRequest(), joinRequestDialog: false});
                             }}>
                                 Submit
@@ -241,8 +263,10 @@ export class RecruitmentBoxComponent extends Component<props, state> {
     }
 
     normalView = () => {
+        if(this.props.pageStatus === ReducerStateStatus.LOADING) return (<LoadingScreen/>)
         let recruitment: Recruitment = {...this.props.recruitmentInfo};
         let masterView = this.props.user?recruitment.createdBy._id === this.props.user._id: false;
+        let applied = this.props.user? this.applied(this.props.recruitmentInfo._id): true;
         return(
             <div>
                 <SplitVIewTemplate>
@@ -281,7 +305,7 @@ export class RecruitmentBoxComponent extends Component<props, state> {
                         <Divider/>
                         <br/>
                         {
-                            !masterView &&
+                            !masterView && !applied &&
                             <Button raised style={{backgroundColor: "#0099ff", color: "white"}} onClick={() => this.setState({joinRequestDialog: true})}>
                                 Join Now
                             </Button>
@@ -350,16 +374,20 @@ const mapStateToProps = (state: AppStoreState) => ({
     recruitmentInfo: state.recruitmentPage.recruitmentPage,
     recruitmentEditorState: undefined,
     edit: undefined,
+    recruitmentRecords: state.recruitmentRecords.records,
+    pageStatus: state.recruitmentRecords.status,
 });
 
 interface DispatchProps {
     updateRecruitment: (updatedRecruitment: RecruitmentDto) => void;
     joinRecruitment: (request: RecruitmentRequestDto, recruitmentId: string) => void;
+    addRecruitmentRecord: (newRecord: RecruitmentRecordEntityDto, recordsId: string) => void;
 }
 
 const mapDispatchToProps = (dispatch): DispatchProps => ({
     updateRecruitment: (updatedRecruitment: RecruitmentDto) => dispatch(RecruitmentActions.editRecruitment(updatedRecruitment)),
     joinRecruitment: (request: RecruitmentRequestDto, recruitmentId: string) => dispatch(RecruitmentActions.joinRecruitment(request, recruitmentId)),
+    addRecruitmentRecord: (newRecord: RecruitmentRecordEntityDto, recordsId: string) => dispatch(RecruitmentActions.addRecruitmentRecord(newRecord, recordsId)),
 });
 
 export const RecruitmentBoxView = connect<RecruitmentBoxComponentProps, DispatchProps, any>(
