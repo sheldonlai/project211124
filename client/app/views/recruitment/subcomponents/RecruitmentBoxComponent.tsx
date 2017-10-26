@@ -263,7 +263,7 @@ export class RecruitmentBoxComponent extends Component<props, state> {
     }
 
     normalView = () => {
-        if(this.props.pageStatus === ReducerStateStatus.LOADING) return (<LoadingScreen/>)
+        //if(this.props.pageStatus === ReducerStateStatus.LOADING) return (<LoadingScreen/>)
         let recruitment: Recruitment = {...this.props.recruitmentInfo};
         let masterView = this.props.user?recruitment.createdBy._id === this.props.user._id: false;
         let applied = this.props.user? this.applied(this.props.recruitmentInfo._id): true;
