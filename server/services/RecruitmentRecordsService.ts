@@ -65,30 +65,20 @@ export class RecruitmentRecordsService extends BaseService implements IRecruitme
     }
 
     private async recordsModelToDto(model: RecruitmentRecords): Promise<RecruitmentRecordsDto>{
-        let records = [];
-        model.records.forEach(record => {
-            this.recordEntityModelToDto(record).then(record => {
-                records.push(record);
-            })
-        });
-        let user;
-        this.userRepository.getById(model.userId).then(userFound => {
-            user = userFound;
-        });
-        /*return Promise.all([records, user]).then(result => {
-            console.log(result[0]);
+        let results = [];
+        results.push(model.records.map(record => {
+            return this.recordEntityModelToDto(record);
+        }));
+        results.push(this.userRepository.getById(model.userId));
+        return Promise.all(results).then(result => {
+            console.log(result[0][0].then(result => {console.log(result)}));
+            //convert array of promises into array of objects
             return{
                 _id: model._id,
                 records: result[0],
                 user: result[1],
             }
-        })*/
-        console.log(records);
-        return{
-            _id: model._id,
-            records: records,
-            user: user,
-        }
+        })
     }
 }
 

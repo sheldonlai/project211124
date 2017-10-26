@@ -94,6 +94,7 @@ export class RecruitmentAPI extends BaseAPI{
     public getRecruitmentRecords = (req: AuthRequest, res: Response, next: NextFunction) => {
         let user: User = req.user;
         let result = this.recordService.getRecruitmentRecords(user);
+        console.log(result);
         this.respondPromise(result, res, next);
     };
 
