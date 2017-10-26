@@ -55,7 +55,7 @@ export class RecruitmentPageComponent extends React.Component<props, state>{
             console.error("No id is specified");
         if(!this.props.recruitmentInfo || this.props.recruitmentInfo._id != id || Date.now() - this.props.lastUpdated > 1000){
             this.props.fetchRecruitment(id);
-            this.props.fetchRecruitmentRecords();
+            //this.props.fetchRecruitmentRecords();
         }
         else if (this.props.recruitmentInfo._id != id)
             this.setState({recruitment: {...this.props.recruitmentInfo}});
