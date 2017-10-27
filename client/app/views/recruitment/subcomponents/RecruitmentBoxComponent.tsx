@@ -37,6 +37,8 @@ import {RecruitmentRecordEntityDto} from "../../../../../server/dtos/recruitment
 import {RequestStateEnum} from "../../../../../server/enums/RecruitmentRequestEnum";
 import {ReducerStateStatus} from "../../../constants/ReducerStateStatus";
 import {LoadingScreen} from "../../../components/Animations/LoadingScreen";
+import Snackbar from "material-ui/Snackbar";
+import {AuthorLink} from "../../../components/RoutingComponents/AuthorLink";
 
 interface RecruitmentBoxComponentProps {
     user: UserDto; // current user
@@ -87,7 +89,6 @@ export class RecruitmentBoxComponent extends Component<props, state> {
 
     applied = (recruitmentId: string): boolean => {
       let i:number;
-      console.log(this.props.recruitmentRecords.records);
       for(i=0; i<this.props.recruitmentRecords.records.length; i++){
           if(this.props.recruitmentRecords.records[i].recruitment._id == recruitmentId){
               return true;
@@ -293,7 +294,7 @@ export class RecruitmentBoxComponent extends Component<props, state> {
                             <Grid container justify="flex-end">
                                 <Grid item>
                                     <Typography type="caption">
-                                        Recruiter: {recruitment.createdBy.username}
+                                        Recruiter: <AuthorLink fontSize={12} username={this.state.editedRecruitment.createdBy.username}/>
                                     </Typography>
                                 </Grid>
                             </Grid>
@@ -313,7 +314,43 @@ export class RecruitmentBoxComponent extends Component<props, state> {
                         {
                             masterView &&
                             (recruitment.pendingRequests.map(request => {
-
+                                console.log(request);
+                               return(
+                                   <div key={request._id}>
+                                       <Paper elevation={2} style={paperStyle}>
+                                           <SplitVIewTemplate>
+                                               <div>
+                                                   <Typography type="body1">Request to join recruitment from {<AuthorLink fontSize={12} username={request.createdBy.username}/>}</Typography>
+                                               </div>
+                                               <Grid container justify="flex-end">
+                                                   {request.status === RequestStateEnum.JOINED &&
+                                                       <Grid item>
+                                                           <Typography type="body1" style={{color: '#0099ff'}}>JOINED</Typography>
+                                                       </Grid>
+                                                   }
+                                                   {request.status === RequestStateEnum.DECLINED &&
+                                                   <Grid item>
+                                                       <Typography type="body1" color="accent">DECLINED</Typography>
+                                                   </Grid>
+                                                   }
+                                                   {request.status === RequestStateEnum.PENDING &&
+                                                   <Grid item>
+                                                       <Button raised style={{backgroundColor: '#0099ff', color: "white"}} dense>
+                                                           Accept
+                                                       </Button>
+                                                   </Grid>}
+                                                   {request.status === RequestStateEnum.PENDING &&
+                                                   <Grid item>
+                                                       <Button raised dense color="accent">
+                                                       Decline
+                                                       </Button>
+                                                   </Grid>}
+                                               </Grid>
+                                           </SplitVIewTemplate>
+                                       </Paper>
+                                       <br/>
+                                   </div>
+                               )
                             }))
                         }
                         {this.joinRequestView()}

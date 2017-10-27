@@ -179,7 +179,7 @@ const schema = new Schema({
 });
 
 const autoPopulateUsers = function(next) {
-    this.populate(["createdBy", "comments.createdBy", "university", "groupMates"]);
+    this.populate(["createdBy", "comments.createdBy", "university", "groupMates", "pendingRequests", "pendingRequests.createdBy"]);
     next();
 };
 
@@ -188,7 +188,9 @@ schema.plugin(mongoosastic, {
     populate: [
         {path: 'university', select: 'name'},
         {path: 'createdBy', select: 'username'},
-        {path: 'groupMates', select: 'username'}
+        {path: 'groupMates', select: 'username'},
+        {path: 'pendingRequests', select: 'createdBy'},
+        {path: 'pendingRequests.createdBy', select: 'username'}
     ],
     esClient
 });

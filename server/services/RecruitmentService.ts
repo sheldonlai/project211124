@@ -43,7 +43,6 @@ export class RecruitmentService extends BaseService implements IRecruitmentServi
             let myRecruitments = [];
             if(user){
                 myRecruitments = result[1].map(recruitment => Recruitment.fromObject(recruitment).toPreviewDto());
-                console.log(result[1]);
             }
 
             return{

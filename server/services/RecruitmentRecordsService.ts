@@ -7,6 +7,7 @@ import {UserDto} from "../dtos/auth/UserDto";
 import {IRecruitmentRepository} from "../repositories/RecruitmentRepository";
 import {RecruitmentDto} from "../dtos/recruitment/RecruitmentDto";
 import {IUserRepository} from "../repositories/UserRepository";
+import {AppError} from "../errors/AppError";
 
 export interface IRecruitmentRecordsService {
     addRecruitmentRecord(recordEntity: RecruitmentRecordEntityDto, recordsId: string): Promise<RecruitmentRecordsDto>;
@@ -28,6 +29,7 @@ export class RecruitmentRecordsService extends BaseService implements IRecruitme
             status: recordEntity.status,
         };
         return this.recruitmentRecordsRepository.getById(recordsId).then(recordsFound => {
+            this.checkPermissionToAddRecord(recordsFound, record);
             recordsFound.records.push(record);
             return this.recruitmentRecordsRepository.update(recordsFound).then(updatedRecords => {
                 return this.recruitmentRecordsRepository.getById(updatedRecords._id).then(recordsFound => {
@@ -65,20 +67,26 @@ export class RecruitmentRecordsService extends BaseService implements IRecruitme
     }
 
     private async recordsModelToDto(model: RecruitmentRecords): Promise<RecruitmentRecordsDto>{
-        let results = [];
-        results.push(model.records.map(record => {
+        let records = model.records.map(record => {
             return this.recordEntityModelToDto(record);
-        }));
-        results.push(this.userRepository.getById(model.userId));
-        return Promise.all(results).then(result => {
-            console.log(result[0][0].then(result => {console.log(result)}));
-            //convert array of promises into array of objects
+        });
+        let user = this.userRepository.getById(model.userId);
+        return Promise.all([Promise.all(records), user]).then(result => {
             return{
                 _id: model._id,
                 records: result[0],
                 user: result[1],
             }
         })
+    }
+
+    private checkPermissionToAddRecord(records: RecruitmentRecords, newRecord: RecruitmentRecordEntity){
+        records.records.forEach(record => {
+            if(record.recruitmentId == newRecord.recruitmentId){
+                throw new AppError("You have already applied to this recruitment!");
+            }
+        });
+        return true;
     }
 }
 
