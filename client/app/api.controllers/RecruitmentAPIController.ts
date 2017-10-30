@@ -82,4 +82,22 @@ export class RecruitmentAPIController extends ApiController{
         };
         return this.put(APIUrls.addRecruitmentRecord, reqBody);
     }
+
+    updateRecruitmentRequest(request: RecruitmentRequestDto, recruitmentId: string, accepted: boolean){
+        let reqBody = {
+            request: request,
+            recruitmentId: recruitmentId,
+            accepted: accepted,
+        };
+        return this.put(APIUrls.updateRecruitmentRequest, reqBody);
+    }
+
+    updateRecruitmentRecord(recruitmentId: string, member: UserDto, accepted: boolean){
+        let reqBody = {
+            recruitmentId: recruitmentId,
+            member: member,
+            accepted: accepted,
+        };
+        return this.put(APIUrls.updateRecruitmentRecord, reqBody);
+    }
 }

@@ -261,7 +261,11 @@ export class RecruitmentBoxComponent extends Component<props, state> {
                 </DialogContent>
             </Dialog>
         )
-    }
+    };
+
+    acceptRequest = (request: RecruitmentRequest) => {
+
+    };
 
     normalView = () => {
         //if(this.props.pageStatus === ReducerStateStatus.LOADING) return (<LoadingScreen/>)
@@ -320,7 +324,7 @@ export class RecruitmentBoxComponent extends Component<props, state> {
                                        <Paper elevation={2} style={paperStyle}>
                                            <SplitVIewTemplate>
                                                <div>
-                                                   <Typography type="body1">Request to join recruitment from {<AuthorLink fontSize={12} username={request.createdBy.username}/>}</Typography>
+                                                   <Typography type="body1">Request to join recruitment from {<AuthorLink fontSize={12} username={request.createdBy.username}/>} - <p style={{display: "inline"}}><i>"{request.message}"</i></p></Typography>
                                                </div>
                                                <Grid container justify="flex-end">
                                                    {request.status === RequestStateEnum.JOINED &&

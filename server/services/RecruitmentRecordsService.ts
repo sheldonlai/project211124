@@ -5,13 +5,15 @@ import {IRecruitmentService} from "./RecruitmentService";
 import {RecruitmentRecordEntity, RecruitmentRecords} from "../models/RecruitmentRecords";
 import {UserDto} from "../dtos/auth/UserDto";
 import {IRecruitmentRepository} from "../repositories/RecruitmentRepository";
-import {RecruitmentDto} from "../dtos/recruitment/RecruitmentDto";
+import {RecruitmentDto, RecruitmentRequestDto} from "../dtos/recruitment/RecruitmentDto";
 import {IUserRepository} from "../repositories/UserRepository";
 import {AppError} from "../errors/AppError";
+import {RequestStateEnum} from "../enums/RecruitmentRequestEnum";
 
 export interface IRecruitmentRecordsService {
     addRecruitmentRecord(recordEntity: RecruitmentRecordEntityDto, recordsId: string): Promise<RecruitmentRecordsDto>;
     getRecruitmentRecords(user: UserDto): Promise<RecruitmentRecordsDto>;
+    updateRecruitmentRecord(recruitmentId: string, member: UserDto, accepted: boolean): Promise<RecruitmentRecordsDto>;
 }
 
 export class RecruitmentRecordsService extends BaseService implements IRecruitmentRecordsService {
@@ -57,6 +59,21 @@ export class RecruitmentRecordsService extends BaseService implements IRecruitme
         })
     }
 
+    updateRecruitmentRecord(recruitmentId: string, member: UserDto, accepted: boolean): Promise<RecruitmentRecordsDto>{
+        return this.recruitmentRecordsRepository.findOne({'userId': member._id}).then(recordsFound => {
+            recordsFound.records.forEach(record => {
+                if(record.recruitmentId == recruitmentId){
+                    record.status = accepted? RequestStateEnum.JOINED: RequestStateEnum.DECLINED;
+                }
+            });
+            return this.recruitmentRecordsRepository.update(recordsFound).then(updatedRecords => {
+                return this.recruitmentRecordsRepository.getById(updatedRecords._id).then(records => {
+                    return this.recordsModelToDto(records).then(convertedRecords => {return convertedRecords});
+                });
+            });
+        });
+    }
+
     private recordEntityModelToDto(model: RecruitmentRecordEntity): Promise<RecruitmentRecordEntityDto> {
         return this.recruitmentRepository.getById(model.recruitmentId).then(recruitmentFound => {
             return {
@@ -78,6 +95,13 @@ export class RecruitmentRecordsService extends BaseService implements IRecruitme
                 user: result[1],
             }
         })
+    }
+
+    private checkPermissionToModifyRecord(records: RecruitmentRecords, user: UserDto){
+        if(records.userId != user._id){
+            throw new AppError("You do not have the permission to modify this record!");
+        }
+        return true;
     }
 
     private checkPermissionToAddRecord(records: RecruitmentRecords, newRecord: RecruitmentRecordEntity){

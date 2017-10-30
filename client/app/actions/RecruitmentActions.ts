@@ -171,4 +171,12 @@ export class RecruitmentActions extends BaseActions{
             }).catch(err => RecruitmentActions.handleError(dispatch, err, RecruitmentActionTypes.GetRecruitmentRecordsError))
         }
     }
+
+    static updateRecruitmentRequest(request: RecruitmentRequestDto, recruitmentId:string, accepted: boolean){
+        return function(dispatch){
+            dispatch({
+                type: RecruitmentActionTypes
+            })
+        }
+    }
 }

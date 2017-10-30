@@ -10,6 +10,7 @@ import {RecruitmentCommentDto} from "../dtos/recruitment/RecruitmentCommenDto";
 import {UserDto} from "../dtos/auth/UserDto";
 import {UserRepository} from "../repositories/UserRepository";
 import {RecruitmentPreviewCollectionsDto} from "../dtos/recruitment/RecruitmentPreviewCollectionsDto";
+import {RequestStateEnum} from "../enums/RecruitmentRequestEnum";
 
 
 export interface IRecruitmentService {
@@ -21,6 +22,7 @@ export interface IRecruitmentService {
     getRecruitmentPreviews(user?: User): Promise<RecruitmentPreviewCollectionsDto>;
     editRecruitment(recruitment: RecruitmentDto, user: User): Promise<RecruitmentDto>;
     joinRecruitment(request: RecruitmentRequestDto, recruitmentId: string, user: User): Promise<RecruitmentDto>;
+    updateRecruitmentRequest(request: RecruitmentRequestDto, recruitmentId: string, user: User, accepted: boolean): Promise<RecruitmentDto>;
 }
 
 export class RecruitmentService extends BaseService implements IRecruitmentService {
@@ -138,6 +140,20 @@ export class RecruitmentService extends BaseService implements IRecruitmentServi
         })
     }
 
+    updateRecruitmentRequest(request: RecruitmentRequestDto, recruitmentId: string, user: User, accepted: boolean): Promise<RecruitmentDto>{
+        return this.recruitmentRepository.getById(recruitmentId).then(recruitmentFound => {
+            this.checkPermissionForModificationWithRecruitmentId(recruitmentFound, user);
+            recruitmentFound.pendingRequests.forEach(r => {
+                if(r._id == request._id){
+                    r.status = accepted? RequestStateEnum.JOINED: RequestStateEnum.DECLINED;
+                }
+            });
+            return this.recruitmentRepository.update(recruitmentFound).then(updatedRecruitment => {
+                return this.recruitmentRepository.getById(updatedRecruitment._id);
+            })
+        });
+    }
+
     private checkPermissionForModification = (recruitmentDto: RecruitmentDto, recruitmentObj: Recruitment, currentUser: User) => {
         if(recruitmentObj.createdBy._id.toString() != currentUser._id.toString()){
             throw new AppError("You are not the owner of this post!");
@@ -145,6 +161,14 @@ export class RecruitmentService extends BaseService implements IRecruitmentServi
         if(currentUser.username != recruitmentDto.createdBy.username){
             throw new AppError("You cannot change the username of the author");
         }
+        return true;
+    };
+
+    private checkPermissionForModificationWithRecruitmentId = (recruitmentObj: Recruitment, currentUser: User) => {
+        if(recruitmentObj.createdBy._id.toString() != currentUser._id.toString()){
+            throw new AppError("You are not the owner of this post!");
+        }
+
         return true;
     };
 

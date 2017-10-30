@@ -30,6 +30,8 @@ export class RecruitmentAPI extends BaseAPI{
         this.router.put(APIUrls.joinRecruitment, mustBeAuthenticated, this.joinRecruitment);
         this.router.get(APIUrls.getRecruitmentRecords, mustBeAuthenticated, this.getRecruitmentRecords);
         this.router.put(APIUrls.addRecruitmentRecord, mustBeAuthenticated, this.addRecruitmentRecord);
+        this.router.put(APIUrls.updateRecruitmentRequest, mustBeAuthenticated, this.updateRecruitmentRequest);
+        this.router.put(APIUrls.updateRecruitmentRecord, mustBeAuthenticated, this.updateRecruitmentRecord);
     }
 
     public getRecruitmentPreviews = (req: AuthRequest, res: Response, next: NextFunction) => {
@@ -102,6 +104,23 @@ export class RecruitmentAPI extends BaseAPI{
         let recordsId: string = req.body.recordsId;
         let user: User;
         let result = this.recordService.addRecruitmentRecord(record, recordsId);
+        this.respondPromise(result, res, next);
+    };
+
+    public updateRecruitmentRequest = (req: AuthRequest, res: Response, next: NextFunction) => {
+        let request: RecruitmentRequestDto = req.body.request;
+        let recruitmentId: string = req.body.recruitmentId;
+        let accepted: boolean = req.body.accepted;
+        let user: User;
+        let result = this.service.updateRecruitmentRequest(request, recruitmentId, user, accepted);
+        this.respondPromise(result, res, next);
+    };
+
+    public updateRecruitmentRecord = (req: AuthRequest, res: Response, next: NextFunction) => {
+        let recruitmentId: string = req.body.recruitmentId;
+        let member: User = req.body.member;
+        let accepted: boolean = req.body.accepted;
+        let result = this.recordService.updateRecruitmentRecord(recruitmentId, member, accepted);
         this.respondPromise(result, res, next);
     }
 }
