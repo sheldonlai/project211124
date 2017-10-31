@@ -117,6 +117,7 @@ export class RecruitmentService extends BaseService implements IRecruitmentServi
 
     recruitMember(member: UserDto, recruitmentId: string, user: User): Promise<RecruitmentDto>{
         return this.recruitmentRepository.getById(recruitmentId).then(recruitmentObj => {
+            this.checkPermissionForModificationWithRecruitmentId(recruitmentObj, user);
             if(recruitmentObj.groupMates.indexOf(member) != -1){
                 console.error("Member already exist in group");
                 return recruitmentObj;
@@ -143,13 +144,20 @@ export class RecruitmentService extends BaseService implements IRecruitmentServi
     updateRecruitmentRequest(request: RecruitmentRequestDto, recruitmentId: string, user: User, accepted: boolean): Promise<RecruitmentDto>{
         return this.recruitmentRepository.getById(recruitmentId).then(recruitmentFound => {
             this.checkPermissionForModificationWithRecruitmentId(recruitmentFound, user);
-            recruitmentFound.pendingRequests.forEach(r => {
-                if(r._id == request._id){
+            let requests: RecruitmentRequest[] = recruitmentFound.pendingRequests;
+            requests.forEach(r => {
+                if(r.createdBy._id.toString() == request.createdBy._id.toString()){
                     r.status = accepted? RequestStateEnum.JOINED: RequestStateEnum.DECLINED;
                 }
             });
+            recruitmentFound.pendingRequests = requests;
+            console.log(recruitmentFound.pendingRequests[0].status);
             return this.recruitmentRepository.update(recruitmentFound).then(updatedRecruitment => {
-                return this.recruitmentRepository.getById(updatedRecruitment._id);
+                console.log(updatedRecruitment.pendingRequests[0].status);
+                return this.recruitmentRepository.getById(updatedRecruitment._id).then(r => {
+                    console.log(r.pendingRequests[0].status);
+                    return r;
+                });
             })
         });
     }

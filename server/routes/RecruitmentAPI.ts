@@ -102,7 +102,7 @@ export class RecruitmentAPI extends BaseAPI{
     public addRecruitmentRecord = (req: AuthRequest, res: Response, next: NextFunction) => {
         let record: RecruitmentRecordEntityDto = req.body.record;
         let recordsId: string = req.body.recordsId;
-        let user: User;
+        let user: User = req.user;
         let result = this.recordService.addRecruitmentRecord(record, recordsId);
         this.respondPromise(result, res, next);
     };
@@ -111,7 +111,7 @@ export class RecruitmentAPI extends BaseAPI{
         let request: RecruitmentRequestDto = req.body.request;
         let recruitmentId: string = req.body.recruitmentId;
         let accepted: boolean = req.body.accepted;
-        let user: User;
+        let user: User = req.user;
         let result = this.service.updateRecruitmentRequest(request, recruitmentId, user, accepted);
         this.respondPromise(result, res, next);
     };

@@ -164,19 +164,42 @@ export class RecruitmentActions extends BaseActions{
             });
             apiController.getRecruitmentRecords().then(res => {
                 let data: RecruitmentRecords = recordsDtoToModel(res.data);
+                console.log(data.records);
                 dispatch({
                     type: RecruitmentActionTypes.GetRecruitmentRecordsOK,
                     data: data,
                 })
-            }).catch(err => RecruitmentActions.handleError(dispatch, err, RecruitmentActionTypes.GetRecruitmentRecordsError))
+            }).catch(err => RecruitmentActions.handleError(dispatch, err, RecruitmentActionTypes.GetRecruitmentRecordsError));
         }
     }
 
     static updateRecruitmentRequest(request: RecruitmentRequestDto, recruitmentId:string, accepted: boolean){
         return function(dispatch){
             dispatch({
-                type: RecruitmentActionTypes
-            })
+                type: RecruitmentActionTypes.UpdateRecruitmentRequestRequest,
+            });
+            apiController.updateRecruitmentRequest(request, recruitmentId, accepted).then(res => {
+                let data: Recruitment = recruitmentDtoToModel(res.data);
+                dispatch({
+                    type: RecruitmentActionTypes.UpdateRecruitmentRequestOK,
+                    data: data,
+                })
+            }).catch(err => RecruitmentActions.handleError(dispatch, err, RecruitmentActionTypes.UpdateRecruitmentRequestError));
+        }
+    }
+
+    static updateRecruitmentRecord(recruitmentId: string, member: UserDto, accepted: boolean){
+        return function(dispatch){
+            dispatch({
+                type: RecruitmentActionTypes.UpdateRecruitmentRecordRequest,
+            });
+            apiController.updateRecruitmentRecord(recruitmentId, member, accepted).then(res => {
+                let data: RecruitmentRecords = recordsDtoToModel(res.data);
+                dispatch({
+                    type: RecruitmentActionTypes.UpdateRecruitmentRecordOK,
+                    data: data,
+                });
+            }).catch(err => RecruitmentActions.handleError(dispatch, err, RecruitmentActionTypes.UpdateRecruitmentRecordError));
         }
     }
 }

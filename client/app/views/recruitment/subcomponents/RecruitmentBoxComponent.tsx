@@ -39,6 +39,7 @@ import {ReducerStateStatus} from "../../../constants/ReducerStateStatus";
 import {LoadingScreen} from "../../../components/Animations/LoadingScreen";
 import Snackbar from "material-ui/Snackbar";
 import {AuthorLink} from "../../../components/RoutingComponents/AuthorLink";
+import {MembersViewComponent} from "./MemberDisplayComponent";
 
 interface RecruitmentBoxComponentProps {
     user: UserDto; // current user
@@ -264,7 +265,16 @@ export class RecruitmentBoxComponent extends Component<props, state> {
     };
 
     acceptRequest = (request: RecruitmentRequest) => {
+        let requestDto: RecruitmentRequestDto = requestModelToDto({...request});
+        this.props.updateRecruitmentRequest(requestDto, this.props.recruitmentInfo._id, true);
+        this.props.updateRecruitmentRecord(this.props.recruitmentInfo._id, requestDto.createdBy, true);
+        this.props.addMember(requestDto.createdBy, this.props.recruitmentInfo._id);
+    };
 
+    declineRequest = (request: RecruitmentRequest) => {
+        let requestDto: RecruitmentRequestDto = requestModelToDto({...request});
+        this.props.updateRecruitmentRequest(requestDto, this.props.recruitmentInfo._id, false);
+        this.props.updateRecruitmentRecord(this.props.recruitmentInfo._id, requestDto.createdBy, false);
     };
 
     normalView = () => {
@@ -318,13 +328,12 @@ export class RecruitmentBoxComponent extends Component<props, state> {
                         {
                             masterView &&
                             (recruitment.pendingRequests.map(request => {
-                                console.log(request);
                                return(
                                    <div key={request._id}>
                                        <Paper elevation={2} style={paperStyle}>
                                            <SplitVIewTemplate>
                                                <div>
-                                                   <Typography type="body1">Request to join recruitment from {<AuthorLink fontSize={12} username={request.createdBy.username}/>} - <p style={{display: "inline"}}><i>"{request.message}"</i></p></Typography>
+                                                   <Typography tpe="body1">Request to join recruitment from {<AuthorLink fontSize={12} username={request.createdBy.username}/>} - <p style={{display: "inline"}}><i>"{request.message}"</i></p></Typography>
                                                </div>
                                                <Grid container justify="flex-end">
                                                    {request.status === RequestStateEnum.JOINED &&
@@ -339,13 +348,13 @@ export class RecruitmentBoxComponent extends Component<props, state> {
                                                    }
                                                    {request.status === RequestStateEnum.PENDING &&
                                                    <Grid item>
-                                                       <Button raised style={{backgroundColor: '#0099ff', color: "white"}} dense>
+                                                       <Button raised style={{backgroundColor: '#0099ff', color: "white"}} dense onClick={() => this.acceptRequest(request)}>
                                                            Accept
                                                        </Button>
                                                    </Grid>}
                                                    {request.status === RequestStateEnum.PENDING &&
                                                    <Grid item>
-                                                       <Button raised dense color="accent">
+                                                       <Button raised dense color="accent" onClick={() => this.declineRequest(request)}>
                                                        Decline
                                                        </Button>
                                                    </Grid>}
@@ -396,6 +405,9 @@ export class RecruitmentBoxComponent extends Component<props, state> {
                                     Members:
                                 </Typography>
                             </Grid>
+                            <Grid item>
+                                <MembersViewComponent members={this.props.recruitmentInfo.groupMates}/>
+                            </Grid>
                         </Grid>
                     </div>
                 </SplitVIewTemplate>
@@ -423,12 +435,18 @@ interface DispatchProps {
     updateRecruitment: (updatedRecruitment: RecruitmentDto) => void;
     joinRecruitment: (request: RecruitmentRequestDto, recruitmentId: string) => void;
     addRecruitmentRecord: (newRecord: RecruitmentRecordEntityDto, recordsId: string) => void;
+    updateRecruitmentRequest: (request: RecruitmentRequestDto, recruitmentId: string, accepted: boolean) => void;
+    updateRecruitmentRecord: (recruitmentId: string, member: UserDto, accepted: boolean) => void;
+    addMember: (member: UserDto, recruitmentId: string) => void;
 }
 
 const mapDispatchToProps = (dispatch): DispatchProps => ({
     updateRecruitment: (updatedRecruitment: RecruitmentDto) => dispatch(RecruitmentActions.editRecruitment(updatedRecruitment)),
     joinRecruitment: (request: RecruitmentRequestDto, recruitmentId: string) => dispatch(RecruitmentActions.joinRecruitment(request, recruitmentId)),
     addRecruitmentRecord: (newRecord: RecruitmentRecordEntityDto, recordsId: string) => dispatch(RecruitmentActions.addRecruitmentRecord(newRecord, recordsId)),
+    updateRecruitmentRequest: (request: RecruitmentRequestDto, recruitmentId: string, accepted: boolean) => dispatch(RecruitmentActions.updateRecruitmentRequest(request, recruitmentId, accepted)),
+    updateRecruitmentRecord: (recruitmentId: string, member: UserDto, accepted: boolean) => dispatch(RecruitmentActions.updateRecruitmentRecord(recruitmentId, member, accepted)),
+    addMember: (member: UserDto, recruitmentId: string) => dispatch(RecruitmentActions.recruitMember(member, recruitmentId)),
 });
 
 export const RecruitmentBoxView = connect<RecruitmentBoxComponentProps, DispatchProps, any>(
