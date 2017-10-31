@@ -333,7 +333,7 @@ export class RecruitmentBoxComponent extends Component<props, state> {
                                        <Paper elevation={2} style={paperStyle}>
                                            <SplitVIewTemplate>
                                                <div>
-                                                   <Typography tpe="body1">Request to join recruitment from {<AuthorLink fontSize={12} username={request.createdBy.username}/>} - <p style={{display: "inline"}}><i>"{request.message}"</i></p></Typography>
+                                                   <Typography type="body1">Request to join recruitment from {<AuthorLink fontSize={12} username={request.createdBy.username}/>} - <p style={{display: "inline"}}><i>"{request.message}"</i></p></Typography>
                                                </div>
                                                <Grid container justify="flex-end">
                                                    {request.status === RequestStateEnum.JOINED &&
