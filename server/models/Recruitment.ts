@@ -113,7 +113,7 @@ export class Recruitment extends BaseModel{
             courseDifficulty: this.courseDifficulty,
             groupSize: this.groupMates.length,
             views: this.views,
-        }
+        };
         return previewDto;
     }
 }

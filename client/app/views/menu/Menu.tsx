@@ -70,6 +70,8 @@ class MenuClass extends Component<MenuClassProps, state> {
             return "#6bb4f8";
         } else if (pathName.indexOf(Routes.story) !== -1) {
             return "#3066f8";
+        } else if(pathName.indexOf(Routes.recruitment) !== -1){
+            return '#42f44e';
         } else {
             return "#37474F";
         }

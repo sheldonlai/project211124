@@ -24,9 +24,13 @@ import {PreviewCardsComponent} from "../../components/CardComponent/PreviewCards
 import {FrontEndRecruitmentModels} from "../../models/RecruitmentModels";
 import RecruitmentPreview = FrontEndRecruitmentModels.RecruitmentPreview;
 import {PRIMARY_COLOR} from "../router";
+import Recruitment = FrontEndRecruitmentModels.Recruitment;
 
 interface state {
     tab: number;
+    searchString: string;
+    searchObj: Recruitment;
+
 }
 
 export class RecruitmentHomeComponent extends React.Component<StateToProps & DispatchToProps, state> {
@@ -34,8 +38,11 @@ export class RecruitmentHomeComponent extends React.Component<StateToProps & Dis
 
     constructor(props) {
         super(props);
+        let searchObj: Recruitment = new Recruitment();
         this.state = {
             tab: 0,
+            searchString: "",
+            searchObj: searchObj,
         };
         this.apiController = RatingApiController.getInstance();
     }
@@ -50,6 +57,7 @@ export class RecruitmentHomeComponent extends React.Component<StateToProps & Dis
 
         return (
             <div>
+
                 <PreviewCardsComponent label="Featured" list={this.props.featuredRecruitments} maxBlock={4}>
                     <Grid container justify="flex-end" direction="column" style={{width: "100%"}}>
                         <Grid item style={{paddding: 5}}>
